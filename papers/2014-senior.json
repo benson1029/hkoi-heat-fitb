@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "paper": {
-    "id": "2013-14-senior",
-    "season": "2013/14",
+    "id": "2014-senior",
+    "season": "2014",
     "division": "senior",
-    "title": "HKOI 2013/14 Heat Event — Senior Group FITB",
+    "title": "HKOI 2014 Heat Event — Senior Group FITB",
     "source": {
       "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
       "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",

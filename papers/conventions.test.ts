@@ -29,7 +29,14 @@ describe('bundled paper metadata conventions', () => {
     for (const paper of papers) {
       const division = paper.paper.division === 'junior' ? 'Junior' : 'Senior';
       const sample = paper.paper.id.includes('sample') ? ' Sample Paper' : '';
-      expect(paper.paper.season, paper.paper.id).toMatch(/^\d{4}\/\d{2}$/);
+      expect(paper.paper.season, paper.paper.id).toMatch(/^\d{4}(?:\/\d{2})?$/);
+      const contestYear = paper.paper.season.includes('/')
+        ? Number(paper.paper.season.slice(0, 4)) + 1
+        : Number(paper.paper.season);
+      if (contestYear <= 2014) {
+        expect(paper.paper.season, paper.paper.id).toBe(String(contestYear));
+        expect(paper.paper.id, paper.paper.season).toBe(`${contestYear}-${paper.paper.division}`);
+      }
       expect(paper.paper.title, paper.paper.id).toBe(`HKOI ${paper.paper.season} Heat Event${sample} — ${division} Group FITB`);
       for (const question of paper.questions) {
         expect(question.printedRef, `${paper.paper.id}: ${question.id}`).toMatch(reference);

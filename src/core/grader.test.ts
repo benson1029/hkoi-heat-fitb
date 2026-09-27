@@ -32,3 +32,10 @@ it('enforces prohibited identifiers as whole tokens', async () => {
   expect(prohibited.message).toContain('prohibited identifier');
   expect((await gradeQuestion(constrained, { A: 'ff' })).status).toBe('pass');
 });
+
+it('can exclude whitespace from a printed character limit', async () => {
+  const constrained: Question = { ...question('paper1-a'), blanks: [{ id: 'A', maxChars: 5, maxCharsExcludeWhitespace: true }],
+    grading: { kind: 'literal', accepted: { A: ['z = i % j'] }, normalize: 'none' } };
+  expect((await gradeQuestion(constrained, { A: 'z = i % j' })).status).toBe('pass');
+  expect((await gradeQuestion(constrained, { A: 'z = i % jj' })).message).toContain('character limit');
+});

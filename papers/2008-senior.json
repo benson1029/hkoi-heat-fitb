@@ -1,0 +1,922 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2008-senior",
+    "season": "2008",
+    "division": "senior",
+    "title": "HKOI 2008 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2008hs_ans.doc",
+      "page": 16
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q1-robot",
+      "track": "section-b",
+      "title": "Section B, Question 1",
+      "markdown": "There is a robot which walks and paints the ground at the same time. It accepts 3 kinds of command only:\n\n- F: Go forward by 1 unit\n- T: Turn right by 90 degrees\n- n(commands): Repeat commands n times, where 0 ≤ n ≤ 9\n\n“@” is the position where the robot starts. The robot is facing upward when starts.\n\n4(FT) does the same thing using the repeat command. Although both commands give the same result, we prefer the later one as it is shorter. Beware that each open/close bracket is counted as a character."
+    },
+    {
+      "id": "q6-program",
+      "track": "section-b",
+      "title": "Section B, Question 6",
+      "markdown": "",
+      "displayCode": {
+        "c": "#include <stdio.h>\nint i,j,k,z;\nint main() {\n  k = 0;\n  for (i = 2 ; i <= 100; ++i) {\n    for (j = 2 ; j <= i-1; ++j) {\n      z = i;                 /* XXX */\n      while (z > 0) z -= j;  /* XXX */\n      if (z == 0) {\n        k++;\n        break;\n      }\n    }\n  }\n  printf(\"%d\\n\", k);\n  return 0;\n}"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "section-b-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Please give the command to draw the following patterns without exceeding the no. of character specified. Maximum no. of characters in the command: 10"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 16
+      },
+      "grading": {
+        "kind": "drawing-robot",
+        "answerBlank": "A",
+        "start": [
+          0,
+          0
+        ],
+        "facing": "up",
+        "targetEdges": [
+          [
+            [
+              -1,
+              -1
+            ],
+            [
+              -1,
+              0
+            ]
+          ],
+          [
+            [
+              -1,
+              -1
+            ],
+            [
+              0,
+              -1
+            ]
+          ],
+          [
+            [
+              -1,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              -1
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        "maxCommands": 500,
+        "maxRepeat": 9
+      },
+      "contextId": "q1-robot",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2008-senior-q1-a.png",
+        "alt": "Printed pattern A: two squares touching at the robot start, one upper right and one lower left."
+      }
+    },
+    {
+      "id": "section-b-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Please give the command to draw the following patterns without exceeding the no. of character specified. Maximum no. of characters in the command: 12"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 17
+      },
+      "grading": {
+        "kind": "drawing-robot",
+        "answerBlank": "B",
+        "start": [
+          0,
+          0
+        ],
+        "facing": "up",
+        "targetEdges": [
+          [
+            [
+              -1,
+              1
+            ],
+            [
+              -1,
+              2
+            ]
+          ],
+          [
+            [
+              -1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              -1,
+              2
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          [
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ]
+        ],
+        "maxCommands": 500,
+        "maxRepeat": 9
+      },
+      "contextId": "q1-robot",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2008-senior-q1-b.png",
+        "alt": "Printed pattern B: a vertical stalk from the robot to two stacked horizontal rectangular rows, topped by a short stalk."
+      }
+    },
+    {
+      "id": "section-b-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Consider the following program segment. The first 7 bits of an array b[0..7] (b[8] in C Version) store the contents and the last bit b[7] is an even parity bit, which is to make the number of TRUE (1 in C Version) elements in the array an even number. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "C",
+          "forbiddenChars": "?"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int b[8]; int i; int main(){for(i=0;i<7;i++)scanf(\"%d\",&b[i]);b[7] = 0;\nfor (i = 0; i < 7; i++)\n    b[7] = b[7] {{C}}; printf(\"%d\",b[7]);}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "0",
+            "stdin": "0 0 0 0 0 0 0\n",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "1",
+            "stdin": "1 0 0 0 0 0 0\n",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "stdin": "1 1 0 0 0 0 0\n",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "stdin": "1 1 1 1 1 1 1\n",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "stdin": "1 0 1 0 1 0 1\n",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "b[7] = 0;\nfor (i = 0; i < 7; i++)\n    b[7] = b[7] {{C}};"
+      }
+    },
+    {
+      "id": "section-b-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "The output of the following program is 92863519. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D",
+          "forbiddenChars": "?"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 20
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int i){return {{D}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              0
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              2
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              5
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "7",
+            "args": [
+              6
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "8",
+            "args": [
+              7
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\nint i, a[8];\nint main(){\n  a[0] = 3;\n  a[1] = 6;\n  a[2] = 8;\n  a[3] = 2;\n  a[4] = 9;\n  a[5] = 1;\n  a[6] = 5;\n  a[7] = 8;\n  for (i = 0; i < 8; ++i){\n    printf(\"%d\", a[{{D}}]);\n  }\n  printf(\"\\n\");\n  return 0;\n}"
+      }
+    },
+    {
+      "id": "section-b-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank E",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The following program tries to verify whether the input is a perfect number or not. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E",
+          "forbiddenChars": "?"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 22
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int i,int num){return {{E}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              1,
+              4
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              2,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              1,
+              6
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              2,
+              16
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              4,
+              16
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "7",
+            "args": [
+              3,
+              18
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include<stdio.h>\n#include<math.h>\nint num, sum, i;\nint main(){\n  scanf(\"%d\", &num);\n  sum = 0;\n  for (i = 1; i <= (int)(sqrt(num)); ++i)\n    if (num % i == 0)\n      if ({{E}})\n        sum += i + num/i;\n      else sum+=i;\n\n  if (sum == 2 * num)\n    printf(\"Perfect number!\\n\");\n  else\n    printf(\"Not a perfect number\\n\");\n  return 0;\n}"
+      }
+    },
+    {
+      "id": "section-b-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank F",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Write an expression that indicates the number of positive integers that are NOT divisible by a, b, and c and less than 1000 using f(x), where a, b and c are relatively prime and are positive integers."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F",
+          "forbiddenChars": "?"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 23
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int a,int b,int c){return {{F}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            },
+            "helperSource": "int f(int x){return 999/x;}"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              2,
+              3,
+              5
+            ],
+            "expected": {
+              "returnValue": 266
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              2,
+              5,
+              7
+            ],
+            "expected": {
+              "returnValue": 343
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              3,
+              4,
+              11
+            ],
+            "expected": {
+              "returnValue": 455
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              7,
+              11,
+              13
+            ],
+            "expected": {
+              "returnValue": 719
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              1,
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "answerOnly": true
+    },
+    {
+      "id": "section-b-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank G",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "What is the output of the above program?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 26
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "74"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q6-program"
+    },
+    {
+      "id": "section-b-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank H",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Replace the two lines marked by \"XXX\" with ONE statement containing less than 10 characters (spaces not included) while the output remains unchanged."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H",
+          "forbiddenChars": "?",
+          "maxChars": 9,
+          "maxCharsExcludeWhitespace": true
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 26
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int i,j,z;int solve(int a,int b){i=a;j=b;{{H}};return z;}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              8,
+              3
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              12,
+              5
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              97,
+              7
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              100,
+              99
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q6-program"
+    },
+    {
+      "id": "section-b-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank I",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Strings are formed by arranging characters A, B, C, D and E in any order and are sorted in dictionary order. What is the 54th string?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 26
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "CAEDB"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank J",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Strings are formed by arranging characters A, B, C, D and E in any order and are sorted in dictionary order. What is the rank of string \"DBEAC\"?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 26
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "J": [
+            "83"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-k",
+      "track": "section-b",
+      "printedRef": "Section B, Question 8, Blank K",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "The following is the shape of an hourglass, which is made up by two triangles. Starting from any number on the first row, you can travel the hourglass down to form a route. Each step can go either diagonally down to the left or diagonally down to the right.\n\nWhat is the largest sum of numbers passed on a route that starts from any number on the first row and ends at any number at the last row?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2008hse.doc",
+        "page": 26
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "K": [
+            "66"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2008-senior-q8.png",
+        "alt": "Nine-row printed hourglass of digits from top row 8 3 8 2 5 to bottom row 1 8 3 8 9."
+      }
+    }
+  ]
+}

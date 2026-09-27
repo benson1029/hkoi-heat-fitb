@@ -69,6 +69,8 @@ export interface Blank {
   id: string;
   label?: string;
   maxChars?: number;
+  /** Printed limit ignores spaces and other whitespace. */
+  maxCharsExcludeWhitespace?: boolean;
   forbiddenChars?: string;
   forbiddenIdentifiers?: string[];
   allowedChars?: string;
@@ -95,7 +97,126 @@ export interface Question {
   grading: GradingSpec;
 }
 
-export type GradingSpec = ProgramGrading | ProgramInputGrading | CppLineRepairGrading | CoinCounterexampleGrading | ChecksumCollisionGrading | ZigzagPathGrading | LiteralGrading | RobotGridGrading | GraphGrading | GraphReversalGrading | TriangleAffineGrading | UniformCppExpressionGrading | GridCheckpointsGrading | IntegerListGrading | MatrixSumsGrading | RpnExpressionGrading | CounterexampleMaxGrading | SignedWrapSumGrading | NandExpressionGrading | DieFaceGrading | PrimePowerPairGrading | FloatInputErrorGrading | LogoDrawingGrading | PendingGrading | CancelledGrading;
+export type GradingSpec = ProgramGrading | ProgramInputGrading | CppLineRepairGrading | CoinCounterexampleGrading | ChecksumCollisionGrading | ZigzagPathGrading | LiteralGrading | RobotGridGrading | GraphGrading | GraphReversalGrading | TriangleAffineGrading | UniformCppExpressionGrading | GridCheckpointsGrading | IntegerListGrading | MatrixSumsGrading | RpnExpressionGrading | CounterexampleMaxGrading | SignedWrapSumGrading | NandExpressionGrading | DieFaceGrading | PrimePowerPairGrading | FloatInputErrorGrading | LogoDrawingGrading | StringReplacementCounterexampleGrading | DifferencePyramidGrading | SparseRulerGrading | TextEditorGrading | BooleanCircuitGrading | PrimeFactorCounterexampleGrading | PrimeFactorCountCounterexampleGrading | WeightedRouteGrading | RecordSortComparatorGrading | DrawingRobotGrading | TopTwoCounterexampleGrading | GraphLabelingGrading | BoxStackRobotGrading | RiverRouteGrading | TripleSortNetworkGrading | RegularPolygonGraphGrading | PendingGrading | CancelledGrading;
+
+export type RegularPolygonGraphGrading = import('./regular-polygon-graph').RegularPolygonSpec;
+
+export interface GraphLabelingGrading {
+  kind: 'graph-labeling'; answerBlank: string;
+  nodes: string[]; edges: [string, string][];
+}
+
+export interface BoxStackRobotGrading {
+  kind: 'box-stack-robot'; answerBlank: string;
+  /** Stacks are listed top to bottom. */
+  initial: number[][]; target: number[][];
+  maxCommands: number; maxRepeat: number;
+}
+
+export interface RiverRouteGrading {
+  kind: 'river-route'; answerBlank: string;
+  start: string; goal: string; passengers: number;
+  edges: { from: string; to: string; limit: number }[];
+  maxCommands: number;
+}
+
+export interface TripleSortNetworkGrading {
+  kind: 'triple-sort-network'; answerBlank: string;
+  variables: string[];
+  /** Each call lists three variable names, with answerToken expanding to the entered pointers. */
+  calls: string[][]; answerToken: string; answerCount: number;
+}
+
+export interface TopTwoCounterexampleGrading {
+  kind: 'top-two-counterexample';
+  answerBlank: string;
+  count: number;
+  minimum: number;
+  maximum: number;
+}
+
+export interface DrawingRobotGrading {
+  kind: 'drawing-robot';
+  answerBlank: string;
+  start: Coord;
+  facing: 'up' | 'right' | 'down' | 'left';
+  targetEdges: [Coord, Coord][];
+  maxCommands: number;
+  maxRepeat: number;
+}
+
+export interface RecordSortComparatorGrading {
+  kind: 'record-sort-comparator';
+  answerBlank: string;
+  arrayName: string;
+  indexName: string;
+  fields: [string, string];
+  order: 'descending' | 'ascending';
+}
+
+export interface WeightedRouteGrading {
+  kind: 'weighted-route';
+  answerBlank: string;
+  nodes: string[];
+  edges: { from: string; to: string; weight: number }[];
+  directed: boolean;
+  start: string;
+  end: string;
+  objective: 'shortest' | 'shortest-alternate' | 'longest-simple';
+  reference?: { questionId: string; blankId: string };
+}
+
+export interface PrimeFactorCounterexampleGrading {
+  kind: 'prime-factor-counterexample';
+  inputBlank: string;
+  outputBlank: string;
+  minimum: number;
+  maximum: number;
+}
+
+export interface PrimeFactorCountCounterexampleGrading {
+  kind: 'prime-factor-count-counterexample';
+  answerBlank: string;
+  minimum: number;
+  maximum: number;
+}
+
+export interface StringReplacementCounterexampleGrading {
+  kind: 'string-replacement-counterexample';
+  answerBlank: string;
+  needle: string;
+  replacement: string;
+  maxInputLength: number;
+}
+
+export interface DifferencePyramidGrading {
+  kind: 'difference-pyramid';
+  answerBlank: string;
+  values: number[];
+}
+
+export interface SparseRulerGrading {
+  kind: 'sparse-ruler';
+  answerBlank: string;
+  length: number;
+  maxMarks: number;
+}
+
+export interface TextEditorGrading {
+  kind: 'text-editor';
+  answerBlank: string;
+  initial: string;
+  target: string;
+  maxCommands: number;
+}
+
+export interface BooleanCircuitGrading {
+  kind: 'boolean-circuit';
+  answerBlank: string;
+  /** Output for a,b = FF, FT, TF, TT. */
+  expected: [boolean, boolean, boolean, boolean];
+  maxCost: number;
+}
 
 export interface LogoDrawingGrading {
   kind: 'logo-drawing';

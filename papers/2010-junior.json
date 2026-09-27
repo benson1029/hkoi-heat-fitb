@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2010-junior",
+    "season": "2010",
+    "division": "junior",
+    "title": "HKOI 2010 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2010hje.doc",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2010hj_sol.doc"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q3-teacher",
+      "track": "section-b",
+      "title": "Question 3 · C program segment",
+      "markdown": "There are N people in a community. Suppose person T[i] is the teacher of person i for all i = 1, ..., N. If person i teaches herself, T[i] equals i. The following program segment finds out who the knowledge of person x originates from.",
+      "displayCode": {
+        "c": "scanf(\"%d\",&x);\ni = x;\nwhile ({{C}})\n   {{D}};\nanswer = i;"
+      }
+    },
+    {
+      "id": "q4-checker",
+      "track": "section-b",
+      "title": "Question 4 · C program",
+      "markdown": "```text\n*.*.*\n.*.*.\n*.*.*\n.*.*.\n*.*.*\n```\n\nFor C, you are not allowed to use comparison operators (==, !=, <, >, <=, >=) or conditional operators (?:).",
+      "displayCode": {
+        "c": "#include <stdio.h>\nint main(){\n   char b[5][5];\n   int i, j;\n   for(i=0;i<=4;i++)\n      for(j=0;j<=4;j++)\n         b[i][j]='.';\n   i = 0;\n   j = 0;\n   while(i>=0 && i<5 && j>=0 && j<5)\n   {\n      b[i][j] = '*';\n      i = {{E}};\n      j = {{F}};\n   }\n   for(i=0;i<=4;i++) {\n      for(j=0;j<=4;j++)\n         printf(\"%c\",b[i][j]);\n      printf(\"\\n\");\n   }\n   return 0;\n}"
+      }
+    },
+    {
+      "id": "q5-rpg",
+      "track": "section-b",
+      "title": "Question 5 · Regular Polygon Graph",
+      "markdown": "A Regular Polygon Graph (RPG in short) is a graph consisting of a sequence of non-overlapping regular polygons of 3 - 6 sides. The centres of the polygons lie on the same horizontal line. Each polygon shares an edge and two vertices with the polygon on the left of it (if it is not the leftmost polygon) and shares an edge and two vertices with the polygon on the right of it (if it is not the rightmost polygon). For example, the figure below shows a RPG.\n\nThe RPG above has 12 vertices and 15 edges.\n\nDefine the horizontal distance of a RPG to be the length (number of edges) of the shortest path connecting one of the leftmost vertices (there may be 1 or 2 of them) to one of the rightmost vertices. For example, the RPG above has horizontal distance of 6.\n\nA RPG can be represented by a sequence of numbers, which specifies the number of sides of the polygons from left to right. For example, the RPG above is represented by 5643."
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Please fill in the truth values (T/F) of boolean values of a, b and c so that the boolean expression below is TRUE.\n\n`b AND (NOT b OR c) AND (NOT a or NOT c)`\n\nA: a = __ ; b = __ ; c = __"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hje.doc",
+        "page": 19
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "FTT",
+            "F T T",
+            "F,T,T",
+            "a=F;b=T;c=T"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The following table shows the computational time needed for logical operations on a special machine.\n\n| Operation | Unit(s) of time needed |\n|---|---:|\n| NOT | 5 |\n| AND | 3 |\n| OR | 1 |\n| XOR | 2 |\n| XNOR | 2 |\n\n| a | b | F(a,b) |\n|:---:|:---:|:---:|\n| F | F | T |\n| F | T | T |\n| T | F | F |\n| T | T | T |\n\nWrite down a boolean expression that implements F within 6 units of time. You must use parenthesis (round brackets) to indicate the order of execution of the logical operations. For example, \"(a AND a) OR (NOT a)\" and \"a AND (a OR (NOT a))\" are two different expressions. Do not write symbolic operators such as !,||,&&."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hje.doc",
+        "page": 20
+      },
+      "grading": {
+        "kind": "boolean-circuit",
+        "answerBlank": "B",
+        "expected": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "maxCost": 6
+      }
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Fill in the blanks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hje.doc",
+        "page": 20
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){int T[101],n,x,i,answer,k;scanf(\"%d\",&n);for(k=1;k<=n;k++)scanf(\"%d\",&T[k]);scanf(\"%d\",&x);i=x;while ({{C}}) i=T[i];answer=i;printf(\"%d\\n\",answer);return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "direct",
+            "expected": {
+              "stdout": "1\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "4\n1 1 2 3\n4\n"
+          },
+          {
+            "id": "self",
+            "expected": {
+              "stdout": "3\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "4\n2 2 3 3\n3\n"
+          },
+          {
+            "id": "long-chain",
+            "expected": {
+              "stdout": "1\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "7\n1 1 2 3 4 5 6\n7\n"
+          }
+        ]
+      },
+      "contextId": "q3-teacher"
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Fill in the blanks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hje.doc",
+        "page": 20
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){int T[101],n,x,i,answer,k;scanf(\"%d\",&n);for(k=1;k<=n;k++)scanf(\"%d\",&T[k]);scanf(\"%d\",&x);i=x;while (T[i]!=i) {{D}};answer=i;printf(\"%d\\n\",answer);return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "direct",
+            "expected": {
+              "stdout": "1\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "4\n1 1 2 3\n4\n"
+          },
+          {
+            "id": "self",
+            "expected": {
+              "stdout": "3\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "4\n2 2 3 3\n3\n"
+          },
+          {
+            "id": "long-chain",
+            "expected": {
+              "stdout": "1\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "7\n1 1 2 3 4 5 6\n7\n"
+          }
+        ]
+      },
+      "contextId": "q3-teacher"
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank E",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Fill in the blanks such that the program outputs the following pattern."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E",
+          "forbiddenChars": "?<>!="
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hje.doc",
+        "page": 21
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){char b[25];int i,j,k,steps=0;for(k=0;k<25;k++)b[k]='.';i=0;j=0;while(i>=0&&i<5&&j>=0&&j<5&&steps<30){b[i*5+j]='*';i={{E}};j=(j+2)%5;steps++;}for(i=0;i<5;i++){for(j=0;j<5;j++)printf(\"%c\",b[i*5+j]);printf(\"\\n\");}return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "checker",
+            "expected": {
+              "stdout": "*.*.*\n.*.*.\n*.*.*\n.*.*.\n*.*.*\n"
+            },
+            "maxSteps": 10000,
+            "stdin": ""
+          }
+        ]
+      },
+      "contextId": "q4-checker"
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Fill in the blanks such that the program outputs the following pattern."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F",
+          "forbiddenChars": "?<>!="
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hje.doc",
+        "page": 21
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){char b[25];int i,j,k,steps=0;for(k=0;k<25;k++)b[k]='.';i=0;j=0;while(i>=0&&i<5&&j>=0&&j<5&&steps<30){b[i*5+j]='*';i=i+j/3;j={{F}};steps++;}for(i=0;i<5;i++){for(j=0;j<5;j++)printf(\"%c\",b[i*5+j]);printf(\"\\n\");}return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "checker",
+            "expected": {
+              "stdout": "*.*.*\n.*.*.\n*.*.*\n.*.*.\n*.*.*\n"
+            },
+            "maxSteps": 10000,
+            "stdin": ""
+          }
+        ]
+      },
+      "contextId": "q4-checker"
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank G",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Write down a RPG with 13 edges which has the maximum number of vertices."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hje.doc",
+        "page": 22
+      },
+      "grading": {
+        "kind": "regular-polygon-graph",
+        "answerBlank": "G",
+        "totalEdges": 13,
+        "objective": "max-vertices"
+      },
+      "contextId": "q5-rpg",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2010-rpg-example.png",
+        "alt": "Printed Regular Polygon Graph example, represented by 5643"
+      }
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Write down a RPG with 13 edges which has the minimum horizontal distance."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hje.doc",
+        "page": 22
+      },
+      "grading": {
+        "kind": "regular-polygon-graph",
+        "answerBlank": "H",
+        "totalEdges": 13,
+        "objective": "min-horizontal"
+      },
+      "contextId": "q5-rpg"
+    }
+  ]
+}

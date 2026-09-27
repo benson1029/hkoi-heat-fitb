@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2011-senior",
+    "season": "2011",
+    "division": "senior",
+    "title": "HKOI 2011 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2011hs_ans.doc"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q1-editor",
+      "track": "section-b",
+      "title": "Question 1 · HKOI text editor",
+      "markdown": "You are going to modify a string containing only capital letters using the HKOI text editor. Originally, the string is on the editor and a cursor is highlighting the first character of the string.\n\nThere are 4 kinds of command provided by the editor.\n\n| command | meaning |\n|---|---|\n| m? | Modify the character highlighted by the cursor to \"?\" |\n| l | Shift the cursor to the position on the left of it. If the cursor is at the leftmost position, it will stay at the leftmost position |\n| r | Shift the cursor to the position on the right of it. If the cursor is at the rightmost position, it will stay at the rightmost position |\n| (command)N | Repeat the command by N times. For example “(rr)3” means shifting the cursor to the right by 6 times. |\n\nIn the example and question below, ‘_’ indicates the position of the cursor.\n\nIf the screen is initially shown as:\n\n```text\nABCDE\n```\n\nAfter executing the sequence of command \"mF(r)7mZ\", the screen will be shown as:\n\n```text\nFBCDZ\n```\n\nWrite the sequence of command for modifying the following strings respectively."
+    },
+    {
+      "id": "q2-search",
+      "track": "section-b",
+      "title": "Question 2 · C program segment",
+      "markdown": "",
+      "displayCode": {
+        "c": "left = 1;\nright = 10;\nwhile (left < right){\n   mid = ( left + right ) / 2; /* # */\n   if (a[mid] > target)\n      right = mid - 1;\n   else\n      left = mid;\n}\nprintf(\"%d\\n\", left);"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Initial string:\n\n```text\nTCTCTCTCTCTC\n```\n\nTarget string:\n\n```text\nAGAGAGAGAGAG\n```\n\nCommand:"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "text-editor",
+        "answerBlank": "A",
+        "initial": "TCTCTCTCTCTC",
+        "target": "AGAGAGAGAGAG",
+        "maxCommands": 1000
+      },
+      "contextId": "q1-editor"
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Initial string:\n\n```text\nXXXXXXYXY\n```\n\nTarget string:\n\n```text\nYYYYYYXYX\n```\n\nCommand:"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "text-editor",
+        "answerBlank": "B",
+        "initial": "XXXXXXYXY",
+        "target": "YYYYYYXYX",
+        "maxCommands": 1000
+      },
+      "contextId": "q1-editor"
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Alice has written a binary search which was going to print the index of the target in array a[]={0,1,2,3,4,5,6,7,8,9,10,11}(a[0]..a[11]). However, Alice found that the program did not print the correct index.\n\nRewrite line with comment \"#\" in order to correct the program. Assume the initial value of target is between 1 and 10 inclusively."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){int a[12],left=1,right=10,mid,target,i;for(i=0;i<12;i++)a[i]=i;scanf(\"%d\",&target);while(left<right){ {{C}}; if(a[mid]>target)right=mid-1;else left=mid;}printf(\"%d\\n\",left);return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "target-1",
+            "expected": {
+              "stdout": "1\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "1\n"
+          },
+          {
+            "id": "target-2",
+            "expected": {
+              "stdout": "2\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "2\n"
+          },
+          {
+            "id": "target-3",
+            "expected": {
+              "stdout": "3\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "3\n"
+          },
+          {
+            "id": "target-4",
+            "expected": {
+              "stdout": "4\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "4\n"
+          },
+          {
+            "id": "target-5",
+            "expected": {
+              "stdout": "5\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "5\n"
+          },
+          {
+            "id": "target-6",
+            "expected": {
+              "stdout": "6\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "6\n"
+          },
+          {
+            "id": "target-7",
+            "expected": {
+              "stdout": "7\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "7\n"
+          },
+          {
+            "id": "target-8",
+            "expected": {
+              "stdout": "8\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "8\n"
+          },
+          {
+            "id": "target-9",
+            "expected": {
+              "stdout": "9\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "9\n"
+          },
+          {
+            "id": "target-10",
+            "expected": {
+              "stdout": "10\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "10\n"
+          }
+        ]
+      },
+      "contextId": "q2-search",
+      "answerOnly": true
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "A regular ruler may have integer marks from 0 to the length of the ruler. However, sometimes a ruler has some missing marks, but you can still use it to measure any integer length from 1 up to the ruler’s full length. This kind of ruler is called ‘sparse ruler’. An example of a sparse ruler of full length 6 is given below:\n\nYou can measure any integer length from 1 to 6. For example, you can get length 2 by measuring between 4 and 6, length 5 by measuring between 1 and 6 etc.\n\nCreate a sparse ruler of length 9 with at most 5 marks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "sparse-ruler",
+        "answerBlank": "D",
+        "length": 9,
+        "maxMarks": 5
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2011-sparse-ruler.png",
+        "alt": "Printed sparse ruler example with marks at 0, 1, 4, and 6"
+      }
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "A regular ruler may have integer marks from 0 to the length of the ruler. However, sometimes a ruler has some missing marks, but you can still use it to measure any integer length from 1 up to the ruler’s full length. This kind of ruler is called ‘sparse ruler’. An example of a sparse ruler of full length 6 is given below:\n\nYou can measure any integer length from 1 to 6. For example, you can get length 2 by measuring between 4 and 6, length 5 by measuring between 1 and 6 etc.\n\nCreate a sparse ruler of length 13 with at most 6 marks"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "sparse-ruler",
+        "answerBlank": "E",
+        "length": 13,
+        "maxMarks": 6
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2011-sparse-ruler.png",
+        "alt": "Printed sparse ruler example with marks at 0, 1, 4, and 6"
+      }
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blanks F1, F2",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The number of inversions of an array A[n] (A[0]..A[n-1]) is defined as the number of pairs (i,j), where 0≤ i < j <n, such that A[i]>A[j].\n\nAlice has written the following program segment to count the number of inversion pairs of array A, where each element is an integer between 1 and 1001. The program will output the number of inversions in the array. Can you help Alice to complete the program?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F1"
+        },
+        {
+          "id": "F2"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){int A[20],vis[20],n,i,j,k,sum=0;scanf(\"%d\",&n);for(i=0;i<n;i++){scanf(\"%d\",&A[i]);vis[i]=0;}for(i=1001;i>=1;i--){for(j=n-1;j>=0;j--){if({{F1}}){for(k=0;k<j;k++)sum=sum+vis[k];{{F2}};}}}printf(\"%d\\n\",sum);return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "array-0",
+            "expected": {
+              "stdout": "3\n"
+            },
+            "maxSteps": 200000,
+            "stdin": "3\n3 2 1\n"
+          },
+          {
+            "id": "array-1",
+            "expected": {
+              "stdout": "0\n"
+            },
+            "maxSteps": 200000,
+            "stdin": "3\n1 2 3\n"
+          },
+          {
+            "id": "array-2",
+            "expected": {
+              "stdout": "5\n"
+            },
+            "maxSteps": 200000,
+            "stdin": "5\n4 1 4 2 3\n"
+          },
+          {
+            "id": "array-3",
+            "expected": {
+              "stdout": "6\n"
+            },
+            "maxSteps": 200000,
+            "stdin": "5\n1001 1 500 2 3\n"
+          },
+          {
+            "id": "array-4",
+            "expected": {
+              "stdout": "0\n"
+            },
+            "maxSteps": 200000,
+            "stdin": "4\n5 5 5 5\n"
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "sum=0;\nfor (i=0;i<n;i++)\n   vis[i]=0;\nfor (i=1001;i>=1;i--){\n   for (j=n-1;j>=0;j--){\n      if ({{F1}}){\n         for (k=0;k<j;k++)\n            sum=sum+vis[k];\n         {{F2}};\n      }\n   }\n}\nprintf(\"%d\\n\",sum);"
+      }
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank G",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Alice has written the following program segment below to count the number of prime factors for a given integer n, where n is an integer between 2 and 1001 inclusively. For example, 12=2²x3, hence 12 has 2 prime factors. However, Bob claims that her program is incorrect. Can you provide a valid input such that his program gives an incorrect output?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "prime-factor-count-counterexample",
+        "answerBlank": "G",
+        "minimum": 2,
+        "maximum": 1001
+      },
+      "displayCode": {
+        "c": "ans=1;\nscanf(\"%d\",&n);\nfor (i=2;i*i<=n;i++){\n   if (n%i==0){\n      ans++;\n      while (n%i==0)\n         n/=i;\n   }\n}\nprintf(\"%d\\n\",ans);"
+      }
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank H",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Suppose there is an integer array A[]. Alice wrote a program to find the largest and the second largest elements (A[0] and A[1] after sorting A in non-ascending order) of A[] without sorting the array A[]. However, Bob claims that her program is incorrect. Can you state an array of A[] containing 5 elements such that his program will give incorrect output?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "top-two-counterexample",
+        "answerBlank": "H",
+        "count": 5,
+        "minimum": -32768,
+        "maximum": 32767
+      },
+      "displayCode": {
+        "c": "max1=-1;\nmax2=-1;\nfor (i=0;i<5;i++){\n   if (A[i]>max2&&A[i]<max1)\n      max2=A[i];\n   else if (A[i]>max1){\n      max2=max1;\n      max1=A[i];\n   }\n}\nprintf(\"%d %d\\n\",max1,max2);"
+      }
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blanks I1, I2",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Consider the following program segment. Assume the variable a is declared as a 32 bit integer, and the user's input for a is always positive.\n\nComplete the program segment above such that the two lines of output are the same."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I1"
+        },
+        {
+          "id": "I2"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){int a;scanf(\"%d\",&a);printf(\"%d\\n\",a);if(a>=100){if({{I1}})printf(\"%d\",a/100);else printf(\"%d\",{{I2}});}printf(\"%d\\n\",a%100);return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "a-1",
+            "expected": {
+              "stdout": "1\n1\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "1\n"
+          },
+          {
+            "id": "a-9",
+            "expected": {
+              "stdout": "9\n9\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "9\n"
+          },
+          {
+            "id": "a-10",
+            "expected": {
+              "stdout": "10\n10\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "10\n"
+          },
+          {
+            "id": "a-99",
+            "expected": {
+              "stdout": "99\n99\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "99\n"
+          },
+          {
+            "id": "a-100",
+            "expected": {
+              "stdout": "100\n100\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "100\n"
+          },
+          {
+            "id": "a-101",
+            "expected": {
+              "stdout": "101\n101\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "101\n"
+          },
+          {
+            "id": "a-109",
+            "expected": {
+              "stdout": "109\n109\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "109\n"
+          },
+          {
+            "id": "a-110",
+            "expected": {
+              "stdout": "110\n110\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "110\n"
+          },
+          {
+            "id": "a-199",
+            "expected": {
+              "stdout": "199\n199\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "199\n"
+          },
+          {
+            "id": "a-999",
+            "expected": {
+              "stdout": "999\n999\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "999\n"
+          },
+          {
+            "id": "a-1000",
+            "expected": {
+              "stdout": "1000\n1000\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "1000\n"
+          },
+          {
+            "id": "a-1009",
+            "expected": {
+              "stdout": "1009\n1009\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "1009\n"
+          },
+          {
+            "id": "a-1234567",
+            "expected": {
+              "stdout": "1234567\n1234567\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "1234567\n"
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "scanf(\"%d\",&a);\nprintf(\"%d\\n\",a);\nif (a>=100){\n   if({{I1}})\n      printf(\"%d\", a / 100);\n   else\n      printf(\"%d\", {{I2}});\n}\nprintf(\"%d\\n\", a % 100);"
+      }
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 8, Blank J",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "You are given 3 integer arrays a[5], b[5], c[5](a[0..4], b[0..4],c[0..4] in Pascal):\n\n```text\na[5] = {1,0,4,2,3}\nb[5] = {0,4,2,3,1}\nc[5] = {4,2,3,1,0}\n```\n\nWhat is the output of the following program segment?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hse.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "J": [
+            "750"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "c": "ans=0;\nfor (i=0; i<5; i++)\n   for (j=0; j<5; j++)\n      for (k=0; k<5; k++)\n         ans+=a[b[i]]+b[c[j]]+c[a[k]];\nprintf(\"%d\\n\",ans)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,618 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2010-senior",
+    "season": "2010",
+    "division": "senior",
+    "title": "HKOI 2010 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2010hs_sol.doc"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q3-sort",
+      "track": "section-b",
+      "title": "Question 3 · C program segment",
+      "markdown": "There are six integer variables, a, b, c, d, e and f . You are asked to sort them in ascending order, i.e. a≤b≤c≤d≤e≤f. There is a procedure sort(x,y,z), where x, y and z are integers that are passed by reference. After a call of this procedure, the variables will be sorted such that x≤y≤z.",
+      "displayCode": {
+        "c": "sort(&a,&b,&c);\nsort(&d,&e,&f);\nsort(&a,&d,&e);\nsort(&b,&c,&f);\nsort(&a, {{C}});\nsort({{D}});"
+      }
+    },
+    {
+      "id": "q4-number",
+      "track": "section-b",
+      "title": "Question 4 · C program",
+      "markdown": "```text\n1\n31\n531\n7531\n97531\n1197531\n131197531\n```",
+      "displayCode": {
+        "c": "#include <stdio.h>\nint main() {\n   long a, b, i, t;\n   a = 0;\n   b = 1;\n   for(i=0; i<=6; i++) {\n      printf(\"%ld\\n\", b);\n      t = b;\n      if(i<5)\n         b = {{E}};\n      else\n         b = {{F}};\n      a = t;\n   }\n   return 0;\n}"
+      }
+    },
+    {
+      "id": "q5-rpg",
+      "track": "section-b",
+      "title": "Question 5 · Regular Polygon Graph",
+      "markdown": "A Regular Polygon Graph (RPG in short) is a graph consisting of a sequence of non-overlapping regular polygons of 3 - 6 sides. The centres of the polygons lie on the same horizontal line. Each polygon shares an edge and two vertices with the polygon on the left of it (if it is not the leftmost polygon) and shares an edge and two vertices with the polygon on the right of it (if it is not the rightmost polygon). For example, the figure below shows a RPG.\n\nThe RPG above has 12 vertices and 15 edges.\n\nDefine the diagonal distance of a RPG to be the length of the shortest path connecting P and Q, where P is the leftmost vertex among the topmost vertices, and Q is the rightmost vertex among the bottommost vertices. For example, the RPG above has diagonal distance equals to 3.\n\nA RPG can be represented by a sequence of numbers, which specifies the number of sides of the polygons from left to right. For example, the RPG above is represented by 5643."
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Please fill in the truth values (T/F) of boolean values of a, b, c and d so that the boolean expression below is TRUE.\n\n`(a OR b) AND (NOT a OR c) AND (NOT b OR NOT d) AND (NOT c OR d)`\n\nA: a = __ ; b = __ ; c = __; d = __"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 16
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 19
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "FTFF",
+            "TFTT",
+            "F T F F",
+            "T F T T",
+            "F,T,F,F",
+            "T,F,T,T"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The following table shows the computational time needed for logical operations on a special machine.\n\n| Operation | Unit(s) of time needed |\n|---|---:|\n| NOT | 5 |\n| AND | 3 |\n| OR | 1 |\n| XOR | 2 |\n| XNOR | 2 |\n\n| a | b | F(a,b) |\n|:---:|:---:|:---:|\n| F | F | T |\n| F | T | T |\n| T | F | F |\n| T | T | T |\n\nWrite down a boolean expression that implements F within 5 units of time. You must use parenthesis (round brackets) to indicate the order of execution of the logical operations. For example, \"(a AND a) OR (NOT a)\" and \"a AND (a OR (NOT a))\" are two different expressions. Do not write symbolic operators such as !,||,&&."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 20
+      },
+      "grading": {
+        "kind": "boolean-circuit",
+        "answerBlank": "B",
+        "expected": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "maxCost": 5
+      }
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Please fill in the blanks in the following program segment to finish the task."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 20
+      },
+      "grading": {
+        "kind": "triple-sort-network",
+        "answerBlank": "C",
+        "variables": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f"
+        ],
+        "calls": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "e",
+            "f"
+          ],
+          [
+            "a",
+            "d",
+            "e"
+          ],
+          [
+            "b",
+            "c",
+            "f"
+          ],
+          [
+            "a",
+            "ANSWER"
+          ],
+          [
+            "c",
+            "d",
+            "e"
+          ]
+        ],
+        "answerToken": "ANSWER",
+        "answerCount": 2
+      },
+      "contextId": "q3-sort"
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Please fill in the blanks in the following program segment to finish the task."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 20
+      },
+      "grading": {
+        "kind": "triple-sort-network",
+        "answerBlank": "D",
+        "variables": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f"
+        ],
+        "calls": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "e",
+            "f"
+          ],
+          [
+            "a",
+            "d",
+            "e"
+          ],
+          [
+            "b",
+            "c",
+            "f"
+          ],
+          [
+            "a",
+            "b",
+            "d"
+          ],
+          [
+            "ANSWER"
+          ]
+        ],
+        "answerToken": "ANSWER",
+        "answerCount": 3
+      },
+      "contextId": "q3-sort"
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank E",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Complete the program so that it gives the following output."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 21
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){long long a=0,b=1,i,t;for(i=0;i<=6;i++){printf(\"%lld\\n\",b);t=b;if(i<5)b={{E}};else b=131197531;a=t;}return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "seven-lines",
+            "expected": {
+              "stdout": "1\n31\n531\n7531\n97531\n1197531\n131197531\n"
+            },
+            "maxSteps": 10000,
+            "stdin": ""
+          }
+        ]
+      },
+      "contextId": "q4-number"
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Complete the program so that it gives the following output."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 21
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){long long a=0,b=1,i,t;for(i=0;i<=6;i++){printf(\"%lld\\n\",b);t=b;if(i<5)b=20*b-100*a+11;else b={{F}};a=t;}return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "seven-lines",
+            "expected": {
+              "stdout": "1\n31\n531\n7531\n97531\n1197531\n131197531\n"
+            },
+            "maxSteps": 10000,
+            "stdin": ""
+          }
+        ]
+      },
+      "contextId": "q4-number"
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank G",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Write down a RPG with 13 edges which has the maximum number of vertices."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 21
+      },
+      "grading": {
+        "kind": "regular-polygon-graph",
+        "answerBlank": "G",
+        "totalEdges": 13,
+        "objective": "max-vertices"
+      },
+      "contextId": "q5-rpg",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2010-rpg-example.png",
+        "alt": "Printed Regular Polygon Graph example, represented by 5643"
+      }
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Write down a RPG with 13 edges which has the minimum diagonal distance."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 22
+      },
+      "grading": {
+        "kind": "regular-polygon-graph",
+        "answerBlank": "H",
+        "totalEdges": 13,
+        "objective": "min-diagonal"
+      },
+      "contextId": "q5-rpg"
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank I",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the program so that it gives the following output.\n\n```text\n....*....\n.........\n...*.*...\n.........\n..*.*.*..\n.........\n.*.*.*.*.\n.........\n*.*.*.*.*\n```"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 23
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int i,int j){return {{I}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "cell-0-0",
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              0
+            ]
+          },
+          {
+            "id": "cell-1-0",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              0
+            ]
+          },
+          {
+            "id": "cell-1-1",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              1
+            ]
+          },
+          {
+            "id": "cell-2-0",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              2,
+              0
+            ]
+          },
+          {
+            "id": "cell-2-1",
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000,
+            "args": [
+              2,
+              1
+            ]
+          },
+          {
+            "id": "cell-2-2",
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 20000,
+            "args": [
+              2,
+              2
+            ]
+          },
+          {
+            "id": "cell-3-0",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              0
+            ]
+          },
+          {
+            "id": "cell-3-1",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              1
+            ]
+          },
+          {
+            "id": "cell-3-2",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              2
+            ]
+          },
+          {
+            "id": "cell-3-3",
+            "expected": {
+              "returnValue": 8
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              3
+            ]
+          },
+          {
+            "id": "cell-4-0",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000,
+            "args": [
+              4,
+              0
+            ]
+          },
+          {
+            "id": "cell-4-1",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              4,
+              1
+            ]
+          },
+          {
+            "id": "cell-4-2",
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000,
+            "args": [
+              4,
+              2
+            ]
+          },
+          {
+            "id": "cell-4-3",
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 20000,
+            "args": [
+              4,
+              3
+            ]
+          },
+          {
+            "id": "cell-4-4",
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 20000,
+            "args": [
+              4,
+              4
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\nint main() {\n   int a[15][15];\n   int i, j;\n   for (i=1;i<=9;i++)\n      for (j=1;j<=9;j++)\n         a[i][j] = 0;\n   for (i=0;i<=4;i++)\n      for (j=0;j<=i;j++)\n         a[i*2+1][{{I}}] = 1;\n   for (i=1;i<=9;i++) {\n      for (j=1;j<=9;j++)\n         if (a[i][j])\n            printf(\"*\");\n         else\n            printf(\".\");\n      printf(\"\\n\");\n   }\n}"
+      }
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank J",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Consider the following program:\n\n\"***\" is an unknown expression which depends on the values of a and j only.\n\nIt is given that the output is as follows:\n\n`2331##1#31###2`     where \"#\" are unknown characters (which may or may not be the same).\n\nFind the exact output of the program."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2010hse.doc",
+        "page": 24
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "J": [
+            "23314412314412"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n#include <stdlib.h>\nint main() {\n   int a = 0; int i, j;\n   for (i=0; i<=13; i++) {\n      j = i%2;\n      a = ***;\n      a = abs(a) % 4 + 1;\n      printf(\"%d\", a);\n   }\n   printf(\"\\n\");\n   return 0;\n}"
+      }
+    }
+  ]
+}

@@ -1,11 +1,11 @@
 import { expect, it } from 'vitest';
-import raw2012 from './2011-12-senior.json';
-import raw2013 from './2012-13-senior.json';
-import raw2014 from './2013-14-senior.json';
+import raw2012 from './2012-senior.json';
+import raw2013 from './2013-senior.json';
+import raw2014 from './2014-senior.json';
 import { validatePaper } from '../src/core/validate';
 import { gradeQuestion } from '../src/core/grader';
 
-it('2011/12 Senior official numeric and code answers pass', async () => {
+it('2012 Senior official numeric and code answers pass', async () => {
   const paper = validatePaper(raw2012);
   const answers: Record<string, Record<string,string>> = {
     A:{A:'m(x,y,32767)'}, B:{B:'m(x,y,32767)'},
@@ -21,7 +21,7 @@ it('2011/12 Senior official numeric and code answers pass', async () => {
   }
 },120_000);
 
-it('2013/14 Senior official Section B answers pass, including cancellation', async () => {
+it('2014 Senior official Section B answers pass, including cancellation', async () => {
   const paper=validatePaper(raw2014);
   expect(paper.questions.reduce((sum,q)=>sum+q.points,0)).toBe(18);
   const answers:Record<string,Record<string,string>>={
@@ -41,7 +41,7 @@ it('2013/14 Senior official Section B answers pass, including cancellation', asy
   }
 },120_000);
 
-it('2012/13 Senior official Section B answers pass', async () => {
+it('2013 Senior official Section B answers pass', async () => {
   const paper=validatePaper(raw2013);
   expect(paper.questions.reduce((sum,q)=>sum+q.points,0)).toBe(26);
   const answers:Record<string,string>={A:'16',B:'108',C:'2916',D:'peek(r)',E:'s,pop(r)',

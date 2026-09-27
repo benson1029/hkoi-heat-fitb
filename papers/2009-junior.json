@@ -1,0 +1,1022 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2009-junior",
+    "season": "2009",
+    "division": "junior",
+    "title": "HKOI 2009 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2009hj_ans.doc",
+      "page": 29,
+      "note": "The corrected suggested-answer table has C-language typos in F and G; the graders follow the printed task and its numeric example."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q1-code",
+      "track": "section-b",
+      "title": "Section B, Question 1",
+      "markdown": "Given a function getmax with 4 integer parameters a,b,c and upper_limit, which returns the largest integer among a,b and c if they are smaller than upper_limit, otherwise upper_limit will be returned.\n\nSuppose getMax is already defined. Also, all integers are distinct and smaller than 100 and the following program prints out a, b, c in descending order. Fill in the blanks.",
+      "displayCode": {
+        "c": "#include <stdio.h>\n\nint main(){\n  int a, b, c, largest, ceiling;\n  ceiling = 100;\n  scanf(\"%d%d%d\",&a, &b, &c);\n  largest = {{A}};\n  while ({{B}}){\n     printf(\"%d \", largest);\n     ceiling = {{C}};\n     largest = {{D}};\n  }\n  return 0;\n}"
+      }
+    },
+    {
+      "id": "q4-code",
+      "track": "section-b",
+      "title": "Section B, Question 4",
+      "markdown": "Each cell in a n×m table is labeled from left to right, then from up to down with an integer from 1 to n×m. Rows are numbered 1 to n from up to down, while columns are numbered 1 to m from left to right.\n\nFor example, cells in a 4×9 table are labeled as follows:\n\n| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|---|---|---|---|---|---|---|---|---|\n| 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 |\n| 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 |\n| 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 |\n\nThe cell labeled with 12, for example, is in the 3rd column and 2nd row.\n\nThe following program outputs the column number and the row number of the cell which is labeled with id in an n x m table. Fill in the blanks.",
+      "displayCode": {
+        "c": "#include <stdio.h>\nint n,m,id,C,R;\nint main()\n{\n   scanf(\"%d%d\",&n,&m);\n   scanf(\"%d\",&id);\n   C = {{G}};\n   R = {{H}};\n   printf(\"row number = %d\\n\",R);\n   printf(\"column number = %d\\n\",C);\n   return 0;\n}"
+      }
+    },
+    {
+      "id": "q5-code",
+      "track": "section-b",
+      "title": "Section B, Question 5",
+      "markdown": "The following program segment tries to locate key in an array A[0..n-1] (A[n] in C Version) which is sorted in descending order. Assume that key is always in the array A and all elements in A are unique. Fill in the blanks.",
+      "displayCode": {
+        "c": "low = 0;\nhigh = n-1;\ndo{\n    mid = (low + high) / 2;\n    if (A[mid] > key)\n       {{I}};\n    else\n        high = mid;\n}while (high > low)\nans = A[{{J}}];"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "section-b-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Suppose getMax is already defined. Also, all integers are distinct and smaller than 100 and the following program prints out a, b, c in descending order. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 29
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int a,int b,int c){return {{A}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            },
+            "helperSource": "int getMax(int a,int b,int c,int ceiling){int best=ceiling;int v[3]={a,b,c};for(int i=0;i<3;i++)if(v[i]<ceiling&&(best==ceiling||v[i]>best))best=v[i];return best;}"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              2,
+              3,
+              5
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              1,
+              99,
+              50
+            ],
+            "expected": {
+              "returnValue": 99
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              -2,
+              4,
+              5
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              7,
+              8,
+              9
+            ],
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              10,
+              20,
+              30
+            ],
+            "expected": {
+              "returnValue": 30
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q1-code"
+    },
+    {
+      "id": "section-b-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Suppose getMax is already defined. Also, all integers are distinct and smaller than 100 and the following program prints out a, b, c in descending order. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 30
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int largest,int ceiling){return {{B}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              5,
+              100
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              5,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              3,
+              5
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              100,
+              100
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              -1,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q1-code"
+    },
+    {
+      "id": "section-b-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank C",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Suppose getMax is already defined. Also, all integers are distinct and smaller than 100 and the following program prints out a, b, c in descending order. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 30
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int largest,int ceiling){return {{C}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              5,
+              100
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              3,
+              5
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              99,
+              100
+            ],
+            "expected": {
+              "returnValue": 99
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              -2,
+              10
+            ],
+            "expected": {
+              "returnValue": -2
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q1-code"
+    },
+    {
+      "id": "section-b-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank D",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Suppose getMax is already defined. Also, all integers are distinct and smaller than 100 and the following program prints out a, b, c in descending order. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 30
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int a,int b,int c,int ceiling){return {{D}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            },
+            "helperSource": "int getMax(int a,int b,int c,int ceiling){int best=ceiling;int v[3]={a,b,c};for(int i=0;i<3;i++)if(v[i]<ceiling&&(best==ceiling||v[i]>best))best=v[i];return best;}"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              2,
+              3,
+              5,
+              100
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              2,
+              3,
+              5,
+              5
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              2,
+              3,
+              5,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              10,
+              20,
+              30,
+              25
+            ],
+            "expected": {
+              "returnValue": 20
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              1,
+              50,
+              99,
+              51
+            ],
+            "expected": {
+              "returnValue": 50
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q1-code"
+    },
+    {
+      "id": "section-b-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank E",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Given 5 types of coins with unlimited supply (\\$2, \\$1, \\$0.5, \\$0.2, \\$0.1). In how many ways can we make up \\$3.7 using coins?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 30
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "188"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank F",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Suppose isprime[0..n] (isprime[n+1] in C Version) is an integer array. The program segment below outputs the prime factors of positive integer n. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 30
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int j,i,isprime[100];int solve(int jj,int ii,int p){j=jj;i=ii;isprime[i]=p;return {{F}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              2,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              4,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              6,
+              3,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              9,
+              3,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              10,
+              2,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              9,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "7",
+            "args": [
+              15,
+              5,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "8",
+            "args": [
+              17,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "9",
+            "args": [
+              12,
+              4,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "for (j = 2; j <= n; ++j)\n  isprime[j] = 1;\nfor (j = 2; j <= n; ++j){\n  for (i = 2; i < n; ++i){\n    if ({{F}}){\n      if (j == n)\n        printf(\"%d\\n\", i);\n      isprime[j] = 0;\n    }\n  }\n}"
+      }
+    },
+    {
+      "id": "section-b-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The following program outputs the column number and the row number of the cell which is labeled with id in an n x m table. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 32
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int m,id;int solve(int mm,int value){m=mm;id=value;return {{G}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              9,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              9,
+              9
+            ],
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              9,
+              10
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              9,
+              12
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              9,
+              36
+            ],
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              5,
+              7
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "7",
+            "args": [
+              2,
+              4
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "8",
+            "args": [
+              10,
+              6
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q4-code"
+    },
+    {
+      "id": "section-b-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank H",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The following program outputs the column number and the row number of the cell which is labeled with id in an n x m table. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 32
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int m,id,C;int solve(int mm,int value){m=mm;id=value;C=(id-1)%m+1;return {{H}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              9,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              9,
+              9
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              9,
+              10
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              9,
+              12
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              9,
+              36
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              5,
+              7
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "7",
+            "args": [
+              2,
+              4
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "8",
+            "args": [
+              10,
+              6
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q4-code"
+    },
+    {
+      "id": "section-b-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank I",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "The following program segment tries to locate key in an array A[0..n-1] (A[n] in C Version) which is sorted in descending order. Assume that key is always in the array A and all elements in A are unique. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 33
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int low,mid;int solve(int l,int m){low=l;mid=m;{{I}};return low;}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              0,
+              3
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              3,
+              5
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              10,
+              11
+            ],
+            "expected": {
+              "returnValue": 12
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              25,
+              50
+            ],
+            "expected": {
+              "returnValue": 51
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q5-code"
+    },
+    {
+      "id": "section-b-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank J",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "The following program segment tries to locate key in an array A[0..n-1] (A[n] in C Version) which is sorted in descending order. Assume that key is always in the array A and all elements in A are unique. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hje.doc",
+        "page": 33
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int high,low;int solve(int h){high=h;low=h;return {{J}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              5
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              20
+            ],
+            "expected": {
+              "returnValue": 20
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              99
+            ],
+            "expected": {
+              "returnValue": 99
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q5-code"
+    }
+  ]
+}

@@ -56,9 +56,16 @@ function countChars(value: string): number {
   return Array.from(value).length;
 }
 
-function capAnswer(value: string, maxChars?: number): string {
+function capAnswer(value: string, maxChars?: number, excludeWhitespace = false): string {
   const normalized = value.replace(/\r\n?/g, '\n');
-  return maxChars === undefined ? normalized : Array.from(normalized).slice(0, maxChars).join('');
+  if (maxChars === undefined) return normalized;
+  let counted = 0;
+  return Array.from(normalized).filter(char => {
+    if (excludeWhitespace && /\s/.test(char)) return true;
+    if (counted >= maxChars) return false;
+    counted++;
+    return true;
+  }).join('');
 }
 
 function statusName(status: QuestionGrade['status']): string {
@@ -366,7 +373,7 @@ function AnswerInput({
   showLabel?: boolean;
   questionTitle: string;
 }) {
-  const remaining = blank.maxChars === undefined ? null : blank.maxChars - countChars(value);
+  const remaining = blank.maxChars === undefined ? null : blank.maxChars - countChars(blank.maxCharsExcludeWhitespace ? value.replace(/\s/g, '') : value);
   const label = `${questionTitle}: ${blank.label || blank.id}`;
   const width = `${Math.min(80, Math.max(inline ? 42 : 46, (blank.maxChars ?? 24) + 16, countChars(value) + 12))}ch`;
   return (
@@ -380,7 +387,7 @@ function AnswerInput({
           className={inline ? 'inline-textarea' : 'answer-textarea'}
           style={inline ? { width } : undefined}
           value={value}
-          onChange={(event) => onChange(capAnswer(event.target.value, blank.maxChars))}
+          onChange={(event) => onChange(capAnswer(event.target.value, blank.maxChars, blank.maxCharsExcludeWhitespace))}
           placeholder={blank.placeholder || 'Type your answer'}
           spellCheck={false}
           rows={inline ? 2 : 4}
@@ -392,7 +399,7 @@ function AnswerInput({
           className={inline ? 'inline-input' : 'answer-input'}
           style={{ width }}
           value={value}
-          onChange={(event) => onChange(capAnswer(event.target.value, blank.maxChars))}
+          onChange={(event) => onChange(capAnswer(event.target.value, blank.maxChars, blank.maxCharsExcludeWhitespace))}
           placeholder={blank.placeholder || 'Type your answer'}
           spellCheck={false}
           autoComplete="off"
@@ -585,6 +592,52 @@ function RobotAnswer({
   </div>;
 }
 
+function CommandAnswer({ question, answerBlank, values, onAnswer, commands, repeat }: {
+  question: Question;
+  answerBlank: string;
+  values: Record<string, string>;
+  onAnswer: (id: string, value: string) => void;
+  commands: { token: string; label: string }[];
+  repeat: boolean;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const blank = question.blanks.find(item => item.id === answerBlank);
+  if (!blank) return <p className="inline-error">This question has no answer blank.</p>;
+  const value = values[blank.id] || '';
+  const remaining = blank.maxChars === undefined ? null : blank.maxChars - countChars(value);
+  function insert(token: string) {
+    const input = inputRef.current;
+    const start = input?.selectionStart ?? value.length;
+    const end = input?.selectionEnd ?? start;
+    const edit = insertRobotToken(value, start, end, token, blank!.maxChars);
+    if (!edit) return;
+    onAnswer(blank!.id, edit.value);
+    window.requestAnimationFrame(() => {
+      input?.focus({ preventScroll: true });
+      input?.setSelectionRange(edit.cursor, edit.cursor);
+    });
+  }
+  function backspace() {
+    const input = inputRef.current;
+    const edit = deleteBeforeCursor(value, input?.selectionStart ?? value.length, input?.selectionEnd ?? value.length);
+    if (!edit) return;
+    onAnswer(blank!.id, edit.value);
+    window.requestAnimationFrame(() => {
+      input?.focus({ preventScroll: true });
+      input?.setSelectionRange(edit.cursor, edit.cursor);
+    });
+  }
+  const button = (token: string, label: string) => <button key={label} type="button" className="robot-token" aria-label={`Insert ${label}`} title={`Insert ${label}`} onMouseDown={event => event.preventDefault()} onClick={() => insert(token)}>{token}</button>;
+  return <div className="robot-editor">
+    <div className="robot-input-row"><input ref={inputRef} type="text" className="robot-input" value={value} onChange={event => onAnswer(blank.id, capAnswer(event.target.value, blank.maxChars))} aria-label={`${question.printedRef}: command`} placeholder="Commands" spellCheck={false} autoComplete="off" />{remaining !== null && <span className="robot-count" aria-label={`${remaining} characters remaining`} aria-live="polite">{remaining}</span>}</div>
+    <div className="robot-toolbar" aria-label="Command buttons">
+      <div className="robot-token-group"><span>Commands</span>{commands.map(({ token, label }) => button(token, label))}</div>
+      {repeat && <div className="robot-token-group"><span>Repeat</span>{button('(', 'opening parenthesis')}{button(')', 'closing parenthesis')}{Array.from({ length: 10 }, (_, digit) => button(String(digit), `digit ${digit}`))}</div>}
+      <button type="button" className="robot-backspace" onMouseDown={event => event.preventDefault()} onClick={backspace} aria-label="Delete before cursor">⌫</button>
+    </div>
+  </div>;
+}
+
 function DieFaceAnswer({ question, answerBlank, value, onAnswer }: {
   question: Question; answerBlank: string; value: string; onAnswer: (id: string, value: string) => void;
 }) {
@@ -695,9 +748,12 @@ function QuestionCard({
       )}
       {grading.kind === 'graph' && <GraphAnswer question={question} grading={grading} values={values} onAnswer={onAnswer} />}
       {grading.kind === 'robot-grid' && <RobotAnswer question={question} grading={grading} values={values} onAnswer={onAnswer} />}
+      {grading.kind === 'drawing-robot' && <CommandAnswer question={question} answerBlank={grading.answerBlank} values={values} onAnswer={onAnswer} commands={[{token:'F',label:'forward'},{token:'T',label:'turn right'}]} repeat />}
+      {grading.kind === 'box-stack-robot' && <CommandAnswer question={question} answerBlank={grading.answerBlank} values={values} onAnswer={onAnswer} commands={[{token:'L',label:'move left'},{token:'R',label:'move right'},{token:'U',label:'pick up'},{token:'D',label:'drop'}]} repeat />}
+      {grading.kind === 'river-route' && <CommandAnswer question={question} answerBlank={grading.answerBlank} values={values} onAnswer={onAnswer} commands={[{token:'+',label:'add passenger and move downstream'},{token:'-',label:'remove passenger and move downstream'},{token:'<',label:'move upstream'}]} repeat={false} />}
       {grading.kind === 'die-face' && <DieFaceAnswer question={question} answerBlank={grading.answerBlank} value={values[grading.answerBlank] || ''} onAnswer={onAnswer} />}
       {grading.kind === 'logo-drawing' && <LogoDrawingAnswer question={question} answerBlank={grading.answerBlank} value={values[grading.answerBlank] || ''} onAnswer={onAnswer} />}
-      {!sharedCode && (grading.kind !== 'program' || plainAnswer || (!!displaySource && !displayHasBlanks)) && grading.kind !== 'graph' && grading.kind !== 'robot-grid' && grading.kind !== 'die-face' && grading.kind !== 'logo-drawing' && grading.kind !== 'cancelled' && !displayHasBlanks && <div className="answer-fields">{question.blanks.map((blank) => <AnswerInput key={blank.id} blank={blank} value={values[blank.id] || ''} onChange={(value) => onAnswer(blank.id, value)} showLabel={question.blanks.length > 1} questionTitle={question.printedRef} />)}</div>}
+      {!sharedCode && (grading.kind !== 'program' || plainAnswer || (!!displaySource && !displayHasBlanks)) && grading.kind !== 'graph' && grading.kind !== 'robot-grid' && grading.kind !== 'drawing-robot' && grading.kind !== 'box-stack-robot' && grading.kind !== 'river-route' && grading.kind !== 'die-face' && grading.kind !== 'logo-drawing' && grading.kind !== 'cancelled' && !displayHasBlanks && <div className="answer-fields">{question.blanks.map((blank) => <AnswerInput key={blank.id} blank={blank} value={values[blank.id] || ''} onChange={(value) => onAnswer(blank.id, value)} showLabel={question.blanks.length > 1} questionTitle={question.printedRef} />)}</div>}
       {grading.kind === 'pending' && <p className="pending-note">Grader pending: {grading.reason}</p>}
       {grading.kind === 'cancelled' && <p className="cancelled-note">{grading.reason}</p>}
       {grading.kind !== 'cancelled' && <div className="question-actions"><button type="button" className="check-button" onClick={onCheck} disabled={busy || grading.kind === 'pending'}>{busy ? 'Checking…' : 'Check'}</button></div>}
@@ -807,7 +863,7 @@ export default function App() {
     setBusyQuestion(question.id);
     setGradeError(null);
     try {
-      const result = await gradeQuestion(question, answersByPaper[key]?.[question.id] || {}, selectedLanguage);
+      const result = await gradeQuestion(question, answersByPaper[key]?.[question.id] || {}, selectedLanguage, answersByPaper[key] || {});
       setResultsByPaper((all) => ({ ...all, [key]: { ...(all[key] || {}), [question.id]: result } }));
       setFullResults((all) => ({ ...all, [key]: null }));
     } catch (error) {

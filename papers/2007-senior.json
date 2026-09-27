@@ -1,0 +1,1497 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2007-senior",
+    "season": "2007",
+    "division": "senior",
+    "title": "HKOI 2007 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2007hs_sol.doc"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q1-hamming",
+      "track": "section-b",
+      "title": "Question 1 · C function",
+      "markdown": "A Hamming number is a positive integer with no prime factors other than 2, 3 or 5.\n\nFor example, 12 (2 × 2 × 3) is a Hamming number while 14 (2 × 7) is not.",
+      "displayCode": {
+        "c": "int hamming(int n){\n   int i;\n   if (n == 1)\n      return 1;\n   i = 0;\n   if (n % 2 == 0)\n      i = 2;\n   if (n % 3 == 0)\n      i = 3;\n   if (n % 5 == 0)\n      i = 5;\n   if (i == 0)\n      {{A}};\n   else\n      {{B}};\n}"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "The following function checks whether a number n is a Hamming number. The function returns 1 if n is a hamming number, and 0 otherwise. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 24
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int hamming(int n){\n   int i;\n   if (n == 1)\n      return 1;\n   i = 0;\n   if (n % 2 == 0)\n      i = 2;\n   if (n % 3 == 0)\n      i = 3;\n   if (n % 5 == 0)\n      i = 5;\n   if (i == 0)\n      {{A}};\n   else\n      return hamming(n/i);\n}",
+            "harness": {
+              "kind": "call",
+              "function": "hamming"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "n-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "n-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "n-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "n-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "n-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              7
+            ]
+          },
+          {
+            "id": "n-12",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              12
+            ]
+          },
+          {
+            "id": "n-14",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              14
+            ]
+          },
+          {
+            "id": "n-30",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              30
+            ]
+          },
+          {
+            "id": "n-32",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              32
+            ]
+          },
+          {
+            "id": "n-125",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              125
+            ]
+          },
+          {
+            "id": "n-997",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              997
+            ]
+          }
+        ]
+      },
+      "contextId": "q1-hamming"
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "The following function checks whether a number n is a Hamming number. The function returns 1 if n is a hamming number, and 0 otherwise. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 24
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int hamming(int n){\n   int i;\n   if (n == 1)\n      return 1;\n   i = 0;\n   if (n % 2 == 0)\n      i = 2;\n   if (n % 3 == 0)\n      i = 3;\n   if (n % 5 == 0)\n      i = 5;\n   if (i == 0)\n      return 0;\n   else\n      {{B}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "hamming"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "n-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "n-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "n-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "n-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "n-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              7
+            ]
+          },
+          {
+            "id": "n-12",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              12
+            ]
+          },
+          {
+            "id": "n-14",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              14
+            ]
+          },
+          {
+            "id": "n-30",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              30
+            ]
+          },
+          {
+            "id": "n-32",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              32
+            ]
+          },
+          {
+            "id": "n-125",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              125
+            ]
+          },
+          {
+            "id": "n-997",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              997
+            ]
+          }
+        ]
+      },
+      "contextId": "q1-hamming"
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Let A be an array of n integers, where n is divisible by 3. The following program segment assigns value to an array B such that B = (A[0], A[2], A[1], A[3], A[5], A[4], ... , A[n-3], A[n-1], A[n-2]). Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 25
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int i){return {{C}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "index-0",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              0
+            ]
+          },
+          {
+            "id": "index-1",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "index-2",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "index-3",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "index-4",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "index-5",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "index-6",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 6
+            },
+            "args": [
+              6
+            ]
+          },
+          {
+            "id": "index-7",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 8
+            },
+            "args": [
+              7
+            ]
+          },
+          {
+            "id": "index-8",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              8
+            ]
+          },
+          {
+            "id": "index-9",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 9
+            },
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "index-10",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 11
+            },
+            "args": [
+              10
+            ]
+          },
+          {
+            "id": "index-11",
+            "maxSteps": 100000,
+            "expected": {
+              "returnValue": 10
+            },
+            "args": [
+              11
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "for (i = 0; i < n; ++i)\n   B[i] = A[{{C}}];"
+      }
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "The following program segment finds the maximum integer k satisfying 2ᵏ m = n!, where m is an integer. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 27
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){int n,cnt=0;scanf(\"%d\",&n);while(n>0){ {{D}}; cnt+=n; }printf(\"%d\\n\",cnt);return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "n-1",
+            "maxSteps": 100000,
+            "expected": {
+              "stdout": "0\n"
+            },
+            "stdin": "1\n"
+          },
+          {
+            "id": "n-2",
+            "maxSteps": 100000,
+            "expected": {
+              "stdout": "1\n"
+            },
+            "stdin": "2\n"
+          },
+          {
+            "id": "n-6",
+            "maxSteps": 100000,
+            "expected": {
+              "stdout": "4\n"
+            },
+            "stdin": "6\n"
+          },
+          {
+            "id": "n-10",
+            "maxSteps": 100000,
+            "expected": {
+              "stdout": "8\n"
+            },
+            "stdin": "10\n"
+          },
+          {
+            "id": "n-100",
+            "maxSteps": 100000,
+            "expected": {
+              "stdout": "97\n"
+            },
+            "stdin": "100\n"
+          },
+          {
+            "id": "n-1000",
+            "maxSteps": 100000,
+            "expected": {
+              "stdout": "994\n"
+            },
+            "stdin": "1000\n"
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "scanf(\"%d\", &n);\ncnt = 0;\nwhile (n > 0){\n   {{D}};\n   cnt += n;\n}\nprintf(\"%d\\n\", cnt);"
+      }
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank E",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "In the following graph, vertices are marked by A, B, C, D and E, and the lengths of the edges are indicated next to the edge. Also, AC =2, AD = 3, CE = 6, BD = 3 and BE = 4.\n\nA graph is connected if and only if there is a path between every pair of vertices.\n\nWhat is the maximum number of edges that can be removed such that the remaining graph is still connected?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 28,
+        "note": "In the following graph, vertices are marked by A, B, C, D and E, and the lengths of the edges are indicated next to the edge. Also, AC =2, AD = 3, CE = 6, BD = 3 and BE = 4."
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "6"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "figure": {
+        "kind": "undirected-graph",
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0.5,
+            "y": 0.05
+          },
+          {
+            "id": "B",
+            "x": 0.05,
+            "y": 0.45
+          },
+          {
+            "id": "E",
+            "x": 0.95,
+            "y": 0.45
+          },
+          {
+            "id": "C",
+            "x": 0.2,
+            "y": 0.95
+          },
+          {
+            "id": "D",
+            "x": 0.8,
+            "y": 0.95
+          }
+        ],
+        "edges": [
+          {
+            "from": "A",
+            "to": "B",
+            "label": "1"
+          },
+          {
+            "from": "A",
+            "to": "C",
+            "label": "2"
+          },
+          {
+            "from": "A",
+            "to": "D",
+            "label": "3"
+          },
+          {
+            "from": "A",
+            "to": "E",
+            "label": "4"
+          },
+          {
+            "from": "B",
+            "to": "C",
+            "label": "5"
+          },
+          {
+            "from": "B",
+            "to": "D",
+            "label": "3"
+          },
+          {
+            "from": "B",
+            "to": "E",
+            "label": "4"
+          },
+          {
+            "from": "C",
+            "to": "D",
+            "label": "3"
+          },
+          {
+            "from": "C",
+            "to": "E",
+            "label": "6"
+          },
+          {
+            "from": "D",
+            "to": "E",
+            "label": "2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "In the following graph, vertices are marked by A, B, C, D and E, and the lengths of the edges are indicated next to the edge. Also, AC =2, AD = 3, CE = 6, BD = 3 and BE = 4.\n\nA graph is connected if and only if there is a path between every pair of vertices.\n\nWhat is the maximum total length of edges that can be removed such that the remaining graph is still connected?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 28,
+        "note": "In the following graph, vertices are marked by A, B, C, D and E, and the lengths of the edges are indicated next to the edge. Also, AC =2, AD = 3, CE = 6, BD = 3 and BE = 4."
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "25"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "figure": {
+        "kind": "undirected-graph",
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0.5,
+            "y": 0.05
+          },
+          {
+            "id": "B",
+            "x": 0.05,
+            "y": 0.45
+          },
+          {
+            "id": "E",
+            "x": 0.95,
+            "y": 0.45
+          },
+          {
+            "id": "C",
+            "x": 0.2,
+            "y": 0.95
+          },
+          {
+            "id": "D",
+            "x": 0.8,
+            "y": 0.95
+          }
+        ],
+        "edges": [
+          {
+            "from": "A",
+            "to": "B",
+            "label": "1"
+          },
+          {
+            "from": "A",
+            "to": "C",
+            "label": "2"
+          },
+          {
+            "from": "A",
+            "to": "D",
+            "label": "3"
+          },
+          {
+            "from": "A",
+            "to": "E",
+            "label": "4"
+          },
+          {
+            "from": "B",
+            "to": "C",
+            "label": "5"
+          },
+          {
+            "from": "B",
+            "to": "D",
+            "label": "3"
+          },
+          {
+            "from": "B",
+            "to": "E",
+            "label": "4"
+          },
+          {
+            "from": "C",
+            "to": "D",
+            "label": "3"
+          },
+          {
+            "from": "C",
+            "to": "E",
+            "label": "6"
+          },
+          {
+            "from": "D",
+            "to": "E",
+            "label": "2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5(a), Blank G",
+      "title": "Section B, Question 5(a)",
+      "prompt": {
+        "en": "The diagram below shows the transport network of a country. Each circle represents a city and each line represents a road between the two cities with distance specified.\n\nA visitor wants to walk from s to t. Find a route which minimizes the distance he needs to walk.\n\n(Denote the route by s→p₁→p₂→...→t, where p₁, p₂, ... are the cities on your route in sequence.)"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "placeholder": "s→f→g→t"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 28,
+        "note": "The diagram below shows the transport network of a country. Each circle represents a city and each line represents a road between the two cities with distance specified."
+      },
+      "grading": {
+        "kind": "weighted-route",
+        "answerBlank": "G",
+        "nodes": [
+          "s",
+          "a",
+          "b",
+          "c",
+          "d",
+          "t",
+          "e",
+          "f",
+          "g"
+        ],
+        "edges": [
+          {
+            "from": "s",
+            "to": "a",
+            "weight": 2
+          },
+          {
+            "from": "s",
+            "to": "f",
+            "weight": 3
+          },
+          {
+            "from": "a",
+            "to": "b",
+            "weight": 6
+          },
+          {
+            "from": "a",
+            "to": "c",
+            "weight": 4
+          },
+          {
+            "from": "b",
+            "to": "d",
+            "weight": 3
+          },
+          {
+            "from": "b",
+            "to": "t",
+            "weight": 9
+          },
+          {
+            "from": "c",
+            "to": "d",
+            "weight": 3
+          },
+          {
+            "from": "d",
+            "to": "t",
+            "weight": 7
+          },
+          {
+            "from": "c",
+            "to": "e",
+            "weight": 5
+          },
+          {
+            "from": "c",
+            "to": "g",
+            "weight": 4
+          },
+          {
+            "from": "e",
+            "to": "g",
+            "weight": 2
+          },
+          {
+            "from": "f",
+            "to": "g",
+            "weight": 7
+          },
+          {
+            "from": "g",
+            "to": "t",
+            "weight": 6
+          }
+        ],
+        "directed": false,
+        "start": "s",
+        "end": "t",
+        "objective": "shortest"
+      },
+      "figure": {
+        "kind": "undirected-graph",
+        "nodes": [
+          {
+            "id": "s",
+            "x": 0.05,
+            "y": 0.5
+          },
+          {
+            "id": "a",
+            "x": 0.3,
+            "y": 0.1
+          },
+          {
+            "id": "b",
+            "x": 0.58,
+            "y": 0.1
+          },
+          {
+            "id": "c",
+            "x": 0.28,
+            "y": 0.5
+          },
+          {
+            "id": "d",
+            "x": 0.62,
+            "y": 0.5
+          },
+          {
+            "id": "t",
+            "x": 0.95,
+            "y": 0.5
+          },
+          {
+            "id": "e",
+            "x": 0.28,
+            "y": 0.88
+          },
+          {
+            "id": "f",
+            "x": 0.15,
+            "y": 0.95
+          },
+          {
+            "id": "g",
+            "x": 0.58,
+            "y": 0.88
+          }
+        ],
+        "edges": [
+          {
+            "from": "s",
+            "to": "a",
+            "label": "2"
+          },
+          {
+            "from": "s",
+            "to": "f",
+            "label": "3"
+          },
+          {
+            "from": "a",
+            "to": "b",
+            "label": "6"
+          },
+          {
+            "from": "a",
+            "to": "c",
+            "label": "4"
+          },
+          {
+            "from": "b",
+            "to": "d",
+            "label": "3"
+          },
+          {
+            "from": "b",
+            "to": "t",
+            "label": "9"
+          },
+          {
+            "from": "c",
+            "to": "d",
+            "label": "3"
+          },
+          {
+            "from": "d",
+            "to": "t",
+            "label": "7"
+          },
+          {
+            "from": "c",
+            "to": "e",
+            "label": "5"
+          },
+          {
+            "from": "c",
+            "to": "g",
+            "label": "4"
+          },
+          {
+            "from": "e",
+            "to": "g",
+            "label": "2"
+          },
+          {
+            "from": "f",
+            "to": "g",
+            "label": "7"
+          },
+          {
+            "from": "g",
+            "to": "t",
+            "label": "6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5(b), Blank H",
+      "title": "Section B, Question 5(b)",
+      "prompt": {
+        "en": "The visitor has prepared a second route, to be used in case a road in his original route is blocked. He wants the second route to be shortest among all routes other than his first chosen route, i.e. your answer in (A). Find one such route."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H",
+          "placeholder": "s→a→c→g→t"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 29
+      },
+      "grading": {
+        "kind": "weighted-route",
+        "answerBlank": "H",
+        "nodes": [
+          "s",
+          "a",
+          "b",
+          "c",
+          "d",
+          "t",
+          "e",
+          "f",
+          "g"
+        ],
+        "edges": [
+          {
+            "from": "s",
+            "to": "a",
+            "weight": 2
+          },
+          {
+            "from": "s",
+            "to": "f",
+            "weight": 3
+          },
+          {
+            "from": "a",
+            "to": "b",
+            "weight": 6
+          },
+          {
+            "from": "a",
+            "to": "c",
+            "weight": 4
+          },
+          {
+            "from": "b",
+            "to": "d",
+            "weight": 3
+          },
+          {
+            "from": "b",
+            "to": "t",
+            "weight": 9
+          },
+          {
+            "from": "c",
+            "to": "d",
+            "weight": 3
+          },
+          {
+            "from": "d",
+            "to": "t",
+            "weight": 7
+          },
+          {
+            "from": "c",
+            "to": "e",
+            "weight": 5
+          },
+          {
+            "from": "c",
+            "to": "g",
+            "weight": 4
+          },
+          {
+            "from": "e",
+            "to": "g",
+            "weight": 2
+          },
+          {
+            "from": "f",
+            "to": "g",
+            "weight": 7
+          },
+          {
+            "from": "g",
+            "to": "t",
+            "weight": 6
+          }
+        ],
+        "directed": false,
+        "start": "s",
+        "end": "t",
+        "objective": "shortest-alternate",
+        "reference": {
+          "questionId": "G",
+          "blankId": "G"
+        }
+      },
+      "figure": {
+        "kind": "undirected-graph",
+        "nodes": [
+          {
+            "id": "s",
+            "x": 0.05,
+            "y": 0.5
+          },
+          {
+            "id": "a",
+            "x": 0.3,
+            "y": 0.1
+          },
+          {
+            "id": "b",
+            "x": 0.58,
+            "y": 0.1
+          },
+          {
+            "id": "c",
+            "x": 0.28,
+            "y": 0.5
+          },
+          {
+            "id": "d",
+            "x": 0.62,
+            "y": 0.5
+          },
+          {
+            "id": "t",
+            "x": 0.95,
+            "y": 0.5
+          },
+          {
+            "id": "e",
+            "x": 0.28,
+            "y": 0.88
+          },
+          {
+            "id": "f",
+            "x": 0.15,
+            "y": 0.95
+          },
+          {
+            "id": "g",
+            "x": 0.58,
+            "y": 0.88
+          }
+        ],
+        "edges": [
+          {
+            "from": "s",
+            "to": "a",
+            "label": "2"
+          },
+          {
+            "from": "s",
+            "to": "f",
+            "label": "3"
+          },
+          {
+            "from": "a",
+            "to": "b",
+            "label": "6"
+          },
+          {
+            "from": "a",
+            "to": "c",
+            "label": "4"
+          },
+          {
+            "from": "b",
+            "to": "d",
+            "label": "3"
+          },
+          {
+            "from": "b",
+            "to": "t",
+            "label": "9"
+          },
+          {
+            "from": "c",
+            "to": "d",
+            "label": "3"
+          },
+          {
+            "from": "d",
+            "to": "t",
+            "label": "7"
+          },
+          {
+            "from": "c",
+            "to": "e",
+            "label": "5"
+          },
+          {
+            "from": "c",
+            "to": "g",
+            "label": "4"
+          },
+          {
+            "from": "e",
+            "to": "g",
+            "label": "2"
+          },
+          {
+            "from": "f",
+            "to": "g",
+            "label": "7"
+          },
+          {
+            "from": "g",
+            "to": "t",
+            "label": "6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5(c), Blank I",
+      "title": "Section B, Question 5(c)",
+      "prompt": {
+        "en": "Another visitor, on the contrary, wishes to walk as long as possible. However, he does not want to travel through a city twice. Find a route from s to t with a longest distance and in which no city is visited twice."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I",
+          "placeholder": "s→f→g→e→c→a→b→d→t"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 29
+      },
+      "grading": {
+        "kind": "weighted-route",
+        "answerBlank": "I",
+        "nodes": [
+          "s",
+          "a",
+          "b",
+          "c",
+          "d",
+          "t",
+          "e",
+          "f",
+          "g"
+        ],
+        "edges": [
+          {
+            "from": "s",
+            "to": "a",
+            "weight": 2
+          },
+          {
+            "from": "s",
+            "to": "f",
+            "weight": 3
+          },
+          {
+            "from": "a",
+            "to": "b",
+            "weight": 6
+          },
+          {
+            "from": "a",
+            "to": "c",
+            "weight": 4
+          },
+          {
+            "from": "b",
+            "to": "d",
+            "weight": 3
+          },
+          {
+            "from": "b",
+            "to": "t",
+            "weight": 9
+          },
+          {
+            "from": "c",
+            "to": "d",
+            "weight": 3
+          },
+          {
+            "from": "d",
+            "to": "t",
+            "weight": 7
+          },
+          {
+            "from": "c",
+            "to": "e",
+            "weight": 5
+          },
+          {
+            "from": "c",
+            "to": "g",
+            "weight": 4
+          },
+          {
+            "from": "e",
+            "to": "g",
+            "weight": 2
+          },
+          {
+            "from": "f",
+            "to": "g",
+            "weight": 7
+          },
+          {
+            "from": "g",
+            "to": "t",
+            "weight": 6
+          }
+        ],
+        "directed": false,
+        "start": "s",
+        "end": "t",
+        "objective": "longest-simple"
+      },
+      "figure": {
+        "kind": "undirected-graph",
+        "nodes": [
+          {
+            "id": "s",
+            "x": 0.05,
+            "y": 0.5
+          },
+          {
+            "id": "a",
+            "x": 0.3,
+            "y": 0.1
+          },
+          {
+            "id": "b",
+            "x": 0.58,
+            "y": 0.1
+          },
+          {
+            "id": "c",
+            "x": 0.28,
+            "y": 0.5
+          },
+          {
+            "id": "d",
+            "x": 0.62,
+            "y": 0.5
+          },
+          {
+            "id": "t",
+            "x": 0.95,
+            "y": 0.5
+          },
+          {
+            "id": "e",
+            "x": 0.28,
+            "y": 0.88
+          },
+          {
+            "id": "f",
+            "x": 0.15,
+            "y": 0.95
+          },
+          {
+            "id": "g",
+            "x": 0.58,
+            "y": 0.88
+          }
+        ],
+        "edges": [
+          {
+            "from": "s",
+            "to": "a",
+            "label": "2"
+          },
+          {
+            "from": "s",
+            "to": "f",
+            "label": "3"
+          },
+          {
+            "from": "a",
+            "to": "b",
+            "label": "6"
+          },
+          {
+            "from": "a",
+            "to": "c",
+            "label": "4"
+          },
+          {
+            "from": "b",
+            "to": "d",
+            "label": "3"
+          },
+          {
+            "from": "b",
+            "to": "t",
+            "label": "9"
+          },
+          {
+            "from": "c",
+            "to": "d",
+            "label": "3"
+          },
+          {
+            "from": "d",
+            "to": "t",
+            "label": "7"
+          },
+          {
+            "from": "c",
+            "to": "e",
+            "label": "5"
+          },
+          {
+            "from": "c",
+            "to": "g",
+            "label": "4"
+          },
+          {
+            "from": "e",
+            "to": "g",
+            "label": "2"
+          },
+          {
+            "from": "f",
+            "to": "g",
+            "label": "7"
+          },
+          {
+            "from": "g",
+            "to": "t",
+            "label": "6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank J",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "The following program sorts the array A in descending order of height, and then descending order of weight if two elements have the same value for height. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2007hse.doc",
+        "page": 31
+      },
+      "grading": {
+        "kind": "record-sort-comparator",
+        "answerBlank": "J",
+        "arrayName": "A",
+        "indexName": "j",
+        "fields": [
+          "height",
+          "weight"
+        ],
+        "order": "descending"
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\nstruct man{\n   int height;\n   int weight;\n};\n\nint main() {\n   const int n = 100;\n   int i, j;\n   struct man A[n+1], temp;\n   ...\n   for (i = 1; i <= n; ++i)\n      for (j = 1; j <= n-i; ++j)\n         if ({{J}}) {\n            temp = A[j];\n            A[j] = A[j+1];\n            A[j+1] = temp;\n         }\n   ...\n   return 0;\n}"
+      }
+    }
+  ]
+}

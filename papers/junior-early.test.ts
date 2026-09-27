@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest';
-import raw12 from './2011-12-junior.json';
-import raw13 from './2012-13-junior.json';
-import raw14 from './2013-14-junior.json';
+import raw12 from './2012-junior.json';
+import raw13 from './2013-junior.json';
+import raw14 from './2014-junior.json';
 import { validatePaper } from '../src/core/validate';
 import { gradePaper } from '../src/core/grader';
 import { gradeQuestion } from '../src/core/grader';
@@ -61,12 +61,12 @@ for (const [index, paper] of papers.entries()) {
   }, 120_000);
 }
 
-it('2011/12 Junior F awards partial credit to another valid counterexample', async () => {
+it('2012 Junior F awards partial credit to another valid counterexample', async () => {
   const grade = await gradePaper(papers[0], { 'section-b-f': { F:'10008' } }, ['section-b']);
   expect(grade.questions.find(q => q.questionId === 'section-b-f')?.score).toBe(2);
 }, 120_000);
 
-it('2011/12 Junior inverse inputs award one point each and follow scanf numeric prefixes', async () => {
+it('2012 Junior inverse inputs award one point each and follow scanf numeric prefixes', async () => {
   const question = papers[0].questions.find(q => q.id === 'section-b-a')!;
   const partial = await gradeQuestion(question, { A:'0', B:'1x' }, 'c');
   expect(partial.score).toBe(1);
@@ -74,12 +74,12 @@ it('2011/12 Junior inverse inputs award one point each and follow scanf numeric 
   expect(full.score).toBe(2);
 });
 
-it('2012/13 Junior die faces award one point for count with a wrong orientation', async () => {
+it('2013 Junior die faces award one point for count with a wrong orientation', async () => {
   const grade = await gradePaper(papers[1], { 'section-b-j': { J:'..o/.o./o..' } }, ['section-b']);
   expect(grade.questions.find(q => q.questionId === 'section-b-j')?.score).toBe(1);
 }, 120_000);
 
-it('2013/14 Junior prime question rejects the answer-table typo', async () => {
+it('2014 Junior prime question rejects the answer-table typo', async () => {
   const question = papers[2].questions.find(q => q.id === 'section-b-c')!;
   const result = await gradeQuestion(question, { C:'n*2+1' }, 'c');
   expect(result.status).toBe('fail');

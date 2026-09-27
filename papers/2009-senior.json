@@ -1,0 +1,1547 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2009-senior",
+    "season": "2009",
+    "division": "senior",
+    "title": "HKOI 2009 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2009hs_ans.doc",
+      "page": 29
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q3-arm",
+      "track": "section-b",
+      "title": "Section B, Question 3",
+      "markdown": "Suppose a robotic arm can move boxes from one room to another room. At the beginning, there are three rooms and a stack of boxes labeled with unique integers in the leftmost room. The arm is at the ceiling of the leftmost room. The followings are the commands:\n\n- L: Move left. (The command has no effect if the robotic arm is in the leftmost room.)\n- R: Move right. (The command has no effect if the robotic arm is in the rightmost room.)\n- U: Pick up the box at the top of the stack at the current position. (The command has no effect if there is no box or the robotic arm is already holding a box.)\n- D: Drop down a box to the top of stack at the current position. (The command has no effect if the robotic arm is not holding a box.)\n- `n(<command>)`: Repeat command n times\n\nFor each of the following question, write a sequence of commands to change the original state to the target state. Command length should be within the given limit."
+    },
+    {
+      "id": "q4-functions",
+      "track": "section-b",
+      "title": "Section B, Question 4",
+      "markdown": "Consider the following program:\n\nAssume the input is always an integer between 0 and 3 inclusively. Fill in the blanks only using characters “A”, “B”, “x”, “y”, “(”, “)” and “,”.",
+      "displayCode": {
+        "c": "#include<stdio.h>\nint x, y;\nint A(int i, int j){\nreturn (i + j) % 4;\n};\nint B(int i){\nif (i == 1)\n   return 0;\nelse\n   return 1;\n};\nint main(void){\nscanf(\"%d%d\", &x, &y);\nif({{E}} == 1)\n    printf(\"x equals 0\\n\");\nif({{F}} == 1)\n    printf(\"x equals 1\\n\");\nif({{G}} == 1)\n    printf(\"x equals y\\n\");\nreturn 0;\n}"
+      }
+    },
+    {
+      "id": "q5-river",
+      "track": "section-b",
+      "title": "Section B, Question 5",
+      "markdown": "A boat carrying 10 passengers moves along a river. The map of the river is as follows. Each arrow represents a river segment where water flows along the direction of the arrow from one river node to another river node. The boat starts at node S.\n\nWhen the boat is at a node, it can perform one of the following three actions:\n\n- + : Increase the number of passenger by 1, then move downstream.\n- - : Decrease the number of passenger by 1, then move downstream.\n- < : Move upstream.\n\nIf the boat is instructed to move upstream, it moves along a river segment against the direction of the arrow. The boat stays if it is at S.\n\nHowever, due to the depth of a river segment, each river segment has a weight limit for boats moving downstream. The boat can move downstream through the river segment only if its number of passengers is not greater than the weight limit. The number next to the arrow in the above diagram indicates the weight limit corresponding to each river segment.\n\nIf the boat is instructed to move downstream, it starts from its current node and moves along a river segment satisfying the weight limit in the direction of the arrow. If there are more than one such river segment, the one with the least weight limit is chosen. The boat stays if there is no river segment satisfying the weight limit.\n\nFor example, if the boat performs the sequence of actions “- + - -“, it can reach node A."
+    }
+  ],
+  "questions": [
+    {
+      "id": "section-b-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "The above figure shows 13 circles which are labelled with positive integers from 1 to 13. Circle 1 is of level 0, circles 2 to 5 are of level 1, and the others are of level 2. Write ONE expression in terms of n to represent the level of circle n (1 ≤ n ≤ 13)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "A",
+          "forbiddenChars": "?"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 29
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int n){return {{A}};}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              4
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              5
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              6
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "7",
+            "args": [
+              7
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "8",
+            "args": [
+              8
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "9",
+            "args": [
+              9
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "10",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "11",
+            "args": [
+              11
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "12",
+            "args": [
+              12
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "13",
+            "args": [
+              13
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2009-senior-q1.png",
+        "alt": "Thirteen printed circles arranged around centre 1, labeled 1 through 13."
+      }
+    },
+    {
+      "id": "section-b-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "In the above diagram, each circle can be labeled by a positive number from 1 to 6. Each label can only be used once. The cost of an edge is the absolute difference between the labels of the two vertices it connect. Label each vertex such that each edge has a unique cost."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B",
+          "label": "Labels for a, b, c, d, e, f",
+          "placeholder": "Enter six labels in a, b, c, d, e, f order"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 29
+      },
+      "grading": {
+        "kind": "graph-labeling",
+        "answerBlank": "B",
+        "nodes": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f"
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "d",
+            "e"
+          ],
+          [
+            "d",
+            "f"
+          ]
+        ]
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2009-senior-q2.png",
+        "alt": "Six circles a–f with edges a–b, b–c, c–d, d–e, and d–f."
+      }
+    },
+    {
+      "id": "section-b-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "For each of the following question, write a sequence of commands to change the original state to the target state. Command length should be within the given limit."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 11
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 30
+      },
+      "grading": {
+        "kind": "box-stack-robot",
+        "answerBlank": "C",
+        "initial": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [],
+          []
+        ],
+        "target": [
+          [],
+          [],
+          [
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "maxCommands": 1000,
+        "maxRepeat": 999
+      },
+      "contextId": "q3-arm",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2009-senior-q3-c.png",
+        "alt": "Initial left room stack 1,2,3,4 top to bottom; target right room stack 1,2,3,4; length limit 11."
+      }
+    },
+    {
+      "id": "section-b-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "For each of the following question, write a sequence of commands to change the original state to the target state. Command length should be within the given limit."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 30
+      },
+      "grading": {
+        "kind": "box-stack-robot",
+        "answerBlank": "D",
+        "initial": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          [],
+          []
+        ],
+        "target": [
+          [],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            6,
+            4,
+            2
+          ]
+        ],
+        "maxCommands": 1000,
+        "maxRepeat": 999
+      },
+      "contextId": "q3-arm",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2009-senior-q3-d.png",
+        "alt": "Initial left stack 1 through 6 top to bottom; target middle stack 5,3,1 and right stack 6,4,2; length limit 13."
+      }
+    },
+    {
+      "id": "section-b-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank E",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Assume the input is always an integer between 0 and 3 inclusively. Fill in the blanks only using characters “A”, “B”, “x”, “y”, “(”, “)” and “,”."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E",
+          "allowedChars": "ABxy(),",
+          "forbiddenChars": "?"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 31
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int x,int y){return ({{E}})==1;}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            },
+            "helperSource": "int A(int i,int j){return (i+j)%4;} int B(int i){if(i==1)return 0;else return 1;}"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              0,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              0,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              0,
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              1,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "7",
+            "args": [
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "8",
+            "args": [
+              1,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "9",
+            "args": [
+              2,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "10",
+            "args": [
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "11",
+            "args": [
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "12",
+            "args": [
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "13",
+            "args": [
+              3,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "14",
+            "args": [
+              3,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "15",
+            "args": [
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "16",
+            "args": [
+              3,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q4-functions"
+    },
+    {
+      "id": "section-b-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Assume the input is always an integer between 0 and 3 inclusively. Fill in the blanks only using characters “A”, “B”, “x”, “y”, “(”, “)” and “,”."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F",
+          "allowedChars": "ABxy(),",
+          "forbiddenChars": "?"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 31
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int x,int y){return ({{F}})==1;}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            },
+            "helperSource": "int A(int i,int j){return (i+j)%4;} int B(int i){if(i==1)return 0;else return 1;}"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              0,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              0,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              0,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              1,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "7",
+            "args": [
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "8",
+            "args": [
+              1,
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "9",
+            "args": [
+              2,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "10",
+            "args": [
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "11",
+            "args": [
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "12",
+            "args": [
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "13",
+            "args": [
+              3,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "14",
+            "args": [
+              3,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "15",
+            "args": [
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "16",
+            "args": [
+              3,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q4-functions"
+    },
+    {
+      "id": "section-b-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Assume the input is always an integer between 0 and 3 inclusively. Fill in the blanks only using characters “A”, “B”, “x”, “y”, “(”, “)” and “,”."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "allowedChars": "ABxy(),",
+          "forbiddenChars": "?"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 31
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int solve(int x,int y){return ({{G}})==1;}",
+            "harness": {
+              "kind": "call",
+              "function": "solve"
+            },
+            "helperSource": "int A(int i,int j){return (i+j)%4;} int B(int i){if(i==1)return 0;else return 1;}"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "1",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "2",
+            "args": [
+              0,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "3",
+            "args": [
+              0,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "4",
+            "args": [
+              0,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "5",
+            "args": [
+              1,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "6",
+            "args": [
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "7",
+            "args": [
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "8",
+            "args": [
+              1,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "9",
+            "args": [
+              2,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "10",
+            "args": [
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "11",
+            "args": [
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "12",
+            "args": [
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "13",
+            "args": [
+              3,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "14",
+            "args": [
+              3,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "15",
+            "args": [
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "16",
+            "args": [
+              3,
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q4-functions"
+    },
+    {
+      "id": "section-b-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Give the sequence of actions for the boat to reach node B."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 5,
+          "allowedChars": "+-<"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 33
+      },
+      "grading": {
+        "kind": "river-route",
+        "answerBlank": "H",
+        "start": "S",
+        "goal": "B",
+        "passengers": 10,
+        "edges": [
+          {
+            "from": "S",
+            "to": "u",
+            "limit": 11
+          },
+          {
+            "from": "S",
+            "to": "l",
+            "limit": 9
+          },
+          {
+            "from": "u",
+            "to": "u1",
+            "limit": 20
+          },
+          {
+            "from": "u",
+            "to": "u2",
+            "limit": 17
+          },
+          {
+            "from": "u",
+            "to": "u3",
+            "limit": 10
+          },
+          {
+            "from": "u1",
+            "to": "u1a",
+            "limit": 18
+          },
+          {
+            "from": "u1",
+            "to": "u1b",
+            "limit": 17
+          },
+          {
+            "from": "u1b",
+            "to": "C",
+            "limit": 16
+          },
+          {
+            "from": "u2",
+            "to": "u2a",
+            "limit": 18
+          },
+          {
+            "from": "u2a",
+            "to": "u2aa",
+            "limit": 25
+          },
+          {
+            "from": "u2a",
+            "to": "u2ab",
+            "limit": 20
+          },
+          {
+            "from": "u2a",
+            "to": "u2ac",
+            "limit": 19
+          },
+          {
+            "from": "u2ab",
+            "to": "D",
+            "limit": 22
+          },
+          {
+            "from": "u2ac",
+            "to": "t1",
+            "limit": 25
+          },
+          {
+            "from": "t1",
+            "to": "t2",
+            "limit": 23
+          },
+          {
+            "from": "t2",
+            "to": "t3",
+            "limit": 24
+          },
+          {
+            "from": "t3",
+            "to": "t4",
+            "limit": 26
+          },
+          {
+            "from": "l",
+            "to": "l1",
+            "limit": 15
+          },
+          {
+            "from": "l",
+            "to": "l2",
+            "limit": 8
+          },
+          {
+            "from": "l1",
+            "to": "l1a",
+            "limit": 10
+          },
+          {
+            "from": "l1a",
+            "to": "A",
+            "limit": 8
+          },
+          {
+            "from": "l2",
+            "to": "l2a",
+            "limit": 9
+          },
+          {
+            "from": "l2",
+            "to": "l2b",
+            "limit": 7
+          },
+          {
+            "from": "l2a",
+            "to": "l2aa",
+            "limit": 12
+          },
+          {
+            "from": "l2a",
+            "to": "l2ab",
+            "limit": 8
+          },
+          {
+            "from": "l2aa",
+            "to": "B",
+            "limit": 9
+          },
+          {
+            "from": "l2b",
+            "to": "l2ba",
+            "limit": 8
+          }
+        ],
+        "maxCommands": 5
+      },
+      "contextId": "q5-river",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2009-senior-q5.png",
+        "alt": "Printed directed river network from S to A, B, C and D with edge weight limits."
+      }
+    },
+    {
+      "id": "section-b-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank I",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Give the sequence of actions for the boat to reach node C."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 14,
+          "allowedChars": "+-<"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 33
+      },
+      "grading": {
+        "kind": "river-route",
+        "answerBlank": "I",
+        "start": "S",
+        "goal": "C",
+        "passengers": 10,
+        "edges": [
+          {
+            "from": "S",
+            "to": "u",
+            "limit": 11
+          },
+          {
+            "from": "S",
+            "to": "l",
+            "limit": 9
+          },
+          {
+            "from": "u",
+            "to": "u1",
+            "limit": 20
+          },
+          {
+            "from": "u",
+            "to": "u2",
+            "limit": 17
+          },
+          {
+            "from": "u",
+            "to": "u3",
+            "limit": 10
+          },
+          {
+            "from": "u1",
+            "to": "u1a",
+            "limit": 18
+          },
+          {
+            "from": "u1",
+            "to": "u1b",
+            "limit": 17
+          },
+          {
+            "from": "u1b",
+            "to": "C",
+            "limit": 16
+          },
+          {
+            "from": "u2",
+            "to": "u2a",
+            "limit": 18
+          },
+          {
+            "from": "u2a",
+            "to": "u2aa",
+            "limit": 25
+          },
+          {
+            "from": "u2a",
+            "to": "u2ab",
+            "limit": 20
+          },
+          {
+            "from": "u2a",
+            "to": "u2ac",
+            "limit": 19
+          },
+          {
+            "from": "u2ab",
+            "to": "D",
+            "limit": 22
+          },
+          {
+            "from": "u2ac",
+            "to": "t1",
+            "limit": 25
+          },
+          {
+            "from": "t1",
+            "to": "t2",
+            "limit": 23
+          },
+          {
+            "from": "t2",
+            "to": "t3",
+            "limit": 24
+          },
+          {
+            "from": "t3",
+            "to": "t4",
+            "limit": 26
+          },
+          {
+            "from": "l",
+            "to": "l1",
+            "limit": 15
+          },
+          {
+            "from": "l",
+            "to": "l2",
+            "limit": 8
+          },
+          {
+            "from": "l1",
+            "to": "l1a",
+            "limit": 10
+          },
+          {
+            "from": "l1a",
+            "to": "A",
+            "limit": 8
+          },
+          {
+            "from": "l2",
+            "to": "l2a",
+            "limit": 9
+          },
+          {
+            "from": "l2",
+            "to": "l2b",
+            "limit": 7
+          },
+          {
+            "from": "l2a",
+            "to": "l2aa",
+            "limit": 12
+          },
+          {
+            "from": "l2a",
+            "to": "l2ab",
+            "limit": 8
+          },
+          {
+            "from": "l2aa",
+            "to": "B",
+            "limit": 9
+          },
+          {
+            "from": "l2b",
+            "to": "l2ba",
+            "limit": 8
+          }
+        ],
+        "maxCommands": 14
+      },
+      "contextId": "q5-river",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2009-senior-q5.png",
+        "alt": "Printed directed river network from S to A, B, C and D with edge weight limits."
+      }
+    },
+    {
+      "id": "section-b-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank J",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Give the sequence of actions for the boat to reach node D."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 15,
+          "allowedChars": "+-<"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2009hse.doc",
+        "page": 33
+      },
+      "grading": {
+        "kind": "river-route",
+        "answerBlank": "J",
+        "start": "S",
+        "goal": "D",
+        "passengers": 10,
+        "edges": [
+          {
+            "from": "S",
+            "to": "u",
+            "limit": 11
+          },
+          {
+            "from": "S",
+            "to": "l",
+            "limit": 9
+          },
+          {
+            "from": "u",
+            "to": "u1",
+            "limit": 20
+          },
+          {
+            "from": "u",
+            "to": "u2",
+            "limit": 17
+          },
+          {
+            "from": "u",
+            "to": "u3",
+            "limit": 10
+          },
+          {
+            "from": "u1",
+            "to": "u1a",
+            "limit": 18
+          },
+          {
+            "from": "u1",
+            "to": "u1b",
+            "limit": 17
+          },
+          {
+            "from": "u1b",
+            "to": "C",
+            "limit": 16
+          },
+          {
+            "from": "u2",
+            "to": "u2a",
+            "limit": 18
+          },
+          {
+            "from": "u2a",
+            "to": "u2aa",
+            "limit": 25
+          },
+          {
+            "from": "u2a",
+            "to": "u2ab",
+            "limit": 20
+          },
+          {
+            "from": "u2a",
+            "to": "u2ac",
+            "limit": 19
+          },
+          {
+            "from": "u2ab",
+            "to": "D",
+            "limit": 22
+          },
+          {
+            "from": "u2ac",
+            "to": "t1",
+            "limit": 25
+          },
+          {
+            "from": "t1",
+            "to": "t2",
+            "limit": 23
+          },
+          {
+            "from": "t2",
+            "to": "t3",
+            "limit": 24
+          },
+          {
+            "from": "t3",
+            "to": "t4",
+            "limit": 26
+          },
+          {
+            "from": "l",
+            "to": "l1",
+            "limit": 15
+          },
+          {
+            "from": "l",
+            "to": "l2",
+            "limit": 8
+          },
+          {
+            "from": "l1",
+            "to": "l1a",
+            "limit": 10
+          },
+          {
+            "from": "l1a",
+            "to": "A",
+            "limit": 8
+          },
+          {
+            "from": "l2",
+            "to": "l2a",
+            "limit": 9
+          },
+          {
+            "from": "l2",
+            "to": "l2b",
+            "limit": 7
+          },
+          {
+            "from": "l2a",
+            "to": "l2aa",
+            "limit": 12
+          },
+          {
+            "from": "l2a",
+            "to": "l2ab",
+            "limit": 8
+          },
+          {
+            "from": "l2aa",
+            "to": "B",
+            "limit": 9
+          },
+          {
+            "from": "l2b",
+            "to": "l2ba",
+            "limit": 8
+          }
+        ],
+        "maxCommands": 15
+      },
+      "contextId": "q5-river",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2009-senior-q5.png",
+        "alt": "Printed directed river network from S to A, B, C and D with edge weight limits."
+      }
+    }
+  ]
+}

@@ -1,0 +1,2093 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2004-senior",
+    "season": "2004",
+    "division": "senior",
+    "title": "HKOI 2004 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2004hs_sol.pdf",
+      "note": "English paper, Section B. Suggested solution is not exhaustive."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q1-code",
+      "track": "section-b",
+      "title": "Question 1 · C program",
+      "markdown": "",
+      "displayCode": {
+        "c": "#include <stdio.h>\n#include <string.h>\n\nchar s[256];\nint i,len;\nchar temp;\n\nint main() {\n  gets(s);\n  len=strlen(s);\n  for (i=0; i<len{{A}}; i++) {\n    temp=s[i];\n    s[i]=s[{{B}}];\n    s[{{C}}]=temp;\n  }\n  printf(\"%s\\n\",s);\n  return 0;\n}"
+      }
+    },
+    {
+      "id": "q5-code",
+      "track": "section-b",
+      "title": "Question 5 · C program",
+      "markdown": "",
+      "displayCode": {
+        "c": "#include <stdio.h>\nint n;\nint main() {\n  scanf(\"%d\",&n);\n  if (n<=0)\n    printf(\"Not a power of 3.\\n\");\n  else {\n    while (n%3==0)\n      n={{G}};\n    if ({{H}})\n      printf(\"A power of 3.\\n\");\n    else\n      printf(\"Not a power of 3.\\n\");\n  }\n  return 0;\n}"
+      }
+    },
+    {
+      "id": "q8-code",
+      "track": "section-b",
+      "title": "Question 8 · C linked list program",
+      "markdown": "",
+      "displayCode": {
+        "c": "typedef struct Node *pNode;\nstruct Node {\n  int data;\n  pNode next;\n};\n\npNode reverse(pNode src) {\n  pNode dst,temp;\n\n  dst=NULL;\n  while (src!=NULL) {\n    temp=src->next;\n    src->next={{K}};\n    dst={{L}};\n    src=temp;\n  }\n  return dst;\n}"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "section-b-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "The following program reverses a string. For example, “ABCD” is reversed to “DCBA” by the program. Fill in the blanks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int len){int s[256];int i,temp;for(i=0;i<len;i++)s[i]=i+1;for(i=0;i<len{{A}};i++){temp=s[i];s[i]=s[len-1-i];s[len-1-i]=temp;}int out=0;for(i=0;i<len;i++)out=(out*17+s[i])%1000003;return out;}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              2
+            ],
+            "expected": {
+              "returnValue": 35
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": 902
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              4
+            ],
+            "expected": {
+              "returnValue": 20554
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              5
+            ],
+            "expected": {
+              "returnValue": 438159
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-6",
+            "args": [
+              6
+            ],
+            "expected": {
+              "returnValue": 957277
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-7",
+            "args": [
+              7
+            ],
+            "expected": {
+              "returnValue": 919753
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-8",
+            "args": [
+              8
+            ],
+            "expected": {
+              "returnValue": 619288
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-9",
+            "args": [
+              9
+            ],
+            "expected": {
+              "returnValue": 247911
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-10",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": 455256
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-11",
+            "args": [
+              31
+            ],
+            "expected": {
+              "returnValue": 589135
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-12",
+            "args": [
+              32
+            ],
+            "expected": {
+              "returnValue": 478386
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-13",
+            "args": [
+              64
+            ],
+            "expected": {
+              "returnValue": 391768
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-14",
+            "args": [
+              99
+            ],
+            "expected": {
+              "returnValue": 913874
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-15",
+            "args": [
+              100
+            ],
+            "expected": {
+              "returnValue": 992904
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-16",
+            "args": [
+              254
+            ],
+            "expected": {
+              "returnValue": 233845
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-17",
+            "args": [
+              255
+            ],
+            "expected": {
+              "returnValue": 367578
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q1-code"
+    },
+    {
+      "id": "section-b-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "The following program reverses a string. For example, “ABCD” is reversed to “DCBA” by the program. Fill in the blanks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int len,int i){return {{B}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              2,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              3,
+              0
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              4,
+              0
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              4,
+              1
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              5,
+              0
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-6",
+            "args": [
+              5,
+              1
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-7",
+            "args": [
+              8,
+              0
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-8",
+            "args": [
+              8,
+              1
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-9",
+            "args": [
+              8,
+              2
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-10",
+            "args": [
+              8,
+              3
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-11",
+            "args": [
+              11,
+              0
+            ],
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-12",
+            "args": [
+              11,
+              1
+            ],
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-13",
+            "args": [
+              11,
+              2
+            ],
+            "expected": {
+              "returnValue": 8
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-14",
+            "args": [
+              11,
+              3
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-15",
+            "args": [
+              11,
+              4
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q1-code"
+    },
+    {
+      "id": "section-b-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank C",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "The following program reverses a string. For example, “ABCD” is reversed to “DCBA” by the program. Fill in the blanks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int len,int i){return {{C}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              2,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              3,
+              0
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              4,
+              0
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              4,
+              1
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              5,
+              0
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-6",
+            "args": [
+              5,
+              1
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-7",
+            "args": [
+              8,
+              0
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-8",
+            "args": [
+              8,
+              1
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-9",
+            "args": [
+              8,
+              2
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-10",
+            "args": [
+              8,
+              3
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-11",
+            "args": [
+              11,
+              0
+            ],
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-12",
+            "args": [
+              11,
+              1
+            ],
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-13",
+            "args": [
+              11,
+              2
+            ],
+            "expected": {
+              "returnValue": 8
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-14",
+            "args": [
+              11,
+              3
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-15",
+            "args": [
+              11,
+              4
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q1-code"
+    },
+    {
+      "id": "section-b-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank D",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Suppose there are n candies and some boxes. Each box can hold at most m candies. Complete the following program so that it outputs the minimum number of boxes required to put all candies into the boxes."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int n,int m){return {{D}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              17,
+              5
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-6",
+            "args": [
+              99,
+              10
+            ],
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-7",
+            "args": [
+              100,
+              11
+            ],
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-8",
+            "args": [
+              255,
+              7
+            ],
+            "expected": {
+              "returnValue": 37
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\nint n,m;\nint main() {\n  scanf(\"%d %d\",&n,&m);\n  printf(\"%d boxes needed\\n\", {{D}});\n  return 0;\n}"
+      }
+    },
+    {
+      "id": "section-b-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Write down the values (true/false) of boolean variables A, B, C and D such that all of the following five boolean expressions are true.\n\n1. A or (not B)\n2. (not A) or D\n3. B or C\n4. (not C) or (not D)\n5. D or A"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "A=True,B=True,C=False,D=True",
+            "A=true,B=true,C=false,D=true",
+            "True,True,False,True",
+            "true,true,false,true",
+            "T,T,F,T"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Consider the following program segment:\n\n```c\nprintf(\"%s\\n\", \"X.....X\");\nprintf(\"%s\\n\", \".X...X.\");\nprintf(\"%s\\n\", \"..X.X..\");\nprintf(\"%s\\n\", \"...X...\");\nprintf(\"%s\\n\", \"..X.X..\");\nprintf(\"%s\\n\", \".X...X.\");\nprintf(\"%s\\n\", \"X.....X\");\n```\n\nWhat should be filled in the blank so that the following program segment does exactly what the above statements do?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int i,int j){return {{F}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              1,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              1,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              1,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-6",
+            "args": [
+              1,
+              6
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-7",
+            "args": [
+              1,
+              7
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-8",
+            "args": [
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-9",
+            "args": [
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-10",
+            "args": [
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-11",
+            "args": [
+              2,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-12",
+            "args": [
+              2,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-13",
+            "args": [
+              2,
+              6
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-14",
+            "args": [
+              2,
+              7
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-15",
+            "args": [
+              3,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-16",
+            "args": [
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-17",
+            "args": [
+              3,
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-18",
+            "args": [
+              3,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-19",
+            "args": [
+              3,
+              5
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-20",
+            "args": [
+              3,
+              6
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-21",
+            "args": [
+              3,
+              7
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-22",
+            "args": [
+              4,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-23",
+            "args": [
+              4,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-24",
+            "args": [
+              4,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-25",
+            "args": [
+              4,
+              4
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-26",
+            "args": [
+              4,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-27",
+            "args": [
+              4,
+              6
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-28",
+            "args": [
+              4,
+              7
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-29",
+            "args": [
+              5,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-30",
+            "args": [
+              5,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-31",
+            "args": [
+              5,
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-32",
+            "args": [
+              5,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-33",
+            "args": [
+              5,
+              5
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-34",
+            "args": [
+              5,
+              6
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-35",
+            "args": [
+              5,
+              7
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-36",
+            "args": [
+              6,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-37",
+            "args": [
+              6,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-38",
+            "args": [
+              6,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-39",
+            "args": [
+              6,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-40",
+            "args": [
+              6,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-41",
+            "args": [
+              6,
+              6
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-42",
+            "args": [
+              6,
+              7
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-43",
+            "args": [
+              7,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-44",
+            "args": [
+              7,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-45",
+            "args": [
+              7,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-46",
+            "args": [
+              7,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-47",
+            "args": [
+              7,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-48",
+            "args": [
+              7,
+              6
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-49",
+            "args": [
+              7,
+              7
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "for (i=1; i<=7; i++) {\n  for (j=1; j<=7; j++)\n    if ({{F}})\n      printf(\"X\");\n    else\n      printf(\".\");\n  printf(\"\\n\");\n}"
+      }
+    },
+    {
+      "id": "section-b-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank G",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "The following program checks whether the input number is a power of 3. Fill in the blanks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int n){return {{G}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              6
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              9
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              12
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              27
+            ],
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-6",
+            "args": [
+              81
+            ],
+            "expected": {
+              "returnValue": 27
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-7",
+            "args": [
+              243
+            ],
+            "expected": {
+              "returnValue": 81
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-8",
+            "args": [
+              1000
+            ],
+            "expected": {
+              "returnValue": 333
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q5-code"
+    },
+    {
+      "id": "section-b-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "The following program checks whether the input number is a power of 3. Fill in the blanks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int n){return {{H}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-6",
+            "args": [
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-7",
+            "args": [
+              7
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-8",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-9",
+            "args": [
+              20
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-10",
+            "args": [
+              40
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q5-code"
+    },
+    {
+      "id": "section-b-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank I",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Write down the output of the following program."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "89"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n\nint f(int n) {\n  if (n<=1)\n    return 1;\n  else\n    return f(n-1)+f(n-2);\n}\n\nint main() {\n  printf(\"%d\\n\",f(10));\n  return 0;\n}"
+      }
+    },
+    {
+      "id": "section-b-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank J",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Given n distinct integers. What is the minimum number of comparisons needed to find the smallest integer if each comparison involves only two integers? Express your answer in terms of n."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int n){return {{J}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              4
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              7
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-6",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-7",
+            "args": [
+              42
+            ],
+            "expected": {
+              "returnValue": 41
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-8",
+            "args": [
+              100
+            ],
+            "expected": {
+              "returnValue": 99
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "answerOnly": true
+    },
+    {
+      "id": "section-b-k",
+      "track": "section-b",
+      "printedRef": "Section B, Question 8, Blank K",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "The following program segment reverses a linked list. The linked list terminates when next=nil (next==NULL in C Version). Fill in the blanks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int src,int dst){return {{K}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              1,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              10,
+              5
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              999,
+              52
+            ],
+            "expected": {
+              "returnValue": 52
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q8-code"
+    },
+    {
+      "id": "section-b-l",
+      "track": "section-b",
+      "printedRef": "Section B, Question 8, Blank L",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "The following program segment reverses a linked list. The linked list terminates when next=nil (next==NULL in C Version). Fill in the blanks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int src,int dst){return {{L}};}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "args": [
+              1,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-2",
+            "args": [
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-3",
+            "args": [
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-4",
+            "args": [
+              10,
+              5
+            ],
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "case-5",
+            "args": [
+              999,
+              52
+            ],
+            "expected": {
+              "returnValue": 999
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "contextId": "q8-code"
+    },
+    {
+      "id": "section-b-m",
+      "track": "section-b",
+      "printedRef": "Section B, Question 9, Blank M",
+      "title": "Section B, Question 9",
+      "prompt": {
+        "en": "Write down the output of the following program."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "M"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 17
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "M": [
+            "10110"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n\nvoid r(int x) {\n  if (x<=1)\n    printf(\"%d\",x);\n  else {\n    r(x-1);\n    r(x-2);\n  }\n}\n\nint main() {\n  r(4);\n  return 0;\n}"
+      }
+    },
+    {
+      "id": "section-b-n",
+      "track": "section-b",
+      "printedRef": "Section B, Question 10, Blank N",
+      "title": "Section B, Question 10",
+      "prompt": {
+        "en": "The purpose of the following program is to read a string from standard input, replace ALL occurrences of \"HKOI2003\" in the string with \"HKOI2004\" and output the updated string to standard output. However, it does not always work as expected. Write down an input string such that the program fails to produce a correct output."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "N",
+          "maxChars": 255
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 17
+      },
+      "grading": {
+        "kind": "string-replacement-counterexample",
+        "answerBlank": "N",
+        "needle": "HKOI2003",
+        "replacement": "HKOI2004",
+        "maxInputLength": 255
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n#include <string.h>\nchar s[256], *k;\n\nint main() {\n  gets(s);\n  k=strstr(s,\"HKOI2003\");\n  if (k!=NULL)\n    *(k+7)='4';\n  printf(\"%s\\n\",s);\n  return 0;\n}"
+      }
+    },
+    {
+      "id": "section-b-o",
+      "track": "section-b",
+      "printedRef": "Section B, Question 11, Blank O",
+      "title": "Section B, Question 11",
+      "prompt": {
+        "en": "Given the following 4x4 board. Starting from the top-left corner of the board, you can move to any adjacent cell if the number in that cell is greater than the number in the current cell. The sum of all numbers in the cells you have visited is your score. What is the highest possible score you can achieve?\n\n| 1 | 2 | 5 | 6 |\n|---|---|---|---|\n| 16 | 17 | 3 | 8 |\n| 13 | 30 | 12 | 10 |\n| 2 | 4 | 13 | 19 |"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "O"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 17
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "O": [
+            "76"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-p",
+      "track": "section-b",
+      "printedRef": "Section B, Question 12, Blank P",
+      "title": "Section B, Question 12",
+      "prompt": {
+        "en": "Among all 5-digit integers composed of the digits '1', '2', '3', '4' and '5', each digit appearing exactly once, how many of them are smaller than 53412?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "P"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2004hse.doc",
+        "page": 17
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "P": [
+            "112"
+          ]
+        },
+        "normalize": "trim"
+      }
+    }
+  ]
+}

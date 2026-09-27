@@ -9,6 +9,16 @@ import { checkUniformCppExpression } from '../engines/probability/uniform-cpp';
 import { cppEngine } from '../engines/cpp';
 import { pythonEngine } from '../engines/python';
 import { matchesLogoDrawing, type DrawingSegment } from './logo-drawing';
+import { checkWeightedRoute } from './weighted-route';
+import { checkRecordSortComparator } from './record-sort-comparator';
+import { checkDrawingRobot } from './drawing-robot';
+import { checkBoxStackRobot, checkGraphLabeling, checkRiverRoute, checkTripleSortNetwork } from './early-graphs';
+import { checkRegularPolygonGraph } from './regular-polygon-graph';
+import {
+  checkBooleanCircuit, checkDifferencePyramid, checkPrimeFactorCounterexample,
+  checkPrimeFactorCountCounterexample, checkSparseRuler,
+  checkStringReplacementCounterexample, checkTextEditor, checkTopTwoCounterexample
+} from './early-semantics';
 
 const MAX_PY_SOURCE_BYTES = 200_000;
 const MAX_C_SOURCE_BYTES = 128 * 1024;
@@ -60,7 +70,8 @@ function invalidAnswer(question: Question, answers: Record<string, string>): str
   for (const blank of question.blanks) {
     const answer = answers[blank.id];
     if (typeof answer !== 'string' || answer.length === 0) return `Blank ${blank.id} is empty.`;
-    if (blank.maxChars !== undefined && [...answer].length > blank.maxChars) {
+    const answerLength = [...answer].filter(char => !blank.maxCharsExcludeWhitespace || !/\s/.test(char)).length;
+    if (blank.maxChars !== undefined && answerLength > blank.maxChars) {
       return `Blank ${blank.id} exceeds its ${blank.maxChars} character limit.`;
     }
     if (blank.forbiddenChars && [...answer].some(char => blank.forbiddenChars!.includes(char))) {
@@ -105,7 +116,7 @@ async function gradeTarget(question: Question, answers: Record<string, string>, 
   return results;
 }
 
-export async function gradeQuestion(question: Question, answersForQuestion: Record<string, string>, language?: Language): Promise<QuestionGrade> {
+export async function gradeQuestion(question: Question, answersForQuestion: Record<string, string>, language?: Language, allAnswers?: PaperAnswers): Promise<QuestionGrade> {
   if (question.grading.kind === 'cancelled') return { questionId: question.id, status: 'cancelled', score: 0, maxScore: 0, cases: [], message: question.grading.reason };
   if (question.grading.kind === 'pending') return singleResult(question, 'pending', question.grading.reason);
   const answers: Record<string, string> = {};
@@ -120,6 +131,87 @@ export async function gradeQuestion(question: Question, answersForQuestion: Reco
       return !accepted[blank.id].some(candidate => (normalize === 'trim' ? candidate.trim() : candidate) === value);
     });
     return singleResult(question, wrong ? 'fail' : 'pass', wrong ? `Blank ${wrong.id} does not match an accepted value.` : undefined);
+  }
+  if (question.grading.kind === 'string-replacement-counterexample') {
+    const spec = question.grading;
+    const error = checkStringReplacementCounterexample(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'difference-pyramid') {
+    const spec = question.grading;
+    const error = checkDifferencePyramid(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'sparse-ruler') {
+    const spec = question.grading;
+    const error = checkSparseRuler(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'text-editor') {
+    const spec = question.grading;
+    const error = checkTextEditor(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'boolean-circuit') {
+    const spec = question.grading;
+    const error = checkBooleanCircuit(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'prime-factor-counterexample') {
+    const spec = question.grading;
+    const error = checkPrimeFactorCounterexample(spec, answers[spec.inputBlank], answers[spec.outputBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'prime-factor-count-counterexample') {
+    const spec = question.grading;
+    const error = checkPrimeFactorCountCounterexample(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'weighted-route') {
+    const spec = question.grading;
+    const previous = spec.reference ? allAnswers?.[spec.reference.questionId]?.[spec.reference.blankId] : undefined;
+    const result = checkWeightedRoute(spec, answers[spec.answerBlank], previous);
+    return singleResult(question, result.status, result.message);
+  }
+  if (question.grading.kind === 'record-sort-comparator') {
+    const spec = question.grading;
+    const error = checkRecordSortComparator(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'drawing-robot') {
+    const spec = question.grading;
+    const error = checkDrawingRobot(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'top-two-counterexample') {
+    const spec = question.grading;
+    const error = checkTopTwoCounterexample(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'graph-labeling') {
+    const spec = question.grading;
+    const error = checkGraphLabeling(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'box-stack-robot') {
+    const spec = question.grading;
+    const error = checkBoxStackRobot(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'river-route') {
+    const spec = question.grading;
+    const error = checkRiverRoute(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'triple-sort-network') {
+    const spec = question.grading;
+    const error = checkTripleSortNetwork(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
+  }
+  if (question.grading.kind === 'regular-polygon-graph') {
+    const spec = question.grading;
+    const error = checkRegularPolygonGraph(spec, answers[spec.answerBlank]);
+    return singleResult(question, error ? 'fail' : 'pass', error ?? undefined);
   }
   if (question.grading.kind === 'rpn-expression') {
     const spec = question.grading;
@@ -471,7 +563,7 @@ export async function gradePaper(paper: PaperConfig, answers: PaperAnswers, sele
   const language = choiceLanguages.length === 1 ? choiceLanguages[0] : undefined;
   const questions: QuestionGrade[] = [];
   for (const question of paper.questions) if (selected.has(question.track)) {
-    questions.push(await gradeQuestion(question, answers[question.id] ?? {}, language));
+    questions.push(await gradeQuestion(question, answers[question.id] ?? {}, language, answers));
   }
   const scored = questions.filter(item => item.score !== null);
   return {

@@ -1,15 +1,14 @@
 {
   "schemaVersion": 1,
   "paper": {
-    "id": "2011-12-junior",
-    "season": "2011/12",
-    "division": "junior",
-    "title": "HKOI 2011/12 Heat Event — Junior Group FITB",
+    "id": "2012-senior",
+    "season": "2012",
+    "division": "senior",
+    "title": "HKOI 2012 Heat Event — Senior Group FITB",
     "source": {
-      "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
-      "answerSheetUrl": "https://assets.hkoi.org/ref/2012hja.pdf",
-      "page": 1,
-      "note": "English Junior paper, Section B pages 8–10. The corrected answer sheet is 2012hja.pdf; the blank box layout is 2012h_answer_sheet.pdf."
+      "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+      "note": "Local archive: 2012 (with MC sol & corrected ANS)/2012hse.pdf and 2012hsa.pdf. Section B pages 8–10; answer-sheet boxes page 1."
     }
   },
   "tracks": [
@@ -19,66 +18,280 @@
       "selection": "required"
     }
   ],
-  "contexts": [
-    {
-      "id": "q2-code",
-      "track": "section-b",
-      "title": "Question 2 · C program segment",
-      "markdown": "",
-      "displayCode": {
-        "c": "#include <stdio.h>\nint is_prime[6];\nint prime;\n......\nis_prime[2]=1;\nis_prime[3]=1;\nis_prime[4]=0;\nis_prime[5]= {{C}};\nfor (i={{D}}; i<=25; i++) {\n   prime=1;\n   for (j=2; j<=5; j++)\n      if ({{E}})\n         prime=0;\n   if (prime==1) printf(\"%d\\n\",i);\n}"
-      }
-    },
-    {
-      "id": "robot-open-grid",
-      "track": "section-b",
-      "title": "Section B Q4 G–H",
-      "markdown": "There is a robot in a grid. You can use a command to control the robot:\n\n```text\n˄ : up\n˅ : down\n< : left\n> : right\n[Command]num : repeat Command for num times, where num is an integer from 1 to 9 (inclusive).\n```\n\nFormally, ‘˄’, ‘˅’, ‘<’, ‘>’ are moves. One or more moves forms a Command. (Command)num is also a command. Concatenation of two commands is also a command.\n\nIf a move will result the robot out of boundary or hit an obstacle, the robot will ignore that move.\nIn the following problems, you need to write a command to fulfill the task, where the robot should make less than 1000 moves and the length of the command must not exceed than the provided space.\n\n```text\nR........\n.........\n.........\n.........\n.........\n.........\n.........\n.........\n.........\n```\n\nR is the initial position of the robot."
-    },
-    {
-      "id": "robot-obstacle-grid",
-      "track": "section-b",
-      "title": "Section B Q4 I–K",
-      "markdown": "There is a robot in a grid. You can use a command to control the robot:\n\n```text\n˄ : up\n˅ : down\n< : left\n> : right\n[Command]num : repeat Command for num times, where num is an integer from 1 to 9 (inclusive).\n```\n\nFormally, ‘˄’, ‘˅’, ‘<’, ‘>’ are moves. One or more moves forms a Command. (Command)num is also a command. Concatenation of two commands is also a command.\n\nIf a move will result the robot out of boundary or hit an obstacle, the robot will ignore that move.\nIn the following problems, you need to write a command to fulfill the task, where the robot should make less than 1000 moves and the length of the command must not exceed than the provided space.\n\n```text\nR........\n.........\n.........\n.........\n....*....\n.........\n.........\n.........\n.........\n```\n\n* is an obstacle"
-    }
-  ],
   "questions": [
     {
-      "id": "section-b-a",
+      "id": "A",
       "track": "section-b",
-      "printedRef": "Section B, Question 1, Blanks A, B",
+      "printedRef": "Section B, Question 1, Blank A",
       "title": "Section B, Question 1",
       "prompt": {
-        "en": "Consider the following program.\n\nGive two different inputs that will result in runtime error. Write your answer in A and B. (1 pt each)."
+        "en": "A. Write an expression which gives the maximum of two non-negative integers x and y."
       },
+      "answerOnly": true,
       "points": 2,
       "blanks": [
         {
           "id": "A",
-          "maxChars": 13
-        },
-        {
-          "id": "B",
-          "maxChars": 25
+          "label": "A",
+          "maxChars": 13,
+          "forbiddenChars": "?:<>"
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 8
       },
-      "displayCode": {
-        "c": "#include <stdio.h>\nfloat f;\nint main(){\n  printf(\"Enter a number: \");\n  scanf(\"%f\", &f);\n  printf(\"The inverse is: %f\\n\", 1.0/f);\n}"
-      },
       "grading": {
-        "kind": "float-input-error",
-        "answerBlanks": [
-          "A",
-          "B"
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "c",
+            "helperSource": "int m(int a, int b, int c) {\n  if (a > b) { int t = a; a = b; b = t; }\n  if (b > c) { int t = b; b = c; c = t; }\n  if (a > b) { int t = a; a = b; b = t; }\n  return b;\n}",
+            "source": "int f(int x, int y) { return {{A}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "case1",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case2",
+            "args": [
+              1,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case3",
+            "args": [
+              0,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case4",
+            "args": [
+              99,
+              13
+            ],
+            "expected": {
+              "returnValue": 99
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case5",
+            "args": [
+              32767,
+              1
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case6",
+            "args": [
+              32767,
+              32767
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          }
         ]
-      }
+      },
+      "contextId": "section-b-q1"
     },
     {
-      "id": "section-b-c",
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "B. Write an expression which gives the maximum of two integers x and y"
+      },
+      "answerOnly": true,
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B",
+          "label": "B",
+          "maxChars": 25,
+          "forbiddenChars": "?:<>"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "c",
+            "helperSource": "int m(int a, int b, int c) {\n  if (a > b) { int t = a; a = b; b = t; }\n  if (b > c) { int t = b; b = c; c = t; }\n  if (a > b) { int t = a; a = b; b = t; }\n  return b;\n}",
+            "source": "int f(int x, int y) { return {{B}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "case1",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case2",
+            "args": [
+              1,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case3",
+            "args": [
+              0,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case4",
+            "args": [
+              99,
+              13
+            ],
+            "expected": {
+              "returnValue": 99
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case5",
+            "args": [
+              32767,
+              1
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case6",
+            "args": [
+              32767,
+              32767
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case7",
+            "args": [
+              -32768,
+              -32768
+            ],
+            "expected": {
+              "returnValue": -32768
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case8",
+            "args": [
+              -32768,
+              32767
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case9",
+            "args": [
+              -5,
+              -7
+            ],
+            "expected": {
+              "returnValue": -5
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case10",
+            "args": [
+              -5,
+              3
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case11",
+            "args": [
+              0,
+              -1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "contextId": "section-b-q1"
+    },
+    {
+      "id": "C",
       "track": "section-b",
       "printedRef": "Section B, Question 2, Blank C",
       "title": "Section B, Question 2",
@@ -89,26 +302,43 @@
       "blanks": [
         {
           "id": "C",
-          "maxChars": 9
+          "label": "C",
+          "maxChars": 9,
+          "forbiddenChars": "?:"
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 8
       },
-      "contextId": "q2-code",
       "grading": {
-        "kind": "literal",
-        "accepted": {
-          "C": [
-            "1"
-          ]
-        },
-        "normalize": "trim"
-      }
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint is_prime[6];\nint prime, i, j;\nint main() {\n  is_prime[2]=1;\n  is_prime[3]=1;\n  is_prime[4]=0;\n  is_prime[5]={{C}};\n  for (i=6; i<=25; i++) {\n    prime=1;\n    for (j=2; j<=5; j++)\n      if (is_prime[j]&&i%j==0)\n        prime=0;\n    if (prime==1) printf(\"%d\\n\",i);\n  }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "prime-1-to-25",
+            "stdin": "",
+            "expected": {
+              "stdout": "7\n11\n13\n17\n19\n23\n"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "section-b-q2"
     },
     {
-      "id": "section-b-d",
+      "id": "D",
       "track": "section-b",
       "printedRef": "Section B, Question 2, Blank D",
       "title": "Section B, Question 2",
@@ -119,40 +349,43 @@
       "blanks": [
         {
           "id": "D",
-          "maxChars": 5
+          "label": "D",
+          "maxChars": 5,
+          "forbiddenChars": "?:"
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 8
       },
-      "contextId": "q2-code",
       "grading": {
         "kind": "program",
+        "targetPolicy": "all",
         "targets": [
           {
             "language": "c",
-            "source": "#include <stdio.h>\nint is_prime[6];\nint prime,i,j;\nint main(){\n is_prime[2]=1; is_prime[3]=1; is_prime[4]=0; is_prime[5]=1;\n for(i={{D}};i<=25;i++){ prime=1; for(j=2;j<=5;j++) if(j<i&&i%j==0) prime=0; if(prime==1) printf(\"%d\\n\",i); }\n}",
+            "source": "#include <stdio.h>\nint is_prime[6];\nint prime, i, j;\nint main() {\n  is_prime[2]=1;\n  is_prime[3]=1;\n  is_prime[4]=0;\n  is_prime[5]=1;\n  for (i={{D}}; i<=25; i++) {\n    prime=1;\n    for (j=2; j<=5; j++)\n      if (is_prime[j]&&i%j==0)\n        prime=0;\n    if (prime==1) printf(\"%d\\n\",i);\n  }\n}",
             "harness": {
               "kind": "program"
             }
           }
         ],
-        "targetPolicy": "all",
         "cases": [
           {
-            "id": "case-1",
-            "maxSteps": 50000,
+            "id": "prime-1-to-25",
+            "stdin": "",
             "expected": {
-              "stdout": "2\n3\n5\n7\n11\n13\n17\n19\n23\n"
+              "stdout": "7\n11\n13\n17\n19\n23\n"
             },
-            "stdin": ""
+            "maxSteps": 10000
           }
         ]
-      }
+      },
+      "contextId": "section-b-q2"
     },
     {
-      "id": "section-b-e",
+      "id": "E",
       "track": "section-b",
       "printedRef": "Section B, Question 2, Blank E",
       "title": "Section B, Question 2",
@@ -163,40 +396,43 @@
       "blanks": [
         {
           "id": "E",
-          "maxChars": 39
+          "label": "E",
+          "maxChars": 39,
+          "forbiddenChars": "?:"
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 8
       },
-      "contextId": "q2-code",
       "grading": {
         "kind": "program",
+        "targetPolicy": "all",
         "targets": [
           {
             "language": "c",
-            "source": "#include <stdio.h>\nint is_prime[6];\nint prime,i,j;\nint main(){\n is_prime[2]=1; is_prime[3]=1; is_prime[4]=0; is_prime[5]=1;\n for(i=2;i<=25;i++){ prime=1; for(j=2;j<=5;j++) if({{E}}) prime=0; if(prime==1) printf(\"%d\\n\",i); }\n}",
+            "source": "#include <stdio.h>\nint is_prime[6];\nint prime, i, j;\nint main() {\n  is_prime[2]=1;\n  is_prime[3]=1;\n  is_prime[4]=0;\n  is_prime[5]=1;\n  for (i=6; i<=25; i++) {\n    prime=1;\n    for (j=2; j<=5; j++)\n      if ({{E}})\n        prime=0;\n    if (prime==1) printf(\"%d\\n\",i);\n  }\n}",
             "harness": {
               "kind": "program"
             }
           }
         ],
-        "targetPolicy": "all",
         "cases": [
           {
-            "id": "case-1",
-            "maxSteps": 50000,
+            "id": "prime-1-to-25",
+            "stdin": "",
             "expected": {
-              "stdout": "2\n3\n5\n7\n11\n13\n17\n19\n23\n"
+              "stdout": "7\n11\n13\n17\n19\n23\n"
             },
-            "stdin": ""
+            "maxSteps": 10000
           }
         ]
-      }
+      },
+      "contextId": "section-b-q2"
     },
     {
-      "id": "section-b-f",
+      "id": "F",
       "track": "section-b",
       "printedRef": "Section B, Question 3, Blank F",
       "title": "Section B, Question 3",
@@ -207,15 +443,14 @@
       "blanks": [
         {
           "id": "F",
+          "label": "F",
           "maxChars": 5
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 9
-      },
-      "displayCode": {
-        "c": "#include <stdio.h>\nint x;\nint main(){\n   scanf(\"%d\",&x);\n   printf(\"%d\", x-(x+1)/9*9);\n}"
       },
       "grading": {
         "kind": "counterexample-max",
@@ -228,10 +463,13 @@
           8
         ],
         "partialPoints": 2
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\nint x;\nint main(){\n   scanf(\"%d\",&x);\n   printf(\"%d\", x-(x+1)/9*9);\n}"
       }
     },
     {
-      "id": "section-b-g",
+      "id": "G",
       "track": "section-b",
       "printedRef": "Section B, Question 4, Blank G",
       "title": "Section B, Question 4",
@@ -242,14 +480,15 @@
       "blanks": [
         {
           "id": "G",
+          "label": "G",
           "maxChars": 12
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 9
       },
-      "contextId": "robot-open-grid",
       "grading": {
         "kind": "robot-grid",
         "answerBlank": "G",
@@ -300,10 +539,11 @@
             "maxMoves": 999
           }
         ]
-      }
+      },
+      "contextId": "robot-open-grid"
     },
     {
-      "id": "section-b-h",
+      "id": "H",
       "track": "section-b",
       "printedRef": "Section B, Question 4, Blank H",
       "title": "Section B, Question 4",
@@ -314,14 +554,15 @@
       "blanks": [
         {
           "id": "H",
+          "label": "H",
           "maxChars": 20
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 9
       },
-      "contextId": "robot-open-grid",
       "grading": {
         "kind": "robot-grid",
         "answerBlank": "H",
@@ -367,10 +608,11 @@
             "maxMoves": 999
           }
         ]
-      }
+      },
+      "contextId": "robot-open-grid"
     },
     {
-      "id": "section-b-i",
+      "id": "I",
       "track": "section-b",
       "printedRef": "Section B, Question 4, Blank I",
       "title": "Section B, Question 4",
@@ -381,14 +623,15 @@
       "blanks": [
         {
           "id": "I",
+          "label": "I",
           "maxChars": 18
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 10
       },
-      "contextId": "robot-obstacle-grid",
       "grading": {
         "kind": "robot-grid",
         "answerBlank": "I",
@@ -444,10 +687,11 @@
             "maxMoves": 999
           }
         ]
-      }
+      },
+      "contextId": "robot-obstacle-grid"
     },
     {
-      "id": "section-b-j",
+      "id": "J",
       "track": "section-b",
       "printedRef": "Section B, Question 4, Blank J",
       "title": "Section B, Question 4",
@@ -458,14 +702,15 @@
       "blanks": [
         {
           "id": "J",
+          "label": "J",
           "maxChars": 23
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 10
       },
-      "contextId": "robot-obstacle-grid",
       "grading": {
         "kind": "robot-grid",
         "answerBlank": "J",
@@ -516,10 +761,11 @@
             "maxMoves": 999
           }
         ]
-      }
+      },
+      "contextId": "robot-obstacle-grid"
     },
     {
-      "id": "section-b-k",
+      "id": "K",
       "track": "section-b",
       "printedRef": "Section B, Question 4, Blank K",
       "title": "Section B, Question 4",
@@ -530,14 +776,15 @@
       "blanks": [
         {
           "id": "K",
+          "label": "K",
           "maxChars": 44
         }
       ],
       "source": {
-        "paperUrl": "https://assets.hkoi.org/ref/2012hje.pdf",
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
         "page": 10
       },
-      "contextId": "robot-obstacle-grid",
       "grading": {
         "kind": "robot-grid",
         "answerBlank": "K",
@@ -1708,7 +1955,37 @@
             "maxMoves": 999
           }
         ]
+      },
+      "contextId": "robot-obstacle-grid"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "section-b-q1",
+      "track": "section-b",
+      "title": "Section B Q1",
+      "markdown": "Let m(a,b,c) be a function that gives the median of the three integers a, b and c.\nFor example, m(2,1,3) = 2. Answer A and B using this function.\nThe characters \"?\", \":\", \"<\" and \">\" are not allowed."
+    },
+    {
+      "id": "section-b-q2",
+      "track": "section-b",
+      "title": "Question 2 · C program segment",
+      "markdown": "",
+      "displayCode": {
+        "c": "int is_prime[6];\nint prime;\n......\nis_prime[2]=1;\nis_prime[3]=1;\nis_prime[4]=0;\nis_prime[5]= {{C}};\nfor (i={{D}}; i<=25; i++) {\n   prime=1;\n   for (j=2; j<=5; j++)\n      if ({{E}})\n         prime=0;\n   if (prime==1) printf(\"%d\\n\",i);\n}"
       }
+    },
+    {
+      "id": "robot-open-grid",
+      "track": "section-b",
+      "title": "Section B Q4 G–H",
+      "markdown": "There is a robot in a grid. You can use a command to control the robot:\n\n```text\n˄ : up\n˅ : down\n< : left\n> : right\n[Command]num : repeat Command for num times, where num is an integer from 1 to 9 (inclusive).\n```\n\nFormally, ‘˄’, ‘˅’, ‘<’, ‘>’ are moves. One or more moves forms a Command. (Command)num is also a command. Concatenation of two commands is also a command.\n\nIf a move will result the robot out of boundary or hit an obstacle, the robot will ignore that move.\nIn the following problems, you need to write a command to fulfill the task, where the robot should make less than 1000 moves and the length of the command must not exceed than the provided space.\n\n```text\nR........\n.........\n.........\n.........\n.........\n.........\n.........\n.........\n.........\n```\n\nR is the initial position of the robot."
+    },
+    {
+      "id": "robot-obstacle-grid",
+      "track": "section-b",
+      "title": "Section B Q4 I–K",
+      "markdown": "There is a robot in a grid. You can use a command to control the robot:\n\n```text\n˄ : up\n˅ : down\n< : left\n> : right\n[Command]num : repeat Command for num times, where num is an integer from 1 to 9 (inclusive).\n```\n\nFormally, ‘˄’, ‘˅’, ‘<’, ‘>’ are moves. One or more moves forms a Command. (Command)num is also a command. Concatenation of two commands is also a command.\n\nIf a move will result the robot out of boundary or hit an obstacle, the robot will ignore that move.\nIn the following problems, you need to write a command to fulfill the task, where the robot should make less than 1000 moves and the length of the command must not exceed than the provided space.\n\n```text\nR........\n.........\n.........\n.........\n....*....\n.........\n.........\n.........\n.........\n```\n\n* is an obstacle"
     }
   ]
 }

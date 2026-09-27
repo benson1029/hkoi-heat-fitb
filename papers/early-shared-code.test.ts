@@ -4,14 +4,14 @@ import { join } from 'node:path';
 import { validatePaper } from '../src/core/validate';
 
 const groups = [
-  ['2011-12-junior', 'q2-code', 'section-b-c,section-b-d,section-b-e'],
-  ['2011-12-senior', 'section-b-q2', 'C,D,E'],
-  ['2012-13-junior', 'q5-code', 'section-b-f,section-b-g,section-b-h'],
-  ['2012-13-senior', 'q3', 'D,E'],
-  ['2012-13-senior', 'q5', 'H,I,J'],
-  ['2013-14-junior', 'q2-code', 'section-b-b,section-b-c'],
-  ['2013-14-junior', 'q5-code', 'section-b-i,section-b-j,section-b-k'],
-  ['2013-14-senior', 'q5', 'J,K,L'],
+  ['2012-junior', 'q2-code', 'section-b-c,section-b-d,section-b-e'],
+  ['2012-senior', 'section-b-q2', 'C,D,E'],
+  ['2013-junior', 'q5-code', 'section-b-f,section-b-g,section-b-h'],
+  ['2013-senior', 'q3', 'D,E'],
+  ['2013-senior', 'q5', 'H,I,J'],
+  ['2014-junior', 'q2-code', 'section-b-b,section-b-c'],
+  ['2014-junior', 'q5-code', 'section-b-i,section-b-j,section-b-k'],
+  ['2014-senior', 'q5', 'J,K,L'],
   ['2014-15-senior', 'linked', 'c-g,c-h'],
   ['2015-16-junior', 'collatz', 'B,C,D'],
   ['2015-16-junior', 'crosses', 'J,K'],
@@ -39,7 +39,7 @@ it('retains printed division-specific headers and shared code where the papers a
     const paper = validatePaper(JSON.parse(readFileSync(join(__dirname, `${file}.json`), 'utf8')));
     return paper.contexts?.find((item) => item.id === id)?.displayCode?.c;
   };
-  expect(contextCode('2011-12-junior', 'q2-code')).toBe(`#include <stdio.h>\n${contextCode('2011-12-senior', 'section-b-q2')}`);
+  expect(contextCode('2012-junior', 'q2-code')).toBe(`#include <stdio.h>\n${contextCode('2012-senior', 'section-b-q2')}`);
   expect(contextCode('2015-16-junior', 'crosses')).toBe(contextCode('2015-16-senior', 'crosses'));
 });
 
@@ -58,8 +58,8 @@ it.each([
 });
 
 it.each([
-  ['2013-14-junior', 'q5-code'],
-  ['2013-14-senior', 'q5'],
+  ['2014-junior', 'q5-code'],
+  ['2014-senior', 'q5'],
 ])('%s preserves the printed C sorting block indentation', (file, contextId) => {
   const paper = validatePaper(JSON.parse(readFileSync(join(__dirname, `${file}.json`), 'utf8')));
   const code = paper.contexts?.find((item) => item.id === contextId)?.displayCode?.c || '';
@@ -69,8 +69,8 @@ it.each([
   expect(code).toMatch(/\n    \} else \{\n        \{\{/);
 });
 
-it('uses the printed 2013/14 Senior C block as the editor, without repeating it in the context', () => {
-  const paper = validatePaper(JSON.parse(readFileSync(join(__dirname, '2013-14-senior.json'), 'utf8')));
+it('uses the printed 2014 Senior C block as the editor, without repeating it in the context', () => {
+  const paper = validatePaper(JSON.parse(readFileSync(join(__dirname, '2014-senior.json'), 'utf8')));
   const context = paper.contexts?.find((item) => item.id === 'q2');
   expect(context?.displayCode?.c).toContain('printf("%d", {{C}});');
   expect(context?.displayCode?.c).toContain('    if (x > 0)\n        printf');
@@ -79,7 +79,7 @@ it('uses the printed 2013/14 Senior C block as the editor, without repeating it 
 
 it('shows bare answer inputs for expression questions without printed code', () => {
   const load = (file: string) => validatePaper(JSON.parse(readFileSync(join(__dirname, `${file}.json`), 'utf8')));
-  const senior = load('2011-12-senior');
+  const senior = load('2012-senior');
   const junior = load('2014-15-junior');
   expect(senior.questions.filter((q) => ['A', 'B'].includes(q.id)).every((q) => q.answerOnly)).toBe(true);
   expect(junior.questions.find((q) => q.id === 'F')?.answerOnly).toBe(true);

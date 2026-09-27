@@ -1,0 +1,599 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2006-senior",
+    "season": "2006",
+    "division": "senior",
+    "title": "HKOI 2006 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2006hs_sol.doc"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q4-rot13",
+      "track": "section-b",
+      "title": "Question 4 · C program segment",
+      "markdown": "",
+      "displayCode": {
+        "c": "char *f(char *s) {\n   int i, n, x;\n   char *s2;\n   n = strlen(s);\n   /* allocate n bytes of memory for s2 */\n   s2 = (char *) malloc(n);\n   for (i = 0; i < n; ++i ) {\n      x = s[i] - 'a';\n      s2[i] = ((x + 13) % 26) + 'a';\n   }\n   return s2;\n}"
+      }
+    },
+    {
+      "id": "q5-pyramid",
+      "track": "section-b",
+      "title": "Question 5 · number boxes",
+      "markdown": "```text\n     □\n   □   □\n □   □   □\n```\n\nGiven 6 numbers b₁, b₂, b₃, b₄, b₅ and b₆, where 0 < b₁ < b₂ < b₃ < b₄ < b₅ < b₆, Chris wants to find all possible ways to fill in the above boxes such that:\n\n(i) Every number is used exactly once.\n(ii) If a number is not in the bottom row, then it is equal to the absolute difference between the two numbers below it. (i.e. a₁ = |a₂ - a₃|, a₂ = |a₄ - a₅| and a₃ = |a₅ - a₆|.)"
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Given integers n and m (-1000 < n < 1000 and 0 < m < 1000), the following program computes the smallest non-negative integer x such that n-x is divisible by m. For example, if n = 12, m = 5, then x = 2. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 12
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int n, int m) { return {{A}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "positive",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              12,
+              5
+            ]
+          },
+          {
+            "id": "negative",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              -12,
+              5
+            ]
+          },
+          {
+            "id": "zero",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              0,
+              7
+            ]
+          },
+          {
+            "id": "large-negative",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 997
+            },
+            "args": [
+              -999,
+              998
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n\nint main() {\n   int n, m;\n   scanf(\"%d %d\", &n, &m);\n   printf(\"x = %d\\n\", {{A}});\n   return 0;\n}"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "You are given a function max3(a, b, c) which returns the maximum of three integers a, b and c (0 < a, b, c < 10000). The following function returns the minimum of a, b and c. Fill in the blank using max3."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 12
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int min3(int a, int b, int c) { return {{B}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "min3"
+            },
+            "helperSource": "int max3(int a, int b, int c) { int m = a; if (b > m) m = b; if (c > m) m = c; return m; }"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "triple-0",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "id": "triple-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              3,
+              2,
+              1
+            ]
+          },
+          {
+            "id": "triple-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              12,
+              5,
+              9
+            ]
+          },
+          {
+            "id": "triple-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              9999,
+              1,
+              3000
+            ]
+          },
+          {
+            "id": "triple-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              4,
+              4,
+              7
+            ]
+          },
+          {
+            "id": "triple-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              7,
+              7,
+              7
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "int min3(int a, int b, int c) {\n   return {{B}};\n}"
+      }
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The following function returns the median of a, b and c. Fill in the blank using max3 and min3."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int median3(int a, int b, int c) { return {{C}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "median3"
+            },
+            "helperSource": "int max3(int a, int b, int c) { int m = a; if (b > m) m = b; if (c > m) m = c; return m; }\nint min3(int a, int b, int c) { int m = a; if (b < m) m = b; if (c < m) m = c; return m; }"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "triple-0",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "id": "triple-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              3,
+              2,
+              1
+            ]
+          },
+          {
+            "id": "triple-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 9
+            },
+            "args": [
+              12,
+              5,
+              9
+            ]
+          },
+          {
+            "id": "triple-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3000
+            },
+            "args": [
+              9999,
+              1,
+              3000
+            ]
+          },
+          {
+            "id": "triple-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              4,
+              4,
+              7
+            ]
+          },
+          {
+            "id": "triple-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              7,
+              7,
+              7
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "int median3(int a, int b, int c) {\n   return {{C}};\n}"
+      }
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank D",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The following program reverses the order of elements in the array A. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 14,
+        "note": "The suggested C expression in 2006hs_sol.doc does not reverse the array when executed in the printed loop; grading follows the printed program."
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main() { int A[10],t,i; for(i=0;i<10;i++) scanf(\"%d\",&A[i]); for(i=0;i<10;i++){ t=A[{{D}}]; A[{{D}}]=A[i]; A[i]=t; } for(i=0;i<10;i++) printf(\"%d \",A[i]); return 0; }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "array-0",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "9 8 7 6 5 4 3 2 1 0 "
+            },
+            "stdin": "0 1 2 3 4 5 6 7 8 9"
+          },
+          {
+            "id": "array-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 10 "
+            },
+            "stdin": "10 9 8 7 6 5 4 3 2 1"
+          },
+          {
+            "id": "array-2",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "3 5 4 7 9 -1 0 1 2 2 "
+            },
+            "stdin": "2 2 1 0 -1 9 7 4 5 3"
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n   int A[10], t, i;\n   for (i=0; i<10; i++) {\n      t = A[{{D}}];\n      A[{{D}}] = A[i];\n      A[i] = t;\n   }\n   return 0;\n}"
+      }
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "The following program segment outputs the above pattern. Fill in the blank.\n\n```text\n*-*-*-*-*-\n-*---*---*\n*-*-*-*-*-\n-*---*---*\n*-*-*-*-*-\n-*---*---*\n*-*-*-*-*-\n-*---*---*\n*-*-*-*-*-\n-*---*---*\n```"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){ int i,j; for(i=1;i<=10;i++){ for(j=1;j<=10;j++) if {{E}} printf(\"*\"); else printf(\"-\"); printf(\"\\n\"); } return 0; }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "printed-pattern",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "*-*-*-*-*-\n-*---*---*\n*-*-*-*-*-\n-*---*---*\n*-*-*-*-*-\n-*---*---*\n*-*-*-*-*-\n-*---*---*\n*-*-*-*-*-\n-*---*---*\n"
+            },
+            "stdin": ""
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "for (i=1; i<=10; i++) {\n   for (j=1; j<=10; j++)\n      if {{E}}\n         printf(\"*\");\n      else\n         printf(\"-\");\n   printf(\"\\n\");\n}"
+      }
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4(a), Blank F",
+      "title": "Section B, Question 4(a)",
+      "prompt": {
+        "en": "What is the string returned by f('envy') ( f(\"envy\") in C version)?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "rail"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q4-rot13"
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4(b), Blank G",
+      "title": "Section B, Question 4(b)",
+      "prompt": {
+        "en": "What is the string returned by f(f('computerprogrammingcomputerprogramming')) (f(f(\"computerprogrammingcomputerprogramming\")) in C version)?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "computerprogrammingcomputerprogramming"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q4-rot13"
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5(a), Blank H",
+      "title": "Section B, Question 5(a)",
+      "prompt": {
+        "en": "How many permutations are tested?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "H": [
+            "720"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q5-pyramid"
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5(b), Blank I",
+      "title": "Section B, Question 5(b)",
+      "prompt": {
+        "en": "It can be proven that b6 must be put in the bottom row. Chris modified his algorithm by only trying permutations that have b6 in the bottom row. How many permutations are tested?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "360"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q5-pyramid"
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5(c), Blank J",
+      "title": "Section B, Question 5(c)",
+      "prompt": {
+        "en": "Find one solution if the given numbers are 1, 2, 3, 4, 5 and 6."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J",
+          "placeholder": "3/1,4/5,6,2"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hse.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "difference-pyramid",
+        "answerBlank": "J",
+        "values": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "contextId": "q5-pyramid"
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "paper": {
-    "id": "2013-14-junior",
-    "season": "2013/14",
+    "id": "2014-junior",
+    "season": "2014",
     "division": "junior",
-    "title": "HKOI 2013/14 Heat Event — Junior Group FITB",
+    "title": "HKOI 2014 Heat Event — Junior Group FITB",
     "source": {
       "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
       "answerSheetUrl": "https://assets.hkoi.org/ref/2014hja.pdf",

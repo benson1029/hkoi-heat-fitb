@@ -27,6 +27,7 @@ const blank = z.object({
   id,
   label: z.string().max(200).optional(),
   maxChars: z.number().int().positive().max(5_000).optional(),
+  maxCharsExcludeWhitespace: z.boolean().optional(),
   forbiddenChars: z.string().min(1).max(100).optional(),
   forbiddenIdentifiers: z.array(z.string().min(1).max(80).regex(/^[A-Za-z_][A-Za-z0-9_]*$/)).min(1).max(30).optional(),
   allowedChars: z.string().min(1).max(200).optional(),
@@ -266,6 +267,104 @@ const logoDrawingGrading = z.object({
   tolerance: z.number().positive().max(0.15)
 }).strict();
 
+const stringReplacementCounterexampleGrading = z.object({
+  kind: z.literal('string-replacement-counterexample'), answerBlank: id,
+  needle: z.string().min(1).max(100), replacement: z.string().min(1).max(100),
+  maxInputLength: z.number().int().positive().max(5_000)
+}).strict();
+
+const differencePyramidGrading = z.object({
+  kind: z.literal('difference-pyramid'), answerBlank: id,
+  values: z.array(z.number().int()).length(6)
+}).strict();
+
+const sparseRulerGrading = z.object({
+  kind: z.literal('sparse-ruler'), answerBlank: id,
+  length: z.number().int().min(2).max(100), maxMarks: z.number().int().min(2).max(30)
+}).strict();
+
+const textEditorGrading = z.object({
+  kind: z.literal('text-editor'), answerBlank: id,
+  initial: z.string().regex(/^[A-Z]+$/).max(500), target: z.string().regex(/^[A-Z]+$/).max(500),
+  maxCommands: z.number().int().positive().max(10_000)
+}).strict();
+
+const booleanCircuitGrading = z.object({
+  kind: z.literal('boolean-circuit'), answerBlank: id,
+  expected: z.tuple([z.boolean(), z.boolean(), z.boolean(), z.boolean()]),
+  maxCost: z.number().int().positive().max(100)
+}).strict();
+
+const primeFactorCounterexampleGrading = z.object({
+  kind: z.literal('prime-factor-counterexample'), inputBlank: id, outputBlank: id,
+  minimum: z.number().int().min(2).max(100_000), maximum: z.number().int().min(2).max(100_000)
+}).strict();
+
+const primeFactorCountCounterexampleGrading = z.object({
+  kind: z.literal('prime-factor-count-counterexample'), answerBlank: id,
+  minimum: z.number().int().min(2).max(100_000), maximum: z.number().int().min(2).max(100_000)
+}).strict();
+
+const weightedRouteGrading = z.object({
+  kind: z.literal('weighted-route'), answerBlank: id,
+  nodes: z.array(id).min(2).max(25),
+  edges: z.array(z.object({ from: id, to: id, weight: z.number().int().positive().max(1_000_000) }).strict()).min(1).max(80),
+  directed: z.boolean(), start: id, end: id,
+  objective: z.enum(['shortest', 'shortest-alternate', 'longest-simple']),
+  reference: z.object({ questionId: id, blankId: id }).strict().optional()
+}).strict();
+
+const recordSortComparatorGrading = z.object({
+  kind: z.literal('record-sort-comparator'), answerBlank: id,
+  arrayName: id, indexName: id, fields: z.tuple([id, id]),
+  order: z.enum(['descending', 'ascending'])
+}).strict();
+
+const drawingRobotGrading = z.object({
+  kind: z.literal('drawing-robot'), answerBlank: id, start: coord,
+  facing: z.enum(['up', 'right', 'down', 'left']),
+  targetEdges: z.array(z.tuple([coord, coord])).min(1).max(100),
+  maxCommands: z.number().int().positive().max(10_000),
+  maxRepeat: z.number().int().positive().max(99)
+}).strict();
+
+const topTwoCounterexampleGrading = z.object({
+  kind: z.literal('top-two-counterexample'), answerBlank: id,
+  count: z.number().int().min(2).max(30),
+  minimum: z.number().int().min(-2147483648), maximum: z.number().int().max(2147483647)
+}).strict();
+
+const graphLabelingGrading = z.object({
+  kind: z.literal('graph-labeling'), answerBlank: id,
+  nodes: z.array(id).min(2).max(12), edges: z.array(z.tuple([id, id])).min(1).max(30)
+}).strict();
+
+const boxStackRobotGrading = z.object({
+  kind: z.literal('box-stack-robot'), answerBlank: id,
+  initial: z.array(z.array(z.number().int())).length(3),
+  target: z.array(z.array(z.number().int())).length(3),
+  maxCommands: z.number().int().positive().max(10_000), maxRepeat: z.number().int().positive().max(999)
+}).strict();
+
+const riverRouteGrading = z.object({
+  kind: z.literal('river-route'), answerBlank: id,
+  start: id, goal: id, passengers: z.number().int().nonnegative(),
+  edges: z.array(z.object({ from: id, to: id, limit: z.number().int().nonnegative() }).strict()).min(1).max(100),
+  maxCommands: z.number().int().positive().max(10_000)
+}).strict();
+
+const tripleSortNetworkGrading = z.object({
+  kind: z.literal('triple-sort-network'), answerBlank: id,
+  variables: z.array(id).length(6), calls: z.array(z.array(id).min(1).max(3)).min(1).max(20),
+  answerToken: id, answerCount: z.number().int().min(1).max(3)
+}).strict();
+
+const regularPolygonGraphGrading = z.object({
+  kind: z.literal('regular-polygon-graph'), answerBlank: id,
+  totalEdges: z.number().int().min(3).max(30),
+  objective: z.enum(['max-vertices', 'min-horizontal', 'min-diagonal'])
+}).strict();
+
 const question = z.object({
   id,
   track: id,
@@ -283,7 +382,7 @@ const question = z.object({
   points: z.number().nonnegative().finite().max(100),
   blanks: z.array(blank).min(1).max(30),
   source: sourceRef.optional(),
-  grading: z.discriminatedUnion('kind', [programGrading, programInputGrading, cppLineRepairGrading, coinCounterexampleGrading, checksumCollisionGrading, zigzagPathGrading, literalGrading, robotGrading, graphGrading, graphReversalGrading, triangleAffineGrading, uniformCppExpressionGrading, gridCheckpointsGrading, integerListGrading, matrixSumsGrading, rpnExpressionGrading, counterexampleMaxGrading, signedWrapSumGrading, nandExpressionGrading, dieFaceGrading, primePowerPairGrading, floatInputErrorGrading, logoDrawingGrading, pendingGrading, cancelledGrading])
+  grading: z.discriminatedUnion('kind', [programGrading, programInputGrading, cppLineRepairGrading, coinCounterexampleGrading, checksumCollisionGrading, zigzagPathGrading, literalGrading, robotGrading, graphGrading, graphReversalGrading, triangleAffineGrading, uniformCppExpressionGrading, gridCheckpointsGrading, integerListGrading, matrixSumsGrading, rpnExpressionGrading, counterexampleMaxGrading, signedWrapSumGrading, nandExpressionGrading, dieFaceGrading, primePowerPairGrading, floatInputErrorGrading, logoDrawingGrading, stringReplacementCounterexampleGrading, differencePyramidGrading, sparseRulerGrading, textEditorGrading, booleanCircuitGrading, primeFactorCounterexampleGrading, primeFactorCountCounterexampleGrading, weightedRouteGrading, recordSortComparatorGrading, drawingRobotGrading, topTwoCounterexampleGrading, graphLabelingGrading, boxStackRobotGrading, riverRouteGrading, tripleSortNetworkGrading, regularPolygonGraphGrading, pendingGrading, cancelledGrading])
 }).strict();
 
 const paperSchema = z.object({
@@ -345,6 +444,54 @@ function checkQuestion(q: Question): void {
   if (q.grading.kind === 'nand-expression' && !blankIds.includes(q.grading.answerBlank)) throw new Error(`Question ${q.id}: NAND blank is unknown`);
   if (q.grading.kind === 'logo-drawing' && !blankIds.includes(q.grading.answerBlank)) throw new Error(`Question ${q.id}: drawing blank is unknown`);
   if (q.grading.kind === 'die-face' && !blankIds.includes(q.grading.answerBlank)) throw new Error(`Question ${q.id}: die-face blank is unknown`);
+  if (['string-replacement-counterexample', 'difference-pyramid', 'sparse-ruler', 'text-editor', 'boolean-circuit', 'prime-factor-count-counterexample'].includes(q.grading.kind)) {
+    const spec = q.grading as { answerBlank: string };
+    if (!blankIds.includes(spec.answerBlank)) throw new Error(`Question ${q.id}: semantic answer blank is unknown`);
+  }
+  if (q.grading.kind === 'difference-pyramid' && new Set(q.grading.values).size !== 6) throw new Error(`Question ${q.id}: pyramid values must be distinct`);
+  if (q.grading.kind === 'text-editor' && q.grading.initial.length !== q.grading.target.length) throw new Error(`Question ${q.id}: text editor strings must have equal length`);
+  if (q.grading.kind === 'sparse-ruler' && q.grading.maxMarks > q.grading.length + 1) throw new Error(`Question ${q.id}: ruler mark limit exceeds its length`);
+  if (q.grading.kind === 'prime-factor-counterexample' && (q.grading.minimum > q.grading.maximum || q.grading.inputBlank === q.grading.outputBlank || !blankIds.includes(q.grading.inputBlank) || !blankIds.includes(q.grading.outputBlank))) throw new Error(`Question ${q.id}: factor counterexample contract is invalid`);
+  if (q.grading.kind === 'prime-factor-count-counterexample' && q.grading.minimum > q.grading.maximum) throw new Error(`Question ${q.id}: factor-count range is invalid`);
+  if (q.grading.kind === 'weighted-route') {
+    const spec = q.grading;
+    if (!blankIds.includes(spec.answerBlank) || new Set(spec.nodes).size !== spec.nodes.length || !spec.nodes.includes(spec.start) || !spec.nodes.includes(spec.end) || spec.start === spec.end ||
+        spec.edges.some(edge => !spec.nodes.includes(edge.from) || !spec.nodes.includes(edge.to) || edge.from === edge.to) ||
+        (spec.objective === 'shortest-alternate') !== !!spec.reference) throw new Error(`Question ${q.id}: weighted route contract is invalid`);
+  }
+  if (q.grading.kind === 'record-sort-comparator' && (!blankIds.includes(q.grading.answerBlank) || q.grading.fields[0] === q.grading.fields[1])) throw new Error(`Question ${q.id}: record comparator contract is invalid`);
+  if (q.grading.kind === 'drawing-robot') {
+    const spec = q.grading;
+    if (!blankIds.includes(spec.answerBlank) || spec.targetEdges.some(([a, b]) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) !== 1)) {
+      throw new Error(`Question ${q.id}: drawing robot edges must be unit segments`);
+    }
+  }
+  if (q.grading.kind === 'top-two-counterexample' && (!blankIds.includes(q.grading.answerBlank) || q.grading.minimum > q.grading.maximum)) throw new Error(`Question ${q.id}: top-two counterexample contract is invalid`);
+  if (q.grading.kind === 'graph-labeling') {
+    const spec = q.grading;
+    if (!blankIds.includes(spec.answerBlank) || new Set(spec.nodes).size !== spec.nodes.length ||
+        spec.edges.some(([a, b]) => !spec.nodes.includes(a) || !spec.nodes.includes(b) || a === b)) throw new Error(`Question ${q.id}: graph labeling contract is invalid`);
+  }
+  if (q.grading.kind === 'box-stack-robot') {
+    const spec = q.grading;
+    const initial = spec.initial.flat().sort((a, b) => a - b);
+    const target = spec.target.flat().sort((a, b) => a - b);
+    if (!blankIds.includes(spec.answerBlank) || initial.length !== target.length || initial.some((value, index) => value !== target[index]) || new Set(initial).size !== initial.length)
+      throw new Error(`Question ${q.id}: box stack contract is invalid`);
+  }
+  if (q.grading.kind === 'river-route') {
+    const spec = q.grading;
+    const parents = new Set(spec.edges.map(edge => edge.to));
+    if (!blankIds.includes(spec.answerBlank) || spec.start === spec.goal || parents.has(spec.start) || !parents.has(spec.goal) ||
+        parents.size !== spec.edges.length || spec.edges.some(edge => edge.from === edge.to)) throw new Error(`Question ${q.id}: river route contract is invalid`);
+  }
+  if (q.grading.kind === 'triple-sort-network') {
+    const spec = q.grading;
+    if (!blankIds.includes(spec.answerBlank) || new Set(spec.variables).size !== 6 ||
+        spec.calls.some(call => call.filter(name => name === spec.answerToken).length > 1 || call.some(name => name !== spec.answerToken && !spec.variables.includes(name))))
+      throw new Error(`Question ${q.id}: triple-sort network contract is invalid`);
+  }
+  if (q.grading.kind === 'regular-polygon-graph' && !blankIds.includes(q.grading.answerBlank)) throw new Error(`Question ${q.id}: regular polygon graph blank is invalid`);
   if (q.grading.kind === 'prime-power-pair') {
     const spec = q.grading;
     if (!blankIds.includes(spec.correctBlank) || !blankIds.includes(spec.incorrectBlank) || spec.correctBlank === spec.incorrectBlank || spec.minimum >= spec.maximum) {
@@ -561,6 +708,13 @@ export function validatePaper(input: unknown): PaperConfig {
       throw new Error(`Question ${q.id}: context ${q.contextId} is absent or on another track`);
     }
     checkQuestion(q);
+  }
+  for (const q of paper.questions) if (q.grading.kind === 'weighted-route' && q.grading.reference) {
+    const reference = q.grading.reference;
+    const referenced = paper.questions.find(item => item.id === reference.questionId);
+    if (!referenced?.blanks.some(blank => blank.id === reference.blankId)) {
+      throw new Error(`Question ${q.id}: weighted route reference is unknown`);
+    }
   }
   return paper;
 }

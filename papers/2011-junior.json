@@ -1,0 +1,559 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2011-junior",
+    "season": "2011",
+    "division": "junior",
+    "title": "HKOI 2011 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2011hj_ans.doc"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q1-editor",
+      "track": "section-b",
+      "title": "Question 1 · HKOI text editor",
+      "markdown": "You are going to modify a string containing only capital letters using the HKOI text editor. Originally, the string is on the editor and a cursor is highlighting the first character of the string.\n\nThere are 4 kinds of command provided by the editor.\n\n| command | meaning |\n|---|---|\n| m? | Modify the character highlighted by the cursor to \"?\" |\n| l | Shift the cursor to the position on the left of it. If the cursor is at the leftmost position, it will stay at the leftmost position |\n| r | Shift the cursor to the position on the right of it. If the cursor is at the rightmost position, it will stay at the rightmost position |\n| (command)N | Repeat the command by N times. For example “(rr)3” means shifting the cursor to the right by 6 times. |\n\nIn the example and question below, ‘_’ indicates the position of the cursor.\n\nIf the screen is initially shown as:\n\n```text\nABCDE\n```\n\nAfter executing the sequence of command \"mF(r)7mZ\", the screen will be shown as:\n\n```text\nFBCDZ\n```\n\nWrite the sequence of command for modifying the following strings respectively."
+    },
+    {
+      "id": "q2-search",
+      "track": "section-b",
+      "title": "Question 2 · C program segment",
+      "markdown": "",
+      "displayCode": {
+        "c": "left = 1;\nright = 10;\nwhile (left < right){\n   mid = ( left + right ) / 2; /* # */\n   if (a[mid] > target)\n      right = mid - 1;\n   else\n      left = mid;\n}\nprintf(\"%d\\n\", left);"
+      }
+    },
+    {
+      "id": "q7-fraction",
+      "track": "section-b",
+      "title": "Question 7 · C function",
+      "markdown": "",
+      "displayCode": {
+        "c": "int f(int x){\n   int i, sum = 0;\n   int a = _____;\n   int b = _____;\n   for (i=1;i<=x;++i)\n      sum+=(a*i)/b;\n   return sum;\n}"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Initial string:\n\n```text\nTCTCTCTCTCTC\n```\n\nTarget string:\n\n```text\nAGAGAGAGAGAG\n```\n\nCommand:"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "text-editor",
+        "answerBlank": "A",
+        "initial": "TCTCTCTCTCTC",
+        "target": "AGAGAGAGAGAG",
+        "maxCommands": 1000
+      },
+      "contextId": "q1-editor"
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Initial string:\n\n```text\nPQRRRRRRPQRRRRRR\n```\n\nTarget string:\n\n```text\nABCCCCCCABCCCCCA\n```\n\nCommand:"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "text-editor",
+        "answerBlank": "B",
+        "initial": "PQRRRRRRPQRRRRRR",
+        "target": "ABCCCCCCABCCCCCA",
+        "maxCommands": 1000
+      },
+      "contextId": "q1-editor"
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Alice has implemented a binary search which was going to print the index of the target in array a[]={0,1,2,3,4,5,6,7,8,9,10,11}(a[0]..a[11]). However, Alice found that the program did not print the correct index.\n\nRewrite line with comment \"#\" in order to correct the program. Assume the initial value of target is between 1 and 10 inclusively."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){int a[12],left=1,right=10,mid,target,i;for(i=0;i<12;i++)a[i]=i;scanf(\"%d\",&target);while(left<right){ {{C}}; if(a[mid]>target)right=mid-1;else left=mid;}printf(\"%d\\n\",left);return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "target-1",
+            "expected": {
+              "stdout": "1\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "1\n"
+          },
+          {
+            "id": "target-2",
+            "expected": {
+              "stdout": "2\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "2\n"
+          },
+          {
+            "id": "target-3",
+            "expected": {
+              "stdout": "3\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "3\n"
+          },
+          {
+            "id": "target-4",
+            "expected": {
+              "stdout": "4\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "4\n"
+          },
+          {
+            "id": "target-5",
+            "expected": {
+              "stdout": "5\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "5\n"
+          },
+          {
+            "id": "target-6",
+            "expected": {
+              "stdout": "6\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "6\n"
+          },
+          {
+            "id": "target-7",
+            "expected": {
+              "stdout": "7\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "7\n"
+          },
+          {
+            "id": "target-8",
+            "expected": {
+              "stdout": "8\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "8\n"
+          },
+          {
+            "id": "target-9",
+            "expected": {
+              "stdout": "9\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "9\n"
+          },
+          {
+            "id": "target-10",
+            "expected": {
+              "stdout": "10\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "10\n"
+          }
+        ]
+      },
+      "contextId": "q2-search",
+      "answerOnly": true
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "A regular ruler may have integer marks from 0 to the length of the ruler. However, sometimes a ruler has some missing marks, but you can still use it to measure any integer length from 1 up to the ruler’s full length. This kind of ruler is called ‘sparse ruler’. An example of a sparse ruler of full length 6 is given below:\n\nYou can measure any integer length from 1 to 6. For example, you can get length 2 by measuring between 4 and 6, length 5 by measuring between 1 and 6 etc.\n\nCreate a sparse ruler of length 9 with at most 5 integer marks."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "sparse-ruler",
+        "answerBlank": "D",
+        "length": 9,
+        "maxMarks": 5
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2011-sparse-ruler.png",
+        "alt": "Printed sparse ruler example with marks at 0, 1, 4, and 6"
+      }
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "A regular ruler may have integer marks from 0 to the length of the ruler. However, sometimes a ruler has some missing marks, but you can still use it to measure any integer length from 1 up to the ruler’s full length. This kind of ruler is called ‘sparse ruler’. An example of a sparse ruler of full length 6 is given below:\n\nYou can measure any integer length from 1 to 6. For example, you can get length 2 by measuring between 4 and 6, length 5 by measuring between 1 and 6 etc.\n\nCreate a sparse ruler of length 13 with at most 6 integer marks"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "sparse-ruler",
+        "answerBlank": "E",
+        "length": 13,
+        "maxMarks": 6
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2011-sparse-ruler.png",
+        "alt": "Printed sparse ruler example with marks at 0, 1, 4, and 6"
+      }
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Alice has written the following program segment below to count the number of prime factors for a given integer n, where n is an integer between 2 and 1001 inclusively. For example, 12=2²x3, hence 12 has 2 prime factors. However, Bob claims that her program is incorrect. Can you provide a valid input such that his program gives an incorrect output?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "prime-factor-count-counterexample",
+        "answerBlank": "F",
+        "minimum": 2,
+        "maximum": 1001
+      },
+      "displayCode": {
+        "c": "ans=1;\nscanf(\"%d\",&n);\nfor (i=2;i*i<=n;i++){\n   if (n%i==0){\n      ans++;\n      while (n%i==0)\n         n/=i;\n   }\n}\nprintf(\"%d\\n\",ans);"
+      }
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank G",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Alice has written a program to find the median of an integer array A[] with n elements, where n is an odd number. Complete the following program segment below. Store the median in the variable med."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main(){int A[30],n,i,j,x,y,z,med=0;scanf(\"%d\",&n);for(i=1;i<=n;i++)scanf(\"%d\",&A[i]);for(i=1;i<=n;i++){x=y=z=0;for(j=1;j<=n;j++){if(A[j]>A[i])x++;if(A[j]==A[i])y++;if(A[j]<A[i])z++;}if({{G}})med=A[i];}printf(\"%d\\n\",med);return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "array-0",
+            "expected": {
+              "stdout": "2\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "3\n1 2 3\n"
+          },
+          {
+            "id": "array-1",
+            "expected": {
+              "stdout": "5\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "5\n9 1 4 5 7\n"
+          },
+          {
+            "id": "array-2",
+            "expected": {
+              "stdout": "5\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "3\n5 5 5\n"
+          },
+          {
+            "id": "array-3",
+            "expected": {
+              "stdout": "2\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "5\n1 1 2 2 3\n"
+          },
+          {
+            "id": "array-4",
+            "expected": {
+              "stdout": "5\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "7\n3 7 3 7 5 3 5\n"
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "for (i=1;i<=n;i++){\n   x=y=z=0;\n   for (j=1;j<=n;j++){\n      if (A[j]>A[i]) x++;\n      if (A[j]==A[i]) y++;\n      if (A[j]<A[i]) z++;\n   }\n   if ({{G}}) med=A[i];\n}"
+      }
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank H",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "The following program segment is to find out how many times \"hkoi\" appears in the string variable str with length n. For example, the program should output \"2\" when str is \"hkoiheathkoifinal\". Fill in the blanks.\n\nHint: Consider the case when str is \"ioi\"."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int mode){char str[100];int cnt=0,found=0,n=0,i;if(mode==0){n=17;str[0]=104;str[1]=107;str[2]=111;str[3]=105;str[4]=104;str[5]=101;str[6]=97;str[7]=116;str[8]=104;str[9]=107;str[10]=111;str[11]=105;str[12]=102;str[13]=105;str[14]=110;str[15]=97;str[16]=108;}if(mode==1){n=3;str[0]=105;str[1]=111;str[2]=105;}if(mode==2){n=4;str[0]=104;str[1]=107;str[2]=111;str[3]=105;}if(mode==3){n=8;str[0]=104;str[1]=107;str[2]=111;str[3]=105;str[4]=104;str[5]=107;str[6]=111;str[7]=105;}if(mode==4){n=11;str[0]=104;str[1]=107;str[2]=111;str[3]=105;str[4]=104;str[5]=107;str[6]=111;str[7]=105;str[8]=105;str[9]=111;str[10]=105;}if(mode==5){n=6;str[0]=111;str[1]=111;str[2]=111;str[3]=111;str[4]=111;str[5]=105;}if(mode==6){n=6;str[0]=104;str[1]=107;str[2]=111;str[3]=111;str[4]=111;str[5]=105;}for(i=0;i<n-1;i++){cnt++;if(str[i]=='h'&&str[i+1]=='k')cnt=0;if(str[i]=='o'&&str[i+1]=='i')if({{H}})found++;}return found;}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "string-0",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              0
+            ]
+          },
+          {
+            "id": "string-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "string-2",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000,
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "string-3",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "string-4",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "string-5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "string-6",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              6
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "cnt = 0;\nfound = 0;\nfor(i=0; i<n-1; i++){\n   cnt++;\n   if(str[i]=='h' && str[i+1]=='k')\n      cnt = 0;\n   if(str[i]=='o' && str[i+1]=='i')\n      if({{H}})\n         found++;\n}\nprintf(\"%d\\n\", found);"
+      }
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank I",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Consider the following function:\n\nGive a pair of values of a and b such that the return value is 17 while the parameter x is 5."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "program-input",
+        "answerBlank": "I",
+        "target": {
+          "language": "c",
+          "source": "#include <stdio.h>\nint main(){int a,b,i,sum=0;scanf(\"%d %d\",&a,&b);for(i=1;i<=5;i++)sum+=(a*i)/b;printf(\"%d\\n\",sum);return 0;}",
+          "harness": {
+            "kind": "program"
+          }
+        },
+        "expected": {
+          "stdout": "17\n"
+        },
+        "maxSteps": 10000
+      },
+      "contextId": "q7-fraction"
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 8, Blank J",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "Alice is going to destroy Bob's Kingdom. More precisely, she wants to destroy some bridges such that island A and island B are disconnected. Assume the numbers written on the edges in the diagram below are the costs of the corresponding bridges. What is the minimum cost to achieve this?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2011hje.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "J": [
+            "14"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2011-bridges.png",
+        "alt": "Printed bridge network from island A to island B with edge costs"
+      }
+    }
+  ]
+}

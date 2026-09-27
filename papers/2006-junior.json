@@ -1,0 +1,801 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2006-junior",
+    "season": "2006",
+    "division": "junior",
+    "title": "HKOI 2006 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2006hj_sol.doc"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q7-sieve",
+      "track": "section-b",
+      "title": "Question 7 · C program",
+      "markdown": "",
+      "displayCode": {
+        "c": "#include <stdio.h>\n\nint main() {\n   int i, j;\n   int marked[1000];\n   for (i=1; i<1000; i++)\n      marked[i] = 0;\n   for (i=2; i<1000; i++)\n      if (!marked[i]) {\n         printf(\"%d is prime\\n\", i);\n         for ({{H}}; j++)\n            marked[{{I}}] = 1;\n      }\n   return 0;\n}"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "The following program segment swaps the values of two integer variables x and y. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int x, int y) { x = y - x; y = y - x; return {{A}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "swap-3-8",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 8
+            },
+            "args": [
+              3,
+              8
+            ]
+          },
+          {
+            "id": "swap--4-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              -4,
+              2
+            ]
+          },
+          {
+            "id": "swap-100-0",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              100,
+              0
+            ]
+          },
+          {
+            "id": "swap-7-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              7,
+              7
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "x = y - x;\ny = y - x;\nx = {{A}};"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Given integers n and m (-1000 < n < 1000 and 0 < m < 1000), the following program computes the smallest non-negative integer x such that n-x is divisible by m. For example, if n = 12, m = 5, then x = 2. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int n, int m) { return {{B}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "mod-12-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              12,
+              5
+            ]
+          },
+          {
+            "id": "mod-0-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              0,
+              7
+            ]
+          },
+          {
+            "id": "mod-999-10",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 9
+            },
+            "args": [
+              999,
+              10
+            ]
+          },
+          {
+            "id": "mod-5-10",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              5,
+              10
+            ]
+          },
+          {
+            "id": "negative-12",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              -12,
+              5
+            ]
+          },
+          {
+            "id": "negative-999",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 997
+            },
+            "args": [
+              -999,
+              998
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n\nint main() {\n   int n, m;\n   scanf(\"%d %d\", &n, &m);\n   printf(\"x = %d\\n\", {{B}});\n   return 0;\n}"
+      }
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "You are given a function max3(a, b, c) which returns the maximum of three integers a, b and c (0 < a, b, c < 10000). The following function returns the minimum of a, b and c. Fill in the blank using max3."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int min3(int a, int b, int c) { return {{C}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "min3"
+            },
+            "helperSource": "int max3(int a, int b, int c) { int m = a; if (b > m) m = b; if (c > m) m = c; return m; }"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "triple-0",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "id": "triple-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              3,
+              2,
+              1
+            ]
+          },
+          {
+            "id": "triple-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              12,
+              5,
+              9
+            ]
+          },
+          {
+            "id": "triple-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              9999,
+              1,
+              3000
+            ]
+          },
+          {
+            "id": "triple-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              4,
+              4,
+              7
+            ]
+          },
+          {
+            "id": "triple-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              7,
+              7,
+              7
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "int min3(int a, int b, int c) {\n   return {{C}};\n}"
+      }
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "The following function returns the median of a, b and c. Fill in the blank using max3 and min3."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int median3(int a, int b, int c) { return {{D}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "median3"
+            },
+            "helperSource": "int max3(int a, int b, int c) { int m = a; if (b > m) m = b; if (c > m) m = c; return m; }\nint min3(int a, int b, int c) { int m = a; if (b < m) m = b; if (c < m) m = c; return m; }"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "triple-0",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "id": "triple-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              3,
+              2,
+              1
+            ]
+          },
+          {
+            "id": "triple-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 9
+            },
+            "args": [
+              12,
+              5,
+              9
+            ]
+          },
+          {
+            "id": "triple-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3000
+            },
+            "args": [
+              9999,
+              1,
+              3000
+            ]
+          },
+          {
+            "id": "triple-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              4,
+              4,
+              7
+            ]
+          },
+          {
+            "id": "triple-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              7,
+              7,
+              7
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "int median3(int a, int b, int c) {\n   return {{D}};\n}"
+      }
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank E",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The following program reads 100 positive integers (each less than 10000) from the input and outputs them in ascending order. Fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int F[10001]; int f(int value, int times) { int temp=value; for (int i=0; i<times; i++) F[temp] = {{E}}; return F[value]; }",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "frequency-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              17,
+              1
+            ]
+          },
+          {
+            "id": "frequency-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              17,
+              2
+            ]
+          },
+          {
+            "id": "frequency-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              17,
+              5
+            ]
+          },
+          {
+            "id": "frequency-100",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 100
+            },
+            "args": [
+              17,
+              100
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n\nint main() {\n   int F[10001], i, j, temp;\n   for (i=1; i<=10000; i++)\n      F[i] = 0;\n   for (i=1; i<=100; i++) {\n      scanf(\"%d\", &temp);\n      F[temp] = {{E}};\n   }\n   for (i=1; i<=10000; i++)\n      for (j=1; j<=F[i]; j++)\n         printf(\"%d\\n\", i);\n   return 0;\n}"
+      }
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank F",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Chris has an unlimited number of \\$4 and \\$7 coins. However, some amounts cannot be paid with only \\$4 and \\$7 coins. Examples are \\$1, \\$2, \\$3 and \\$5. List all other integral amounts that cannot be paid."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 14
+      },
+      "grading": {
+        "kind": "integer-list",
+        "answerBlanks": [
+          "F"
+        ],
+        "count": 5,
+        "minimum": 1,
+        "maximum": 17,
+        "distinct": true,
+        "allowed": [
+          6,
+          9,
+          10,
+          13,
+          17
+        ]
+      }
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank G",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Let S(n, a) = 1+a+a²+…+aⁿ. The following program calculates the value of S(n, a). Making use of the fact S(n, a) = 1 + a × S(n-1, a), fill in the blank."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int n, int a) { int i, ans=1; for(i=1;i<=n;i++) ans={{G}}; return ans; }",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "series-0-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              0,
+              2
+            ]
+          },
+          {
+            "id": "series-1-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              1,
+              3
+            ]
+          },
+          {
+            "id": "series-3-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 15
+            },
+            "args": [
+              3,
+              2
+            ]
+          },
+          {
+            "id": "series-4-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              4,
+              1
+            ]
+          },
+          {
+            "id": "series-5-0",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              5,
+              0
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n\nint main() {\n   int n, a, i, ans;\n   scanf(\"%d %d\", &n, &a);\n   ans = 1;\n   for (i=1; i<=n; i++)\n      ans = {{G}};\n   printf(\"%d\\n\", ans);\n   return 0;\n}"
+      }
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank H",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "The following program computes all prime numbers less than 1000 using Sieve of Eratosthenes, i.e. by repeatedly crossing out multiples of prime numbers. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main() { int n,i,j,marked[1000]; scanf(\"%d\",&n); for(i=1;i<1000;i++) marked[i]=0; for(i=2;i<=n;i++) if(!marked[i]) { printf(\"%d is prime\\n\",i); for({{H}};j++) marked[i*j]=1; } return 0; }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "up-to-30",
+            "maxSteps": 250000,
+            "expected": {
+              "stdout": "2 is prime\n3 is prime\n5 is prime\n7 is prime\n11 is prime\n13 is prime\n17 is prime\n19 is prime\n23 is prime\n29 is prime\n"
+            },
+            "stdin": "30\n"
+          },
+          {
+            "id": "up-to-100",
+            "maxSteps": 250000,
+            "expected": {
+              "stdout": "2 is prime\n3 is prime\n5 is prime\n7 is prime\n11 is prime\n13 is prime\n17 is prime\n19 is prime\n23 is prime\n29 is prime\n31 is prime\n37 is prime\n41 is prime\n43 is prime\n47 is prime\n53 is prime\n59 is prime\n61 is prime\n67 is prime\n71 is prime\n73 is prime\n79 is prime\n83 is prime\n89 is prime\n97 is prime\n"
+            },
+            "stdin": "100\n"
+          },
+          {
+            "id": "up-to-999",
+            "maxSteps": 250000,
+            "expected": {
+              "stdout": "2 is prime\n3 is prime\n5 is prime\n7 is prime\n11 is prime\n13 is prime\n17 is prime\n19 is prime\n23 is prime\n29 is prime\n31 is prime\n37 is prime\n41 is prime\n43 is prime\n47 is prime\n53 is prime\n59 is prime\n61 is prime\n67 is prime\n71 is prime\n73 is prime\n79 is prime\n83 is prime\n89 is prime\n97 is prime\n101 is prime\n103 is prime\n107 is prime\n109 is prime\n113 is prime\n127 is prime\n131 is prime\n137 is prime\n139 is prime\n149 is prime\n151 is prime\n157 is prime\n163 is prime\n167 is prime\n173 is prime\n179 is prime\n181 is prime\n191 is prime\n193 is prime\n197 is prime\n199 is prime\n211 is prime\n223 is prime\n227 is prime\n229 is prime\n233 is prime\n239 is prime\n241 is prime\n251 is prime\n257 is prime\n263 is prime\n269 is prime\n271 is prime\n277 is prime\n281 is prime\n283 is prime\n293 is prime\n307 is prime\n311 is prime\n313 is prime\n317 is prime\n331 is prime\n337 is prime\n347 is prime\n349 is prime\n353 is prime\n359 is prime\n367 is prime\n373 is prime\n379 is prime\n383 is prime\n389 is prime\n397 is prime\n401 is prime\n409 is prime\n419 is prime\n421 is prime\n431 is prime\n433 is prime\n439 is prime\n443 is prime\n449 is prime\n457 is prime\n461 is prime\n463 is prime\n467 is prime\n479 is prime\n487 is prime\n491 is prime\n499 is prime\n503 is prime\n509 is prime\n521 is prime\n523 is prime\n541 is prime\n547 is prime\n557 is prime\n563 is prime\n569 is prime\n571 is prime\n577 is prime\n587 is prime\n593 is prime\n599 is prime\n601 is prime\n607 is prime\n613 is prime\n617 is prime\n619 is prime\n631 is prime\n641 is prime\n643 is prime\n647 is prime\n653 is prime\n659 is prime\n661 is prime\n673 is prime\n677 is prime\n683 is prime\n691 is prime\n701 is prime\n709 is prime\n719 is prime\n727 is prime\n733 is prime\n739 is prime\n743 is prime\n751 is prime\n757 is prime\n761 is prime\n769 is prime\n773 is prime\n787 is prime\n797 is prime\n809 is prime\n811 is prime\n821 is prime\n823 is prime\n827 is prime\n829 is prime\n839 is prime\n853 is prime\n857 is prime\n859 is prime\n863 is prime\n877 is prime\n881 is prime\n883 is prime\n887 is prime\n907 is prime\n911 is prime\n919 is prime\n929 is prime\n937 is prime\n941 is prime\n947 is prime\n953 is prime\n967 is prime\n971 is prime\n977 is prime\n983 is prime\n991 is prime\n997 is prime\n"
+            },
+            "stdin": "999\n"
+          }
+        ]
+      },
+      "contextId": "q7-sieve"
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank I",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "The following program computes all prime numbers less than 1000 using Sieve of Eratosthenes, i.e. by repeatedly crossing out multiples of prime numbers. Fill in the blanks."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint main() { int n,i,j,marked[1000]; scanf(\"%d\",&n); for(i=1;i<1000;i++) marked[i]=0; for(i=2;i<=n;i++) if(!marked[i]) { printf(\"%d is prime\\n\",i); for(j=2; j<=999/i;j++) marked[{{I}}]=1; } return 0; }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "up-to-30",
+            "maxSteps": 250000,
+            "expected": {
+              "stdout": "2 is prime\n3 is prime\n5 is prime\n7 is prime\n11 is prime\n13 is prime\n17 is prime\n19 is prime\n23 is prime\n29 is prime\n"
+            },
+            "stdin": "30\n"
+          },
+          {
+            "id": "up-to-100",
+            "maxSteps": 250000,
+            "expected": {
+              "stdout": "2 is prime\n3 is prime\n5 is prime\n7 is prime\n11 is prime\n13 is prime\n17 is prime\n19 is prime\n23 is prime\n29 is prime\n31 is prime\n37 is prime\n41 is prime\n43 is prime\n47 is prime\n53 is prime\n59 is prime\n61 is prime\n67 is prime\n71 is prime\n73 is prime\n79 is prime\n83 is prime\n89 is prime\n97 is prime\n"
+            },
+            "stdin": "100\n"
+          },
+          {
+            "id": "up-to-999",
+            "maxSteps": 250000,
+            "expected": {
+              "stdout": "2 is prime\n3 is prime\n5 is prime\n7 is prime\n11 is prime\n13 is prime\n17 is prime\n19 is prime\n23 is prime\n29 is prime\n31 is prime\n37 is prime\n41 is prime\n43 is prime\n47 is prime\n53 is prime\n59 is prime\n61 is prime\n67 is prime\n71 is prime\n73 is prime\n79 is prime\n83 is prime\n89 is prime\n97 is prime\n101 is prime\n103 is prime\n107 is prime\n109 is prime\n113 is prime\n127 is prime\n131 is prime\n137 is prime\n139 is prime\n149 is prime\n151 is prime\n157 is prime\n163 is prime\n167 is prime\n173 is prime\n179 is prime\n181 is prime\n191 is prime\n193 is prime\n197 is prime\n199 is prime\n211 is prime\n223 is prime\n227 is prime\n229 is prime\n233 is prime\n239 is prime\n241 is prime\n251 is prime\n257 is prime\n263 is prime\n269 is prime\n271 is prime\n277 is prime\n281 is prime\n283 is prime\n293 is prime\n307 is prime\n311 is prime\n313 is prime\n317 is prime\n331 is prime\n337 is prime\n347 is prime\n349 is prime\n353 is prime\n359 is prime\n367 is prime\n373 is prime\n379 is prime\n383 is prime\n389 is prime\n397 is prime\n401 is prime\n409 is prime\n419 is prime\n421 is prime\n431 is prime\n433 is prime\n439 is prime\n443 is prime\n449 is prime\n457 is prime\n461 is prime\n463 is prime\n467 is prime\n479 is prime\n487 is prime\n491 is prime\n499 is prime\n503 is prime\n509 is prime\n521 is prime\n523 is prime\n541 is prime\n547 is prime\n557 is prime\n563 is prime\n569 is prime\n571 is prime\n577 is prime\n587 is prime\n593 is prime\n599 is prime\n601 is prime\n607 is prime\n613 is prime\n617 is prime\n619 is prime\n631 is prime\n641 is prime\n643 is prime\n647 is prime\n653 is prime\n659 is prime\n661 is prime\n673 is prime\n677 is prime\n683 is prime\n691 is prime\n701 is prime\n709 is prime\n719 is prime\n727 is prime\n733 is prime\n739 is prime\n743 is prime\n751 is prime\n757 is prime\n761 is prime\n769 is prime\n773 is prime\n787 is prime\n797 is prime\n809 is prime\n811 is prime\n821 is prime\n823 is prime\n827 is prime\n829 is prime\n839 is prime\n853 is prime\n857 is prime\n859 is prime\n863 is prime\n877 is prime\n881 is prime\n883 is prime\n887 is prime\n907 is prime\n911 is prime\n919 is prime\n929 is prime\n937 is prime\n941 is prime\n947 is prime\n953 is prime\n967 is prime\n971 is prime\n977 is prime\n983 is prime\n991 is prime\n997 is prime\n"
+            },
+            "stdin": "999\n"
+          }
+        ]
+      },
+      "contextId": "q7-sieve"
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 8, Blank J",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2006hje.doc",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "J": [
+            "rail"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n\nint main() {\n   char s[5] = \"envy\";\n   int i, x;\n   for (i=0; i<4; i++) {\n      x = s[i] - 'a';\n      x = (x + 13) % 26 + 'a';\n      printf(\"%c\", x);\n   }\n   return 0;\n}"
+      }
+    }
+  ]
+}
