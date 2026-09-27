@@ -1,0 +1,1608 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2023-24-junior",
+    "season": "2023/24",
+    "division": "junior",
+    "title": "HKOI 2023/24 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2024hj_sol.pdf. Only Section B FITB is included."
+    }
+  },
+  "tracks": [
+    {
+      "id": "junior",
+      "label": "Junior · compulsory",
+      "selection": "required"
+    }
+  ],
+  "questions": [
+    {
+      "id": "junior-a",
+      "track": "junior",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Complete the following function g, so that the program outputs 2024. You may use the provided function f()."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int f(int x) {\n    if (x < 0)\n        return -x;\n    return x;\n}\nint g(int x) {\n    return {{A}};\n}\nint main() {\n    for (int i = 0; i < 4; ++i) {\n        cout << g(i);\n    }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-output",
+            "expected": {
+              "stdout": "2024"
+            },
+            "maxSteps": 3000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int f(int x) {\n    if (x < 0)\n        return -x;\n    return x;\n}\nint g(int x) {\n    return {{A}};\n}\nint main() {\n    for (int i = 0; i < 4; ++i) {\n        cout << g(i);\n    }\n}"
+      }
+    },
+    {
+      "id": "junior-b",
+      "track": "junior",
+      "printedRef": "Section B, Question 2, Blanks B1/B2",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Complete the following function f(a, b), so that if a < b, f(a, b) returns -1; if a = b, f(a, b) returns 0, and if a > b, f(a, b) returns 1."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B1",
+          "maxChars": 3
+        },
+        {
+          "id": "B2",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int g(int a, int b) {\n    return ({{B1}}) - ({{B2}});\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "a--2-b--2",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              -2,
+              -2
+            ]
+          },
+          {
+            "id": "a--2-b-0",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 300,
+            "args": [
+              -2,
+              0
+            ]
+          },
+          {
+            "id": "a--2-b-1",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 300,
+            "args": [
+              -2,
+              1
+            ]
+          },
+          {
+            "id": "a--2-b-5",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 300,
+            "args": [
+              -2,
+              5
+            ]
+          },
+          {
+            "id": "a-0-b--2",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              0,
+              -2
+            ]
+          },
+          {
+            "id": "a-0-b-0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              0,
+              0
+            ]
+          },
+          {
+            "id": "a-0-b-1",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 300,
+            "args": [
+              0,
+              1
+            ]
+          },
+          {
+            "id": "a-0-b-5",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 300,
+            "args": [
+              0,
+              5
+            ]
+          },
+          {
+            "id": "a-1-b--2",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              -2
+            ]
+          },
+          {
+            "id": "a-1-b-0",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              0
+            ]
+          },
+          {
+            "id": "a-1-b-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              1
+            ]
+          },
+          {
+            "id": "a-1-b-5",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              5
+            ]
+          },
+          {
+            "id": "a-5-b--2",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              5,
+              -2
+            ]
+          },
+          {
+            "id": "a-5-b-0",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              5,
+              0
+            ]
+          },
+          {
+            "id": "a-5-b-1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              5,
+              1
+            ]
+          },
+          {
+            "id": "a-5-b-5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              5,
+              5
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int g(int a, int b) {\n    return ({{B1}}) - ({{B2}});\n}"
+      }
+    },
+    {
+      "id": "junior-c",
+      "track": "junior",
+      "printedRef": "Section B, Question 3(a), Blanks C1/C2",
+      "title": "Section B, Question 3(a)",
+      "prompt": {
+        "en": "Currently, the Byteland Meteorological Agency’s tropical cyclone warning system consists of two signals. If at least 4 weather stations observe wind speeds larger or equal to 41, the Strong Wind Signal will be issued, and if there are at least 4 weather stations’ wind speeds larger or equal to 63, the Gale Signal will be issued. Note that if the Gale Signal is issued, the Strong Wind Signal will not be issued.\n\nspeeds stores the current wind speeds of every weather station.\n\nComplete the function Signal2 such that it outputs the signal currently issued."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C1",
+          "maxChars": 7
+        },
+        {
+          "id": "C2",
+          "maxChars": 7
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "void Signal2(vector<int> speeds) {\n    int number_of_stations = speeds.size();\n    int strong = 0;\n    int gale = 0;\n    for (int i = 0; i < number_of_stations; ++i) {\n        if (speeds[i] >= 63)\n            ++gale;\n        {{C1}} (speeds[i] >= 41)\n            ++strong;\n    }\n    if (gale >= 4)\n        cout << \"Gale\";\n    {{C2}} (strong + gale >= 4)\n        cout << \"Strong Wind\";\n}",
+            "harness": {
+              "kind": "call",
+              "function": "Signal2"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "wind-0",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 2000,
+            "args": [
+              []
+            ]
+          },
+          {
+            "id": "wind-1",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 2000,
+            "args": [
+              [
+                40,
+                40,
+                40,
+                40
+              ]
+            ]
+          },
+          {
+            "id": "wind-2",
+            "expected": {
+              "stdout": "Strong Wind"
+            },
+            "maxSteps": 2000,
+            "args": [
+              [
+                41,
+                41,
+                41,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-3",
+            "expected": {
+              "stdout": "Gale"
+            },
+            "maxSteps": 2000,
+            "args": [
+              [
+                63,
+                63,
+                63,
+                63
+              ]
+            ]
+          },
+          {
+            "id": "wind-4",
+            "expected": {
+              "stdout": "Strong Wind"
+            },
+            "maxSteps": 2000,
+            "args": [
+              [
+                63,
+                63,
+                41,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-5",
+            "expected": {
+              "stdout": "Strong Wind"
+            },
+            "maxSteps": 2000,
+            "args": [
+              [
+                63,
+                63,
+                63,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-6",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 2000,
+            "args": [
+              [
+                41,
+                41,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-7",
+            "expected": {
+              "stdout": "Strong Wind"
+            },
+            "maxSteps": 2000,
+            "args": [
+              [
+                118,
+                41,
+                41,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-8",
+            "expected": {
+              "stdout": "Gale"
+            },
+            "maxSteps": 2000,
+            "args": [
+              [
+                118,
+                118,
+                118,
+                118
+              ]
+            ]
+          },
+          {
+            "id": "wind-9",
+            "expected": {
+              "stdout": "Gale"
+            },
+            "maxSteps": 2000,
+            "args": [
+              [
+                63,
+                63,
+                63,
+                63,
+                41
+              ]
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "void Signal2(vector<int> speeds) {\n    int number_of_stations = speeds.size();\n    int strong = 0;\n    int gale = 0;\n    for (int i = 0; i < number_of_stations; ++i) {\n        if (speeds[i] >= 63)\n            ++gale;\n        {{C1}} (speeds[i] >= 41)\n            ++strong;\n    }\n    if (gale >= 4)\n        cout << \"Gale\";\n    {{C2}} (strong + gale >= 4)\n        cout << \"Strong Wind\";\n}"
+      }
+    },
+    {
+      "id": "junior-d",
+      "track": "junior",
+      "printedRef": "Section B, Question 3(b), Blank D",
+      "title": "Section B, Question 3(b)",
+      "prompt": {
+        "en": "To further warn of the hazards from extreme wind forces, if there is a weather station whose observed wind speed is larger or equal to 118, a new signal called the Hurricane Signal will be issued. Note that if the Hurricane Signal is issued, the Strong Wind Signal and the Gale Signal will not be issued.\n\nComplete the function Signal3 such that it outputs the signal currently issued."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 6
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 14,
+        "note": "Trusted question-local Signal2 is the preceding part completed with its official answer."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "void Signal3(vector<int> speeds) {\n    int number_of_stations = speeds.size();\n    for (int i = 0; i < number_of_stations; ++i)\n        if (speeds[i] >= 118) {\n            cout << \"Hurricane\";\n            {{D}};\n        }\n    Signal2(speeds);\n}",
+            "harness": {
+              "kind": "call",
+              "function": "Signal3"
+            },
+            "helperSource": "void Signal2(vector<int> speeds) {\n    int number_of_stations = speeds.size();\n    int strong = 0;\n    int gale = 0;\n    for (int i = 0; i < number_of_stations; ++i) {\n        if (speeds[i] >= 63)\n            ++gale;\n        else if (speeds[i] >= 41)\n            ++strong;\n    }\n    if (gale >= 4)\n        cout << \"Gale\";\n    else if (strong + gale >= 4)\n        cout << \"Strong Wind\";\n}"
+          }
+        ],
+        "cases": [
+          {
+            "id": "wind-0",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 3000,
+            "args": [
+              []
+            ]
+          },
+          {
+            "id": "wind-1",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                40,
+                40,
+                40,
+                40
+              ]
+            ]
+          },
+          {
+            "id": "wind-2",
+            "expected": {
+              "stdout": "Strong Wind"
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                41,
+                41,
+                41,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-3",
+            "expected": {
+              "stdout": "Gale"
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                63,
+                63,
+                63,
+                63
+              ]
+            ]
+          },
+          {
+            "id": "wind-4",
+            "expected": {
+              "stdout": "Strong Wind"
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                63,
+                63,
+                41,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-5",
+            "expected": {
+              "stdout": "Strong Wind"
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                63,
+                63,
+                63,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-6",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                41,
+                41,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-7",
+            "expected": {
+              "stdout": "Hurricane"
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                118,
+                41,
+                41,
+                41
+              ]
+            ]
+          },
+          {
+            "id": "wind-8",
+            "expected": {
+              "stdout": "Hurricane"
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                118,
+                118,
+                118,
+                118
+              ]
+            ]
+          },
+          {
+            "id": "wind-9",
+            "expected": {
+              "stdout": "Gale"
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                63,
+                63,
+                63,
+                63,
+                41
+              ]
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "void Signal3(vector<int> speeds) {\n    int number_of_stations = speeds.size();\n    for (int i = 0; i < number_of_stations; ++i)\n        if (speeds[i] >= 118) {\n            cout << \"Hurricane\";\n            {{D}};\n        }\n    Signal2(speeds);\n}"
+      }
+    },
+    {
+      "id": "junior-e",
+      "track": "junior",
+      "printedRef": "Section B, Question 4(a), Blank E",
+      "title": "Section B, Question 4(a)",
+      "prompt": {
+        "en": "A binary sequence A is an array of N integers A[0], A[1], · · · , A[N - 1] where all entries are either 0 or 1.\n\nGiven a binary sequence A, a trough is a triplet of indices (i, j, k), such that 0 ≤ i < j < k < N and A[i] = 1, A[j] = 0, A[k] = 1. For example, if the binary sequence is 001101, then its troughs are (2, 4, 5) and (3, 4, 5).\n\nComplete the function IsTrough so that the function IsTrough(A, i, j, k) returns whether the triplet (i, j, k) in a binary sequence A is a trough. It is guaranteed that 0 ≤ i < j < k < N."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "bool IsTrough(vector<int> A, int i, int j, int k) {\n    return {{E}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "IsTrough"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "triple-0",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 700,
+            "args": [
+              [
+                0,
+                0,
+                1,
+                1,
+                0,
+                1
+              ],
+              2,
+              4,
+              5
+            ]
+          },
+          {
+            "id": "triple-1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 700,
+            "args": [
+              [
+                0,
+                0,
+                1,
+                1,
+                0,
+                1
+              ],
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "id": "triple-2",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 700,
+            "args": [
+              [
+                1,
+                0,
+                1
+              ],
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "id": "triple-3",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 700,
+            "args": [
+              [
+                0,
+                0,
+                0
+              ],
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "id": "triple-4",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 700,
+            "args": [
+              [
+                1,
+                1,
+                1
+              ],
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "id": "triple-5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 700,
+            "args": [
+              [
+                1,
+                0,
+                0
+              ],
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "id": "triple-6",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 700,
+            "args": [
+              [
+                0,
+                0,
+                1
+              ],
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "id": "triple-7",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 700,
+            "args": [
+              [
+                1,
+                1,
+                0,
+                1
+              ],
+              0,
+              2,
+              3
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "bool IsTrough(vector<int> A, int i, int j, int k) {\n    return {{E}};\n}"
+      }
+    },
+    {
+      "id": "junior-f",
+      "track": "junior",
+      "printedRef": "Section B, Question 4(b), Blanks F1/F2",
+      "title": "Section B, Question 4(b)",
+      "prompt": {
+        "en": "Complete the function CountTroughs so that the function CountTroughs(A) returns the number of troughs in a given binary sequence A."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F1",
+          "maxChars": 15
+        },
+        {
+          "id": "F2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 15,
+        "note": "Trusted question-local IsTrough is the preceding part completed with its official answer."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int CountTroughs(vector<int> A) {\n    int N = A.size();\n    int ans = 0;\n    for (int i = 0; i < N; ++i) {\n        for (int j = {{F1}}) {\n            for (int k = {{F2}}) {\n                if (IsTrough(A, i, j, k)) {\n                    ans++;\n                }\n            }\n        }\n    }\n    return ans;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "CountTroughs"
+            },
+            "helperSource": "bool IsTrough(vector<int> A, int i, int j, int k) {\n    return A[i]==1&&A[j]==0&&A[k]==1;\n}"
+          }
+        ],
+        "cases": [
+          {
+            "id": "array-0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                0
+              ]
+            ]
+          },
+          {
+            "id": "array-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-2",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                1,
+                0,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-3",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                0,
+                0,
+                1,
+                1,
+                0,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-4",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                1,
+                0,
+                1,
+                0,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-5",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                1,
+                1,
+                0,
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-6",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                0,
+                1,
+                0,
+                0,
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-7",
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                1,
+                0,
+                0,
+                1,
+                0,
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-8",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                0,
+                0,
+                0,
+                0
+              ]
+            ]
+          },
+          {
+            "id": "array-9",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 30000,
+            "args": [
+              [
+                1,
+                1,
+                1,
+                1
+              ]
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int CountTroughs(vector<int> A) {\n    int N = A.size();\n    int ans = 0;\n    for (int i = 0; i < N; ++i) {\n        for (int j = {{F1}}) {\n            for (int k = {{F2}}) {\n                if (IsTrough(A, i, j, k)) {\n                    ans++;\n                }\n            }\n        }\n    }\n    return ans;\n}"
+      }
+    },
+    {
+      "id": "junior-g",
+      "track": "junior",
+      "printedRef": "Section B, Question 4(c), Blanks G1/G2",
+      "title": "Section B, Question 4(c)",
+      "prompt": {
+        "en": "Complete the function CountTroughsFaster so that CountTroughsFaster(A) returns the number of troughs in a given binary sequence A. (Hint: there is no need to modify A or i.)"
+      },
+      "points": 2.5,
+      "blanks": [
+        {
+          "id": "G1",
+          "maxChars": 7
+        },
+        {
+          "id": "G2",
+          "maxChars": 22
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 15,
+        "note": "The printed function indexes A[0], so test inputs have N ≥ 1."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int CountTroughsFaster(vector<int> A) {\n    int N = A.size();\n    vector<int> B(N);\n    B[0] = A[0];\n    for (int i = 1; i < N; ++i) {\n        B[i] = B[i - 1] + A[i];\n    }\n    int ans = 0;\n    for (int i = 1; i < N - 1; ++i) {\n        if ({{G1}}) {\n            ans += {{G2}};\n        }\n    }\n    return ans;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "CountTroughsFaster"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "array-0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                0
+              ]
+            ]
+          },
+          {
+            "id": "array-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-2",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                1,
+                0,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-3",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                0,
+                0,
+                1,
+                1,
+                0,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-4",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                1,
+                0,
+                1,
+                0,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-5",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                1,
+                1,
+                0,
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-6",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                0,
+                1,
+                0,
+                0,
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-7",
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                1,
+                0,
+                0,
+                1,
+                0,
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-8",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                0,
+                0,
+                0,
+                0
+              ]
+            ]
+          },
+          {
+            "id": "array-9",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 4000,
+            "args": [
+              [
+                1,
+                1,
+                1,
+                1
+              ]
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int CountTroughsFaster(vector<int> A) {\n    int N = A.size();\n    vector<int> B(N);\n    B[0] = A[0];\n    for (int i = 1; i < N; ++i) {\n        B[i] = B[i - 1] + A[i];\n    }\n    int ans = 0;\n    for (int i = 1; i < N - 1; ++i) {\n        if ({{G1}}) {\n            ans += {{G2}};\n        }\n    }\n    return ans;\n}"
+      }
+    },
+    {
+      "id": "junior-h",
+      "track": "junior",
+      "printedRef": "Section B, Question 5(a), Blank H",
+      "title": "Section B, Question 5(a)",
+      "prompt": {
+        "en": "There is a staircase with 30 steps, you are now at step 0. Each time, you can either walk up 1 step or jump up 2 steps. How many ways are there to reach and stop at step 10 of the staircase?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "H": [
+            "89"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "junior-i",
+      "track": "junior",
+      "printedRef": "Section B, Question 5(b), Blank I",
+      "title": "Section B, Question 5(b)",
+      "prompt": {
+        "en": "There is a staircase with 30 steps, you are now at step 0. Each time, you can either walk up 1 step or jump up 2 steps, how many ways are there to reach and stop at step 22 of the staircase without stepping on step 11?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "7921"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "junior-j",
+      "track": "junior",
+      "printedRef": "Section B, Question 6, Blanks J1/J2",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "The following function attempts to calculate the check digit for a string containing only digits according to the steps below:\n\n1. Multiply the odd-positioned digits by 2.\n2. If multiplying a digit results in a two-digit number, add up the two digits to get a single-digit number.\n3. Calculate the sum of all the even-positioned digits and the modified odd-positioned digits.\n4. Add 13 to the sum and then multiply the sum by 9. The unit digit (the rightmost digit) of the answer is the check digit.\n\nExample: 54328 → (10)4(6)2(16) → 1 + 4 + 6 + 2 + 7 = 20 → (20 + 13) × 9 = 297 → 7.\n\nComplete the following function f, so that it returns the check digit as described above."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J1",
+          "maxChars": 17
+        },
+        {
+          "id": "J2",
+          "maxChars": 17
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 16,
+        "note": "The grading source omits only the printed C-style (char) cast; returning int through the declared char return type gives the same result for these digit values."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "char f(string s) {\n    int sum = 0;\n    for (int i = 0; i < s.size(); ++i) {\n        int tmp = s[i] - '0';\n        if (i % 2 == 0) {\n            tmp *= 2;\n            if (tmp > 9)\n                {{J1}};\n        }\n        sum += tmp;\n    }\n    return {{J2}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "digits-0",
+            "expected": {
+              "returnValue": 55
+            },
+            "maxSteps": 2500,
+            "args": [
+              "54328"
+            ]
+          },
+          {
+            "id": "digits-1",
+            "expected": {
+              "returnValue": 55
+            },
+            "maxSteps": 2500,
+            "args": [
+              "0"
+            ]
+          },
+          {
+            "id": "digits-2",
+            "expected": {
+              "returnValue": 56
+            },
+            "maxSteps": 2500,
+            "args": [
+              "9"
+            ]
+          },
+          {
+            "id": "digits-3",
+            "expected": {
+              "returnValue": 57
+            },
+            "maxSteps": 2500,
+            "args": [
+              "99"
+            ]
+          },
+          {
+            "id": "digits-4",
+            "expected": {
+              "returnValue": 52
+            },
+            "maxSteps": 2500,
+            "args": [
+              "1234567890"
+            ]
+          },
+          {
+            "id": "digits-5",
+            "expected": {
+              "returnValue": 55
+            },
+            "maxSteps": 2500,
+            "args": [
+              "00000"
+            ]
+          },
+          {
+            "id": "digits-6",
+            "expected": {
+              "returnValue": 52
+            },
+            "maxSteps": 2500,
+            "args": [
+              "987654321"
+            ]
+          },
+          {
+            "id": "digits-7",
+            "expected": {
+              "returnValue": 50
+            },
+            "maxSteps": 2500,
+            "args": [
+              "12345"
+            ]
+          },
+          {
+            "id": "digits-8",
+            "expected": {
+              "returnValue": 55
+            },
+            "maxSteps": 2500,
+            "args": [
+              "88888888"
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "char f(string s) {\n    int sum = 0;\n    for (int i = 0; i < s.size(); ++i) {\n        int tmp = s[i] - '0';\n        if (i % 2 == 0) {\n            tmp *= 2;\n            if (tmp > 9)\n                {{J1}};\n        }\n        sum += tmp;\n    }\n    return (char)({{J2}});\n}"
+      }
+    },
+    {
+      "id": "junior-k",
+      "track": "junior",
+      "printedRef": "Section B, Question 7, Blank K",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Consider the following function: Write down the return value of f(23)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "K": [
+            "3"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int f(int x) {\n    int r = 0;\n    while (x % 2 == 1) {\n        ++r;\n        x /= 2;\n    }\n    return r;\n}"
+      }
+    },
+    {
+      "id": "junior-l",
+      "track": "junior",
+      "printedRef": "Section B, Question 7, Blanks L1/L2/L3",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Complete the following function g, so that the return value of h(x) is exactly x for all integers x between 0 and 7 (inclusive)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L1",
+          "maxChars": 2
+        },
+        {
+          "id": "L2",
+          "maxChars": 2
+        },
+        {
+          "id": "L3",
+          "maxChars": 2
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hja.pdf",
+        "page": 17,
+        "note": "Trusted question-local f is the function printed immediately before this completion."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int g(int x) {\n    int y = 0;\n    if (x & 4)\n        y |= {{L1}};\n    if (x & 2)\n        y |= {{L2}};\n    if (x & 1)\n        y |= {{L3}};\n    return y;\n}\nint h(int x) {\n    return f(g(x));\n}",
+            "harness": {
+              "kind": "call",
+              "function": "h"
+            },
+            "helperSource": "int f(int x) {\n    int r = 0;\n    while (x % 2 == 1) {\n        ++r;\n        x /= 2;\n    }\n    return r;\n}"
+          }
+        ],
+        "cases": [
+          {
+            "id": "x-0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000,
+            "args": [
+              0
+            ]
+          },
+          {
+            "id": "x-1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000,
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "x-2",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 2000,
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "x-3",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 2000,
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "x-4",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 2000,
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "x-5",
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 2000,
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "x-6",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 2000,
+            "args": [
+              6
+            ]
+          },
+          {
+            "id": "x-7",
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 2000,
+            "args": [
+              7
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int g(int x) {\n    int y = 0;\n    if (x & 4)\n        y |= {{L1}};\n    if (x & 2)\n        y |= {{L2}};\n    if (x & 1)\n        y |= {{L3}};\n    return y;\n}\nint h(int x) {\n    return f(g(x));\n}"
+      }
+    }
+  ]
+}

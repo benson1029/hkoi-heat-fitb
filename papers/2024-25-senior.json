@@ -1,0 +1,2704 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2024-25-senior",
+    "season": "2024/25",
+    "division": "senior",
+    "title": "HKOI 2024/25 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2025hsa.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2025hs_sol.pdf. Page numbers refer to the combined 26-page paper. Multiple choice sections are outside FITB scope."
+    }
+  },
+  "tracks": [
+    {
+      "id": "paper1",
+      "label": "Paper 1 · compulsory",
+      "selection": "required"
+    },
+    {
+      "id": "python",
+      "label": "Paper 2 · Python",
+      "selection": "choice",
+      "choiceGroup": "paper2"
+    },
+    {
+      "id": "cpp",
+      "label": "Paper 2 · C++",
+      "selection": "choice",
+      "choiceGroup": "paper2"
+    }
+  ],
+  "questions": [
+    {
+      "id": "paper1-a",
+      "track": "paper1",
+      "title": "Paper 1, Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "displayCode": {
+        "python": "a, b, c = 3, 2, 1\na = a - b + c\nb = a - b + c\nc = a - b + c\n\nprint(a, b, c, sep=',')",
+        "cpp": "int main() {\n    int a = 3, b = 2, c = 1;\n    a = a - b + c;\n    b = a - b + c;\n    c = a - b + c;\n    cout << a << \",\" << b << \",\" << c;\n}"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 7
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "2,1,2"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 1, Section B, Question 1, Blank A"
+    },
+    {
+      "id": "paper1-b",
+      "track": "paper1",
+      "title": "Paper 1, Section B, Question 2",
+      "prompt": {
+        "en": "Alice distributes candies evenly among 24 people until no further equal distribution is possible. The number of remaining candies is 17. If Alice distributes the same number of candies among 6 people until no further equal distribution is possible, what is the number of remaining candies?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 7
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "5"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 1, Section B, Question 2, Blank B"
+    },
+    {
+      "id": "paper1-c",
+      "track": "paper1",
+      "title": "Paper 1, Section B, Question 3",
+      "prompt": {
+        "en": "A graph is strongly connected if and only if for all pair of vertices (u, v) in the graph, one can reach v from u by traversing some edges and can also reach u from v by traversing some edges. Find a set of edges in the graph shown on the right such that the number of edges in the set is minimized and when all the edges in the set is reversed, the graph is strongly connected. List all the edges in the set by separating them with commas."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 7,
+        "note": "Diagram visually transcribed; official solution p.3 gives b,f."
+      },
+      "grading": {
+        "kind": "graph-reversal",
+        "answerBlank": "C",
+        "nodes": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "edges": [
+          {
+            "label": "a",
+            "from": "0",
+            "to": "1"
+          },
+          {
+            "label": "b",
+            "from": "0",
+            "to": "2"
+          },
+          {
+            "label": "c",
+            "from": "1",
+            "to": "2"
+          },
+          {
+            "label": "d",
+            "from": "1",
+            "to": "4"
+          },
+          {
+            "label": "e",
+            "from": "3",
+            "to": "2"
+          },
+          {
+            "label": "f",
+            "from": "3",
+            "to": "4"
+          }
+        ],
+        "requireStronglyConnected": true,
+        "requireMinimum": true
+      },
+      "printedRef": "Paper 1, Section B, Question 3, Blank C",
+      "figure": {
+        "kind": "directed-graph",
+        "nodes": [
+          {
+            "id": "0",
+            "x": 0.5,
+            "y": 0.05
+          },
+          {
+            "id": "1",
+            "x": 0.1,
+            "y": 0.5
+          },
+          {
+            "id": "2",
+            "x": 0.9,
+            "y": 0.5
+          },
+          {
+            "id": "3",
+            "x": 0.9,
+            "y": 0.9
+          },
+          {
+            "id": "4",
+            "x": 0.1,
+            "y": 0.9
+          }
+        ],
+        "edges": [
+          {
+            "from": "0",
+            "to": "1",
+            "label": "a"
+          },
+          {
+            "from": "0",
+            "to": "2",
+            "label": "b"
+          },
+          {
+            "from": "1",
+            "to": "2",
+            "label": "c"
+          },
+          {
+            "from": "1",
+            "to": "4",
+            "label": "d"
+          },
+          {
+            "from": "3",
+            "to": "2",
+            "label": "e"
+          },
+          {
+            "from": "3",
+            "to": "4",
+            "label": "f"
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-d",
+      "track": "paper1",
+      "title": "Paper 1, Section B, Question 4",
+      "prompt": {
+        "en": "Complete the program such that it outputs 14."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 8,
+        "note": "Eight answer boxes verified visually on the official answer sheet p.1. The paper prints both Python and C++ versions."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "python",
+            "dialect": "python3.11",
+            "source": "s = '{{D}}'\na = 0\nb = 0\n\nfor i in range(8):\n    if s[i] == 'a':\n        a = a + 1\n    elif s[i] == 'b':\n        b = b + a\n\nprint(b)\n",
+            "harness": {
+              "kind": "program"
+            }
+          },
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+          "source": "int main() {\n    string s = \"{{D}}\";\n    int a = 0;\n    int b = 0;\n    for (int i = 0; i < 8; ++i) {\n        if (s[i] == 'a')\n            a = a + 1;\n        else if (s[i] == 'b')\n            b = b + a;\n    }\n    cout << b;\n}\n",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+        {
+          "id": "printed-output",
+          "stdin": "",
+          "expected": {
+            "stdout": "14"
+          },
+          "expectedByLanguage": {
+            "python": {
+              "stdout": "14\n"
+            }
+          },
+          "maxSteps": 2000
+        }
+        ]
+      },
+      "printedRef": "Paper 1, Section B, Question 4, Blank D"
+    },
+    {
+      "id": "paper1-e",
+      "track": "paper1",
+      "title": "Paper 1, Section B, Question 5",
+      "prompt": {
+        "en": "Suppose there are 3 students and 6 different candies. How many ways are there to distribute the candies to the students such that each student has at least one candy?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "540"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 1, Section B, Question 5, Blank E"
+    },
+    {
+      "id": "paper1-f",
+      "track": "paper1",
+      "title": "Paper 1, Section B, Question 6",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "displayCode": {
+        "python": "a = [4, 5, 7, 2]\nb = [1, 7, 3, 4, 1, 9, 0]\nc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\n\nfor i in range(10):\n    for j in range(i + 1):\n        if (j < 4) and (i - j < 7):\n            c[i] ^= (a[j] ^ b[i - j])\n\nans = 0\n\nfor i in range(10):\n    ans ^= c[i]\n\nprint(ans)",
+        "cpp": "int main() {\n    int a[4] = {4, 5, 7, 2};\n    int b[7] = {1, 7, 3, 4, 1, 9, 0};\n    int c[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};\n    for (int i = 0; i < 10; ++i) {\n        for (int j = 0; j < i + 1; ++j) {\n            if (j < 4 && i - j < 7)\n                c[i] ^= (a[j] ^ b[i - j]);\n        }\n    }\n    int ans = 0;\n    for (int i = 0; i < 10; ++i) {\n        ans ^= c[i];\n    }\n    cout << ans;\n}"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "4"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 1, Section B, Question 6, Blank F"
+    },
+    {
+      "id": "paper1-g",
+      "track": "paper1",
+      "title": "Paper 1, Section C, Question 1(a)",
+      "prompt": {
+        "en": "(a) What is the 65th letter of S?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "B"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 1, Section C, Question 1(a), Blank G",
+      "contextId": "paper1-c1"
+    },
+    {
+      "id": "paper1-h",
+      "track": "paper1",
+      "title": "Paper 1, Section C, Question 1(b)",
+      "prompt": {
+        "en": "(b) What is the 160th letter of S?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "H": [
+            "G"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 1, Section C, Question 1(b), Blank H",
+      "contextId": "paper1-c1"
+    },
+    {
+      "id": "paper1-i",
+      "track": "paper1",
+      "title": "Paper 1, Section C, Question 2(a)",
+      "prompt": {
+        "en": "(a) Consider the following directed graph. How many different paths are there between vertex A and vertex F?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 10,
+        "note": "Edges visually transcribed from diagram."
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "8"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 1, Section C, Question 2(a), Blank I",
+      "figure": {
+        "kind": "directed-graph",
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0.05,
+            "y": 0.35
+          },
+          {
+            "id": "B",
+            "x": 0.25,
+            "y": 0.8
+          },
+          {
+            "id": "C",
+            "x": 0.35,
+            "y": 0.25
+          },
+          {
+            "id": "D",
+            "x": 0.58,
+            "y": 0.7
+          },
+          {
+            "id": "E",
+            "x": 0.69,
+            "y": 0.15
+          },
+          {
+            "id": "F",
+            "x": 0.85,
+            "y": 0.6
+          }
+        ],
+        "edges": [
+          {
+            "from": "A",
+            "to": "B"
+          },
+          {
+            "from": "A",
+            "to": "C"
+          },
+          {
+            "from": "B",
+            "to": "C"
+          },
+          {
+            "from": "B",
+            "to": "D"
+          },
+          {
+            "from": "C",
+            "to": "D"
+          },
+          {
+            "from": "C",
+            "to": "E"
+          },
+          {
+            "from": "D",
+            "to": "E"
+          },
+          {
+            "from": "D",
+            "to": "F"
+          },
+          {
+            "from": "E",
+            "to": "F"
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-j",
+      "track": "paper1",
+      "title": "Paper 1, Section C, Question 2(b)",
+      "prompt": {
+        "en": "(b) Consider the following directed graph. Currently, it has only 1 path between vertex A and vertex G.\n\nAdd exactly 3 directed edges to the graph such that there are 8 different paths between vertex A and vertex G. Draw the additional edges inside the rectangular box on the answer sheet using arrows. Multiple edges that go from the same vertex to the same vertex are not allowed. You must not create cycles in the graph."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2025hsa.pdf",
+        "page": 10,
+        "note": "Base diagram visually checked against paper p.10 and answer sheet p.1."
+      },
+      "grading": {
+        "kind": "graph",
+        "answerBlank": "J",
+        "nodes": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G"
+        ],
+        "baseEdges": [
+          [
+            "A",
+            "B"
+          ],
+          [
+            "B",
+            "C"
+          ],
+          [
+            "C",
+            "D"
+          ],
+          [
+            "D",
+            "E"
+          ],
+          [
+            "E",
+            "F"
+          ],
+          [
+            "F",
+            "G"
+          ]
+        ],
+        "directed": true,
+        "assertions": {
+          "addedEdgeCount": 3,
+          "acyclic": true,
+          "pathCount": {
+            "from": "A",
+            "to": "G",
+            "count": 8
+          }
+        }
+      },
+      "printedRef": "Paper 1, Section C, Question 2(b), Blank J",
+      "figure": {
+        "kind": "directed-graph",
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0.15,
+            "y": 0.25
+          },
+          {
+            "id": "B",
+            "x": 0.05,
+            "y": 0.55
+          },
+          {
+            "id": "C",
+            "x": 0.2,
+            "y": 0.85
+          },
+          {
+            "id": "D",
+            "x": 0.45,
+            "y": 0.2
+          },
+          {
+            "id": "E",
+            "x": 0.8,
+            "y": 0.85
+          },
+          {
+            "id": "F",
+            "x": 0.75,
+            "y": 0.2
+          },
+          {
+            "id": "G",
+            "x": 0.5,
+            "y": 0.85
+          }
+        ],
+        "edges": [
+          {
+            "from": "A",
+            "to": "B"
+          },
+          {
+            "from": "B",
+            "to": "C"
+          },
+          {
+            "from": "C",
+            "to": "D"
+          },
+          {
+            "from": "D",
+            "to": "E"
+          },
+          {
+            "from": "E",
+            "to": "F"
+          },
+          {
+            "from": "F",
+            "to": "G"
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-a",
+      "track": "python",
+      "title": "Paper 2 (Python), Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?\n\n```python\ndef magic(a):\n    a[0] = a[2]\n    a[2] = a[0]\n\nb = [\n    [1, 2, 3],\n    [4, 5, 6],\n    [7, 8, 9]\n]\nmagic(b)\nmagic(b[0])\nb[0][2] = 0\nprint(b[0][0] + b[1][1] + b[2][2])\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "14"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 2 (Python), Section B, Question 1, Blank A"
+    },
+    {
+      "id": "python-b",
+      "track": "python",
+      "title": "Paper 2 (Python), Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?\n\n```python\na = [1, 3, 6, 0, 5, 2, 1, 9, 6, 8]\nx = 0\nfor i in range(2025):\n    if x % 2 == 0:\n        x += a[x]\n    else:\n        x += a[-x]\n    x %= 10\nprint(x)\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "4"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 2 (Python), Section B, Question 2, Blank B"
+    },
+    {
+      "id": "python-c",
+      "track": "python",
+      "title": "Paper 2 (Python), Section B, Question 3",
+      "prompt": {
+        "en": "What is the output of the following program?\n\n```python\ndef f(x: int) -> int:\n    if x == 0:\n        return 3\n    return f(x // 4) + g(x // 3)\n\ndef g(x: int) -> int:\n    if x == 0:\n        return 2\n    return f(x // 3) + g(x // 4)\n\nprint(g(10))\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "13"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 2 (Python), Section B, Question 3, Blank C"
+    },
+    {
+      "id": "python-d",
+      "track": "python",
+      "title": "Paper 2 (Python), Section B, Question 4",
+      "prompt": {
+        "en": "Complete the program below, such that for all the given inputs, the output of the program matches the given output:\n\n| Input | Output |\n| ---: | ---: |\n| 1 | 0 |\n| 2 | 0 |\n| 3 | 3 |\n| 4 | 7 |\n| 5 | 12 |\n| 6 | 12 |\n| 7 | 12 |"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "python",
+            "dialect": "python3.11",
+            "source": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if {{D}}:\n        total = total + i\nprint(total)\n",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "n-1",
+            "stdin": "1\n",
+            "expected": {
+              "stdout": "0\n"
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "n-2",
+            "stdin": "2\n",
+            "expected": {
+              "stdout": "0\n"
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "n-3",
+            "stdin": "3\n",
+            "expected": {
+              "stdout": "3\n"
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "n-4",
+            "stdin": "4\n",
+            "expected": {
+              "stdout": "7\n"
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "n-5",
+            "stdin": "5\n",
+            "expected": {
+              "stdout": "12\n"
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "n-6",
+            "stdin": "6\n",
+            "expected": {
+              "stdout": "12\n"
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "n-7",
+            "stdin": "7\n",
+            "expected": {
+              "stdout": "12\n"
+            },
+            "maxSteps": 1000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (Python), Section B, Question 4, Blank D"
+    },
+    {
+      "id": "python-e",
+      "track": "python",
+      "title": "Paper 2 (Python), Section B, Question 5",
+      "prompt": {
+        "en": "Let a be a list of integers. Complete the function f so that f(a) returns a sorted in ascending order."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 19
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "python",
+            "dialect": "python3.11",
+            "source": "def f(a: list[int]) -> list[int]:\n    n = len(a)\n    if (n == 0):\n        return []\n    idx = 0\n    for i in range(1, n):\n        if a[idx] > a[i]:\n            idx = i\n    return [a[idx]] + f({{E}})\n",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "empty",
+            "args": [
+              []
+            ],
+            "expected": {
+              "returnValue": []
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "single",
+            "args": [
+              [
+                7
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                7
+              ]
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "sorted",
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "reverse",
+            "args": [
+              [
+                8,
+                7,
+                6,
+                5,
+                4,
+                3,
+                2,
+                1
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "duplicates",
+            "args": [
+              [
+                2,
+                2,
+                1,
+                2
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                1,
+                2,
+                2,
+                2
+              ]
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "negative",
+            "args": [
+              [
+                5,
+                -2,
+                0,
+                -2,
+                5
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                -2,
+                -2,
+                0,
+                5,
+                5
+              ]
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "same",
+            "args": [
+              [
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "maxSteps": 15000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (Python), Section B, Question 5, Blank E"
+    },
+    {
+      "id": "python-f",
+      "track": "python",
+      "title": "Paper 2 (Python), Section B, Question 6",
+      "prompt": {
+        "en": "You are provided with a function rnd() which uniformly and independently returns a random floating point value between 0 and 1 inclusive.\n\nComplete the following function rnd_point_in_triangle() such that rnd_point_in_triangle() uniformly and independently returns a random coordinate (x, y) where 0 ≤ x, y ≤ 1 and 0 ≤ x + y ≤ 1."
+      },
+      "displayCode": {
+        "python": "def rnd_point_in_triangle() -> tuple[float, float]:\n    x = rnd()\n    y = rnd()\n    if x + y > 1:\n        return ({{F}})\n    return (x, y)"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "triangle-affine",
+        "answerBlank": "F"
+      },
+      "printedRef": "Paper 2 (Python), Section B, Question 6, Blank F"
+    },
+    {
+      "id": "python-g",
+      "track": "python",
+      "title": "Paper 2 (Python), Section C, Question 1(a)",
+      "prompt": {
+        "en": "(a) Complete the function has_thirty_days so that the function has_thirty_days(m) returns whether there are exactly 30 days in the m-th month of 2025. It is guaranteed that 1 ≤ m ≤ 12."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 32
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "python",
+            "dialect": "python3.11",
+            "source": "def has_thirty_days(m: int) -> bool:\n    return bool({{G}})\n",
+            "harness": {
+              "kind": "call",
+              "function": "has_thirty_days"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "jan",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "feb",
+            "args": [
+              2
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "mar",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "apr",
+            "args": [
+              4
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "may",
+            "args": [
+              5
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "jun",
+            "args": [
+              6
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "jul",
+            "args": [
+              7
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "aug",
+            "args": [
+              8
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "sep",
+            "args": [
+              9
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "oct",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "nov",
+            "args": [
+              11
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "dec",
+            "args": [
+              12
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (Python), Section C, Question 1(a), Blank G",
+      "contextId": "python-c1"
+    },
+    {
+      "id": "python-h",
+      "track": "python",
+      "title": "Paper 2 (Python), Section C, Question 1(b)",
+      "prompt": {
+        "en": "(b) Complete the function has_thirty_one_days so that the function has_thirty_one_days(m) returns whether there are exactly 31 days in the m-th month of 2025. It is guaranteed that 1 ≤ m ≤ 12."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "python",
+            "dialect": "python3.11",
+            "source": "def has_thirty_one_days(m: int) -> bool:\n    return bool({{H}})\n",
+            "harness": {
+              "kind": "call",
+              "function": "has_thirty_one_days"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "jan",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "feb",
+            "args": [
+              2
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "mar",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "apr",
+            "args": [
+              4
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "may",
+            "args": [
+              5
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "jun",
+            "args": [
+              6
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "jul",
+            "args": [
+              7
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "aug",
+            "args": [
+              8
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "sep",
+            "args": [
+              9
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "oct",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "nov",
+            "args": [
+              11
+            ],
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "dec",
+            "args": [
+              12
+            ],
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 1000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (Python), Section C, Question 1(b), Blank H",
+      "contextId": "python-c1"
+    },
+    {
+      "id": "python-i",
+      "track": "python",
+      "title": "Paper 2 (Python), Section C, Question 2(a)",
+      "prompt": {
+        "en": "(a) Complete the function find_interleave so that the function find_interleave(a) returns the interleaved list of a."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I1",
+          "maxChars": 5
+        },
+        {
+          "id": "I2",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "python",
+            "dialect": "python3.11",
+            "source": "def find_interleave(a: list[int]) -> list[int]:\n    n = len(a)\n    b = [0 for _ in range(n)]\n    l = 0\n    r = n // 2\n    for i in range(0, n // 2):\n        b[{{I1}}] = a[l]\n        b[{{I2}}] = a[r]\n        l += 1\n        r += 1\n    return b\n",
+            "harness": {
+              "kind": "call",
+              "function": "find_interleave"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "n-2",
+            "args": [
+              [
+                8,
+                -3
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                8,
+                -3
+              ]
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "n-4",
+            "args": [
+              [
+                7,
+                1,
+                9,
+                0
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                7,
+                9,
+                1,
+                0
+              ]
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "printed-example",
+            "args": [
+              [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                0,
+                4,
+                1,
+                5,
+                2,
+                6,
+                3,
+                7
+              ]
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "duplicates-negatives",
+            "args": [
+              [
+                -5,
+                2,
+                2,
+                0,
+                9,
+                -5,
+                3,
+                3,
+                4,
+                4,
+                1,
+                1,
+                7,
+                8,
+                8,
+                7
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                -5,
+                4,
+                2,
+                4,
+                2,
+                1,
+                0,
+                1,
+                9,
+                7,
+                -5,
+                8,
+                3,
+                8,
+                3,
+                7
+              ]
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "n-32",
+            "args": [
+              [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31
+              ]
+            ],
+            "expected": {
+              "returnValue": [
+                0,
+                16,
+                1,
+                17,
+                2,
+                18,
+                3,
+                19,
+                4,
+                20,
+                5,
+                21,
+                6,
+                22,
+                7,
+                23,
+                8,
+                24,
+                9,
+                25,
+                10,
+                26,
+                11,
+                27,
+                12,
+                28,
+                13,
+                29,
+                14,
+                30,
+                15,
+                31
+              ]
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (Python), Section C, Question 2(a), Blanks I1 and I2",
+      "contextId": "python-c2"
+    },
+    {
+      "id": "python-j",
+      "track": "python",
+      "title": "Paper 2 (Python), Section C, Question 2(b)",
+      "prompt": {
+        "en": "(b) Complete the functions helper and to_interleave so that the function to_interleave(a) modifies the list a to its interleaved list."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J1",
+          "maxChars": 5
+        },
+        {
+          "id": "J2",
+          "maxChars": 12
+        },
+        {
+          "id": "J3",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "python",
+            "dialect": "python3.11",
+            "source": "def helper(a: list[int], l: int, r: int) -> None:\n    n = r - l\n    if n <= 2:\n        return\n    for i in range(0, {{J1}}):\n        x = {{J2}}\n        y = {{J3}}\n        a[x], a[y] = a[y], a[x]\n    mid = (l + r) // 2\n    helper(a, l, mid)\n    helper(a, mid, r)\n\ndef to_interleave(a: list[int]) -> None:\n    n = len(a)\n    helper(a, 0, n)\n",
+            "harness": {
+              "kind": "call",
+              "function": "to_interleave"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "n-2",
+            "args": [
+              [
+                8,
+                -3
+              ]
+            ],
+            "expected": {
+              "returnValue": null,
+              "argsAfter": [
+                [
+                  8,
+                  -3
+                ]
+              ]
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "n-4",
+            "args": [
+              [
+                7,
+                1,
+                9,
+                0
+              ]
+            ],
+            "expected": {
+              "returnValue": null,
+              "argsAfter": [
+                [
+                  7,
+                  9,
+                  1,
+                  0
+                ]
+              ]
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "printed-example",
+            "args": [
+              [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            ],
+            "expected": {
+              "returnValue": null,
+              "argsAfter": [
+                [
+                  0,
+                  4,
+                  1,
+                  5,
+                  2,
+                  6,
+                  3,
+                  7
+                ]
+              ]
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "duplicates-negatives",
+            "args": [
+              [
+                -5,
+                2,
+                2,
+                0,
+                9,
+                -5,
+                3,
+                3,
+                4,
+                4,
+                1,
+                1,
+                7,
+                8,
+                8,
+                7
+              ]
+            ],
+            "expected": {
+              "returnValue": null,
+              "argsAfter": [
+                [
+                  -5,
+                  4,
+                  2,
+                  4,
+                  2,
+                  1,
+                  0,
+                  1,
+                  9,
+                  7,
+                  -5,
+                  8,
+                  3,
+                  8,
+                  3,
+                  7
+                ]
+              ]
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "n-32",
+            "args": [
+              [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31
+              ]
+            ],
+            "expected": {
+              "returnValue": null,
+              "argsAfter": [
+                [
+                  0,
+                  16,
+                  1,
+                  17,
+                  2,
+                  18,
+                  3,
+                  19,
+                  4,
+                  20,
+                  5,
+                  21,
+                  6,
+                  22,
+                  7,
+                  23,
+                  8,
+                  24,
+                  9,
+                  25,
+                  10,
+                  26,
+                  11,
+                  27,
+                  12,
+                  28,
+                  13,
+                  29,
+                  14,
+                  30,
+                  15,
+                  31
+                ]
+              ]
+            },
+            "maxSteps": 15000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (Python), Section C, Question 2(b), Blanks J1, J2 and J3",
+      "contextId": "python-c2"
+    },
+    {
+      "id": "cpp-k",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?\n\n```cpp\nint a, b, c;\n\nvoid foo(int &a, int b) {\n    c = a + b;\n    a = b + c;\n    b = a + c;\n}\n\nint main() {\n    a = 3; b = 5; c = 7;\n    foo(b, c);\n    cout << a << \",\" << b << \",\" << c;\n}\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 22
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "K": [
+            "3,19,12"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 2 (C++), Section B, Question 1, Blank K"
+    },
+    {
+      "id": "cpp-l",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?\n\n```cpp\nint main() {\n    int a[2][2] = {\n        {34, 14},\n        {11, 21}\n    };\n    int x = 0;\n    for (int i = 0; i < 2024; ++i) {\n        x += a[(x & 2) >> 1][x & 1];\n    }\n    cout << x % 4;\n}\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "L"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 22
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "L": [
+            "0"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 2 (C++), Section B, Question 2, Blank L"
+    },
+    {
+      "id": "cpp-m",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section B, Question 3",
+      "prompt": {
+        "en": "What is the output of the following program?\n\n```cpp\nint f(int x);\nint g(int x);\n\nint f(int x) {\n    if (x == 0)\n        return 2;\n    return f(x / 2) + g(x / 3);\n}\nint g(int x) {\n    if (x == 0)\n        return 1;\n    return f(x / 3) + g(x / 2);\n}\n\nint main() {\n    cout << f(11);\n}\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "M"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 23
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "M": [
+            "13"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 2 (C++), Section B, Question 3, Blank M"
+    },
+    {
+      "id": "cpp-n",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section B, Question 4",
+      "prompt": {
+        "en": "Complete the program below, such that for all the given inputs, the output of the program matches the given output:\n\n| Input | Output |\n| ---: | ---: |\n| 1 | 1 |\n| 2 | 1 |\n| 3 | 4 |\n| 4 | 4 |\n| 5 | 9 |\n| 6 | 9 |\n| 7 | 16 |"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "N",
+          "maxChars": 6
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 23
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int main() {\n    int total = 0;\n    int n;\n    cin >> n;\n    for (int i = 1; i <= n; ++i) {\n        if ({{N}})\n            total = total + i;\n    }\n    cout << total;\n}\n",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "input-1",
+            "stdin": "1\n",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "input-2",
+            "stdin": "2\n",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "input-3",
+            "stdin": "3\n",
+            "expected": {
+              "stdout": "4"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "input-4",
+            "stdin": "4\n",
+            "expected": {
+              "stdout": "4"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "input-5",
+            "stdin": "5\n",
+            "expected": {
+              "stdout": "9"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "input-6",
+            "stdin": "6\n",
+            "expected": {
+              "stdout": "9"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "input-7",
+            "stdin": "7\n",
+            "expected": {
+              "stdout": "16"
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (C++), Section B, Question 4, Blank N"
+    },
+    {
+      "id": "cpp-o",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section B, Question 5",
+      "prompt": {
+        "en": "Complete the program such that it outputs knrl hdvb mre."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "O",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 24
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "bool t(char x) {\n    return x >= 'a' && x <= 'z';\n}\n\nchar s(char x) {\n    return {{O}};\n}\n\nint main() {\n    string str1 = \"hkoi easy job\";\n    string str2 = \"\";\n    for (char x : str1) {\n        if (t(x)) {\n            str2 += s(x);\n        } else {\n            str2 += x;\n        }\n    }\n    cout << str2;\n}\n",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-output",
+            "stdin": "",
+            "expected": {
+              "stdout": "knrl hdvb mre"
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (C++), Section B, Question 5, Blank O"
+    },
+    {
+      "id": "cpp-p",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section B, Question 6",
+      "prompt": {
+        "en": "Complete the program such that it outputs 10 9 8 7 6 5 4 3 3 2 2 2 1 0."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "P",
+          "maxChars": 9
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 24
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int a[14] = {3, 2, 2, 3, 6, 0, 5, 7, 10, 2, 9, 1, 8, 4};\nint b[11];\nint main() {\n    for (int i = 0; i < 11; ++i) {\n        b[i] = 0;\n    }\n    for (int i = 0; i < 14; ++i) {\n        {{P}};\n    }\n    for (int i = 10; i >= 0; --i) {\n        for (int j = 0; j < b[i]; ++j) {\n            cout << i;\n            if (i > 0 || j + 1 < b[i]) {\n                cout << ' ';\n            }\n        }\n    }\n}\n",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-output",
+            "stdin": "",
+            "expected": {
+              "stdout": "10 9 8 7 6 5 4 3 3 2 2 2 1 0"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (C++), Section B, Question 6, Blank P"
+    },
+    {
+      "id": "cpp-q",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section C, Question 1",
+      "prompt": {
+        "en": "Complete the program below, such that it converts a given duration t in minutes into a string in the format of H:MM (0 ≤ t < 600), where H is a digit representing hours, MM are two digits representing minutes. For example, f(123) should return the string 2:03 as 123 minutes can be converted to 2 hours and 3 minutes."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "Q1",
+          "maxChars": 9
+        },
+        {
+          "id": "Q2",
+          "maxChars": 9
+        },
+        {
+          "id": "Q3",
+          "maxChars": 9
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 25
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "string f(int t) {\n    string s = \"\";\n    s += '0' + {{Q1}};\n    s += ':';\n    s += '0' + {{Q2}};\n    s += '0' + {{Q3}};\n    return s;\n}\n",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "zero",
+            "args": [
+              0
+            ],
+            "expected": {
+              "returnValue": "0:00"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "one-minute",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": "0:01"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "single-digit-minute",
+            "args": [
+              9
+            ],
+            "expected": {
+              "returnValue": "0:09"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "ten-minutes",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": "0:10"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "last-minute-of-hour",
+            "args": [
+              59
+            ],
+            "expected": {
+              "returnValue": "0:59"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "one-hour",
+            "args": [
+              60
+            ],
+            "expected": {
+              "returnValue": "1:00"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "one-hour-one-minute",
+            "args": [
+              61
+            ],
+            "expected": {
+              "returnValue": "1:01"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "printed-example",
+            "args": [
+              123
+            ],
+            "expected": {
+              "returnValue": "2:03"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "upper-bound",
+            "args": [
+              599
+            ],
+            "expected": {
+              "returnValue": "9:59"
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (C++), Section C, Question 1, Blanks Q1, Q2 and Q3"
+    },
+    {
+      "id": "cpp-r",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section C, Question 2(a)",
+      "prompt": {
+        "en": "Consider the following function:\n\n```cpp\nint f(int x) {\n    int cnt = 0;\n    for (int i = x; i >= 1; (--i) &= x) {\n        ++cnt;\n    }\n    return cnt;\n}\n```\n\n(a) What is the return value of f(26)?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "R"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 26
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "R": [
+            "7"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "printedRef": "Paper 2 (C++), Section C, Question 2(a), Blank R"
+    },
+    {
+      "id": "cpp-s",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section C, Question 2(b)",
+      "prompt": {
+        "en": "Consider the following function:\n\nYou CANNOT call other functions in your answers to parts (b) and (c), including f, g and h.\n\n(b) Complete the function below, such that for all 1 ≤ x < 2¹⁰, the return value of g(x) is same as the return value of f(x):"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "S1",
+          "maxChars": 3
+        },
+        {
+          "id": "S2",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 26
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int f(int x) {\n    int cnt = 0;\n    for (int i = x; i >= 1; (--i) &= x) {\n        ++cnt;\n    }\n    return cnt;\n}\n\nint g(int x) {\n    int cnt = 0;\n    for (int i = 1; i <= x; ++i) {\n        if (({{S1}}) == ({{S2}})) {\n            ++cnt;\n        }\n    }\n    return cnt;\n}\n",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "x-1",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-2",
+            "args": [
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-3",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-4",
+            "args": [
+              4
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-5",
+            "args": [
+              5
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-7",
+            "args": [
+              7
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-10",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-15",
+            "args": [
+              15
+            ],
+            "expected": {
+              "returnValue": 15
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-26",
+            "args": [
+              26
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-31",
+            "args": [
+              31
+            ],
+            "expected": {
+              "returnValue": 31
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-42",
+            "args": [
+              42
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-85",
+            "args": [
+              85
+            ],
+            "expected": {
+              "returnValue": 15
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-127",
+            "args": [
+              127
+            ],
+            "expected": {
+              "returnValue": 127
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-128",
+            "args": [
+              128
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-255",
+            "args": [
+              255
+            ],
+            "expected": {
+              "returnValue": 255
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-256",
+            "args": [
+              256
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-511",
+            "args": [
+              511
+            ],
+            "expected": {
+              "returnValue": 511
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-512",
+            "args": [
+              512
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "x-1023",
+            "args": [
+              1023
+            ],
+            "expected": {
+              "returnValue": 1023
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (C++), Section C, Question 2(b), Blanks S1 and S2"
+    },
+    {
+      "id": "cpp-t",
+      "track": "cpp",
+      "title": "Paper 2 (C++), Section C, Question 2(c)",
+      "prompt": {
+        "en": "Consider the following function:\n\nYou CANNOT call other functions in your answers to parts (b) and (c), including f, g and h.\n\n(c) Complete the function below, such that for all 1 ≤ x < 2¹⁰, the return value of h(x) is same as the return value of f(x):"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "T1",
+          "maxChars": 13
+        },
+        {
+          "id": "T2",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hs.pdf",
+        "page": 26
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int f(int x) {\n    int cnt = 0;\n    for (int i = x; i >= 1; (--i) &= x) {\n        ++cnt;\n    }\n    return cnt;\n}\n\nint h(int x) {\n    int cnt = 0;\n    for (int i = 0; i < 10; ++i) {\n        if ({{T1}}) {\n            ++cnt;\n        }\n    }\n    return {{T2}};\n}\n",
+            "harness": {
+              "kind": "call",
+              "function": "h"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "x-1",
+            "args": [
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-2",
+            "args": [
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-3",
+            "args": [
+              3
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-4",
+            "args": [
+              4
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-5",
+            "args": [
+              5
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-7",
+            "args": [
+              7
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-10",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-15",
+            "args": [
+              15
+            ],
+            "expected": {
+              "returnValue": 15
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-26",
+            "args": [
+              26
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-31",
+            "args": [
+              31
+            ],
+            "expected": {
+              "returnValue": 31
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-42",
+            "args": [
+              42
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-85",
+            "args": [
+              85
+            ],
+            "expected": {
+              "returnValue": 15
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-127",
+            "args": [
+              127
+            ],
+            "expected": {
+              "returnValue": 127
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-128",
+            "args": [
+              128
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-255",
+            "args": [
+              255
+            ],
+            "expected": {
+              "returnValue": 255
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-256",
+            "args": [
+              256
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-511",
+            "args": [
+              511
+            ],
+            "expected": {
+              "returnValue": 511
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-512",
+            "args": [
+              512
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "x-1023",
+            "args": [
+              1023
+            ],
+            "expected": {
+              "returnValue": 1023
+            },
+            "maxSteps": 3000
+          }
+        ]
+      },
+      "printedRef": "Paper 2 (C++), Section C, Question 2(c), Blanks T1 and T2"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "paper1-c1",
+      "track": "paper1",
+      "markdown": "S is an infinite string defined as follows:\n\n1. S initially is a string A.\n2. Repeat the following action indefinitely: take a copy S′ of the entire current string S, replace every letter in S′ by shifting it one position forward in the alphabet, so that A becomes B, B becomes C, ..., and Z wraps around to become A. Then place S′ at the end of S.\n\nFor illustration, this is how the string S is constructed in the first few steps:\n\nA → AB → ABBC → ABBCBCCD → ..."
+    },
+    {
+      "id": "python-c1",
+      "track": "python",
+      "markdown": "The following table shows the number of days in each month of 2025.\n\n| Month | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |\n| Number of days | 31 | 28 | 31 | 30 | 31 | 30 | 31 | 31 | 30 | 31 | 30 | 31 |"
+    },
+    {
+      "id": "python-c2",
+      "track": "python",
+      "markdown": "Let a be a list of integers of length n, where n = 2ᵏ for some integer 1 ≤ k ≤ 10. We define its interleaved list as another list b such that b[0], b[2], ... are the elements a[0], a[1], ..., a[n/2 − 1] in order, and b[1], b[3], ... are the elements a[n/2], a[n/2 + 1], ..., a[n − 1] in order.\n\nFor example, the interleaved list of [0,1,2,3,4,5,6,7] is [0,4,1,5,2,6,3,7]."
+    }
+  ]
+}

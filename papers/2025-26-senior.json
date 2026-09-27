@@ -1,0 +1,2982 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2025-26-senior",
+    "season": "2025/26",
+    "division": "senior",
+    "title": "HKOI 2025/26 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2026hsa.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2026hs_sol.pdf. Page numbers refer to the combined 28-page paper. Multiple-choice sections are outside FITB scope."
+    }
+  },
+  "tracks": [
+    {
+      "id": "paper1",
+      "label": "Paper 1 · compulsory",
+      "selection": "required"
+    },
+    {
+      "id": "python",
+      "label": "Paper 2 · Python",
+      "selection": "choice",
+      "choiceGroup": "paper2"
+    },
+    {
+      "id": "cpp",
+      "label": "Paper 2 · C++",
+      "selection": "choice",
+      "choiceGroup": "paper2"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "p1-q2-graph",
+      "track": "paper1",
+      "markdown": "Consider the following undirected graph. There are multiple ways to walk from A to E in this graph. For example, A → B → G → K → H → D → H → D → E is a walk that passes through 8 edges."
+    },
+    {
+      "id": "p1-q1-matrix",
+      "track": "paper1",
+      "markdown": "Consider the following program:"
+    },
+    {
+      "id": "py-q1-box",
+      "track": "python",
+      "markdown": "Consider boxes with balls inside. Each ball is marked with a number from between 0 and K - 1, inclusive. We represent a box as a list X of length K, where X[i] is the number of balls in the box with i written on it for all 0 ≤ i < K."
+    },
+    {
+      "id": "py-q1-lottery",
+      "track": "python",
+      "markdown": "In a lottery, there are K distinct prizes. The prizes are sorted according to their rarity, where prize 0 is the rarest, while prize K - 1 is the most common.\n\nNow, two boxes are given, represented by two lists A and B, each of length K.\n\nThe lottery works as follows: Alice picks one ball from each of the two boxes, separately. If Alice picks a ball representing prize i from a box and a ball representing prize j from another box, then Alice gets the prize max(i, j). If there are N balls in a box and M balls in another box, then there are in total N × M ways of picking balls."
+    },
+    {
+      "id": "py-q2-logic",
+      "track": "python",
+      "markdown": "Let x, y and z be integer variables that take the values 0 or 1. Alice wants to design a function such that it returns 1 if and only if at least one of the following conditions is met. Otherwise, it should return 0.\n\n1. x = 1 and y = 1\n2. x = 0 and z = 1\n3. y = 1 and z = 1"
+    },
+    {
+      "id": "cpp-q1-f",
+      "track": "cpp",
+      "markdown": "Consider the following function:"
+    },
+    {
+      "id": "cpp-q2-r",
+      "track": "cpp",
+      "markdown": "Consider the following function:"
+    }
+  ],
+  "questions": [
+    {
+      "id": "paper1-a",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "There is a screen and two buttons in front of you. Initially, the screen shows the number 0. You can perform the following actions in any arbitrary order:\n\n- Click the red button: Increase the number on the screen by 1.\n- Click the blue button: Multiply the number on the screen by 3.\n\nAt least how many button clicks are required such that the screen shows the number 330?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 7
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "9"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-b",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 7
+      },
+      "displayCode": {
+        "python": "a = 1\nb = 1\nc = 1\n\nfor i in range(2025):\n    a ^= b\n    b ^= c\n    c ^= a\n\nprint(a, b, c, sep=\",\")",
+        "cpp": "int main() {\n    int a = 1;\n    int b = 1;\n    int c = 1;\n    for (int i = 0; i < 2025; ++i) {\n        a ^= b;\n        b ^= c;\n        c ^= a;\n    }\n    cout << a << \",\" << b << \",\" << c;\n}"
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "0,1,1"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-c",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 8
+      },
+      "displayCode": {
+        "python": "ans = 0\nfor i in range(56):\n    ans += (i % 7) - (i % 8)\nprint(ans)",
+        "cpp": "int main() {\n    int ans = 0;\n    for (int i = 0; i < 56; ++i)\n        ans += (i % 7) - (i % 8);\n    cout << ans;\n}"
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "-28"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-d",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 4, Blank D",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "12 seats are arranged around a circular table, with each accommodating at most one person. In how many ways can people be seated, so that every 6 consecutive seats contains exactly 4 occupied seats? Two seating arrangements are considered different if and only if there is at least one seat that is occupied in one arrangement but empty in the other."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "D": [
+            "15"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-e",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 5, Blank E",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Given an array $A = [6, 0, -8, 4, 8, 6, -4, 2]$. How many pairs $(L, R)$ are there, such that $0 \\le L \\le R \\le 7$ and sum of elements in the subarray $A[L], A[L + 1], \\ldots, A[R]$ is between 10 and 14, inclusive? For example, $(3, 4)$ is a valid pair, since the sum of $A[3]$ and $A[4]$ is 12, while $(1, 3)$ is not a valid pair, since the sum of $A[1]$, $A[2]$ and $A[3]$ is -4."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "10"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-f",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 6, Blank F",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the program f(a, b, c) so that, for integers 1 ≤ a, b, c ≤ 3, it returns True (C++: true) if and only if a, b, c are either all the same or all different."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 9
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "bool f(int a, int b, int c) {\n    return bool({{F}} == 0);\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          },
+          {
+            "language": "python",
+            "source": "def f(a: int, b: int, c: int) -> bool:\n    return bool({{F}} == 0)",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "1-1-1",
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              1,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "1-1-2",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              1,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "1-1-3",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              1,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "1-2-1",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              2,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "1-2-2",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              2,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "1-2-3",
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              2,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "1-3-1",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              3,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "1-3-2",
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              3,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "1-3-3",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              1,
+              3,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "2-1-1",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              2,
+              1,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "2-1-2",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              2,
+              1,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "2-1-3",
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 300,
+            "args": [
+              2,
+              1,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "2-2-1",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              2,
+              2,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "2-2-2",
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 300,
+            "args": [
+              2,
+              2,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "2-2-3",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              2,
+              2,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "2-3-1",
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 300,
+            "args": [
+              2,
+              3,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "2-3-2",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              2,
+              3,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "2-3-3",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              2,
+              3,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "3-1-1",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              3,
+              1,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "3-1-2",
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 300,
+            "args": [
+              3,
+              1,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "3-1-3",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              3,
+              1,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "3-2-1",
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 300,
+            "args": [
+              3,
+              2,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "3-2-2",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              3,
+              2,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "3-2-3",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              3,
+              2,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "3-3-1",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              3,
+              3,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "3-3-2",
+            "expected": {
+              "returnValue": false
+            },
+            "maxSteps": 300,
+            "args": [
+              3,
+              3,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "3-3-3",
+            "expected": {
+              "returnValue": true
+            },
+            "maxSteps": 300,
+            "args": [
+              3,
+              3,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-g",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 1(a), Blank G1/G2",
+      "title": "Section C, Question 1(a)",
+      "prompt": {
+        "en": "Complete the program so that it outputs the following:\n\n```text\n13 9 5 1\n14 10 6 2\n15 11 7 3\n16 12 8 4\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "G1",
+          "maxChars": 5
+        },
+        {
+          "id": "G2",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 9,
+        "note": "The printed Paper 1 matrix code shares the two index slots between blanks G1/H1 and G2/H2. This executable variant specializes those slots to this scoring part; the official page 9 code is the common source for both parts."
+      },
+      "contextId": "p1-q1-matrix",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "vector<vector<int>> a = {\n    {1, 2, 3, 4},\n    {5, 6, 7, 8},\n    {9, 10, 11, 12},\n    {13, 14, 15, 16}\n};\n\nint main() {\n    for (int i = 0; i < 4; ++i) {\n        for (int j = 0; j < 4; ++j) {\n            cout << a[{{G1}}][{{G2}}]\n                 << \" \";\n        }\n        cout << endl;\n    }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          },
+          {
+            "language": "python",
+            "source": "a = [\n    [1, 2, 3, 4],\n    [5, 6, 7, 8],\n    [9, 10, 11, 12],\n    [13, 14, 15, 16]\n]\n\nfor i in range(4):\n    for j in range(4):\n        print(a[{{G1}}][{{G2}}],\n              end=\" \")\n\n    print()",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-output",
+            "expected": {
+              "stdout": "13 9 5 1 \n14 10 6 2 \n15 11 7 3 \n16 12 8 4 \n"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-h",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 1(b), Blank H1/H2",
+      "title": "Section C, Question 1(b)",
+      "prompt": {
+        "en": "Complete the program so that it outputs the following:\n\n```text\n1 3 1 3\n1 3 1 3\n5 7 5 7\n5 7 5 7\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "H1",
+          "maxChars": 5
+        },
+        {
+          "id": "H2",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 10,
+        "note": "The printed Paper 1 matrix code shares the two index slots between blanks G1/H1 and G2/H2. This executable variant specializes those slots to this scoring part; the official page 9 code is the common source for both parts."
+      },
+      "contextId": "p1-q1-matrix",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "vector<vector<int>> a = {\n    {1, 2, 3, 4},\n    {5, 6, 7, 8},\n    {9, 10, 11, 12},\n    {13, 14, 15, 16}\n};\n\nint main() {\n    for (int i = 0; i < 4; ++i) {\n        for (int j = 0; j < 4; ++j) {\n            cout << a[{{H1}}][{{H2}}]\n                 << \" \";\n        }\n        cout << endl;\n    }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          },
+          {
+            "language": "python",
+            "source": "a = [\n    [1, 2, 3, 4],\n    [5, 6, 7, 8],\n    [9, 10, 11, 12],\n    [13, 14, 15, 16]\n]\n\nfor i in range(4):\n    for j in range(4):\n        print(a[{{H1}}][{{H2}}],\n              end=\" \")\n\n    print()",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-output",
+            "expected": {
+              "stdout": "1 3 1 3 \n1 3 1 3 \n5 7 5 7 \n5 7 5 7 \n"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-i",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 2(a), Blank I",
+      "title": "Section C, Question 2(a)",
+      "prompt": {
+        "en": "What is the minimum number of edges you must remove from the graph, such that it is impossible to walk from A to E passing through exactly 5 edges?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 10
+      },
+      "contextId": "p1-q2-graph",
+      "figure": {
+        "kind": "undirected-graph",
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0.05,
+            "y": 0.12
+          },
+          {
+            "id": "B",
+            "x": 0.26,
+            "y": 0.16
+          },
+          {
+            "id": "C",
+            "x": 0.39,
+            "y": 0.12
+          },
+          {
+            "id": "D",
+            "x": 0.54,
+            "y": 0.16
+          },
+          {
+            "id": "E",
+            "x": 0.75,
+            "y": 0.12
+          },
+          {
+            "id": "F",
+            "x": 0.11,
+            "y": 0.36
+          },
+          {
+            "id": "G",
+            "x": 0.29,
+            "y": 0.41
+          },
+          {
+            "id": "H",
+            "x": 0.5,
+            "y": 0.41
+          },
+          {
+            "id": "J",
+            "x": 0.69,
+            "y": 0.36
+          },
+          {
+            "id": "I",
+            "x": 0.18,
+            "y": 0.62
+          },
+          {
+            "id": "K",
+            "x": 0.39,
+            "y": 0.66
+          },
+          {
+            "id": "L",
+            "x": 0.62,
+            "y": 0.62
+          },
+          {
+            "id": "M",
+            "x": 0.39,
+            "y": 0.95
+          }
+        ],
+        "edges": [
+          {
+            "from": "A",
+            "to": "B"
+          },
+          {
+            "from": "B",
+            "to": "C"
+          },
+          {
+            "from": "C",
+            "to": "D"
+          },
+          {
+            "from": "D",
+            "to": "E"
+          },
+          {
+            "from": "A",
+            "to": "F"
+          },
+          {
+            "from": "F",
+            "to": "I"
+          },
+          {
+            "from": "I",
+            "to": "M"
+          },
+          {
+            "from": "M",
+            "to": "L"
+          },
+          {
+            "from": "L",
+            "to": "J"
+          },
+          {
+            "from": "J",
+            "to": "E"
+          },
+          {
+            "from": "B",
+            "to": "G"
+          },
+          {
+            "from": "G",
+            "to": "K"
+          },
+          {
+            "from": "K",
+            "to": "H"
+          },
+          {
+            "from": "H",
+            "to": "D"
+          },
+          {
+            "from": "K",
+            "to": "M"
+          }
+        ]
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "0"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-j",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 2(b), Blank J",
+      "title": "Section C, Question 2(b)",
+      "prompt": {
+        "en": "What is the minimum number of edges you must remove from the graph, such that it is impossible to walk from A to E passing through exactly 6 edges?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 10
+      },
+      "contextId": "p1-q2-graph",
+      "figure": {
+        "kind": "undirected-graph",
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0.05,
+            "y": 0.12
+          },
+          {
+            "id": "B",
+            "x": 0.26,
+            "y": 0.16
+          },
+          {
+            "id": "C",
+            "x": 0.39,
+            "y": 0.12
+          },
+          {
+            "id": "D",
+            "x": 0.54,
+            "y": 0.16
+          },
+          {
+            "id": "E",
+            "x": 0.75,
+            "y": 0.12
+          },
+          {
+            "id": "F",
+            "x": 0.11,
+            "y": 0.36
+          },
+          {
+            "id": "G",
+            "x": 0.29,
+            "y": 0.41
+          },
+          {
+            "id": "H",
+            "x": 0.5,
+            "y": 0.41
+          },
+          {
+            "id": "J",
+            "x": 0.69,
+            "y": 0.36
+          },
+          {
+            "id": "I",
+            "x": 0.18,
+            "y": 0.62
+          },
+          {
+            "id": "K",
+            "x": 0.39,
+            "y": 0.66
+          },
+          {
+            "id": "L",
+            "x": 0.62,
+            "y": 0.62
+          },
+          {
+            "id": "M",
+            "x": 0.39,
+            "y": 0.95
+          }
+        ],
+        "edges": [
+          {
+            "from": "A",
+            "to": "B"
+          },
+          {
+            "from": "B",
+            "to": "C"
+          },
+          {
+            "from": "C",
+            "to": "D"
+          },
+          {
+            "from": "D",
+            "to": "E"
+          },
+          {
+            "from": "A",
+            "to": "F"
+          },
+          {
+            "from": "F",
+            "to": "I"
+          },
+          {
+            "from": "I",
+            "to": "M"
+          },
+          {
+            "from": "M",
+            "to": "L"
+          },
+          {
+            "from": "L",
+            "to": "J"
+          },
+          {
+            "from": "J",
+            "to": "E"
+          },
+          {
+            "from": "B",
+            "to": "G"
+          },
+          {
+            "from": "G",
+            "to": "K"
+          },
+          {
+            "from": "K",
+            "to": "H"
+          },
+          {
+            "from": "H",
+            "to": "D"
+          },
+          {
+            "from": "K",
+            "to": "M"
+          }
+        ]
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "J": [
+            "2"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-k",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 2(c), Blank K",
+      "title": "Section C, Question 2(c)",
+      "prompt": {
+        "en": "What is the minimum number of edges you must remove from the graph, such that it is impossible to walk from A to E passing through exactly 9 edges?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 10
+      },
+      "contextId": "p1-q2-graph",
+      "figure": {
+        "kind": "undirected-graph",
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0.05,
+            "y": 0.12
+          },
+          {
+            "id": "B",
+            "x": 0.26,
+            "y": 0.16
+          },
+          {
+            "id": "C",
+            "x": 0.39,
+            "y": 0.12
+          },
+          {
+            "id": "D",
+            "x": 0.54,
+            "y": 0.16
+          },
+          {
+            "id": "E",
+            "x": 0.75,
+            "y": 0.12
+          },
+          {
+            "id": "F",
+            "x": 0.11,
+            "y": 0.36
+          },
+          {
+            "id": "G",
+            "x": 0.29,
+            "y": 0.41
+          },
+          {
+            "id": "H",
+            "x": 0.5,
+            "y": 0.41
+          },
+          {
+            "id": "J",
+            "x": 0.69,
+            "y": 0.36
+          },
+          {
+            "id": "I",
+            "x": 0.18,
+            "y": 0.62
+          },
+          {
+            "id": "K",
+            "x": 0.39,
+            "y": 0.66
+          },
+          {
+            "id": "L",
+            "x": 0.62,
+            "y": 0.62
+          },
+          {
+            "id": "M",
+            "x": 0.39,
+            "y": 0.95
+          }
+        ],
+        "edges": [
+          {
+            "from": "A",
+            "to": "B"
+          },
+          {
+            "from": "B",
+            "to": "C"
+          },
+          {
+            "from": "C",
+            "to": "D"
+          },
+          {
+            "from": "D",
+            "to": "E"
+          },
+          {
+            "from": "A",
+            "to": "F"
+          },
+          {
+            "from": "F",
+            "to": "I"
+          },
+          {
+            "from": "I",
+            "to": "M"
+          },
+          {
+            "from": "M",
+            "to": "L"
+          },
+          {
+            "from": "L",
+            "to": "J"
+          },
+          {
+            "from": "J",
+            "to": "E"
+          },
+          {
+            "from": "B",
+            "to": "G"
+          },
+          {
+            "from": "G",
+            "to": "K"
+          },
+          {
+            "from": "K",
+            "to": "H"
+          },
+          {
+            "from": "H",
+            "to": "D"
+          },
+          {
+            "from": "K",
+            "to": "M"
+          }
+        ]
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "K": [
+            "1"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "python-a",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 15
+      },
+      "displayCode": {
+        "python": "a = [3, 1, 3, 5, 7, 4]\nx = 0\nfor i in range(6):\n    if (i + x) % 2 == 0:\n        x += a[i]\n    else:\n        x -= a[i]\n    x %= 2\nprint(x)"
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "1"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "python-b",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 15
+      },
+      "displayCode": {
+        "python": "def f(a: int, b: int) -> int:\n    if a <= 0:\n        return b\n    if b <= 0:\n        return a\n    return f(a + 1, b - 2) - f(a - 2, b + 1)\n\nprint(f(3, 2))"
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "7"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "python-c",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 16
+      },
+      "displayCode": {
+        "python": "state = 0\ninputs = [2, 1, 3, 1, 1, 2, 1, 1, 3, 2]\n\nfor input_val in inputs:\n    if state == 0:\n        if input_val == 1:\n            state = 1\n    elif state == 1:\n        if input_val == 1:\n            state = 2\n        elif input_val == 2:\n            state = 0\n    elif state == 2:\n        if input_val == 3:\n            state = 0\n        else:\n            state = 1\n\nprint(state)"
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "0"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "python-d",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section B, Question 4, Blank D",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Complete the program such that it outputs 721398."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 14
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "python",
+            "source": "a = [3, 8, 9, 7, 1, 2]\nfor i in range(6):\n    {{D}}\nfor i in range(6):\n    print(a[i], end=\"\")",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-output",
+            "expected": {
+              "stdout": "721398"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-e",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section B, Question 5, Blank E",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the function duration(a_h, a_m, b_h, b_m), such that given four non-negative integers a_h, a_m, b_h and b_m, the function returns the time difference of a_h:a_m and b_h:b_m (in HHMM format). It is guaranteed that 0 ≤ a_h, b_h ≤ 23, 0 ≤ a_m, b_m ≤ 59, and a_h:a_m is earlier than b_h:b_m in a day.\n\nFor example, duration(10, 30, 14, 15) should return 345 and duration(7, 15, 20, 45) should return 1330."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 16
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def duration(a_h: int, a_m: int, b_h: int, b_m: int) -> int:\n    a = a_h * 100 + a_m\n    b = b_h * 100 + b_m\n    return {{E}}",
+            "harness": {
+              "kind": "call",
+              "function": "duration"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "10-30-14-15",
+            "expected": {
+              "returnValue": 345
+            },
+            "maxSteps": 5000,
+            "args": [
+              10,
+              30,
+              14,
+              15
+            ]
+          },
+          {
+            "id": "7-15-20-45",
+            "expected": {
+              "returnValue": 1330
+            },
+            "maxSteps": 5000,
+            "args": [
+              7,
+              15,
+              20,
+              45
+            ]
+          },
+          {
+            "id": "0-0-0-1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "12-59-13-0",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              12,
+              59,
+              13,
+              0
+            ]
+          },
+          {
+            "id": "23-0-23-59",
+            "expected": {
+              "returnValue": 59
+            },
+            "maxSteps": 5000,
+            "args": [
+              23,
+              0,
+              23,
+              59
+            ]
+          },
+          {
+            "id": "0-1-23-59",
+            "expected": {
+              "returnValue": 2358
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              1,
+              23,
+              59
+            ]
+          },
+          {
+            "id": "9-45-10-15",
+            "expected": {
+              "returnValue": 30
+            },
+            "maxSteps": 5000,
+            "args": [
+              9,
+              45,
+              10,
+              15
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-f",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section B, Question 6, Blank F",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the program such that it outputs HKOI."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "python",
+            "source": "s = \"HIOK\"\n\nfor i in range(4):\n    print(s[{{F}}], end=\"\")",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-output",
+            "expected": {
+              "stdout": "HKOI"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-g",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section C, Question 1(a), Blank G",
+      "title": "Section C, Question 1(a)",
+      "prompt": {
+        "en": "Given a box, represented by a list X of length K. Complete the function cumulative_count(X) that modifies the list X, such that X[i] is the number of balls inside the box with written number not exceeding i for all 0 ≤ i < K. Assume 1 ≤ K ≤ 10 and 0 ≤ X[i] ≤ 1000 for all i."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 18
+      },
+      "contextId": "py-q1-box",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def cumulative_count(X: list[int]) -> None:\n    K = len(X)\n    for i in range(1, K):\n        X[i] = {{G}}",
+            "harness": {
+              "kind": "call",
+              "function": "cumulative_count"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "box-0",
+            "expected": {
+              "argsAfter": [
+                [
+                  0
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                0
+              ]
+            ]
+          },
+          {
+            "id": "box-1",
+            "expected": {
+              "argsAfter": [
+                [
+                  1,
+                  3,
+                  6
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "box-2",
+            "expected": {
+              "argsAfter": [
+                [
+                  1000,
+                  1000,
+                  2000,
+                  2000
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                1000,
+                0,
+                1000,
+                0
+              ]
+            ]
+          },
+          {
+            "id": "box-3",
+            "expected": {
+              "argsAfter": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                0,
+                0,
+                0,
+                0
+              ]
+            ]
+          },
+          {
+            "id": "box-4",
+            "expected": {
+              "argsAfter": [
+                [
+                  4,
+                  5,
+                  10,
+                  19,
+                  21,
+                  27,
+                  32,
+                  35,
+                  40,
+                  48
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                4,
+                1,
+                5,
+                9,
+                2,
+                6,
+                5,
+                3,
+                5,
+                8
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-h",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section C, Question 1(b), Blank H",
+      "title": "Section C, Question 1(b)",
+      "prompt": {
+        "en": "Complete the function prize_count(A, B) such that it returns a list C, where C[i] contains the number of ways Alice can pick balls to get prize i for all 0 ≤ i < K. Assume 1 ≤ K ≤ 10, 0 ≤ A[i], B[i] ≤ 1000 for all i, and cumulative_count(X) has been correctly implemented."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 26
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 19
+      },
+      "contextId": "py-q1-lottery",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def prize_count(A: list[int], B: list[int]) -> list[int]:\n    cumulative_count(A)\n    cumulative_count(B)\n    K = len(A)\n    C = [0] * K\n    C[0] = A[0] * B[0]\n    for i in range(1, K):\n        C[i] = {{H}}\n    return C",
+            "harness": {
+              "kind": "call",
+              "function": "prize_count"
+            },
+            "helperSource": "def cumulative_count(X: list[int]) -> None:\n    K = len(X)\n    for i in range(1, K):\n        X[i] = X[i - 1] + X[i]"
+          }
+        ],
+        "cases": [
+          {
+            "id": "lottery-0",
+            "expected": {
+              "returnValue": [
+                2
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          },
+          {
+            "id": "lottery-1",
+            "expected": {
+              "returnValue": [
+                3,
+                18
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1,
+                2
+              ],
+              [
+                3,
+                4
+              ]
+            ]
+          },
+          {
+            "id": "lottery-2",
+            "expected": {
+              "returnValue": [
+                0,
+                2,
+                3
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                2,
+                0,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "lottery-3",
+            "expected": {
+              "returnValue": [
+                2,
+                6,
+                20,
+                20
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                2,
+                0,
+                5,
+                1
+              ],
+              [
+                1,
+                3,
+                0,
+                2
+              ]
+            ]
+          },
+          {
+            "id": "lottery-4",
+            "expected": {
+              "returnValue": [
+                1000000,
+                3000000
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1000,
+                1000
+              ],
+              [
+                1000,
+                1000
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-i",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section C, Question 2(a), Blank I",
+      "title": "Section C, Question 2(a)",
+      "prompt": {
+        "en": "Her first attempt is as follows: Consider the function f(x, y, z) below. The function checks each of the three conditions once, and returns 1 immediately if some condition is met. Finally, the function returns 0 if none of the conditions is met. Complete the program such that the function f(x, y, z) returns the correct value for all 0 ≤ x, y, z ≤ 1."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 20
+      },
+      "contextId": "py-q2-logic",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def condition(a: int, b: int, c: int, d: int) -> bool:\n    return bool({{I}})\n\ndef f(x: int, y: int, z: int) -> int:\n    if condition(x, 1, y, 1):\n        return 1\n    if condition(x, 0, z, 1):\n        return 1\n    if condition(y, 1, z, 1):\n        return 1\n    return 0",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "000",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "001",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "010",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "id": "011",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "100",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "101",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "110",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              1,
+              1,
+              0
+            ]
+          },
+          {
+            "id": "111",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              1,
+              1,
+              1
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-j",
+      "track": "python",
+      "printedRef": "Paper 2 (Python), Section C, Question 2(b), Blank J1/J2",
+      "title": "Section C, Question 2(b)",
+      "prompt": {
+        "en": "Let’s assume f(x, y, z) is implemented correctly. Complete the function g(x, y, z), such that f(x, y, z) = g(x, y, z) for 0 ≤ x, y, z ≤ 1."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J1",
+          "maxChars": 4
+        },
+        {
+          "id": "J2",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 20
+      },
+      "contextId": "py-q2-logic",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def g(x: int, y: int, z: int) -> int:\n    return ({{J1}}) | ({{J2}})",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "000",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "001",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "010",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "id": "011",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "100",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "101",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "110",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              1,
+              1,
+              0
+            ]
+          },
+          {
+            "id": "111",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              1,
+              1,
+              1
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-k",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section B, Question 1, Blank K",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 24
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    int ans = 0;\n    for (int i = 0; i < 10; ++i)\n        for (int j = i % 4; j < (8 - i) % 4; ++j)\n            ++ans;\n    cout << ans;\n}"
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "K": [
+            "4"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-l",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section B, Question 2, Blank L",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "L"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 24
+      },
+      "displayCode": {
+        "cpp": "int f(int a, int b) {\n    if (a <= 0)\n        return b;\n    if (b <= 0)\n        return a;\n    return f(a - 2, b + 1) - f(a + 1, b - 2);\n}\n\nint main() {\n    cout << f(3, 2);\n}"
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "L": [
+            "1"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-m",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section B, Question 3, Blank M",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "M"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 25
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    int a[] = {13, 9, 5, 8, 6, 3, 0};\n    int ans = 0;\n    while (a[0] > 0) {\n        for (int i = 0; a[i] > 0; ++i) {\n            --a[i];\n            ++ans;\n        }\n    }\n    cout << ans;\n}"
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "M": [
+            "40"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-n",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section B, Question 4, Blank N",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Complete the following program so that it outputs hkoj-uoj-joj."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "N",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 25
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int main() {\n    string s = \"hkoi-uoi-ioi\";\n    for (int i = 0; i < s.length(); ++i) {\n        if ({{N}}) {\n            ++s[i];\n        }\n    }\n    cout << s;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-output",
+            "expected": {
+              "stdout": "hkoj-uoj-joj"
+            },
+            "maxSteps": 3000
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-o",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section B, Question 5, Blank O",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Let x be an integer between 1 and 10 inclusive. Complete the following function IsValidTyphoonSignal(x) such that it returns true if and only if x is a valid typhoon signal. The valid typhoon signals are 1, 3, 8, 9 and 10, while other numbers are invalid."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "O",
+          "maxChars": 6
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 25
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "bool IsValidTyphoonSignal(int x) {\n    if (x == 2)\n        return false;\n    else\n        return {{O}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "IsValidTyphoonSignal"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "2",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "3",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "4",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "6",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              6
+            ]
+          },
+          {
+            "id": "7",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              7
+            ]
+          },
+          {
+            "id": "8",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              8
+            ]
+          },
+          {
+            "id": "9",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "10",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              10
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-p",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section B, Question 6, Blank P",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Let a[0..n-1] be an array of integers sorted in ascending order. Assume that f(a, x) is a function that returns the smallest index i such that a[i] ≥ x, or returns n if no such index exists.\n\nComplete the function g(a, x) so that it returns |x - a[0]| + |x - a[1]| + ··· + |x - a[n-1]|. You may assume that no integer overflow occurs.\n\nHere, |x| is defined as the absolute value of x: if x ≥ 0, then |x| = x; if x < 0, then |x| = -x. For example, |3| = 3, |-1| = 1."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "P",
+          "maxChars": 21
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 26,
+        "note": "The paper specifies f(a, x) as a lower-bound function but does not print its implementation; a fixed implementation is prepended only in the test harness."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int g(vector<int> a, int x) {\n    int n = a.size();\n    vector<int> b(n + 1, 0);\n    b[0] = 0;\n    for (int i = 1; i <= n; ++i) {\n        b[i] = b[i - 1] + a[i - 1];\n    }\n    int u = f(a, x);\n    return {{P}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            },
+            "helperSource": "int f(vector<int> a, int x) {\n    int i = 0;\n    while (i < a.size() && a[i] < x)\n        ++i;\n    return i;\n}"
+          }
+        ],
+        "cases": [
+          {
+            "id": "arr-0",
+            "expected": {
+              "returnValue": 23
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                -5,
+                -2,
+                0,
+                4,
+                9
+              ],
+              3
+            ]
+          },
+          {
+            "id": "arr-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1
+              ],
+              1
+            ]
+          },
+          {
+            "id": "arr-2",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1
+              ],
+              -5
+            ]
+          },
+          {
+            "id": "arr-3",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1,
+                2,
+                2,
+                7
+              ],
+              2
+            ]
+          },
+          {
+            "id": "arr-4",
+            "expected": {
+              "returnValue": 40
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                -10,
+                -10,
+                10,
+                10
+              ],
+              0
+            ]
+          },
+          {
+            "id": "arr-5",
+            "expected": {
+              "returnValue": 400
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              100
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-q",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section C, Question 1(a), Blank Q",
+      "title": "Section C, Question 1(a)",
+      "prompt": {
+        "en": "Write down the return value of f(7, 3)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "Q"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 27
+      },
+      "displayCode": {
+        "cpp": "int f(int n, int k) {\n    vector<int> a(n + 1);\n    for (int i = 0; i < k; ++i)\n        a[i] = 1;\n    for (int i = k; i <= n; ++i) {\n        a[i] = 0;\n        for (int j = i - k; j < i; ++j)\n            a[i] += a[j];\n    }\n    return a[n];\n}"
+      },
+      "contextId": "cpp-q1-f",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "Q": [
+            "31"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-r",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section C, Question 1(b), Blank R1/R2",
+      "title": "Section C, Question 1(b)",
+      "prompt": {
+        "en": "Without calling the function f(n, k), complete the following function g(n, k), so that g(n, k) has the same return value as f(n, k) for 1 ≤ k ≤ n ≤ 30."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "R1",
+          "maxChars": 3
+        },
+        {
+          "id": "R2",
+          "maxChars": 17
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 28
+      },
+      "contextId": "cpp-q1-f",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int g(int n, int k) {\n    vector<int> a(n+1);\n    for (int i = 0; i < k; ++i)\n        a[i] = 1;\n    a[k] = {{R1}};\n    for (int i = k + 1; i <= n; ++i)\n        a[i] = {{R2}};\n    return a[n];\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "1-1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 15000,
+            "args": [
+              1,
+              1
+            ]
+          },
+          {
+            "id": "2-1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 15000,
+            "args": [
+              2,
+              1
+            ]
+          },
+          {
+            "id": "2-2",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 15000,
+            "args": [
+              2,
+              2
+            ]
+          },
+          {
+            "id": "3-2",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 15000,
+            "args": [
+              3,
+              2
+            ]
+          },
+          {
+            "id": "7-3",
+            "expected": {
+              "returnValue": 31
+            },
+            "maxSteps": 15000,
+            "args": [
+              7,
+              3
+            ]
+          },
+          {
+            "id": "10-4",
+            "expected": {
+              "returnValue": 181
+            },
+            "maxSteps": 15000,
+            "args": [
+              10,
+              4
+            ]
+          },
+          {
+            "id": "20-2",
+            "expected": {
+              "returnValue": 10946
+            },
+            "maxSteps": 15000,
+            "args": [
+              20,
+              2
+            ]
+          },
+          {
+            "id": "30-3",
+            "expected": {
+              "returnValue": 37895489
+            },
+            "maxSteps": 15000,
+            "args": [
+              30,
+              3
+            ]
+          },
+          {
+            "id": "30-10",
+            "expected": {
+              "returnValue": 9391105
+            },
+            "maxSteps": 15000,
+            "args": [
+              30,
+              10
+            ]
+          },
+          {
+            "id": "30-30",
+            "expected": {
+              "returnValue": 30
+            },
+            "maxSteps": 15000,
+            "args": [
+              30,
+              30
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-s",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section C, Question 2(a), Blank S",
+      "title": "Section C, Question 2(a)",
+      "prompt": {
+        "en": "Write down the return value of r(1122444669, 6)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "S"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 28
+      },
+      "displayCode": {
+        "cpp": "vector<int> p = {1, 10, 100, 1000, 10000, 100000, 1000000,\n                 10000000, 100000000, 1000000000};\n\nint r(int x, int n) {\n    if (n == 0)\n        return x;\n    else if (n == 1)\n        return (x + 5) / 10 * 10;\n    else\n        return r(r(x, n - 1) / p[n - 1], 1) * p[n - 1];\n}"
+      },
+      "contextId": "cpp-q2-r",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "S": [
+            "1123000000"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-t",
+      "track": "cpp",
+      "printedRef": "Paper 2 (C++), Section C, Question 2(b), Blank T",
+      "title": "Section C, Question 2(b)",
+      "prompt": {
+        "en": "Complete the following function rnd(x, n), so that rnd(x, n) returns the value of x rounded off to the nearest 10ⁿ. It is guaranteed that 0 ≤ x ≤ 10⁹ and 0 ≤ n ≤ 9. You may use the variable p and/or the function r."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "T",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hs.pdf",
+        "page": 28
+      },
+      "contextId": "cpp-q2-r",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int rnd(int x, int n) {\n    return r({{T}}, n);\n}",
+            "harness": {
+              "kind": "call",
+              "function": "rnd"
+            },
+            "helperSource": "vector<int> p = {1, 10, 100, 1000, 10000, 100000, 1000000,\n                 10000000, 100000000, 1000000000};\n\nint r(int x, int n) {\n    if (n == 0)\n        return x;\n    else if (n == 1)\n        return (x + 5) / 10 * 10;\n    else\n        return r(r(x, n - 1) / p[n - 1], 1) * p[n - 1];\n}"
+          }
+        ],
+        "cases": [
+          {
+            "id": "0-0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 15000,
+            "args": [
+              0,
+              0
+            ]
+          },
+          {
+            "id": "0-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 15000,
+            "args": [
+              0,
+              1
+            ]
+          },
+          {
+            "id": "4-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 15000,
+            "args": [
+              4,
+              1
+            ]
+          },
+          {
+            "id": "5-1",
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 15000,
+            "args": [
+              5,
+              1
+            ]
+          },
+          {
+            "id": "14-1",
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 15000,
+            "args": [
+              14,
+              1
+            ]
+          },
+          {
+            "id": "15-1",
+            "expected": {
+              "returnValue": 20
+            },
+            "maxSteps": 15000,
+            "args": [
+              15,
+              1
+            ]
+          },
+          {
+            "id": "49-2",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 15000,
+            "args": [
+              49,
+              2
+            ]
+          },
+          {
+            "id": "50-2",
+            "expected": {
+              "returnValue": 100
+            },
+            "maxSteps": 15000,
+            "args": [
+              50,
+              2
+            ]
+          },
+          {
+            "id": "149-2",
+            "expected": {
+              "returnValue": 100
+            },
+            "maxSteps": 15000,
+            "args": [
+              149,
+              2
+            ]
+          },
+          {
+            "id": "150-2",
+            "expected": {
+              "returnValue": 200
+            },
+            "maxSteps": 15000,
+            "args": [
+              150,
+              2
+            ]
+          },
+          {
+            "id": "123456789-3",
+            "expected": {
+              "returnValue": 123457000
+            },
+            "maxSteps": 15000,
+            "args": [
+              123456789,
+              3
+            ]
+          },
+          {
+            "id": "999999999-6",
+            "expected": {
+              "returnValue": 1000000000
+            },
+            "maxSteps": 15000,
+            "args": [
+              999999999,
+              6
+            ]
+          },
+          {
+            "id": "1000000000-9",
+            "expected": {
+              "returnValue": 1000000000
+            },
+            "maxSteps": 15000,
+            "args": [
+              1000000000,
+              9
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

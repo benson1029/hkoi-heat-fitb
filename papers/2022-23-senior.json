@@ -1,0 +1,1121 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2022-23-senior",
+    "season": "2022/23",
+    "division": "senior",
+    "title": "HKOI 2022/23 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2023hs_sol.pdf. Page numbers refer to the combined 17-page paper."
+    }
+  },
+  "tracks": [
+    {
+      "id": "cpp",
+      "label": "Section B · C++",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "gifts",
+      "track": "cpp",
+      "markdown": "Alice has N gift points and she plans to use them to redeem gifts. There are two types of redeemable gifts: gift A and gift B. Gift A costs pA gift points and has value vA. Gift B costs pB gift points and has value vB.\n\nAlice wants to redeem some gifts, so that their total value is maximized. For each type of gift, she may redeem zero, one, or more of it. The total number of gift points used must not exceed N."
+    },
+    {
+      "id": "checksum",
+      "track": "cpp",
+      "markdown": "The following program tries to compute the checksum of a string S (variable s) of length 4 consisting of only uppercase alphabets.\n\nIn the calculation, A is regarded as 1, B is regarded as 2, etc, up until Z which is 26. Let Sᵢ be the i-th character of the string S. The checksum of a string S is calculated as (S₁)⁴ + (S₂)³ + (S₃)² + S₄.\n\nFor example, the checksum of the string ABCD is 1⁴ + 2³ + 3² + 4 = 22."
+    },
+    {
+      "id": "zigzag",
+      "track": "cpp",
+      "markdown": "Alice is playing a computer game, and it takes place in the following map with 23 cells: Alice can only walk from S towards E by zigzagging. By walking few steps each time, Alice will skip the cells in the middle and land at the cell according to how many steps she walks. To win the game, Alice has to walk from cell S, get the key and arrive cell E. Notice that Alice cannot land at the cells marked with an X and she has to land exactly at the cell with the key in order to get it.\n\n```text\nE . X X .\n        X\n. X X . .\n🔑\n. X . X .\n        .\nS X . . X\n```"
+    },
+    {
+      "id": "lowbit",
+      "track": "cpp",
+      "markdown": "Consider the following function:"
+    },
+    {
+      "id": "adjacent",
+      "track": "cpp",
+      "markdown": "Alice is asked to write a program to calculate the sum of differences of adjacent elements in an array. The program should first read an integer n, indicating the number of elements in the array, then n integers, which are the elements in the array. The program should output only one integer, which is the required sum. For example, when the input is 3 1 3 4, the program should calculate |1 − 3| + |3 − 4|, and output 3.\n\nAlice tries to write the following program to solve the problem:"
+    }
+  ],
+  "questions": [
+    {
+      "id": "cpp-a",
+      "track": "cpp",
+      "printedRef": "Section B, Question 1(a), Blank A1/A2",
+      "title": "Section B, Question 1(a)",
+      "prompt": {
+        "en": "Complete the function FindMaxValue(N, pA, vA, pB, vB), so that it returns the maximum total value of the redeemed gifts. Assume that N, pA, vA, pB, vB are integers between 1 and 10000 inclusive."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "A1",
+          "maxChars": 15
+        },
+        {
+          "id": "A2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 12
+      },
+      "contextId": "gifts",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int FindMaxValue (int N, int pA, int vA, int pB, int vB) {\n    int ans = 0;\n    for (int xA = 0; xA * pA <= N; ++xA) {\n        for (int xB = 0; xB * pB <= N; ++xB) {\n            if ({{A1}}) {\n                ans = max(ans, {{A2}});\n            }\n        }\n    }\n    return ans;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "FindMaxValue"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "1-1-1-2-10",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 25000,
+            "args": [
+              1,
+              1,
+              1,
+              2,
+              10
+            ]
+          },
+          {
+            "id": "10-3-5-4-6",
+            "expected": {
+              "returnValue": 16
+            },
+            "maxSteps": 25000,
+            "args": [
+              10,
+              3,
+              5,
+              4,
+              6
+            ]
+          },
+          {
+            "id": "20-2-1-5-11",
+            "expected": {
+              "returnValue": 44
+            },
+            "maxSteps": 25000,
+            "args": [
+              20,
+              2,
+              1,
+              5,
+              11
+            ]
+          },
+          {
+            "id": "25-7-14-3-5",
+            "expected": {
+              "returnValue": 47
+            },
+            "maxSteps": 25000,
+            "args": [
+              25,
+              7,
+              14,
+              3,
+              5
+            ]
+          },
+          {
+            "id": "50-9-20-11-24",
+            "expected": {
+              "returnValue": 108
+            },
+            "maxSteps": 25000,
+            "args": [
+              50,
+              9,
+              20,
+              11,
+              24
+            ]
+          },
+          {
+            "id": "30-100-50-6-8",
+            "expected": {
+              "returnValue": 40
+            },
+            "maxSteps": 25000,
+            "args": [
+              30,
+              100,
+              50,
+              6,
+              8
+            ]
+          },
+          {
+            "id": "37-4-4-4-9",
+            "expected": {
+              "returnValue": 81
+            },
+            "maxSteps": 25000,
+            "args": [
+              37,
+              4,
+              4,
+              4,
+              9
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-b",
+      "track": "cpp",
+      "printedRef": "Section B, Question 1(b), Blank B",
+      "title": "Section B, Question 1(b)",
+      "prompt": {
+        "en": "Complete the function FindMaxValueFaster(N, pA, vA, pB, vB), so that it also returns the maximum total value of the redeemed gifts. You may not call FindMaxValue in your answer. Assume that N, pA, vA, pB, vB are integers between 1 and 10000 inclusive."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 30
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 13
+      },
+      "contextId": "gifts",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int FindMaxValueFaster (int N, int pA, int vA, int pB, int vB) {\n    int ans = 0;\n    for (int xA = 0; xA * pA <= N; ++xA) {\n        ans = max(ans, {{B}});\n    }\n    return ans;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "FindMaxValueFaster"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "1-1-1-2-10",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              1,
+              1,
+              1,
+              2,
+              10
+            ]
+          },
+          {
+            "id": "10-3-5-4-6",
+            "expected": {
+              "returnValue": 16
+            },
+            "maxSteps": 10000,
+            "args": [
+              10,
+              3,
+              5,
+              4,
+              6
+            ]
+          },
+          {
+            "id": "20-2-1-5-11",
+            "expected": {
+              "returnValue": 44
+            },
+            "maxSteps": 10000,
+            "args": [
+              20,
+              2,
+              1,
+              5,
+              11
+            ]
+          },
+          {
+            "id": "25-7-14-3-5",
+            "expected": {
+              "returnValue": 47
+            },
+            "maxSteps": 10000,
+            "args": [
+              25,
+              7,
+              14,
+              3,
+              5
+            ]
+          },
+          {
+            "id": "50-9-20-11-24",
+            "expected": {
+              "returnValue": 108
+            },
+            "maxSteps": 10000,
+            "args": [
+              50,
+              9,
+              20,
+              11,
+              24
+            ]
+          },
+          {
+            "id": "30-100-50-6-8",
+            "expected": {
+              "returnValue": 40
+            },
+            "maxSteps": 10000,
+            "args": [
+              30,
+              100,
+              50,
+              6,
+              8
+            ]
+          },
+          {
+            "id": "37-4-4-4-9",
+            "expected": {
+              "returnValue": 81
+            },
+            "maxSteps": 10000,
+            "args": [
+              37,
+              4,
+              4,
+              4,
+              9
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-c",
+      "track": "cpp",
+      "printedRef": "Section B, Question 1(c), Blank C",
+      "title": "Section B, Question 1(c)",
+      "prompt": {
+        "en": "Suppose now that there is a third type of gift, gift C, which costs pC gift points and has value vC. Complete the function FindMaxValueABC(N, pA, vA, pB, vB, pC, vC), so that it returns the maximum total value of the redeemed gifts. You may call FindMaxValue or FindMaxValueFaster in the answer. Assume that they have been correctly implemented.\n\nAssume that all parameters are integers between 1 and 10000 inclusive."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 50
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 13,
+        "note": "The paper allows a correctly implemented FindMaxValueFaster; a fixed implementation is prepended only in the grading harness."
+      },
+      "contextId": "gifts",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int FindMaxValueABC (int N, int pA, int vA, int pB, int vB,\n                     int pC, int vC) {\n    int ans = 0;\n    for (int xA = 0; xA * pA <= N; ++xA) {\n        ans = max(ans, {{C}});\n    }\n    return ans;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "FindMaxValueABC"
+            },
+            "helperSource": "int FindMaxValueFaster(int N, int pB, int vB, int pC, int vC) {\n    int ans = 0;\n    for (int xB = 0; xB * pB <= N; ++xB)\n        ans = max(ans, xB*vB + (N-xB*pB)/pC*vC);\n    return ans;\n}"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "1-1-1-2-3-3-4",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 25000,
+            "args": [
+              1,
+              1,
+              1,
+              2,
+              3,
+              3,
+              4
+            ]
+          },
+          {
+            "id": "15-2-5-3-6-5-15",
+            "expected": {
+              "returnValue": 45
+            },
+            "maxSteps": 25000,
+            "args": [
+              15,
+              2,
+              5,
+              3,
+              6,
+              5,
+              15
+            ]
+          },
+          {
+            "id": "30-7-8-4-5-9-17",
+            "expected": {
+              "returnValue": 51
+            },
+            "maxSteps": 25000,
+            "args": [
+              30,
+              7,
+              8,
+              4,
+              5,
+              9,
+              17
+            ]
+          },
+          {
+            "id": "25-100-1-6-4-2-3",
+            "expected": {
+              "returnValue": 36
+            },
+            "maxSteps": 25000,
+            "args": [
+              25,
+              100,
+              1,
+              6,
+              4,
+              2,
+              3
+            ]
+          },
+          {
+            "id": "40-3-8-5-12-8-20",
+            "expected": {
+              "returnValue": 104
+            },
+            "maxSteps": 25000,
+            "args": [
+              40,
+              3,
+              8,
+              5,
+              12,
+              8,
+              20
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-d",
+      "track": "cpp",
+      "printedRef": "Section B, Question 2, Blank D1/D2",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Complete the program so that it calculates and outputs the above checksum.\nmypow(b, p) is a function that returns the value of bᵖ."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D1",
+          "maxChars": 10
+        },
+        {
+          "id": "D2",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 14,
+        "note": "The paper specifies mypow(b,p) but does not print it; a fixed exponentiation helper is prepended only in the grading harness."
+      },
+      "contextId": "checksum",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int main() {\n    string s;\n    cin >> s;\n    int checksum = 0;\n    for (int i = 0; i < 4; ++i) {\n        checksum += mypow({{D1}}, {{D2}});\n    }\n    cout << checksum << endl;\n}",
+            "harness": {
+              "kind": "program"
+            },
+            "helperSource": "int mypow(int b, int p) {\n    int ans = 1;\n    for (int i = 0; i < p; ++i) ans *= b;\n    return ans;\n}"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "ABCD",
+            "expected": {
+              "stdout": "22\n"
+            },
+            "maxSteps": 5000,
+            "stdin": "ABCD"
+          },
+          {
+            "id": "PAGE",
+            "expected": {
+              "stdout": "65591\n"
+            },
+            "maxSteps": 5000,
+            "stdin": "PAGE"
+          },
+          {
+            "id": "AAAA",
+            "expected": {
+              "stdout": "4\n"
+            },
+            "maxSteps": 5000,
+            "stdin": "AAAA"
+          },
+          {
+            "id": "ZZZZ",
+            "expected": {
+              "stdout": "475254\n"
+            },
+            "maxSteps": 5000,
+            "stdin": "ZZZZ"
+          },
+          {
+            "id": "AZBY",
+            "expected": {
+              "stdout": "17606\n"
+            },
+            "maxSteps": 5000,
+            "stdin": "AZBY"
+          },
+          {
+            "id": "BAAA",
+            "expected": {
+              "stdout": "19\n"
+            },
+            "maxSteps": 5000,
+            "stdin": "BAAA"
+          },
+          {
+            "id": "PBEV",
+            "expected": {
+              "stdout": "65591\n"
+            },
+            "maxSteps": 5000,
+            "stdin": "PBEV"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-e",
+      "track": "cpp",
+      "printedRef": "Section B, Question 2, Blank E",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Find another string of length 4 and consists of only uppercase alphabets other than the string PAGE and have the same checksum as the string PAGE"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 14
+      },
+      "contextId": "checksum",
+      "grading": {
+        "kind": "checksum-collision",
+        "answerBlank": "E",
+        "reference": "PAGE",
+        "powers": [
+          4,
+          3,
+          2,
+          1
+        ],
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      }
+    },
+    {
+      "id": "cpp-f",
+      "track": "cpp",
+      "printedRef": "Section B, Question 3, Blank F",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "If Alice can only walk 6 times and the sequence of number of steps she walks has to be a permutation of {2, 2, 3, 4, 5, 6}, please output one possible sequence of Alice winning the game."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 6
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 15,
+        "note": "The six answer boxes are separated by preprinted commas. Enter the six digits without commas in this interface."
+      },
+      "contextId": "zigzag",
+      "grading": {
+        "kind": "zigzag-path",
+        "answerBlank": "F",
+        "steps": [
+          2,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 0,
+        "end": 22,
+        "key": 11,
+        "blocked": [
+          1,
+          4,
+          7,
+          9,
+          13,
+          14,
+          17,
+          19,
+          20
+        ]
+      }
+    },
+    {
+      "id": "cpp-g",
+      "track": "cpp",
+      "printedRef": "Section B, Question 3, Blank G",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "If Alice can walk 1 to 6 (inclusive) steps each time, how many different ways can Alice win the game?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 15
+      },
+      "contextId": "zigzag",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "1296"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-h",
+      "track": "cpp",
+      "printedRef": "Section B, Question 4, Blank H1/H2/H3",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Consider implementing a linked list using array, where -1 is used to represent the null pointer, h is the head pointer, a[] stores the values of every linked list node and p[] stores the next pointers of every linked list node. Complete the following program so that f(x) can delete the first x found in a singly linked list. The linked list remains unchanged if x is not found."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H1",
+          "maxChars": 10
+        },
+        {
+          "id": "H2",
+          "maxChars": 10
+        },
+        {
+          "id": "H3",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 15,
+        "note": "Printed a[]/p[] declarations omit array sizes. The hidden executable harness supplies fixed capacities and reads linked-list states; displayCode preserves the printed code."
+      },
+      "displayCode": {
+        "cpp": "int h, a[], p[];\nvoid f(int x) {\n    if (h != -1 && a[h] == x) {\n        h = p[h];\n        return;\n    }\n    for (int i = h; i != -1; i = p[i]) {\n        if ({{H1}} && ({{H2}} == x)) {\n            {{H3}};\n            return;\n        }\n    }\n}"
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int h, a[100], p[100];\nvoid f(int x) {\n    if (h != -1 && a[h] == x) {\n        h = p[h];\n        return;\n    }\n    for (int i = h; i != -1; i = p[i]) {\n        if ({{H1}} && ({{H2}} == x)) {\n            {{H3}};\n            return;\n        }\n    }\n}\nint main() {\n    int n, x;\n    cin >> n >> h;\n    for (int i = 0; i < n; ++i) cin >> a[i];\n    for (int i = 0; i < n; ++i) cin >> p[i];\n    cin >> x;\n    f(x);\n    for (int i = h; i != -1; i = p[i]) cout << a[i] << \",\";\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "list-0",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 5000,
+            "stdin": "0 -1 5"
+          },
+          {
+            "id": "list-1",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 5000,
+            "stdin": "1 0 5 -1 5"
+          },
+          {
+            "id": "list-2",
+            "expected": {
+              "stdout": "5,"
+            },
+            "maxSteps": 5000,
+            "stdin": "1 0 5 -1 6"
+          },
+          {
+            "id": "list-3",
+            "expected": {
+              "stdout": "1,3,"
+            },
+            "maxSteps": 5000,
+            "stdin": "3 0 1 2 3 1 2 -1 2"
+          },
+          {
+            "id": "list-4",
+            "expected": {
+              "stdout": "1,2,"
+            },
+            "maxSteps": 5000,
+            "stdin": "3 0 1 2 3 1 2 -1 3"
+          },
+          {
+            "id": "list-5",
+            "expected": {
+              "stdout": "1,2,3,"
+            },
+            "maxSteps": 5000,
+            "stdin": "4 0 1 2 2 3 1 2 3 -1 2"
+          },
+          {
+            "id": "list-6",
+            "expected": {
+              "stdout": "8,3,4,"
+            },
+            "maxSteps": 5000,
+            "stdin": "4 3 3 7 4 8 2 -1 1 0 7"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-i",
+      "track": "cpp",
+      "printedRef": "Section B, Question 5, Blank I",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the function f such that the program outputs 210."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 2
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int f(int a) {\n    return a {{I}};\n}\nint main() {\n    int ans = 0;\n    for (int i = 1; i <= 70; ++i) {\n        ans += f(i);\n    }\n    cout << ans;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "printed-output",
+            "expected": {
+              "stdout": "210"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-j",
+      "track": "cpp",
+      "printedRef": "Section B, Question 6, Blank J",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Write down the return value of f(64)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 16
+      },
+      "displayCode": {
+        "cpp": "int f(int n) {\n    int sum = 0;\n    for (int i = 1; i <= n; ++i)\n        sum += i & -i;\n    return sum;\n}"
+      },
+      "contextId": "lowbit",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "J": [
+            "256"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-k",
+      "track": "cpp",
+      "printedRef": "Section B, Question 6, Blank K1/K2",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Without calling the function f, complete the following function g, so that g(n) has the same return value as f(n) for 1 ≤ n ≤ 10000."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K1",
+          "maxChars": 10
+        },
+        {
+          "id": "K2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 16
+      },
+      "contextId": "lowbit",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int g(int n) {\n    int i = 2;\n    int sum = {{K1}};\n    while (i <= n) {\n        sum += {{K2}};\n        i *= 2;\n    }\n    return sum;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "2",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 10000,
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "3",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 10000,
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "4",
+            "expected": {
+              "returnValue": 8
+            },
+            "maxSteps": 10000,
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "5",
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 10000,
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "7",
+            "expected": {
+              "returnValue": 12
+            },
+            "maxSteps": 10000,
+            "args": [
+              7
+            ]
+          },
+          {
+            "id": "8",
+            "expected": {
+              "returnValue": 20
+            },
+            "maxSteps": 10000,
+            "args": [
+              8
+            ]
+          },
+          {
+            "id": "16",
+            "expected": {
+              "returnValue": 48
+            },
+            "maxSteps": 10000,
+            "args": [
+              16
+            ]
+          },
+          {
+            "id": "31",
+            "expected": {
+              "returnValue": 80
+            },
+            "maxSteps": 10000,
+            "args": [
+              31
+            ]
+          },
+          {
+            "id": "64",
+            "expected": {
+              "returnValue": 256
+            },
+            "maxSteps": 10000,
+            "args": [
+              64
+            ]
+          },
+          {
+            "id": "100",
+            "expected": {
+              "returnValue": 376
+            },
+            "maxSteps": 10000,
+            "args": [
+              100
+            ]
+          },
+          {
+            "id": "255",
+            "expected": {
+              "returnValue": 1024
+            },
+            "maxSteps": 10000,
+            "args": [
+              255
+            ]
+          },
+          {
+            "id": "999",
+            "expected": {
+              "returnValue": 5052
+            },
+            "maxSteps": 10000,
+            "args": [
+              999
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-l",
+      "track": "cpp",
+      "printedRef": "Section B, Question 7, Blank L",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "However, the program contains a bug. When the input is 0, runtime error occurs. Please indicate which line when the above program executes, runtime error occurs."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "L"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 17
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    for (int i = 0;\n         i < a.size();\n         ++i)\n        cin >> a[i];\n    int sum = 0;\n    for (int i = 0;\n         i < a.size() - 1;\n         ++i)\n        sum += abs(a[i] - a[i + 1]);\n    cout << sum;\n}"
+      },
+      "contextId": "adjacent",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "L": [
+            "23"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-m",
+      "track": "cpp",
+      "printedRef": "Section B, Question 7, Blank M1/M2",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "The bug can be fixed by changing exactly one line. Find the line and correct it so the program can output correctly for all the following cases:\n\n| Input | Output |\n|---|---:|\n| 0 | 0 |\n| 1 5 | 0 |\n| 3 1 3 4 | 3 |\n| 5 2 0 2 2 3 | 5 |"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "M1"
+        },
+        {
+          "id": "M2",
+          "maxChars": 17
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
+        "page": 17
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    for (int i = 0;\n         i < a.size();\n         ++i)\n        cin >> a[i];\n    int sum = 0;\n    for (int i = 0;\n         i < a.size() - 1;\n         ++i)\n        sum += abs(a[i] - a[i + 1]);\n    cout << sum;\n}"
+      },
+      "contextId": "adjacent",
+      "grading": {
+        "kind": "cpp-line-repair",
+        "lineBlank": "M1",
+        "replacementBlank": "M2",
+        "firstLine": 11,
+        "source": "int main() {\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    for (int i = 0;\n         i < a.size();\n         ++i)\n        cin >> a[i];\n    int sum = 0;\n    for (int i = 0;\n         i < a.size() - 1;\n         ++i)\n        sum += abs(a[i] - a[i + 1]);\n    cout << sum;\n}",
+        "cases": [
+          {
+            "id": "empty",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "0"
+          },
+          {
+            "id": "one",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "1 5"
+          },
+          {
+            "id": "three",
+            "expected": {
+              "stdout": "3"
+            },
+            "maxSteps": 10000,
+            "stdin": "3 1 3 4"
+          },
+          {
+            "id": "five",
+            "expected": {
+              "stdout": "5"
+            },
+            "maxSteps": 10000,
+            "stdin": "5 2 0 2 2 3"
+          },
+          {
+            "id": "negative",
+            "expected": {
+              "stdout": "8"
+            },
+            "maxSteps": 10000,
+            "stdin": "2 -3 5"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "hkoi-heat-fitb",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run prepare:assets && vite",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepare:assets": "node scripts/copy-pyodide.mjs",
+    "build": "npm run prepare:assets && npm run typecheck && vite build",
+    "validate:papers": "tsx src/cli/validate-papers.ts",
+    "judge:csv": "tsx src/cli/judge-csv.ts"
+  },
+  "dependencies": {
+    "katex": "^0.18.9",
+    "pyodide": "0.23.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-markdown": "^9.1.0",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0",
+    "zod": "3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "20.17.10",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
+    "tsx": "4.23.15",
+    "typescript": "5.7.2",
+    "vite": "6.4.3",
+    "vitest": "4.1.11"
+  }
+}

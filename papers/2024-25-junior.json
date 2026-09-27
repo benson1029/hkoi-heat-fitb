@@ -1,0 +1,2274 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2024-25-junior",
+    "season": "2024/25",
+    "division": "junior",
+    "title": "HKOI 2024/25 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2025hja.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2025hj_sol.pdf. Pages refer to the combined junior PDF. Multiple choice is outside FITB scope."
+    }
+  },
+  "tracks": [
+    {
+      "id": "paper1",
+      "label": "Paper 1 · compulsory",
+      "selection": "required"
+    },
+    {
+      "id": "python",
+      "label": "Paper 2 · Python",
+      "selection": "choice",
+      "choiceGroup": "paper2"
+    },
+    {
+      "id": "cpp",
+      "label": "Paper 2 · C++",
+      "selection": "choice",
+      "choiceGroup": "paper2"
+    }
+  ],
+  "questions": [
+    {
+      "id": "paper1-a",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 6
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "2026"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "a = 2024\nb = 2025\nif a == b:\n    a = b + 1\nelse:\n    a = b\nb = a + 1\nprint(b)",
+        "cpp": "int main() {\n    int a = 2024;\n    int b = 2025;\n    if (a == b) {\n        a = b + 1;\n    } else {\n        a = b;\n    }\n    b = a + 1;\n    cout << b;\n}"
+      }
+    },
+    {
+      "id": "paper1-b",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Complete the program such that it outputs ioi2025."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 11
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 6
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "s = 'hkoi2024/25'\nt = 'hkoi2025/26'\nu = '{{B}}'\nif s < u and u < t:\n    print(\"ioi2025\")",
+            "harness": {
+              "kind": "program"
+            }
+          },
+          {
+            "language": "cpp",
+            "source": "int main() {\n    string s = \"hkoi2024/25\";\n    string t = \"hkoi2025/26\";\n    string u = \"{{B}}\";\n    if (s < u && u < t)\n        cout << \"ioi2025\";\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "ioi2025"
+            },
+            "stdin": "",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "ioi2025\n"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-c",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Two different cards are chosen randomly from 9 cards numbered 1 to 9. Given that the sum of the numbers of the chosen cards is even, what is the probability that both cards are odd-numbered?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 7
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "5/8",
+            "0.625",
+            "62.5%"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-d",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 4, Blank D",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 7
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "D": [
+            "fhi"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "def f() -> bool:\n    print(\"f\", end=\"\")\n    return False\n\ndef g() -> bool:\n    print(\"g\", end=\"\")\n    return True\n\ndef h() -> bool:\n    print(\"h\", end=\"\")\n    return True\n\nif f() and g() or h():\n    print(\"i\", end=\"\")",
+        "cpp": "bool f() {\n    cout << \"f\";\n    return false;\n}\nbool g() {\n    cout << \"g\";\n    return true;\n}\nbool h() {\n    cout << \"h\";\n    return true;\n}\nint main() {\n    if (f() && g() || h()) {\n        cout << \"i\";\n    }\n}"
+      }
+    },
+    {
+      "id": "paper1-e",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 5, Blank E",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Alice and Bob are standing on an infinitely long number line. The positions on the number line are labelled . . . , −2, −1, 0, 1, 2, . . . from left to right.\n\nInitially, Alice is at position 2024, while Bob is at position 4040. Alice can jump 5 positions to the right each time, while Bob can jump 11 positions to the left each time.\n\nWhat is the minimum number of jumps made by Alice and Bob in total so that they end up at the same position?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "186"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-f",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 6, Blank F",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "For how many different integer inputs between 0 and 100 (inclusive) does this program output Cool?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "19"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "a = int(input())\nans = 0\ni = 0\nwhile i < a:\n    ans += 1\n    a -= 1\n    i += 1\nif ans <= 9:\n    print(\"Cool\")\nelse:\n    print(\"Not cool\")",
+        "cpp": "int main() {\n    int a;\n    cin >> a;\n    int ans = 0;\n    int i = 0;\n    while (i < a) {\n        ans += 1;\n        a -= 1;\n        i += 1;\n    }\n    if (ans <= 9) {\n        cout << \"Cool\";\n    } else {\n        cout << \"Not cool\";\n    }\n}"
+      }
+    },
+    {
+      "id": "paper1-g",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 1(a), Blank G",
+      "title": "Section C, Question 1(a)",
+      "prompt": {
+        "en": "Given an array a of n unique positive integers.\n\nYou are given a function f which, when calling f(i, j) where 0 ≤i, j < n, the values of a[i] and a[j] will be swapped if and only if a[i] > a[j].\n\nComplete the function g so that array a will be sorted in ascending order after calling g(n)."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def g(n: int) -> None:\n    for i in range(n):\n        for j in range(n - i - 1):\n            f({{G}})\nn = int(input())\na = list(map(int, input().split()))\ng(n)\nprint(*a, sep=\",\")",
+            "harness": {
+              "kind": "program"
+            },
+            "helperSource": "a = []\ndef f(i: int, j: int) -> None:\n    if a[i] > a[j]:\n        a[i], a[j] = a[j], a[i]"
+          },
+          {
+            "language": "cpp",
+            "source": "void g(int n) {\n    for (int i = 0; i < n; ++i)\n        for (int j = 0; j < n - i - 1; ++j)\n            f({{G}});\n}\nint main() {\n    int n;\n    cin >> n;\n    for (int i = 0; i < n; ++i) cin >> a[i];\n    g(n);\n    for (int i = 0; i < n; ++i) {\n        if (i) cout << \",\";\n        cout << a[i];\n    }\n}",
+            "harness": {
+              "kind": "program"
+            },
+            "helperSource": "int a[100];\nvoid f(int i, int j) { if (a[i] > a[j]) { int t = a[i]; a[i] = a[j]; a[j] = t; } }"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2,3,4"
+            },
+            "stdin": "4\n3 1 4 2\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2,3,4\n"
+              }
+            }
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2,3,4,5"
+            },
+            "stdin": "5\n5 4 3 2 1\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2,3,4,5\n"
+              }
+            }
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "1\n1\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1\n"
+              }
+            }
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2"
+            },
+            "stdin": "2\n2 1\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2\n"
+              }
+            }
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2,3,4,5"
+            },
+            "stdin": "5\n2 5 1 4 3\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2,3,4,5\n"
+              }
+            }
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2,3,4,5,6"
+            },
+            "stdin": "6\n3 2 6 1 5 4\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2,3,4,5,6\n"
+              }
+            }
+          }
+        ]
+      },
+      "displayCode": {
+        "python": "def g(n: int) -> None:\n    for i in range(n):\n        for j in range(n - i - 1):\n            f({{G}})",
+        "cpp": "void g(int n) {\n    for (int i = 0; i < n; ++i)\n        for (int j = 0; j < n - i - 1; ++j)\n            f({{G}});\n}"
+      }
+    },
+    {
+      "id": "paper1-h",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 1(b), Blank H",
+      "title": "Section C, Question 1(b)",
+      "prompt": {
+        "en": "Given an array a of n unique positive integers.\n\nYou are given a function f which, when calling f(i, j) where 0 ≤i, j < n, the values of a[i] and a[j] will be swapped if and only if a[i] > a[j].\n\nComplete the function h so that array a will be sorted in ascending order after calling h(n)."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def h(n: int) -> None:\n    for i in range(n):\n        for j in range(i + 1, n):\n            f({{H}})\nn = int(input())\na = list(map(int, input().split()))\nh(n)\nprint(*a, sep=\",\")",
+            "harness": {
+              "kind": "program"
+            },
+            "helperSource": "a = []\ndef f(i: int, j: int) -> None:\n    if a[i] > a[j]:\n        a[i], a[j] = a[j], a[i]"
+          },
+          {
+            "language": "cpp",
+            "source": "void h(int n) {\n    for (int i = 0; i < n; ++i)\n        for (int j = i + 1; j < n; ++j)\n            f({{H}});\n}\nint main() {\n    int n;\n    cin >> n;\n    for (int i = 0; i < n; ++i) cin >> a[i];\n    h(n);\n    for (int i = 0; i < n; ++i) {\n        if (i) cout << \",\";\n        cout << a[i];\n    }\n}",
+            "harness": {
+              "kind": "program"
+            },
+            "helperSource": "int a[100];\nvoid f(int i, int j) { if (a[i] > a[j]) { int t = a[i]; a[i] = a[j]; a[j] = t; } }"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2,3,4"
+            },
+            "stdin": "4\n3 1 4 2\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2,3,4\n"
+              }
+            }
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2,3,4,5"
+            },
+            "stdin": "5\n5 4 3 2 1\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2,3,4,5\n"
+              }
+            }
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "1\n1\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1\n"
+              }
+            }
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2"
+            },
+            "stdin": "2\n2 1\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2\n"
+              }
+            }
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2,3,4,5"
+            },
+            "stdin": "5\n2 5 1 4 3\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2,3,4,5\n"
+              }
+            }
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "1,2,3,4,5,6"
+            },
+            "stdin": "6\n3 2 6 1 5 4\n",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "1,2,3,4,5,6\n"
+              }
+            }
+          }
+        ]
+      },
+      "displayCode": {
+        "python": "def h(n: int) -> None:\n    for i in range(n):\n        for j in range(i + 1, n):\n            f({{H}})",
+        "cpp": "void h(int n) {\n    for (int i = 0; i < n; ++i)\n        for (int j = i + 1; j < n; ++j)\n            f({{H}});\n}"
+      }
+    },
+    {
+      "id": "paper1-i",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 2(a), Blank I",
+      "title": "Section C, Question 2(a)",
+      "prompt": {
+        "en": "A perfect grid is a grid with 3 rows and 3 columns, where each cell in the grid is filled with a unique integer between 1 and 9 (inclusive).\n\nConsider the following constraints:\n\n- The sums of the numbers in each row are all equal to X.\n- The sums of the numbers in each column are all equal to X.\n\nIt is known that there exists a perfect grid that satisfies all constraints above. Write down a possible value of X."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "15"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-j",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 2(b), Blank J",
+      "title": "Section C, Question 2(b)",
+      "prompt": {
+        "en": "A perfect grid is a grid with 3 rows and 3 columns, where each cell in the grid is filled with a unique integer between 1 and 9 (inclusive).\n\nConsider the following constraints:\n\n- The sums of the numbers in each row are all equal to Y.\n- The sums of the numbers in each column are all equal to Y.\n- The sum of numbers on the upper left corner and lower right corner is equal to Z.\n- The sum of numbers on the upper right corner and lower left corner is equal to Z.\n\nIt is known that there exists a perfect grid that satisfies all constraints above. Write down a possible value of Z."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "J": [
+            "10"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "python-a",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "-4"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "a = [1, 2, 3, -4, -5]\nans = 0\nfor i in range(4, 0, -1):\n    ans += a[i]\nprint(ans)"
+      }
+    },
+    {
+      "id": "python-b",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "82"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "tmp = 0\narr = [12, 91, 85, 5, 53, 87, 93, 33, 90, 8]\nfor i in range(1, 10):\n    x = abs(arr[i] - arr[i - 1])\n    if x > tmp:\n        tmp = x\nprint(tmp)"
+      }
+    },
+    {
+      "id": "python-c",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "27"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "def b(s: list[int]) -> int:\n    x = s.pop()\n    y = s.pop()\n    s.append(x)\n    return y\n\ntotal = 0\ns = []\ns.append(2)\ns.append(14)\ns.append(9)\ns.append(11)\ns.append(16)\ntotal += b(s)\ntotal += b(s)\ns.pop()\ns.append(7)\nwhile len(s) >= 2:\n    total += s.pop()\n    b(s)\nprint(total)"
+      }
+    },
+    {
+      "id": "python-d",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 4, Blank D",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Let a be a non-empty list of integers. We merge adjacent equal elements into one, until no adjacent elements are equal. For example, [1, 2, 2, 3, 3, 3, 1] will become [1, 2, 3, 1]. Complete the function find_merged_length to return the length of the final list."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def find_merged_length(a: list[int]) -> int:\n    n = len(a)\n    ans = 1\n    for i in range(1, n):\n        if {{D}}:\n            ans += 1\n    return ans",
+            "harness": {
+              "kind": "call",
+              "function": "find_merged_length"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              [
+                1,
+                2,
+                2,
+                3,
+                3,
+                3,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              [
+                1,
+                2,
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              [
+                0,
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-e",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 5, Blank E",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the function fix_first_char, so that fix_first_char(s) returns string s, with the first character of s changed to character ‘H’."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def fix_first_char(s: str) -> str:\n    {{E}}\n    return s\n\nprint(fix_first_char(\"KKOI\"))\n# HKOI\nprint(fix_first_char(\"Long Kong\"))\n# Hong Kong",
+            "harness": {
+              "kind": "call",
+              "function": "fix_first_char"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "HKOI"
+            },
+            "args": [
+              "KKOI"
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Hong Kong"
+            },
+            "args": [
+              "Long Kong"
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Hbc"
+            },
+            "args": [
+              "abc"
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "H"
+            },
+            "args": [
+              "H"
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Hoo"
+            },
+            "args": [
+              "Zoo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-f",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 6, Blank F",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Let a be a two-dimensional integer list of size n×m, complete the function f so that it returns the sum of absolute differences over all pairs of adjacent cell values."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 33
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def f(a: list[list[int]]) -> int:\n    n = len(a)\n    m = len(a[0])\n    ans = 0\n    dx = [1, 0, -1, 0]\n    dy = [0, 1, 0, -1]\n    for i in range(n):\n        for j in range(m):\n            for k in range(4):\n                ni = i + dx[k]\n                nj = j + dy[k]\n                if {{F}}:\n                    ans += abs(a[i][j] - a[ni][nj])\n    return ans // 2",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              [
+                [
+                  1
+                ]
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 6
+            },
+            "args": [
+              [
+                [
+                  1,
+                  2
+                ],
+                [
+                  3,
+                  4
+                ]
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              [
+                [
+                  1,
+                  4,
+                  5
+                ]
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              [
+                [
+                  1
+                ],
+                [
+                  5
+                ],
+                [
+                  2
+                ]
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 30
+            },
+            "args": [
+              [
+                [
+                  0,
+                  9,
+                  0
+                ],
+                [
+                  1,
+                  3,
+                  2
+                ]
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-g",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 1(a), Blank G",
+      "title": "Section C, Question 1(a)",
+      "prompt": {
+        "en": "Alice wants to check if a list of integers contains all equal elements. She implements this in a few different ways. It is guaranteed that the list a has at least one element.\n\nComplete the function check_all_equal1 to return True if and only if list a contains all equal elements."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def check_all_equal1(a: list[int]) -> bool:\n    n = len(a)\n    a.sort()\n    return {{G}}",
+            "harness": {
+              "kind": "call",
+              "function": "check_all_equal1"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1,
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                2,
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                -2,
+                -2
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-h",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 1(b), Blank H",
+      "title": "Section C, Question 1(b)",
+      "prompt": {
+        "en": "Alice wants to check if a list of integers contains all equal elements. She implements this in a few different ways. It is guaranteed that the list a has at least one element.\n\nComplete the function check_all_equal2 to return True if and only if list a contains all equal elements."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def check_all_equal2(a: list[int]) -> bool:\n    n = len(a)\n    result = True\n    for x in a:\n        result &= (x == {{H}})\n    return result",
+            "harness": {
+              "kind": "call",
+              "function": "check_all_equal2"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1,
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                2,
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                -2,
+                -2
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-i",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 1(c), Blank I1, I2",
+      "title": "Section C, Question 1(c)",
+      "prompt": {
+        "en": "Alice wants to check if a list of integers contains all equal elements. She implements this in a few different ways. It is guaranteed that the list a has at least one element.\n\nComplete the function check_all_equal3 to return True if and only if the list a contains all equal elements."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I1",
+          "maxChars": 3
+        },
+        {
+          "id": "I2",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def check_all_equal3(a: list[int]) -> bool:\n    n = len(a)\n    v = 0\n    c = 0\n    for x in a:\n        if x == v:\n            c += 1\n        else:\n            v = {{I1}}\n            c = {{I2}}\n    return c == n",
+            "harness": {
+              "kind": "call",
+              "function": "check_all_equal3"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1,
+                1,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                2,
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                -2,
+                -2
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-j",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 2(a), Blank J",
+      "title": "Section C, Question 2(a)",
+      "prompt": {
+        "en": "You own a small boat. Now, using the boat, you want to transport n boxes identical in size but with different weights across the river.\n\nThe maximum capacity of the boat is 2 boxes, while the maximum weight the boat can support is w kg. You do not need to consider your own weight.\n\nThe weights of the boxes are given in a integer list a, which for all 0 ≤i < n, the weight of box i is a[i] kg. It is known that the weight of any single box does not exceeds w kg.\n\nComplete the function is_satisfied, so that is_satisfied(a, w, x, y) returns whether box x and box y can be put onto the boat at the same time."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 19
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def is_satisfied(a: list[int], w: int, x: int, y: int) -> bool:\n    return {{J}}",
+            "harness": {
+              "kind": "call",
+              "function": "is_satisfied"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                2,
+                3
+              ],
+              5,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                2,
+                3
+              ],
+              4,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                10,
+                1,
+                5
+              ],
+              11,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                10,
+                1,
+                5
+              ],
+              14,
+              0,
+              2
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-k",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 2(b), Blank K1, K2, K3, K4",
+      "title": "Section C, Question 2(b)",
+      "prompt": {
+        "en": "You own a small boat. Now, using the boat, you want to transport n boxes identical in size but with different weights across the river.\n\nThe maximum capacity of the boat is 2 boxes, while the maximum weight the boat can support is w kg. You do not need to consider your own weight.\n\nThe weights of the boxes are given in a integer list a, which for all 0 ≤i < n, the weight of box i is a[i] kg. It is known that the weight of any single box does not exceeds w kg.\n\nComplete the function find_minimum_rounds, so that find_minimum_rounds(a, w) returns the minimum number of round trips of boats, in order to transfer all the boxes across the river."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K1",
+          "maxChars": 5
+        },
+        {
+          "id": "K2",
+          "maxChars": 5
+        },
+        {
+          "id": "K3",
+          "maxChars": 5
+        },
+        {
+          "id": "K4",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 19
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def find_minimum_rounds(a: list[int], w: int) -> int:\n    n = len(a)\n    # sorts a in ascending order 將a 以遞增次序排序\n    a.sort()\n    l, r = 0, n - 1\n    ans = 0\n    while {{K1}}:\n        if is_satisfied(a, w, l, r):\n            {{K2}}\n            {{K3}}\n        else:\n            {{K4}}\n        ans += 1\n    return ans",
+            "harness": {
+              "kind": "call",
+              "function": "find_minimum_rounds"
+            },
+            "helperSource": "def is_satisfied(a: list[int], w: int, x: int, y: int) -> bool:\n    return a[x] + a[y] <= w"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                5
+              ],
+              5
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                1,
+                1
+              ],
+              2
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              [
+                2,
+                3
+              ],
+              4
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4
+              ],
+              5
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              [
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              7
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-l",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 1, Blank L",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "L"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 23
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "L": [
+            "16"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    int ans = 0;\n    for (int i = 0; i < 8; ++i)\n        for (int j = 0; j < i - j; ++j)\n            ++ans;\n    cout << ans;\n}"
+      }
+    },
+    {
+      "id": "cpp-m",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 2, Blank M",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "M"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 23
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "M": [
+            "23"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    int cnt = 0;\n    for (int i = 1; i <= 77; ++i) {\n        if (i % 7 == 0 || i % 10 == 7 || i / 10 == 7) {\n            ++cnt;\n        }\n    }\n    cout << cnt;\n}"
+      }
+    },
+    {
+      "id": "cpp-n",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 3, Blank N",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "N"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 24
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "N": [
+            "1213121"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    stack<int> a;\n    a.push(3);\n    while (!a.empty()) {\n        int x = a.top();\n        a.pop();\n        if (x < 0) {\n            cout << -x;\n        }\n        if (x > 0) {\n            a.push(x - 1);\n            a.push(-x);\n            a.push(x - 1);\n        }\n    }\n}"
+      }
+    },
+    {
+      "id": "cpp-o",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 4, Blank O",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "In Byteland Secondary School, each school day consists of 7 periods numbered from 0 to 6, inclusive. The arrays alice and bob store the names of the lessons that Alice and Bob have for each period of the day, respectively. Complete the program such that it outputs the name of the earliest (by period number) lesson common to both Alice and Bob. In the case where Alice and Bob share no common periods, the output is empty."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "O",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 24
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string alice[7] = {\n    \"Chinese\", \"English\", \"Math\", \"Math\", \"CSD\", \"PE\", \"PE\"\n};\nstring bob[7] = {\n    \"Biology\", \"Biology\", \"Math\", \"Math\", \"Chinese\", \"PE\", \"PE\"\n};\nint main() {\n    string ans = \"\";\n    for (int i = 0; i < 7; ++i) {\n        if (alice[i] == bob[i]) {\n            ans = bob[i];\n            {{O}};\n        }\n    }\n    cout << ans;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Math"
+            },
+            "stdin": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-p",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 5, Blank P",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume a is an array of n elements sorted in ascending order with unique elements. Complete the function NextLargerElement such that it returns the index of the smallest element in a that is larger than x. If there are no elements larger than x, NextLargerElement should return n."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "P",
+          "maxChars": 6
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 25
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int NextLargerElement(vector<int> &a, int x) {\n    int n = a.size();\n    int k = n;\n    for (int i = n - 1; i >= 0; --i) {\n        if ({{P}}) {\n            k = i;\n        }\n    }\n    return k;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "NextLargerElement"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              [
+                1,
+                3,
+                5
+              ],
+              0
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                1,
+                3,
+                5
+              ],
+              1
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              [
+                1,
+                3,
+                5
+              ],
+              4
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              [
+                1,
+                3,
+                5
+              ],
+              5
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                -5,
+                0,
+                9
+              ],
+              -4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-q",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 6, Blank Q",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Given an array of non-negative integers, its H-index is the largest integer h ≥0, such that at least h of the values in the array are greater than or equal to h. Complete the following function to compute the H-index of the array a."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "Q",
+          "maxChars": 9
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 25
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int f(vector<int> &a) {\n    int n = a.size();\n    // sorts a in ascending order 將a 以遞增次序排序\n    sort(a.begin(), a.end());\n    for (int i = n; i > 0; --i) {\n        if ({{Q}}) {\n            return i;\n        }\n    }\n    return 0;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              [
+                3,
+                0,
+                6,
+                1,
+                5
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              [
+                0,
+                0
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 4
+            },
+            "args": [
+              [
+                4,
+                4,
+                4,
+                4
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-r",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section C, Question 1(a), Blank R1, R2",
+      "title": "Section C, Question 1(a)",
+      "prompt": {
+        "en": "Given an array a of n unique positive integers.\n\nComplete the function FindMax such that it returns the index of the largest element in a."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "R1",
+          "maxChars": 20
+        },
+        {
+          "id": "R2",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 27
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int FindMax(vector<int> &a) {\n    int x = -1;\n    int n = a.size();\n    for (int i = 0; i < n; ++i) {\n        if ({{R1}}) {\n            {{R2}};\n        }\n    }\n    return x;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "FindMax"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                1,
+                5,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              [
+                4,
+                3,
+                2
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              [
+                2,
+                3,
+                9
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              [
+                10,
+                8,
+                20,
+                1
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-s",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section C, Question 1(b), Blank S1, S2, S3",
+      "title": "Section C, Question 1(b)",
+      "prompt": {
+        "en": "Given an array a of n unique positive integers.\n\nComplete the function FindKthSmallest such that it returns the index of the k-th smallest element in a."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "S1",
+          "maxChars": 6
+        },
+        {
+          "id": "S2",
+          "maxChars": 15
+        },
+        {
+          "id": "S3",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 27
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int FindKthSmallest(vector<int> a, int k) {\n    int n = a.size();\n    for (int i = 0; i < n; ++i) {\n        if ({{S1}}) {\n            {{S2}} = 0;\n        }\n    }\n    return {{S3}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "FindKthSmallest"
+            },
+            "helperSource": "int FindMax(vector<int> &a) { int x = -1; for (int i = 0; i < a.size(); ++i) if (x == -1 || a[i] > a[x]) x = i; return x; }"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              [
+                1
+              ],
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                5,
+                1,
+                9,
+                3
+              ],
+              1
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              [
+                5,
+                1,
+                9,
+                3
+              ],
+              2
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              [
+                5,
+                1,
+                9,
+                3
+              ],
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-t",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section C, Question 2(a), Blank T1, T2",
+      "title": "Section C, Question 2(a)",
+      "prompt": {
+        "en": "The Byteland Meteorological Agency is upgrading their weather stations to be automated. One of the goals is to calculate the Maximum Sustained Wind over a period of data gathering. A Sustained Wind is the average value of a continuous window of len data points.\n\ndata_points stores the values of N data points gathered. It is guaranteed that 1 ≤len ≤N ≤10000 and 1 ≤data_points[i] ≤100.\n\nComplete the function MaxSum such that it returns the maximum sum of values of a continuous window of len data points."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "T1",
+          "maxChars": 11
+        },
+        {
+          "id": "T2",
+          "maxChars": 11
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 28
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int MaxSum(vector<int> &data_points, int len) {\n    int number_of_points = data_points.size();\n    int sum = 0;\n    int max_sum = -1;\n    for (int i = 0; i < number_of_points; ++i) {\n        sum += data_points[i];\n        if (i >= {{T1}}) {\n            max_sum = max(max_sum, sum);\n            sum -= data_points[{{T2}}];\n        }\n    }\n    return max_sum;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "MaxSum"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                1
+              ],
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              [
+                1,
+                2,
+                3
+              ],
+              1
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4
+              ],
+              2
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 11
+            },
+            "args": [
+              [
+                10,
+                1,
+                1,
+                10
+              ],
+              2
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 15
+            },
+            "args": [
+              [
+                3,
+                4,
+                1,
+                5,
+                9
+              ],
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-u",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section C, Question 2(b), Blank U",
+      "title": "Section C, Question 2(b)",
+      "prompt": {
+        "en": "The Byteland Meteorological Agency is upgrading their weather stations to be automated. One of the goals is to calculate the Maximum Sustained Wind over a period of data gathering. A Sustained Wind is the average value of a continuous window of len data points.\n\ndata_points stores the values of N data points gathered. It is guaranteed that 1 ≤len ≤N ≤10000 and 1 ≤data_points[i] ≤100.\n\nAssuming MaxSum is correctly implemented, complete the function MaxSustainedWind such that it returns the maximum sustained wind in a floating point value."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "U",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2025hj.pdf",
+        "page": 28
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "double MaxSustainedWind(vector<int> &data_points, int len) {\n    return {{U}}MaxSum(data_points, len) / len;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "MaxSustainedWind"
+            },
+            "helperSource": "int MaxSum(vector<int> &data_points, int len) { int best = -1; for (int i = 0; i + len <= data_points.size(); ++i) { int sum = 0; for (int j = i; j < i + len; ++j) sum += data_points[j]; best = max(best, sum); } return best; }"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                1
+              ],
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3.5
+            },
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4
+              ],
+              2
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              [
+                3,
+                4,
+                1,
+                5,
+                9
+              ],
+              3
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

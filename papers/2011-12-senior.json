@@ -1,0 +1,1706 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2011-12-senior",
+    "season": "2011/12",
+    "division": "senior",
+    "title": "HKOI2012 Heat Event (Senior Group)",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+      "note": "Local archive: 2012 (with MC sol & corrected ANS)/2012hse.pdf and 2012hsa.pdf. Section B pages 8–10; answer-sheet boxes page 1."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B Q1 A",
+      "title": "Section B Q1 A",
+      "prompt": {
+        "en": "A. Write an expression which gives the maximum of two non-negative integers x and y."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "label": "A",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "pending",
+        "reason": "Requires the median helper m(a,b,c), C expression evaluation, and invariant checking over the permitted non-negative domain.",
+        "intendedEngine": "c"
+      },
+      "contextId": "section-b-q1"
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B Q1 B",
+      "title": "Section B Q1 B",
+      "prompt": {
+        "en": "B. Write an expression which gives the maximum of two integers x and y"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B",
+          "label": "B",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "pending",
+        "reason": "Requires the median helper m(a,b,c), C expression evaluation, and invariant checking over the full signed integer domain.",
+        "intendedEngine": "c"
+      },
+      "contextId": "section-b-q1"
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B Q2 C",
+      "title": "Section B Q2 C",
+      "prompt": {
+        "en": ""
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C",
+          "label": "C",
+          "maxChars": 9
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "pending",
+        "reason": "Requires independent blank testing for the printed C code while preserving its undeclared-variable preface and omitted declaration line.",
+        "intendedEngine": "c"
+      },
+      "contextId": "section-b-q2"
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B Q2 D",
+      "title": "Section B Q2 D",
+      "prompt": {
+        "en": ""
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D",
+          "label": "D",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "pending",
+        "reason": "Requires independent blank testing for the printed C code while preserving its undeclared-variable preface and omitted declaration line.",
+        "intendedEngine": "c"
+      },
+      "contextId": "section-b-q2"
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B Q2 E",
+      "title": "Section B Q2 E",
+      "prompt": {
+        "en": ""
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E",
+          "label": "E",
+          "maxChars": 39
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 8
+      },
+      "grading": {
+        "kind": "pending",
+        "reason": "Requires independent blank testing for the printed C code while preserving its undeclared-variable preface and omitted declaration line.",
+        "intendedEngine": "c"
+      },
+      "contextId": "section-b-q2"
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B Q3 F",
+      "title": "Section B Q3 F",
+      "prompt": {
+        "en": "If we add all of its digits for a certain positive integer, we could get a new positive integer. This procedure could be repeated, until the final result has only one digit.\n\nFor example, 1234 would produce a new integer 10 (1+2+3+4), and finally 1 (1+0). Janet wants to write a program to input a 5-digit positive integer less than 32768, and output the final single digit after performing the above-mentioned procedure.\n\nHere is her code:\n\n```c\n#include <stdio.h>\nint x;\nint main(){\n  scanf(\"%d\",&x);\n  printf(\"%d\", x-(x+1)/9*9);\n}\n```\n\nHowever, she realizes that her program does not work for some cases.\nHelp Janet write down in F a counter-example which is within the input range."
+      },
+      "points": 3,
+      "blanks": [
+        {
+          "id": "F",
+          "label": "F",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "pending",
+        "reason": "Requires the printed two-tier 2/3-mark scoring rubric for any correct counter-example versus the maximum counter-example; v1 grading is pass/fail only.",
+        "intendedEngine": "c"
+      }
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B Q4 G",
+      "title": "Section B Q4 G",
+      "prompt": {
+        "en": "G. Write a command to make the robot visit each grid at least once."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "label": "G",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "robot-grid",
+        "answerBlank": "G",
+        "dialect": {
+          "commands": {
+            "˄": [
+              0,
+              -1
+            ],
+            "^": [
+              0,
+              -1
+            ],
+            "˅": [
+              0,
+              1
+            ],
+            "v": [
+              0,
+              1
+            ],
+            "<": [
+              -1,
+              0
+            ],
+            ">": [
+              1,
+              0
+            ]
+          },
+          "repeatSyntax": "both",
+          "invalidMove": "ignore",
+          "maxRepeat": 9
+        },
+        "worlds": [
+          {
+            "id": "fixed-start",
+            "width": 9,
+            "height": 9,
+            "starts": [
+              [
+                0,
+                0
+              ]
+            ],
+            "blocked": [],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          }
+        ]
+      },
+      "contextId": "robot-open-grid"
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B Q4 H",
+      "title": "Section B Q4 H",
+      "prompt": {
+        "en": "H. Assume that the robot can be start at any position in the grid, Write a command to make the robot visit each grid at least once."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "H",
+          "label": "H",
+          "maxChars": 20
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "robot-grid",
+        "answerBlank": "H",
+        "dialect": {
+          "commands": {
+            "˄": [
+              0,
+              -1
+            ],
+            "^": [
+              0,
+              -1
+            ],
+            "˅": [
+              0,
+              1
+            ],
+            "v": [
+              0,
+              1
+            ],
+            "<": [
+              -1,
+              0
+            ],
+            ">": [
+              1,
+              0
+            ]
+          },
+          "repeatSyntax": "both",
+          "invalidMove": "ignore",
+          "maxRepeat": 9
+        },
+        "worlds": [
+          {
+            "id": "any-start",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          }
+        ]
+      },
+      "contextId": "robot-open-grid"
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B Q4 I",
+      "title": "Section B Q4 I",
+      "prompt": {
+        "en": "I. Write a command to make the robot visit each '.' grid at least once."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I",
+          "label": "I",
+          "maxChars": 18
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "robot-grid",
+        "answerBlank": "I",
+        "dialect": {
+          "commands": {
+            "˄": [
+              0,
+              -1
+            ],
+            "^": [
+              0,
+              -1
+            ],
+            "˅": [
+              0,
+              1
+            ],
+            "v": [
+              0,
+              1
+            ],
+            "<": [
+              -1,
+              0
+            ],
+            ">": [
+              1,
+              0
+            ]
+          },
+          "repeatSyntax": "both",
+          "invalidMove": "ignore",
+          "maxRepeat": 9
+        },
+        "worlds": [
+          {
+            "id": "fixed-start-fixed-obstacle",
+            "width": 9,
+            "height": 9,
+            "starts": [
+              [
+                0,
+                0
+              ]
+            ],
+            "blocked": [
+              [
+                4,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          }
+        ]
+      },
+      "contextId": "robot-obstacle-grid"
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B Q4 J",
+      "title": "Section B Q4 J",
+      "prompt": {
+        "en": "J. Assume that the robot can be start at any position in the grid, write a command to make the robot visit each '.' grid at least once."
+      },
+      "points": 2.5,
+      "blanks": [
+        {
+          "id": "J",
+          "label": "J",
+          "maxChars": 23
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "robot-grid",
+        "answerBlank": "J",
+        "dialect": {
+          "commands": {
+            "˄": [
+              0,
+              -1
+            ],
+            "^": [
+              0,
+              -1
+            ],
+            "˅": [
+              0,
+              1
+            ],
+            "v": [
+              0,
+              1
+            ],
+            "<": [
+              -1,
+              0
+            ],
+            ">": [
+              1,
+              0
+            ]
+          },
+          "repeatSyntax": "both",
+          "invalidMove": "ignore",
+          "maxRepeat": 9
+        },
+        "worlds": [
+          {
+            "id": "any-start-fixed-obstacle",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          }
+        ]
+      },
+      "contextId": "robot-obstacle-grid"
+    },
+    {
+      "id": "K",
+      "track": "section-b",
+      "printedRef": "Section B Q4 K",
+      "title": "Section B Q4 K",
+      "prompt": {
+        "en": "K. Assume that the robot can be start at any position in the grid and the obstacle can also appear anywhere in the grid, Write a command to make the robot visit each '.' grid at least once."
+      },
+      "points": 3,
+      "blanks": [
+        {
+          "id": "K",
+          "label": "K",
+          "maxChars": 44
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "robot-grid",
+        "answerBlank": "K",
+        "dialect": {
+          "commands": {
+            "˄": [
+              0,
+              -1
+            ],
+            "^": [
+              0,
+              -1
+            ],
+            "˅": [
+              0,
+              1
+            ],
+            "v": [
+              0,
+              1
+            ],
+            "<": [
+              -1,
+              0
+            ],
+            ">": [
+              1,
+              0
+            ]
+          },
+          "repeatSyntax": "both",
+          "invalidMove": "ignore",
+          "maxRepeat": 9
+        },
+        "worlds": [
+          {
+            "id": "obstacle-0-0",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                0,
+                0
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-1-0",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                1,
+                0
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-2-0",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                2,
+                0
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-3-0",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                3,
+                0
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-4-0",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                0
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-5-0",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                5,
+                0
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-6-0",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                6,
+                0
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-7-0",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                7,
+                0
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-8-0",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                8,
+                0
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-0-1",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                0,
+                1
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-1-1",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                1,
+                1
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-2-1",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                2,
+                1
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-3-1",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                3,
+                1
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-4-1",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                1
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-5-1",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                5,
+                1
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-6-1",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                6,
+                1
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-7-1",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                7,
+                1
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-8-1",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                8,
+                1
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-0-2",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                0,
+                2
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-1-2",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                1,
+                2
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-2-2",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                2,
+                2
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-3-2",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                3,
+                2
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-4-2",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                2
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-5-2",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                5,
+                2
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-6-2",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                6,
+                2
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-7-2",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                7,
+                2
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-8-2",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                8,
+                2
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-0-3",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                0,
+                3
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-1-3",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                1,
+                3
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-2-3",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                2,
+                3
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-3-3",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                3,
+                3
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-4-3",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                3
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-5-3",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                5,
+                3
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-6-3",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                6,
+                3
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-7-3",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                7,
+                3
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-8-3",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                8,
+                3
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-0-4",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                0,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-1-4",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                1,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-2-4",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                2,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-3-4",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                3,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-4-4",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-5-4",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                5,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-6-4",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                6,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-7-4",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                7,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-8-4",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                8,
+                4
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-0-5",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                0,
+                5
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-1-5",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                1,
+                5
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-2-5",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                2,
+                5
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-3-5",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                3,
+                5
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-4-5",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                5
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-5-5",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                5,
+                5
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-6-5",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                6,
+                5
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-7-5",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                7,
+                5
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-8-5",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                8,
+                5
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-0-6",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                0,
+                6
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-1-6",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                1,
+                6
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-2-6",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                2,
+                6
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-3-6",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                3,
+                6
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-4-6",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                6
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-5-6",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                5,
+                6
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-6-6",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                6,
+                6
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-7-6",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                7,
+                6
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-8-6",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                8,
+                6
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-0-7",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                0,
+                7
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-1-7",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                1,
+                7
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-2-7",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                2,
+                7
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-3-7",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                3,
+                7
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-4-7",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                7
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-5-7",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                5,
+                7
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-6-7",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                6,
+                7
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-7-7",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                7,
+                7
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-8-7",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                8,
+                7
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-0-8",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                0,
+                8
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-1-8",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                1,
+                8
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-2-8",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                2,
+                8
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-3-8",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                3,
+                8
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-4-8",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                4,
+                8
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-5-8",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                5,
+                8
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-6-8",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                6,
+                8
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-7-8",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                7,
+                8
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          },
+          {
+            "id": "obstacle-8-8",
+            "width": 9,
+            "height": 9,
+            "starts": "all-free",
+            "blocked": [
+              [
+                8,
+                8
+              ]
+            ],
+            "requiredVisited": "all-free",
+            "maxMoves": 999
+          }
+        ]
+      },
+      "contextId": "robot-obstacle-grid"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "section-b-q1",
+      "track": "section-b",
+      "title": "Section B Q1",
+      "markdown": "Let m(a,b,c) be a function that gives the median of the three integers a, b and c.\nFor example, m(2,1,3) = 2. Answer A and B using this function.\nThe characters \"?\", \":\", \"<\" and \">\" are not allowed."
+    },
+    {
+      "id": "section-b-q2",
+      "track": "section-b",
+      "title": "Section B Q2",
+      "markdown": "For problem C to E, please consider the following situation.\n\nAlice has written a program to find all the prime numbers in the range [1,25]. Complete the following program segment below.\n\n```c\nint is_prime[6];\nint prime;\n......\nis_prime[2]=1;\nis_prime[3]=1;\nis_prime[4]=0;\nis_prime[5]= ______(C)_______;\nfor (i=___(D)_____; i<=25; i++) {\n  prime=1;\n  for (j=2; j<=5; j++)\n    if (________(E)_______)\n      prime=0;\n  if (prime==1) printf(\"%d\\n\",i);\n}\n```"
+    },
+    {
+      "id": "robot-open-grid",
+      "track": "section-b",
+      "title": "Section B Q4 G–H",
+      "markdown": "There is a robot in a grid. You can use a command to control the robot:\n\n```text\n˄ : up\n˅ : down\n< : left\n> : right\n[Command]num : repeat Command for num times, where num is an integer from 1 to 9 (inclusive).\n```\n\nFormally, ‘˄’, ‘˅’, ‘<’, ‘>’ are moves. One or more moves forms a Command. (Command)num is also a command. Concatenation of two commands is also a command.\n\nIf a move will result the robot out of boundary or hit an obstacle, the robot will ignore that move.\nIn the following problems, you need to write a command to fulfill the task, where the robot should make less than 1000 moves and the length of the command must not exceed than the provided space.\n\n```text\nR........\n.........\n.........\n.........\n.........\n.........\n.........\n.........\n.........\n```\n\nR is the initial position of the robot."
+    },
+    {
+      "id": "robot-obstacle-grid",
+      "track": "section-b",
+      "title": "Section B Q4 I–K",
+      "markdown": "There is a robot in a grid. You can use a command to control the robot:\n\n```text\n˄ : up\n˅ : down\n< : left\n> : right\n[Command]num : repeat Command for num times, where num is an integer from 1 to 9 (inclusive).\n```\n\nFormally, ‘˄’, ‘˅’, ‘<’, ‘>’ are moves. One or more moves forms a Command. (Command)num is also a command. Concatenation of two commands is also a command.\n\nIf a move will result the robot out of boundary or hit an obstacle, the robot will ignore that move.\nIn the following problems, you need to write a command to fulfill the task, where the robot should make less than 1000 moves and the length of the command must not exceed than the provided space.\n\n```text\nR........\n.........\n.........\n.........\n....*....\n.........\n.........\n.........\n.........\n```\n\n* is an obstacle"
+    }
+  ]
+}

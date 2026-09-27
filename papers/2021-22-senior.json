@@ -1,0 +1,944 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2021-22-senior",
+    "season": "2021/22",
+    "division": "senior",
+    "title": "HKOI 2021/22 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2022hs_sol.pdf. Page numbers are those of the combined 19-page paper; Pascal is outside this corpus and C++ is used where C and C++ alternatives are printed."
+    }
+  },
+  "tracks": [
+    {
+      "id": "cpp",
+      "label": "Section B · C++",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "maze",
+      "track": "cpp",
+      "markdown": "Consider the following 8×8 maze. The arrow represents Alice.\n\n```text\n########\n#>.#..##\n#......#\n#..##.##\n##.....#\n#..##.##\n##..#.##\n########\n```\n\nAlice is facing the direction that the arrow is pointing, and would like to walk in the maze. In each move, she may only perform either one of the following actions:\n\n1. Walk to the cell in front of her, or\n2. Rotate 90 degrees clockwise and immediately walk to the cell in front of her.\n\nShe may perform an action only if it does not make her walk into a black cell (she cannot perform the rotation only and not move forward). She can move to the cells that she has visited and the path may end at any cell. The starting cell is considered visited."
+    },
+    {
+      "id": "attacks",
+      "track": "cpp",
+      "markdown": "In a game, there is a game board of n rows and m columns, a monster is located on each cell. A warrior is located at (x,y), meaning the xth row and yth column. He has two attack modes: s-attack and e-attack.\n\nWith s-attack, he can kill all monsters on the diagonal from top left to bottom right passing through (x,y).\nWith e-attack, he can kill all monsters on the diagonal from top right to bottom left passing through (x,y).\n\nRefer to the following diagram. The warrior is located at (2,3), denoted as X.\nWith s-attack, He can kill all the monsters on cells denoted as S, including (2,3).\nWith e-attack, He can kill all the monsters on cells denoted as E, including (2,3).\n\n```text\n    1 2 3 4 5 6 7\n1   . S . E . . .\n2   . . X . . . .\n3   . E . S . . .\n4   E . . . S . .\n5   . . . . . S .\n```"
+    },
+    {
+      "id": "numbers",
+      "track": "cpp",
+      "markdown": "Alice and Peter are playing a game of numbers! Rules of the game are as follows:\n\nIn the beginning of the game, each of Alice and Peter has an array of n integers. Alice and Peter take turns to remove an element from their array, with Alice being the first to move. The game ends when there is one element remaining in each of Alice’s and Peter’s array.\n\nAlice tries to maximise the absolute difference of the 2 remaining elements, while Peter tries to minimise it. Suppose Alice and Peter both play optimally, find the absolute difference of the remaining elements."
+    },
+    {
+      "id": "multiply",
+      "track": "cpp",
+      "markdown": "Consider the following function:"
+    },
+    {
+      "id": "digit",
+      "track": "cpp",
+      "markdown": "Consider the following function:"
+    },
+    {
+      "id": "bridge",
+      "track": "cpp",
+      "markdown": "In a game, N participants, one by one in order, cross a bridge formed by K pairs of indistinguishable glass panels. At the beginning of the game, participants know nothing about how the glass panels are set up, except for the fact that: for every pair of glass panels, one of them is tempered glass which can support participant’s weight, and another one is fragile glass which cannot.\n\nIn every step, a participant chooses one panel from the next pair to step on. When a participant steps on a fragile glass panel, the panel breaks and the participant gets eliminated. If steps on a tempered glass panel, the participant continues to the next step. A participant wins when arrives at the other end of the bridge. Assume all participants are smart and only aim for their personal win, and they can see which panels are broken and the decisions made by participants in front of them.\n\nFor the questions below, if the answer is not an integer, express the answer using reduced fraction."
+    }
+  ],
+  "questions": [
+    {
+      "id": "cpp-a",
+      "track": "cpp",
+      "printedRef": "Section B, Question 1, Blank A1/A2/A3",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Complete the blanks below, so that g(a, b) returns the value of aᵇ. It is guaranteed that a, b > 0, aᵇ ≤ 2³¹ − 1."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A1",
+          "maxChars": 5
+        },
+        {
+          "id": "A2",
+          "maxChars": 5
+        },
+        {
+          "id": "A3",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 13,
+        "note": "Official C++ solution uses A1=c, A2=c, A3=1. Test exponents are chosen to avoid overflow in the printed a*a evaluation, which occurs even on the final recursive call."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int f(int a, int b, int c) {\n    if (b == 0)\n        return {{A1}};\n    else if ((b & 1) != 0)\n        return f(a * a, b / 2, c * a);\n    else\n        return f(a * a, b / 2, {{A2}});\n}\n\nint g(int a, int b) {\n    return f(a, b, {{A3}});\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "1-1",
+            "args": [
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "1-10",
+            "args": [
+              1,
+              10
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "2-1",
+            "args": [
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "2-2",
+            "args": [
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "2-7",
+            "args": [
+              2,
+              7
+            ],
+            "expected": {
+              "returnValue": 128
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "2-14",
+            "args": [
+              2,
+              14
+            ],
+            "expected": {
+              "returnValue": 16384
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "3-1",
+            "args": [
+              3,
+              1
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "3-3",
+            "args": [
+              3,
+              3
+            ],
+            "expected": {
+              "returnValue": 27
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "3-7",
+            "args": [
+              3,
+              7
+            ],
+            "expected": {
+              "returnValue": 2187
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "5-1",
+            "args": [
+              5,
+              1
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "5-2",
+            "args": [
+              5,
+              2
+            ],
+            "expected": {
+              "returnValue": 25
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "5-5",
+            "args": [
+              5,
+              5
+            ],
+            "expected": {
+              "returnValue": 3125
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "10-1",
+            "args": [
+              10,
+              1
+            ],
+            "expected": {
+              "returnValue": 10
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "10-4",
+            "args": [
+              10,
+              4
+            ],
+            "expected": {
+              "returnValue": 10000
+            },
+            "maxSteps": 5000
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-b",
+      "track": "cpp",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "A cell is reachable by Alice if and only if there exists a valid path along which Alice visited the cell. What is the number of cells that are reachable by Alice?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 14,
+        "note": "The 8×8 printed maze has been transcribed as a monospace grid in context; # is black, . is white, > is Alice facing right."
+      },
+      "contextId": "maze",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "20"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-c",
+      "track": "cpp",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "What is the maximum number of different cells that Alice can visit in a single valid path? The starting cell is included."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 14,
+        "note": "The 8×8 printed maze has been transcribed as a monospace grid in context; # is black, . is white, > is Alice facing right."
+      },
+      "contextId": "maze",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "16"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-d",
+      "track": "cpp",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Complete the function attack_s such that it outputs the coordinates of all monsters that the warrior can kill with s-attack, including (x,y)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 15
+      },
+      "contextId": "attacks",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "void attack_s (int n, int m, int x, int y) {\n    int i, j;\n    for (i = 1; i <= n; i++)\n        for (j = 1; j <= m; j++)\n            if ({{D}})\n                cout << i << \",\" << j << endl;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "attack_s"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "1-1-1-1",
+            "args": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "expected": {
+              "stdout": "1,1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "5-7-2-3",
+            "args": [
+              5,
+              7,
+              2,
+              3
+            ],
+            "expected": {
+              "stdout": "1,2\n2,3\n3,4\n4,5\n5,6\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "5-7-1-1",
+            "args": [
+              5,
+              7,
+              1,
+              1
+            ],
+            "expected": {
+              "stdout": "1,1\n2,2\n3,3\n4,4\n5,5\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "5-7-5-7",
+            "args": [
+              5,
+              7,
+              5,
+              7
+            ],
+            "expected": {
+              "stdout": "1,3\n2,4\n3,5\n4,6\n5,7\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "3-9-2-8",
+            "args": [
+              3,
+              9,
+              2,
+              8
+            ],
+            "expected": {
+              "stdout": "1,7\n2,8\n3,9\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "9-3-8-2",
+            "args": [
+              9,
+              3,
+              8,
+              2
+            ],
+            "expected": {
+              "stdout": "7,1\n8,2\n9,3\n"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-e",
+      "track": "cpp",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Complete the function attack_e such that it outputs the coordinates of all monsters that the warrior can kill with e-attack, including (x,y)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 16
+      },
+      "contextId": "attacks",
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "void attack_e (int n, int m, int x, int y) {\n    int i, j;\n    for (i = 1; i <= n; i++)\n        for (j = 1; j <= m; j++)\n            if ({{E}})\n                cout << i << \",\" << j << endl;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "attack_e"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "1-1-1-1",
+            "args": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "expected": {
+              "stdout": "1,1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "5-7-2-3",
+            "args": [
+              5,
+              7,
+              2,
+              3
+            ],
+            "expected": {
+              "stdout": "1,4\n2,3\n3,2\n4,1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "5-7-1-1",
+            "args": [
+              5,
+              7,
+              1,
+              1
+            ],
+            "expected": {
+              "stdout": "1,1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "5-7-5-7",
+            "args": [
+              5,
+              7,
+              5,
+              7
+            ],
+            "expected": {
+              "stdout": "5,7\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "3-9-2-8",
+            "args": [
+              3,
+              9,
+              2,
+              8
+            ],
+            "expected": {
+              "stdout": "1,9\n2,8\n3,7\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "9-3-8-2",
+            "args": [
+              9,
+              3,
+              8,
+              2
+            ],
+            "expected": {
+              "stdout": "7,3\n8,2\n9,1\n"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-f",
+      "track": "cpp",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Given Alice’s array is {2, 6, 7, 11} and Peter’s array is {3, 9, 13, 14}, what is the resulting absolute difference?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 16
+      },
+      "contextId": "numbers",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "3"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-g",
+      "track": "cpp",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Given Alice’s array is {3, 4, 12, 19, 25, 34, 36, 37, 55, 66} and Peter’s array is {6, 9, 16, 23, 29, 31, 43, 54, 60, 70}, what is the resulting absolute difference?"
+      },
+      "points": 2.5,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 16
+      },
+      "contextId": "numbers",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "6"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-h",
+      "track": "cpp",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "The multiply function above attempts to calculate the product of two integers x and y. However, there is a bug in the function.\n\nWrite down the return value of multiply(2021, 2021)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 17
+      },
+      "displayCode": {
+        "cpp": "int multiply(int x, int y) {\n    int ans = 0;\n    while (x > 0)\n    {\n        if (x % 2 == 1)\n            ans = ans + y;\n        x = x / 2;\n    }\n    return ans;\n}"
+      },
+      "contextId": "multiply",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "H": [
+            "16168"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-i",
+      "track": "cpp",
+      "printedRef": "Section B, Question 5, Blank I1/I2",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "The bug can be fixed by changing exactly one line. Find the line and correct it WITHOUT using asterisk (*) so that the function correctly returns the product xy for all integers 1 ≤ x, y ≤ 10⁴."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I1",
+          "maxChars": 2
+        },
+        {
+          "id": "I2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 17
+      },
+      "displayCode": {
+        "cpp": "int multiply(int x, int y) {\n    int ans = 0;\n    while (x > 0)\n    {\n        if (x % 2 == 1)\n            ans = ans + y;\n        x = x / 2;\n    }\n    return ans;\n}"
+      },
+      "contextId": "multiply",
+      "grading": {
+        "kind": "cpp-line-repair",
+        "lineBlank": "I1",
+        "replacementBlank": "I2",
+        "firstLine": 41,
+        "source": "int multiply(int x, int y) {\n    int ans = 0;\n    while (x > 0)\n    {\n        if (x % 2 == 1)\n            ans = ans + y;\n        x = x / 2;\n    }\n    return ans;\n}",
+        "harness": {
+          "kind": "call",
+          "function": "multiply"
+        },
+        "cases": [
+          {
+            "id": "1-1",
+            "args": [
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "2-3",
+            "args": [
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "3-2",
+            "args": [
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "211-34",
+            "args": [
+              211,
+              34
+            ],
+            "expected": {
+              "returnValue": 7174
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "34-211",
+            "args": [
+              34,
+              211
+            ],
+            "expected": {
+              "returnValue": 7174
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "2021-2021",
+            "args": [
+              2021,
+              2021
+            ],
+            "expected": {
+              "returnValue": 4084441
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "10000-10000",
+            "args": [
+              10000,
+              10000
+            ],
+            "expected": {
+              "returnValue": 100000000
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "1-10000",
+            "args": [
+              1,
+              10000
+            ],
+            "expected": {
+              "returnValue": 10000
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "10000-1",
+            "args": [
+              10000,
+              1
+            ],
+            "expected": {
+              "returnValue": 10000
+            },
+            "maxSteps": 5000
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-j",
+      "track": "cpp",
+      "printedRef": "Section B, Question 6, Blank J",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Function f() returns a random integer between 0 and 99 inclusive uniformly and independently. Complete function g() such that it returns a random integer between 0 and 79 inclusive uniformly and independently."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 17
+      },
+      "displayCode": {
+        "cpp": "int f() {\n    .. omitted 省略 ..\n}\n\nint g() {\n    return {{J}};\n}"
+      },
+      "grading": {
+        "kind": "uniform-cpp-expression",
+        "answerBlank": "J",
+        "randomFunction": "f",
+        "randomMin": 0,
+        "randomMax": 99,
+        "outputMin": 0,
+        "outputMax": 79,
+        "maxCalls": 3
+      }
+    },
+    {
+      "id": "cpp-k",
+      "track": "cpp",
+      "printedRef": "Section B, Question 7, Blank K",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "For how many integers x where 1 ≤ x ≤ 2021 does f(x) return 1?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 18
+      },
+      "displayCode": {
+        "cpp": "int f(int x) {\n    int y = 0;\n    if (x < 10)\n        return x;\n    else {\n        while (x > 0) {\n            y = y + x % 10;\n            x = x / 10;\n        }\n        return f(y);\n    }\n}"
+      },
+      "contextId": "digit",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "K": [
+            "225"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-l",
+      "track": "cpp",
+      "printedRef": "Section B, Question 7, Blank L",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "The following program uses the function f above. What is the output of the program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "L"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 18
+      },
+      "displayCode": {
+        "cpp": "int a[20][20];\nint i, j, sum;\nint main () {\n    for (i = 0; i <= 19; i++) {\n        a[i][0] = 1;\n        for (j = 1; j <= 19; j++)\n            a[i][j] = 0;\n    }\n    sum = 0;\n    for (i = 1; i <= 19; i++)\n        for (j = 1; j <= i; j++)\n            a[i][j] = a[i - 1][j]\n                      + a[i - 1][j - 1];\n    for (i = 1; i <= 19; i++)\n        sum = sum + a[19][i];\n    cout << f(sum);\n    return 0;\n}"
+      },
+      "contextId": "digit",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "L": [
+            "1"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-m",
+      "track": "cpp",
+      "printedRef": "Section B, Question 8, Blank M",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "What is the expected number of winning participants when N = 2 and K = 2?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "M"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 19
+      },
+      "contextId": "bridge",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "M": [
+            "1"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-n",
+      "track": "cpp",
+      "printedRef": "Section B, Question 8, Blank N",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "What is the expected number of winning participants when N = 7 and K = 8?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "N"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
+        "page": 19
+      },
+      "contextId": "bridge",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "N": [
+            "769/256"
+          ]
+        },
+        "normalize": "trim"
+      }
+    }
+  ]
+}

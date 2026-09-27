@@ -1,0 +1,746 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2022-23-junior",
+    "season": "2022/23",
+    "division": "junior",
+    "title": "HKOI 2022/23 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2023hj_sol.pdf. Only Section B FITB is included."
+    }
+  },
+  "tracks": [
+    {
+      "id": "junior",
+      "label": "Junior · compulsory",
+      "selection": "required"
+    }
+  ],
+  "questions": [
+    {
+      "id": "junior-a",
+      "track": "junior",
+      "printedRef": "Section B, Question 1, Blanks A1/A2/A3",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Let text be a string. For every slash (/) in text, it is guaranteed that there must be 2023 immediately in front of each slash, and 24 immediately after each slash. For example, text can be HKOI2023/24Heat or 2023/242023/24, but cannot be 2023/2024 or /24.\n\nComplete the function Update(text), such that Update(text) change all 2023/24 in text into 2022/23."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A1",
+          "maxChars": 14
+        },
+        {
+          "id": "A2",
+          "maxChars": 5
+        },
+        {
+          "id": "A3",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 12,
+        "note": "The grading harness returns the modified string because checked C++ does not model string& parameters; the printed code is shown unchanged."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "string Update(string text) {\n    int len = text.length();\n    for (int i = 0; i < len; ++i) {\n        if ({{A1}}) {\n            text[{{A2}}]--;\n            text[{{A3}}]--;\n        }\n    }\n    return text;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "Update"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "text-0",
+            "expected": {
+              "returnValue": "2022/23"
+            },
+            "maxSteps": 3000,
+            "args": [
+              "2023/24"
+            ]
+          },
+          {
+            "id": "text-1",
+            "expected": {
+              "returnValue": "HKOI2022/23Heat"
+            },
+            "maxSteps": 3000,
+            "args": [
+              "HKOI2023/24Heat"
+            ]
+          },
+          {
+            "id": "text-2",
+            "expected": {
+              "returnValue": "2022/232022/23"
+            },
+            "maxSteps": 3000,
+            "args": [
+              "2023/242023/24"
+            ]
+          },
+          {
+            "id": "text-3",
+            "expected": {
+              "returnValue": "hello"
+            },
+            "maxSteps": 3000,
+            "args": [
+              "hello"
+            ]
+          },
+          {
+            "id": "text-4",
+            "expected": {
+              "returnValue": "a2022/23z2022/23!"
+            },
+            "maxSteps": 3000,
+            "args": [
+              "a2023/24z2023/24!"
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "void Update(string& text) {\n    int len = text.length();\n    for (int i = 0; i < len; ++i) {\n        if ({{A1}}) {\n            text[{{A2}}]--;\n            text[{{A3}}]--;\n        }\n    }\n}"
+      }
+    },
+    {
+      "id": "junior-b",
+      "track": "junior",
+      "printedRef": "Section B, Question 2(a), Blanks B1/B2",
+      "title": "Section B, Question 2(a)",
+      "prompt": {
+        "en": "Let a be an array of integers of length n.\n\nComplete the following subprogram ReversePrefix with an input parameter k (0 < k ≤ n) that reverses the subarray a[0], a[1], · · · , a[k-1]."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B1",
+          "maxChars": 7
+        },
+        {
+          "id": "B2",
+          "maxChars": 7
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 13,
+        "note": "The grading harness expands swap into a temporary-variable swap because the interpreter does not model reference parameters; the printed code is shown unchanged."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int a[20];\nvoid ReversePrefix(int k) {\n    for (int i = 0; i < {{B1}}; ++i) {\n        int j = {{B2}};\n        int tmp = a[i]; a[i] = a[j]; a[j] = tmp;\n    }\n}\nint main() { int n, k; cin >> n >> k; for (int i=0;i<n;++i) cin >> a[i]; ReversePrefix(k); for(int i=0;i<n;++i) cout << a[i] << ','; }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "prefix-0",
+            "expected": {
+              "stdout": "5,"
+            },
+            "maxSteps": 2500,
+            "stdin": "1 1 5"
+          },
+          {
+            "id": "prefix-1",
+            "expected": {
+              "stdout": "2,1,"
+            },
+            "maxSteps": 2500,
+            "stdin": "2 2 1 2"
+          },
+          {
+            "id": "prefix-2",
+            "expected": {
+              "stdout": "3,2,1,"
+            },
+            "maxSteps": 2500,
+            "stdin": "3 3 1 2 3"
+          },
+          {
+            "id": "prefix-3",
+            "expected": {
+              "stdout": "4,3,2,1,"
+            },
+            "maxSteps": 2500,
+            "stdin": "4 4 1 2 3 4"
+          },
+          {
+            "id": "prefix-4",
+            "expected": {
+              "stdout": "9,1,4,7,2,"
+            },
+            "maxSteps": 2500,
+            "stdin": "5 3 4 1 9 7 2"
+          },
+          {
+            "id": "prefix-5",
+            "expected": {
+              "stdout": "0,2,4,6,8,1,"
+            },
+            "maxSteps": 2500,
+            "stdin": "6 5 8 6 4 2 0 1"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "void ReversePrefix(int k) {\n    for (int i = 0; i < {{B1}}; ++i) {\n        int j = {{B2}};\n        swap(a[i], a[j]);\n    }\n}"
+      }
+    },
+    {
+      "id": "junior-c",
+      "track": "junior",
+      "printedRef": "Section B, Question 2(b), Blanks C1/C2/C3",
+      "title": "Section B, Question 2(b)",
+      "prompt": {
+        "en": "The subprogram ReverseSubarray with input parameters l and r (0 ≤ l < r ≤ n) reverses the subarray a[l], a[l+1], · · · , a[r-1]. By using ReversePrefix only, complete the subprogram. Assume that ReversePrefix has been correctly implemented."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C1",
+          "maxChars": 5
+        },
+        {
+          "id": "C2",
+          "maxChars": 5
+        },
+        {
+          "id": "C3",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 13,
+        "note": "Trusted question-local ReversePrefix implements the function the paper says is already correct."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "void ReverseSubarray(int l, int r) {\n    ReversePrefix({{C1}});\n    ReversePrefix({{C2}});\n    ReversePrefix({{C3}});\n}\nint main(){int n,l,r;cin>>n>>l>>r;for(int i=0;i<n;++i)cin>>a[i];ReverseSubarray(l,r);for(int i=0;i<n;++i)cout<<a[i]<<',';}",
+            "harness": {
+              "kind": "program"
+            },
+            "helperSource": "int a[20]; void ReversePrefix(int k){for(int i=0;i<k/2;++i){int j=k-1-i;int t=a[i];a[i]=a[j];a[j]=t;}}"
+          }
+        ],
+        "cases": [
+          {
+            "id": "subarray-0",
+            "expected": {
+              "stdout": "2,1,"
+            },
+            "maxSteps": 3000,
+            "stdin": "2 0 2 1 2"
+          },
+          {
+            "id": "subarray-1",
+            "expected": {
+              "stdout": "1,3,2,4,"
+            },
+            "maxSteps": 3000,
+            "stdin": "4 1 3 1 2 3 4"
+          },
+          {
+            "id": "subarray-2",
+            "expected": {
+              "stdout": "0,1,5,4,3,2,"
+            },
+            "maxSteps": 3000,
+            "stdin": "6 2 6 0 1 2 3 4 5"
+          },
+          {
+            "id": "subarray-3",
+            "expected": {
+              "stdout": "5,6,7,8,9,"
+            },
+            "maxSteps": 3000,
+            "stdin": "5 0 5 9 8 7 6 5"
+          },
+          {
+            "id": "subarray-4",
+            "expected": {
+              "stdout": "9,8,7,6,5,"
+            },
+            "maxSteps": 3000,
+            "stdin": "5 3 4 9 8 7 6 5"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "void ReverseSubarray(int l, int r) {\n    ReversePrefix({{C1}});\n    ReversePrefix({{C2}});\n    ReversePrefix({{C3}});\n}"
+      }
+    },
+    {
+      "id": "junior-d",
+      "track": "junior",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Without using “-”, complete the following function MyAbs so that MyAbs(x) returns the absolute value of x."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 4,
+          "forbiddenChars": "-"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 14,
+        "note": "The Chinese prompt additionally states −2³¹ + 1 ≤ x ≤ 2³¹ − 1."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int MyAbs(int x) {\n    if (x >= 0) return x;\n    else return {{D}};\n}",
+            "harness": { "kind": "call", "function": "MyAbs" }
+          }
+        ],
+        "cases": [
+          { "id": "minus-one", "args": [-1], "expected": { "returnValue": 1 }, "maxSteps": 1000 },
+          { "id": "minus-seven", "args": [-7], "expected": { "returnValue": 7 }, "maxSteps": 1000 },
+          { "id": "lower-bound", "args": [-2147483647], "expected": { "returnValue": 2147483647 }, "maxSteps": 1000 },
+          { "id": "zero", "args": [0], "expected": { "returnValue": 0 }, "maxSteps": 1000 },
+          { "id": "positive", "args": [12345], "expected": { "returnValue": 12345 }, "maxSteps": 1000 }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int MyAbs(int x) {\n    if (x >= 0) return x;\n    else return {{D}};\n}"
+      }
+    },
+    {
+      "id": "junior-e",
+      "track": "junior",
+      "printedRef": "Section B, Question 4, Blank E",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Consider the following program: If the input is `it is never too late to join hkoi`, what is the output?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "7"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    string a[8];\n    for (int i = 0; i < 8; ++i) {\n        cin >> a[i];\n    }\n    int count = 0;\n    for (int i = 0; i < 8; ++i) {\n        for (int j = i + 1; j < 8; ++j) {\n            for (int k = 0; k < 5; ++k) {\n                if (a[i].length() > k && a[j].length() > k\n                    && a[i][k] == a[j][k]) {\n                    ++count;\n                }\n            }\n        }\n    }\n    cout << count;\n}"
+      }
+    },
+    {
+      "id": "junior-f",
+      "track": "junior",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Give an input with lowercase English letters and spaces only, such that the preceding program outputs 40."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 25,
+          "allowedChars": " abcdefghijklmnopqrstuvwxyz"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program-input",
+        "answerBlank": "F",
+        "target": {
+          "language": "cpp",
+          "dialect": "c++20",
+          "source": "int main() {\n    string a[8];\n    for (int i = 0; i < 8; ++i) {\n        cin >> a[i];\n    }\n    int count = 0;\n    for (int i = 0; i < 8; ++i) {\n        for (int j = i + 1; j < 8; ++j) {\n            for (int k = 0; k < 5; ++k) {\n                if (a[i].length() > k && a[j].length() > k\n                    && a[i][k] == a[j][k]) {\n                    ++count;\n                }\n            }\n        }\n    }\n    cout << count;\n}",
+          "harness": { "kind": "program" }
+        },
+        "expected": { "stdout": "40" },
+        "maxSteps": 20000
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    string a[8];\n    for (int i = 0; i < 8; ++i) {\n        cin >> a[i];\n    }\n    int count = 0;\n    for (int i = 0; i < 8; ++i) {\n        for (int j = i + 1; j < 8; ++j) {\n            for (int k = 0; k < 5; ++k) {\n                if (a[i].length() > k && a[j].length() > k\n                    && a[i][k] == a[j][k]) {\n                    ++count;\n                }\n            }\n        }\n    }\n    cout << count;\n}"
+      }
+    },
+    {
+      "id": "junior-g",
+      "track": "junior",
+      "printedRef": "Section B, Question 5, Blanks G1/G2",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Alice and Bob is playing a game. There is a 1 × N grid where every cell is initially white. Alice and Bob take turns to perform the following actions.\n\n1. Choose any cell such that the cell and all its adjacent cells are white.\n2. Paint the chosen cell black.\n\nAlice plays first and if a player cannot make a valid move, they lose. Note: two cells are adjacent to each other if they share a common edge. For example, when N = 3, Alice can paint the cell 2 black and win since Bob has no valid moves after that.\n\nIf both players play optimally, can Alice win the following games? If yes, find any winning first move and write down the cell’s number. If no, write down 0. Determine this for N = 4 (G1) and N = 5 (G2). Number the cells from 1 to N."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G1"
+        },
+        {
+          "id": "G2"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 15,
+        "note": "All winning first moves were exhaustively enumerated: N=4 has none; N=5 has only cell 3."
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G1": [
+            "0"
+          ],
+          "G2": [
+            "3"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "junior-h",
+      "track": "junior",
+      "printedRef": "Section B, Question 5, Blanks H1/H2",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Alice and Bob is playing a game. There is a 1 × N grid where every cell is initially white. Alice and Bob take turns to perform the following actions.\n\n1. Choose any cell such that the cell and all its adjacent cells are white.\n2. Paint the chosen cell black.\n\nAlice plays first and if a player cannot make a valid move, they lose. Note: two cells are adjacent to each other if they share a common edge. For example, when N = 3, Alice can paint the cell 2 black and win since Bob has no valid moves after that.\n\nIf both players play optimally, can Alice win the following games? If yes, find any winning first move and write down the cell’s number. If no, write down 0. Determine this for N = 9 (H1) and N = 13 (H2). Number the cells from 1 to N."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "H1"
+        },
+        {
+          "id": "H2"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 15,
+        "note": "All winning first moves were exhaustively enumerated: N=9 has only cell 5; N=13 has only cell 7."
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "H1": [
+            "5"
+          ],
+          "H2": [
+            "7"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "junior-i",
+      "track": "junior",
+      "printedRef": "Section B, Question 6, Blank I",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the following program so that it outputs:\n\n```text\n..#...#..\n..#...#..\n#########\n..#...#..\n..#...#..\n..#...#..\n#########\n..#...#..\n..#...#..\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{I}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-grid",
+            "expected": {
+              "stdout": "..#...#..\n..#...#..\n#########\n..#...#..\n..#...#..\n..#...#..\n#########\n..#...#..\n..#...#..\n"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{I}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}"
+      }
+    },
+    {
+      "id": "junior-j",
+      "track": "junior",
+      "printedRef": "Section B, Question 6, Blank J",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the following program so that it outputs:\n\n```text\n#########\n#.......#\n#.......#\n#.......#\n#.......#\n#.......#\n#.......#\n#.......#\n#########\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{J}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-grid",
+            "expected": {
+              "stdout": "#########\n#.......#\n#.......#\n#.......#\n#.......#\n#.......#\n#.......#\n#.......#\n#########\n"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{J}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}"
+      }
+    },
+    {
+      "id": "junior-k",
+      "track": "junior",
+      "printedRef": "Section B, Question 6, Blank K",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the following program so that it outputs:\n\n```text\n....#....\n....#....\n....#....\n....#....\n####.####\n....#....\n....#....\n....#....\n....#....\n```"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{K}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "printed-grid",
+            "expected": {
+              "stdout": "....#....\n....#....\n....#....\n....#....\n####.####\n....#....\n....#....\n....#....\n....#....\n"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{K}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}"
+      }
+    },
+    {
+      "id": "junior-l",
+      "track": "junior",
+      "printedRef": "Section B, Question 7, Blank L",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "In a game of Rock Paper Scissors, two players simultaneously form a shape of Rock, Paper, Scissors with a hand. For convenience, we represent Rock as 1, Paper as 2, and Scissors as 3. Rock beats Scissors, Paper beats Rock and Scissors beats Paper. If both players show the same shape, the game ends in a tie.\n\nAlice and Bob play the shapes denoted by integers a and b respectively. Complete the program so that the program outputs A Wins if and only if Alice wins."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2023hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2023hja.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++20",
+            "source": "bool AWins(int a, int b) {\n    return {{L}};\n}\nint main() {\n    int a, b;\n    cin >> a >> b;\n    if (AWins(a, b)) cout << \"A Wins\";\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "a-1-b-1",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 1000,
+            "stdin": "1 1"
+          },
+          {
+            "id": "a-1-b-2",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 1000,
+            "stdin": "1 2"
+          },
+          {
+            "id": "a-1-b-3",
+            "expected": {
+              "stdout": "A Wins"
+            },
+            "maxSteps": 1000,
+            "stdin": "1 3"
+          },
+          {
+            "id": "a-2-b-1",
+            "expected": {
+              "stdout": "A Wins"
+            },
+            "maxSteps": 1000,
+            "stdin": "2 1"
+          },
+          {
+            "id": "a-2-b-2",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 1000,
+            "stdin": "2 2"
+          },
+          {
+            "id": "a-2-b-3",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 1000,
+            "stdin": "2 3"
+          },
+          {
+            "id": "a-3-b-1",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 1000,
+            "stdin": "3 1"
+          },
+          {
+            "id": "a-3-b-2",
+            "expected": {
+              "stdout": "A Wins"
+            },
+            "maxSteps": 1000,
+            "stdin": "3 2"
+          },
+          {
+            "id": "a-3-b-3",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 1000,
+            "stdin": "3 3"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "bool AWins(int a, int b) {\n    return {{L}};\n}\nint main() {\n    int a, b;\n    cin >> a >> b;\n    if (AWins(a, b)) cout << \"A Wins\";\n}"
+      }
+    }
+  ]
+}

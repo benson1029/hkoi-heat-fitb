@@ -1,0 +1,1007 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2021-22-junior",
+    "season": "2021/22",
+    "division": "junior",
+    "title": "HKOI 2021/22 Heat Event (Junior Group)",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "coins",
+      "track": "section-b",
+      "title": "Question 2",
+      "markdown": "In Heung Shing, the coin system has n different denominations. We use an integer array c[0..n-1] (C/C++: c[n]) to represent the coin system, so that the n types of coins are worth, respectively, c[0] cents, c[1] cents, . . ., and c[n-1] cents, where 1 = c[0] < c[1] < · · · < c[n-1].\n\nAlice wants to solve the coin changing problem: what is the minimum number of coins needed to make a change of exactly m cents? She proposes the following greedy algorithm: first use as many as possible the most valuable coin, then use as many as possible the second most valuable coin, and so on."
+    },
+    {
+      "id": "segments",
+      "track": "section-b",
+      "title": "Question 7",
+      "markdown": "Given a function f that takes the coordinates of two horizontal line segments as parameters, where:\n\n- line segment a connects two points (ax1, ay) and (ax2, ay) and it is guaranteed that ax1 ≤ ax2.\n- line segment b connects two points (bx1, by) and (bx2, by) and it is guaranteed that bx1 ≤ bx2."
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Complete the following program such that its output is ARENA."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "int a[5] = {17, 8, 21, 4, 17};\nint i;\nint main() {\n    for (i = 0; i <= 4; i++) {\n        a[i] = {{A}};\n        cout << a[i] << \" \";\n    }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "printed-output",
+            "stdin": "",
+            "expected": {
+              "stdout": "0 17 4 13 0 "
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "string river = \"RIVER\";\nint a[5];\nint i;\nint main() {\n    for (i = 0; i <= 4; i++)\n        a[i] = (int)river[i] - (int)'A';\n    for (i = 0; i <= 4; i++) {\n        a[i] = {{A}};\n        a[i] = a[i] + (int)'A';\n        cout << (char)a[i];\n    }\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2(a), Blank B1, Blank B2, Blank B3",
+      "title": "Section B, Question 2(a)",
+      "prompt": {
+        "en": "Complete the following program so that it implements the greedy algorithm described above. At the end of the program, b[i] should equal the number of c[i]-cent coins used. The input and output sections of the program are omitted. You may assume that 1 ≤ n ≤ 100."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B1",
+          "maxChars": 30
+        },
+        {
+          "id": "B2",
+          "maxChars": 15
+        },
+        {
+          "id": "B3",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "int b[100], c[100];\nint n, m;\nint i;\nint main() {\n    cin >> n >> m;\n    for (i = 0; i < n; i++) cin >> c[i];\n    for ({{B1}}) {\n        b[i] = 0;\n        while ({{B2}}) {\n            b[i]++;\n            m = {{B3}};\n        }\n    }\n    for (i = 0; i < n; i++) cout << b[i] << \" \";\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "unit",
+            "stdin": "1 7 1",
+            "expected": {
+              "stdout": "7 "
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "small",
+            "stdin": "3 10 1 3 4",
+            "expected": {
+              "stdout": "2 0 2 "
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "exact",
+            "stdin": "4 20 1 2 5 10",
+            "expected": {
+              "stdout": "0 0 0 2 "
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "remainder",
+            "stdin": "4 47 1 5 12 30",
+            "expected": {
+              "stdout": "0 1 1 1 "
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "zero",
+            "stdin": "3 0 1 6 11",
+            "expected": {
+              "stdout": "0 0 0 "
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "large",
+            "stdin": "4 999 1 7 19 53",
+            "expected": {
+              "stdout": "0 1 2 18 "
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int b[100], c[100];\nint n, m;\nint i;\nint main() {\n    // input 輸入 n, m, c[0], ..., c[n-1]\n    for ({{B1}}) {\n        b[i] = 0;\n        while ({{B2}}) {\n            b[i]++;\n            m = {{B3}};\n        }\n    }\n    // output 輸出 b[0], ..., b[n-1]\n}"
+      },
+      "contextId": "coins"
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2(b), Blank C1, Blank C2",
+      "title": "Section B, Question 2(b)",
+      "prompt": {
+        "en": "Unfortunately, Alice’s greedy algorithm does not always work. Find a counter-example with n = 3, 1 = c[0] < c[1] < c[2] ≤ 10, and m = 10. Write down the values of c[1] and c[2]."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C1",
+          "maxChars": 5
+        },
+        {
+          "id": "C2",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "coin-counterexample",
+        "middleBlank": "C1",
+        "largestBlank": "C2",
+        "amount": 10,
+        "largestLimit": 10
+      },
+      "contextId": "coins"
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2(c), Blank D",
+      "title": "Section B, Question 2(c)",
+      "prompt": {
+        "en": "(c) A coin system c[0..n-1] is said to be simple, if Alice’s greedy algorithm can produce an optimal answer for every positive integer m not greater than 10000. Which of the following coin systems is/are simple? Write down the corresponding indices of all simple coin systems and separate them with commas. (Example: 2, 3, 4). Only answers that are all correct will get credit.\n\n1. c[0..2] = {1, 8, 20}\n2. c[0..3] = {1, 2, 5, 10}\n3. c[0..4] = {1, 2, 4, 8, 10}\n4. c[0..6] = {1, 4, 7, 10, 13, 16, 19}\n5. c[0..6] = {1, 20, 30, 40, 50, 60, 70}"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "D": [
+            "2,4",
+            "2, 4"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "coins"
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Consider a n × m grid (1 ≤ n, m ≤ 1000), where every cell is placed with a light bulb that is initially turned off. Each of the n rows and m columns of the grid is connected to an individual button, which toggles (on → off, off → on) all the light bulbs in that corresponding row/column when pressed. Complete the following program so that it reads the status (pressed: 1, not pressed: 0) of every button and outputs the number of light bulbs that are ultimately on. r[i] and c[j] stores the status of the button of the i-th row and the j-th column respectively."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "int r[1001];\nint c[1001];\nint n, m, x, y, i, j;\nint main() {\n    cin >> n >> m;\n    x = 0;\n    for (i = 1; i <= n; i++) {\n        cin >> r[i];\n        x = x + r[i];\n    }\n    y = 0;\n    for (j = 1; j <= m; j++) {\n        cin >> c[j];\n        y = y + c[j];\n    }\n    cout << {{E}};\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "off",
+            "stdin": "1 1 0 0",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "row",
+            "stdin": "1 3 1 0 0 0",
+            "expected": {
+              "stdout": "3"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "column",
+            "stdin": "3 1 0 0 0 1",
+            "expected": {
+              "stdout": "3"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "both",
+            "stdin": "1 1 1 1",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "mixed",
+            "stdin": "3 4 1 0 1 0 1 1 0",
+            "expected": {
+              "stdout": "6"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "all",
+            "stdin": "4 3 1 1 1 1 1 1 1",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "unequal",
+            "stdin": "5 3 0 1 0 0 1 1 0 0",
+            "expected": {
+              "stdout": "7"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int r[1001];\nint c[1001];\nint n, m, x, y, i, j;\nint main() {\n    cin >> n >> m;\n    x = 0;\n    for (i = 1; i <= n; i++) {\n        cin >> r[i];\n        x = x + r[i];\n    }\n    y = 0;\n    for (j = 1; j <= m; j++) {\n        cin >> c[j];\n        y = y + c[j];\n    }\n    cout << {{E}};\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F1, Blank F2, Blank F3",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The input to the following program is 401 integers between 1 and 1000 inclusive, given in non-descending order. Complete the following program so that it outputs an integer x, such that the sum of absolute difference of x and each input number is minimized. If there is multiple x that can achieve the same minimum sum, the program should output the least x."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F1",
+          "maxChars": 12
+        },
+        {
+          "id": "F2",
+          "maxChars": 5
+        },
+        {
+          "id": "F3",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "int a[401];\nint i, j, temp, minSum, x;\nint main() {\n    cin >> a[0] >> i >> temp;\n    j = 0;\n    cout << ({{F1}}) << \" \";\n    minSum = {{F2}};\n    x = {{F3}};\n    cout << minSum << \" \" << x;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "equal",
+            "stdin": "1 1 0",
+            "expected": {
+              "stdout": "0 0 1"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "below",
+            "stdin": "2 9 401",
+            "expected": {
+              "stdout": "7 401 9"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "above",
+            "stdin": "1000 1 300000",
+            "expected": {
+              "stdout": "999 300000 1"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "middle",
+            "stdin": "431 500 12345",
+            "expected": {
+              "stdout": "69 12345 500"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "high",
+            "stdin": "901 999 999999",
+            "expected": {
+              "stdout": "98 999999 999"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int a[401];\nint x, minSum;\nint temp;\nint i, j;\nint main() {\n    for (i = 0; i <= 400; i++)\n        cin >> a[i];\n    x = -1;\n    minSum = 1000000000;\n    for (i = 1; i <= 1000; i++) {\n        temp = 0;\n        for (j = 0; j <= 400; j++)\n            temp = temp + {{F1}};\n        if (temp < minSum) {\n            minSum = {{F2}};\n            x = {{F3}};\n        }\n    }\n    cout << x;\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Complete the following program so that it produces the same output as the above program."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "int a[401];\nint i;\nint main() {\n    for (i = 0; i <= 400; i++)\n        cin >> a[i];\n    cout << {{G}};\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "uniform",
+            "stdin": "7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7",
+            "expected": {
+              "stdout": "7"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "rising",
+            "stdin": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8",
+            "expected": {
+              "stdout": "3"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "step",
+            "stdin": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 9 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200",
+            "expected": {
+              "stdout": "9"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "top",
+            "stdin": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000",
+            "expected": {
+              "stdout": "1000"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sequence",
+            "stdin": "1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26 27 27 28 28 29 29 30 30 31 31 32 32 33 33 34 34 35 35 36 36 37 37 38 38 39 39 40 40 41 41 42 42 43 43 44 44 45 45 46 46 47 47 48 48 49 49 50 50 51 51 52 52 53 53 54 54 55 55 56 56 57 57 58 58 59 59 60 60 61 61 62 62 63 63 64 64 65 65 66 66 67 67 68 68 69 69 70 70 71 71 72 72 73 73 74 74 75 75 76 76 77 77 78 78 79 79 80 80 81 81 82 82 83 83 84 84 85 85 86 86 87 87 88 88 89 89 90 90 91 91 92 92 93 93 94 94 95 95 96 96 97 97 98 98 99 99 100 100 101 101 102 102 103 103 104 104 105 105 106 106 107 107 108 108 109 109 110 110 111 111 112 112 113 113 114 114 115 115 116 116 117 117 118 118 119 119 120 120 121 121 122 122 123 123 124 124 125 125 126 126 127 127 128 128 129 129 130 130 131 131 132 132 133 133 134 134 135 135 136 136 137 137 138 138 139 139 140 140 141 141 142 142 143 143 144 144 145 145 146 146 147 147 148 148 149 149 150 150 151 151 152 152 153 153 154 154 155 155 156 156 157 157 158 158 159 159 160 160 161 161 162 162 163 163 164 164 165 165 166 166 167 167 168 168 169 169 170 170 171 171 172 172 173 173 174 174 175 175 176 176 177 177 178 178 179 179 180 180 181 181 182 182 183 183 184 184 185 185 186 186 187 187 188 188 189 189 190 190 191 191 192 192 193 193 194 194 195 195 196 196 197 197 198 198 199 199 200 200 201",
+            "expected": {
+              "stdout": "101"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int a[401];\nint i;\nint main() {\n    for (i = 0; i <= 400; i++)\n        cin >> a[i];\n    cout << {{G}};\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the following program such that its output is HKOI."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "int a[10] = {1, 2, 12, 0, 58,\n             74, 64, 92, 58, 0};\nint i, sum;\nint main() {\n    a[9] = {{H}};\n    sum = 0;\n    for (i = 0; i <= 9; i++)\n        sum = sum ^ a[i];\n    if (sum == 118)\n        cout << \"HKOI\";\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "printed-output",
+            "stdin": "",
+            "expected": {
+              "stdout": "HKOI"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int a[10] = {1, 2, 12, 0, 58,\n             74, 64, 92, 58, 0};\nint i, sum;\nint main() {\n    a[9] = {{H}};\n    sum = 0;\n    for (i = 0; i <= 9; i++)\n        sum = sum ^ a[i];\n    if (sum == 118)\n        cout << \"HKOI\";\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank I1, Blank I2",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "The following program tries to delete all negative numbers in the array. However, the program contains an error. The bug can be fixed by changing exactly one line. Find the line and correct it so that the program outputs the correct answers for all of the following cases:\n\n| Input | Output |\n|---|---|\n| 5 1 2 -3 -4 5 | 1 2 5 |\n| 2 -5 3 | 3 |\n| 4 -3 -4 8 -6 | 8 |"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I1",
+          "maxChars": 2
+        },
+        {
+          "id": "I2",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "cpp-line-repair",
+        "lineBlank": "I1",
+        "replacementBlank": "I2",
+        "firstLine": 67,
+        "source": "int n, i, j, a[100];\nint main() {\n    cin >> n;\n    i = 0;\n    while (i < n)\n    {\n        cin >> a[i];\n        i++;\n    }\n    i = 0;\n    while (i < n)\n    {\n        if (a[i] < 0)\n        {\n            j = i + 1;\n            while (j < n)\n            {\n                a[j - 1] = a[j];\n                j++;\n            }\n            n--;\n        }\n        i++;\n    }\n    i = 0;\n    while (i < n)\n    {\n        cout << a[i] << \" \";\n        i++;\n    }\n    return 0;\n}",
+        "cases": [
+          {
+            "id": "printed-a",
+            "stdin": "5 1 2 -3 -4 5",
+            "expected": {
+              "stdout": "1 2 5 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "printed-b",
+            "stdin": "2 -5 3",
+            "expected": {
+              "stdout": "3 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "printed-c",
+            "stdin": "4 -3 -4 8 -6",
+            "expected": {
+              "stdout": "8 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "all-negative",
+            "stdin": "3 -1 -2 -3",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "alternating",
+            "stdin": "6 -1 2 -3 4 -5 6",
+            "expected": {
+              "stdout": "2 4 6 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "positive",
+            "stdin": "3 1 2 3",
+            "expected": {
+              "stdout": "1 2 3 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "empty",
+            "stdin": "0 ",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tail",
+            "stdin": "4 5 4 -7 -8",
+            "expected": {
+              "stdout": "5 4 "
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "67 int n, i, j, a[100];\n68 int main() {\n69     cin >> n;\n70     i = 0;\n71     while (i < n)\n72     {\n73         cin >> a[i];\n74         i++;\n75     }\n76     i = 0;\n77     while (i < n)\n78     {\n79         if (a[i] < 0)\n80         {\n81             j = i + 1;\n82             while (j < n)\n83             {\n84                 a[j - 1] = a[j];\n85                 j++;\n86             }\n87             n--;\n88         }\n89         i++;\n90     }\n91     i = 0;\n92     while (i < n)\n93     {\n94         cout << a[i] << \" \";\n95         i++;\n96     }\n97     return 0;\n98 }"
+      }
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank J",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Complete f WITHOUT using any function calls, so that it returns true if and only if a and b share at least one point."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 90
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 19
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "bool f(int ay, int ax1, int ax2,\n       int by, int bx1, int bx2) {\n    return {{J}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "same",
+            "args": [
+              0,
+              1,
+              3,
+              0,
+              2,
+              5
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "touch-left",
+            "args": [
+              0,
+              1,
+              3,
+              0,
+              -2,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "touch-right",
+            "args": [
+              0,
+              1,
+              3,
+              0,
+              3,
+              7
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "separate-left",
+            "args": [
+              0,
+              1,
+              3,
+              0,
+              -2,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "separate-right",
+            "args": [
+              0,
+              1,
+              3,
+              0,
+              4,
+              7
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "different-height",
+            "args": [
+              0,
+              1,
+              3,
+              1,
+              1,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "point",
+            "args": [
+              2,
+              3,
+              3,
+              2,
+              3,
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "point-apart",
+            "args": [
+              2,
+              3,
+              3,
+              2,
+              4,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "contain",
+            "args": [
+              0,
+              -10,
+              10,
+              0,
+              -2,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "bool f(int ay, int ax1, int ax2,\n       int by, int bx1, int bx2) {\n    return {{J}};\n}"
+      },
+      "contextId": "segments"
+    },
+    {
+      "id": "K",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank K",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Complete g, so that it returns true if and only if a and b share at least one point. You may use function f in function g."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 30
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf",
+        "page": 19
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "bool g(int ay1, int ay2, int ax1, int ax2,\n       int by, int bx1, int bx2) {\n    if (ay1 > by || ay2 < by)\n        return false;\n    else\n        return {{K}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            },
+            "helperSource": "bool f(int ay, int ax1, int ax2,\n       int by, int bx1, int bx2) {\n    return ay == by && ax1 <= bx2 && bx1 <= ax2;\n}"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "overlap",
+            "args": [
+              0,
+              4,
+              1,
+              5,
+              2,
+              3,
+              7
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "above",
+            "args": [
+              0,
+              4,
+              1,
+              5,
+              5,
+              3,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "below",
+            "args": [
+              0,
+              4,
+              1,
+              5,
+              -1,
+              3,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "left",
+            "args": [
+              0,
+              4,
+              1,
+              5,
+              2,
+              -3,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "right",
+            "args": [
+              0,
+              4,
+              1,
+              5,
+              2,
+              6,
+              8
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "boundary",
+            "args": [
+              0,
+              4,
+              1,
+              5,
+              0,
+              5,
+              8
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "point",
+            "args": [
+              3,
+              3,
+              2,
+              2,
+              3,
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "separate-y",
+            "args": [
+              3,
+              3,
+              2,
+              2,
+              4,
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "bool g(int ay1, int ay2, int ax1, int ax2,\n       int by, int bx1, int bx2) {\n    if (ay1 > by || ay2 < by)\n        return false;\n    else\n        return {{K}};\n}"
+      },
+      "contextId": "segments"
+    }
+  ]
+}

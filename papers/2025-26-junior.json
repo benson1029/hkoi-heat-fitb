@@ -1,0 +1,2614 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2025-26-junior",
+    "season": "2025/26",
+    "division": "junior",
+    "title": "HKOI 2025/26 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2026hja.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2026hj_sol.pdf. Pages refer to the combined junior PDF. Multiple choice is outside FITB scope."
+    }
+  },
+  "tracks": [
+    {
+      "id": "paper1",
+      "label": "Paper 1 · compulsory",
+      "selection": "required"
+    },
+    {
+      "id": "python",
+      "label": "Paper 2 · Python",
+      "selection": "choice",
+      "choiceGroup": "paper2"
+    },
+    {
+      "id": "cpp",
+      "label": "Paper 2 · C++",
+      "selection": "choice",
+      "choiceGroup": "paper2"
+    }
+  ],
+  "questions": [
+    {
+      "id": "paper1-a",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "You have three pendulums. They are released from their respective top positions simultaneously at the 0th second. They would return to their starting positions every 6, 8, and 12 seconds respectively. What is the smallest positive time (in seconds) will they all be back to their starting positions?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 6
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "24"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-b",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 6
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "2"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "a = [1, 2, 3, 4, 5]\nx = 0\nfor i in range(2025):\n    x = (x + a[x]) % 5\nprint(a[x])",
+        "cpp": "int main() {\n    int a[5] = {1, 2, 3, 4, 5};\n    int x = 0;\n    for (int i = 0; i < 2025; ++i)\n        x = (x + a[x]) % 5;\n    cout << a[x];\n}"
+      }
+    },
+    {
+      "id": "paper1-c",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "If f() returns a random integer between 0 and 31 inclusive uniformly and independently, what is the probability that the above program outputs 0? Please provide the answer as a fraction in its simplest form."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 6
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "1/8"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "def f() -> int:\n    # Implementation omitted 實現省略\n\nprint(f() & 26)",
+        "cpp": "int f() {\n    // Implementation omitted 實現省略\n}\nint main() {\n    cout << (f() & 26);\n}"
+      }
+    },
+    {
+      "id": "paper1-d",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 4, Blank D",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Complete the program such that it outputs 4."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 2
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 7
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def f(x: int) -> int:\n    a = [5, 3, 6, 2, 8]\n    for i in range(5):\n        x = x ^ a[i]\n    return x\ny = {{D}}\nprint(f(y))",
+            "harness": {
+              "kind": "program"
+            }
+          },
+          {
+            "language": "cpp",
+            "source": "int f(int x) {\n    int a[5] = {5, 3, 6, 2, 8};\n    for (int i = 0; i < 5; ++i) {\n        x = x ^ a[i];\n    }\n    return x;\n}\nint main() {\n    int y = {{D}};\n    cout << f(y);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "4"
+            },
+            "stdin": "",
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "4\n"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-e",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 5, Blank E",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Consider all arithmetic expressions of length between 1 and 7 (inclusive) that consists of 1 and + only. The arithmetic expressions should not start or end with +, or have consecutive +. For example, 1, 11, 111+111 and 1+1+11 are valid arithmetic expressions, while +1+1+ and 1++1 are not. How many different values can be evaluated from these arithmetic expressions?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 7
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "21"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "paper1-f",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section B, Question 6, Blank F",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "8 balls are arranged in a circular formation as shown in the figure on the right. Each ball is colored black or white. For every pair of balls of the same color, draw a straight line segment connecting their centers. The color of the line segment is the same as that of the balls.\n\nIn one operation, you may remove a single line segment, the cost of removing it equals the number of opposite-color line segments it intersects. Repeat until all the line segments are removed; the total cost is the sum of costs of all operations. What is the minimum total cost needed to remove all line segments?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 7
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "16"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2025-26-junior-q6.png",
+        "alt": "Eight balls around a circle, clockwise from the top: white, black, black, white, black, black, white, black."
+      }
+    },
+    {
+      "id": "paper1-g",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 1(a), Blank G1, G2",
+      "title": "Section C, Question 1(a)",
+      "prompt": {
+        "en": "A repdigit is a positive integer whose decimal representation consists of the same digit repeated (e.g., 1, 11, 7, 777 are repdigits, while 15, 23, 998 are not).\n\nComplete the function f(x) to return the smallest repdigit which consists of only digit 1 and is greater than x. For example, when x is 111, f should return 1111. It is guaranteed that x is a repdigit consisting of only digit 1, and 1 ≤x ≤11111."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "G1",
+          "maxChars": 3
+        },
+        {
+          "id": "G2",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def f(x: int) -> int:\n    return x * {{G1}} + {{G2}}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          },
+          {
+            "language": "cpp",
+            "source": "int f(int x) {\n    return x * {{G1}} + {{G2}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 11
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 111
+            },
+            "args": [
+              11
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1111
+            },
+            "args": [
+              111
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 111111
+            },
+            "args": [
+              11111
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-h",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 1(b), Blank H1, H2",
+      "title": "Section C, Question 1(b)",
+      "prompt": {
+        "en": "Assuming f(x) is correctly implemented, complete the function g(x) to return the smallest repdigit greater than x. For example, when x is 222, g should return 333. It is guaranteed that x is a repdigit, and 1 ≤x ≤99999."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "H1",
+          "maxChars": 5
+        },
+        {
+          "id": "H2",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 9
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def g(x: int) -> int:\n    d = x % 10\n    r = x // {{H1}}\n    if d < 9:\n        return {{H2}}\n    else:\n        return f(r)",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            },
+            "helperSource": "def f(x: int) -> int:\n    return x * 10 + 1"
+          },
+          {
+            "language": "cpp",
+            "source": "int g(int x) {\n    int d = x % 10;\n    int r = x / {{H1}};\n    if (d < 9) {\n        return {{H2}};\n    } else {\n        return f(r);\n    }\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            },
+            "helperSource": "int f(int x) { return x * 10 + 1; }"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 33
+            },
+            "args": [
+              22
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 888
+            },
+            "args": [
+              777
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 11
+            },
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 111111
+            },
+            "args": [
+              99999
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-i",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 2(a), Blank I",
+      "title": "Section C, Question 2(a)",
+      "prompt": {
+        "en": "According to the triangle inequality, three positive integers may only form the side lengths of a valid triangle if and only if the sum of any two integers is greater than the third number.\n\nComplete the function f(a, b, c) such that it returns True (C++: true) if and only if the three integers a, b, c form the side lengths of a valid triangle. It is guaranteed that 1 ≤a < b < c ≤1000."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def f(a: int, b: int, c: int) -> bool:\n    return {{I}}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          },
+          {
+            "language": "cpp",
+            "source": "bool f(int a, int b, int c) {\n    return {{I}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              1,
+              2,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              2,
+              3,
+              4
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              3,
+              4,
+              6
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              10,
+              20,
+              30
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              998,
+              999,
+              1000
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper1-j",
+      "track": "paper1",
+      "printedRef": "Paper 1, Section C, Question 2(b), Blank J1, J2",
+      "title": "Section C, Question 2(b)",
+      "prompt": {
+        "en": "Assuming f is correctly implemented. Let a be an array of length n of distinct positive integers in ascending order. Complete the function g(a) to return the number of valid triples in a that form the side lengths of a valid triangle. The triples are unordered, for example, (2, 3, 4) is considered the same triple as (4, 3, 2)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J1",
+          "maxChars": 3
+        },
+        {
+          "id": "J2",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def g(a: list[int]) -> int:\n    n = len(a)\n    ans = 0\n    for i in range(n - 1):\n        k = i + 1\n        for j in range(i):\n            while (({{J1}}) and\n                   f(a[j], a[i], a[k])):\n                k += 1\n            ans += {{J2}}\n    return ans",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            },
+            "helperSource": "def f(a: int, b: int, c: int) -> bool:\n    return a + b > c"
+          },
+          {
+            "language": "cpp",
+            "source": "int g(vector<int> a) {\n    int n = a.size();\n    int ans = 0;\n    for (int i = 0; i < n - 1; ++i) {\n        int k = i + 1;\n        for (int j = 0; j < i; ++j) {\n            while (({{J1}}) &&\n                   f(a[j], a[i], a[k])) {\n                k += 1;\n            }\n            ans += {{J2}};\n        }\n    }\n    return ans;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            },
+            "helperSource": "bool f(int a, int b, int c) { return a + b > c; }"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              [
+                2,
+                3,
+                4
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              [
+                2,
+                3,
+                4,
+                5
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 6
+            },
+            "args": [
+              [
+                2,
+                4,
+                5,
+                7,
+                8
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 10
+            },
+            "args": [
+              [
+                3,
+                4,
+                6,
+                7,
+                10,
+                12
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-a",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "27"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "a = [2, 6, 2, 4, 1, 8, 3, 9, 7]\ns = 0\nfor i in range(1, len(a), 2):\n    s += a[i]\nprint(s)"
+      }
+    },
+    {
+      "id": "python-b",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "78"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "a = [28, 18, 12, 37, 23, 39, 15]\nb = [0] * 7\nfor i in range(7):\n    for j in range(i + 1):\n        if (i - j) % 2 == 0:\n            b[i] += a[j]\n        else:\n            b[i] -= a[j]\ns = 0\nfor i in range(7):\n    s += b[i]\nprint(s)"
+      }
+    },
+    {
+      "id": "python-c",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "28"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "python": "a = [[0] * 8 for _ in range(8)]\nx, y = 0, 0\ndx, dy = 0, 1\nfor i in range(4, 9):\n    for j in range(i):\n        a[x][y] = 1\n        x = (x + dx) & 7\n        y = (y + dy) & 7\n        dx ^= 1\n        dy ^= 1\nans = 0\nfor i in range(8):\n    for j in range(8):\n        ans += a[i][j]\nprint(ans)"
+      }
+    },
+    {
+      "id": "python-d",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 4, Blank D",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Assume a function is_cube(x) is correctly implemented. It takes in a positive integer x, and returns True if and only if x is a perfect cube.\n\nComplete the following function f such that for all positive integers n ≤10⁹, it returns the number of pairs of positive integers (a, b) such that a² + b³ = n."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 20
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def f(n: int) -> int:\n    s, i = 0, 1\n    while i * i < n:\n        if {{D}}:\n            s += 1\n        i += 1\n    return s",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            },
+            "helperSource": "def is_cube(x: int) -> bool:\n    if x < 1: return False\n    k = round(x ** (1 / 3))\n    return any(z ** 3 == x for z in (k - 1, k, k + 1))"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              17
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              36
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              73
+            ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              100
+            ]
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              1000
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "python": "def is_cube(x: int) -> bool:\n    # Implementation omitted 實現省略\n\ndef f(n: int) -> int:\n    s, i = 0, 1\n    while i * i < n:\n        if {{D}}:\n            s += 1\n        i += 1\n    return s"
+      }
+    },
+    {
+      "id": "python-e",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 5, Blank E",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the following program such that it outputs 101101101."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 9
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "a, b = {{E}}\nprint(a * b)",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "101101101\n"
+            },
+            "stdin": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-f",
+      "track": "python",
+      "printedRef": "Paper 2, Section B, Question 6, Blank F",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "The months of the year are encoded in binary, where the N-th month of the year (1 ≤N ≤12) is represented by a 4-digit binary number ABCD₂, such that 0 ≤A, B, C, D ≤1 and N = 8A + 4B + 2C + D. For example, January is represented by A = 0, B = 0, C = 0, D = 1, February by A = 0, B = 0, C = 1, D = 0, ... and December by A = 1, B = 1, C = 0, D = 0.\n\nComplete the function has_r(A, B, C, D), so that given four integers A, B, C, D representing a valid month of the year, it returns Yes if and only if that month’s English name contains the letter r.\n\nHint: The months that contain the letter r are January, February, March, April, September, October, November and December."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 7
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def has_r(A: int, B: int, C: int, D: int) -> str:\n    if {{F}}:\n        return \"Yes\"\n    else:\n        return \"No\"",
+            "harness": {
+              "kind": "call",
+              "function": "has_r"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Yes"
+            },
+            "args": [
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Yes"
+            },
+            "args": [
+              0,
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Yes"
+            },
+            "args": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Yes"
+            },
+            "args": [
+              0,
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "No"
+            },
+            "args": [
+              0,
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "No"
+            },
+            "args": [
+              0,
+              1,
+              1,
+              0
+            ]
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "No"
+            },
+            "args": [
+              0,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "No"
+            },
+            "args": [
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Yes"
+            },
+            "args": [
+              1,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "case-10",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Yes"
+            },
+            "args": [
+              1,
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "id": "case-11",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Yes"
+            },
+            "args": [
+              1,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "case-12",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": "Yes"
+            },
+            "args": [
+              1,
+              1,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-g",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 1(a), Blank G",
+      "title": "Section C, Question 1(a)",
+      "prompt": {
+        "en": "We denote a non-empty list of integers of length n as beautiful if and only if it consists of x, x+1, x+2, ..., x+n−1 in this order for some integer x.\n\nComplete the function is_beautiful1(a) to return True if and only if list a is beautiful. It is guaranteed that the list a has at least one element."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def is_beautiful1(a: list[int]) -> bool:\n    n = len(a)\n    for i in range(1, n):\n        if {{G}} != 1:\n            return False\n    return True",
+            "harness": {
+              "kind": "call",
+              "function": "is_beautiful1"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                -3,
+                -2,
+                -1,
+                0
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                1,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                4,
+                5,
+                5
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-h",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 1(b), Blank H",
+      "title": "Section C, Question 1(b)",
+      "prompt": {
+        "en": "We denote a non-empty list of integers of length n as beautiful if and only if it consists of x, x+1, x+2, ..., x+n−1 in this order for some integer x.\n\nComplete the function is_beautiful2(a) to return True if and only if list a is beautiful. It is guaranteed that the list a has at least one element."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 6
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def is_beautiful2(a: list[int]) -> bool:\n    n = len(a)\n    for i in range(1, n):\n        if a[i] != {{H}}:\n            return False\n    return True",
+            "harness": {
+              "kind": "call",
+              "function": "is_beautiful2"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                -3,
+                -2,
+                -1,
+                0
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                1,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                4,
+                5,
+                5
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-i",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 1(c), Blank I",
+      "title": "Section C, Question 1(c)",
+      "prompt": {
+        "en": "We denote a non-empty list of integers of length n as beautiful if and only if it consists of x, x+1, x+2, ..., x+n−1 in this order for some integer x.\n\nComplete the function is_beautiful3(a) to return True if and only if list a is beautiful. It is guaranteed that the list a has at least one element."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 16
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def is_beautiful3(a: list[int]) -> bool:\n    n = len(a)\n    for i in range(1, n):\n        if a[i - 1] >= a[i]:\n            return False\n    return bool({{I}})",
+            "harness": {
+              "kind": "call",
+              "function": "is_beautiful3"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                -3,
+                -2,
+                -1,
+                0
+              ]
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                1,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                4,
+                5,
+                5
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-j",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 2(a), Blank J",
+      "title": "Section C, Question 2(a)",
+      "prompt": {
+        "en": "Complete the program f(x) such that it produces the correct output for these inputs:\n\n| Input | Output |\n| --- | --- |\n| python marathon | Yes |\n| pair repair | Yes |\n| class glass | Yes |\n| crate rate | Yes |\n| return burn | No |\n| closet set | No |\n| butter button | No |"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 6
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 19
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def f(x: str) -> any:\n    return {{J}}\ns, t = input().split()\nif f(s) == f(t):\n    print(\"Yes\")\nelse:\n    print(\"No\")",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "python marathon\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "pair repair\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "class glass\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "crate rate\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "No\n"
+            },
+            "stdin": "return burn\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "No\n"
+            },
+            "stdin": "closet set\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "No\n"
+            },
+            "stdin": "butter button\n"
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "abcd zzabcd\n"
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "No\n"
+            },
+            "stdin": "abcx abcy\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "python-k",
+      "track": "python",
+      "printedRef": "Paper 2, Section C, Question 2(b), Blank K",
+      "title": "Section C, Question 2(b)",
+      "prompt": {
+        "en": "Complete the program f(x) such that it produces the correct output for these inputs:\n\n| Input | Output |\n| --- | --- |\n| secure rescue | Yes |\n| state taste | Yes |\n| night thing | Yes |\n| loop pool | Yes |\n| time mine | No |\n| write white | No |\n| violet violin | No |"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 9
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 19
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "python",
+            "source": "def f(x: str) -> any:\n    return {{K}}\ns, t = input().split()\nif f(s) == f(t):\n    print(\"Yes\")\nelse:\n    print(\"No\")",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "secure rescue\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "state taste\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "night thing\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "loop pool\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "No\n"
+            },
+            "stdin": "time mine\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "No\n"
+            },
+            "stdin": "write white\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "No\n"
+            },
+            "stdin": "violet violin\n"
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "Yes\n"
+            },
+            "stdin": "aabb baba\n"
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "No\n"
+            },
+            "stdin": "aab abb\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-l",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 1, Blank L",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "L"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 23
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "L": [
+            "18"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    int a = 2, b = 3, c = 5;\n    b *= c;\n    a += b;\n    b -= c;\n    a /= c;\n    cout << a + b + c;\n}"
+      }
+    },
+    {
+      "id": "cpp-m",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 2, Blank M",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "M"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 23
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "M": [
+            "21"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    int ans = 0;\n    for (int i = 2; i < 16; ++i) {\n        for (int j = i * i; j < 16; j += i) ans += i;\n    }\n    cout << ans;\n}"
+      }
+    },
+    {
+      "id": "cpp-n",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 3, Blank N",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Across all inputs, how many distinct integers can the program output?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "N"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 24
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "N": [
+            "7"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int main() {\n    int n;\n    cin >> n;\n    n &= n >> 1;\n    n &= n >> 1;\n    n &= n >> 1;\n    cout << n;\n}"
+      }
+    },
+    {
+      "id": "cpp-o",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 4, Blank O",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Complete the function IsNotEqual(x, y) such that it returns true if and only if x is not equal to y for all integers −10000 ≤x, y ≤10000."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "O",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 24
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "bool IsNotEqual(int x, int y) {\n    return {{O}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "IsNotEqual"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              1,
+              1
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              1,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              0,
+              0
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              -5,
+              5
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              10000,
+              -10000
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              -10000,
+              -10000
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-p",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 5, Blank P",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the following function AreAllOnes(a), such that it returns true if and only if all elements in the array are equal to 1."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "P",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 24
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "bool AreAllOnes(vector<int> a) {\n    bool ok = true;\n    int n = a.size();\n    for (int i = 0; i < n; ++i) {\n        ok = {{P}};\n    }\n    return ok;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "AreAllOnes"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1
+              ]
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                0
+              ]
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                1,
+                1,
+                1
+              ]
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                1,
+                0,
+                1
+              ]
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                0,
+                1,
+                1
+              ]
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-q",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section B, Question 6, Blank Q",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "This is the 30th edition of HKOI. If you look up HKOI’s website, you will find that the 1st HKOI was \"HKOI 1997\". Let e be the edition number, the naming format, \"HKOI {1997+e−1}\", remained in use until the 18th HKOI (\"HKOI 2014\"). Since the 19th HKOI (\"HKOI 2014/15\"), the naming format has changed to \"HKOI {1997 + e −2}/{the two least significant digits of (1997 + e −1)}\".\n\nAssuming that the naming format will not change again in the future, complete the function f(e) below, such that for all 1 ≤e ≤100, it outputs the correct eth HKOI’s name following the naming formats above."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "Q",
+          "maxChars": 16
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 25
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "void f(int e) {\n    if (e <= 18) {\n        cout << \"HKOI \" << 1997 + e - 1;\n    }\n    else {\n        cout << \"HKOI \" << {{Q}};\n    }\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "HKOI 1997"
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "HKOI 2014"
+            },
+            "args": [
+              18
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "HKOI 2014/15"
+            },
+            "args": [
+              19
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "HKOI 2025/26"
+            },
+            "args": [
+              30
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "stdout": "HKOI 2095/96"
+            },
+            "args": [
+              100
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-r",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section C, Question 1(a), Blank R",
+      "title": "Section C, Question 1(a)",
+      "prompt": {
+        "en": "Let n and m be integers. We call the pair (n, m) a good pair if and only if both n and m are even. For example, (8, 4), (2, 6) and (10, 10) are good pairs, but (5, 2) and (7, 7) are not.\n\nComplete the function IsGoodPair(n, m) such that it returns true if and only if (n, m) is a good pair, where 1 ≤n, m ≤10^9."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "R",
+          "maxChars": 18
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 27
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "bool IsGoodPair(int n, int m) {\n    return {{R}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "IsGoodPair"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              2,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              2,
+              3
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              3,
+              2
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              11,
+              11
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 0
+              }
+            }
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              1000000000,
+              999999998
+            ],
+            "expectedByLanguage": {
+              "cpp": {
+                "returnValue": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-s",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section C, Question 1(b), Blank S",
+      "title": "Section C, Question 1(b)",
+      "prompt": {
+        "en": "Let n and m be integers. We call the pair (n, m) a good pair if and only if both n and m are even. For example, (8, 4), (2, 6) and (10, 10) are good pairs, but (5, 2) and (7, 7) are not.\n\nAssume IsGoodPair(n, m) is implemented correctly, complete the function CountGoodPairs1(k) such that it returns the number of unique good pairs where 1 ≤n, m ≤k for all 1 ≤k ≤1000."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "S",
+          "maxChars": 14
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 27
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int CountGoodPairs1(int k) {\n    int count = 0;\n    for (int n = 1; n <= k; ++n) {\n        for (int {{S}}) {\n            if (IsGoodPair(n, m))\n                count++;\n        }\n    }\n    return count;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "CountGoodPairs1"
+            },
+            "helperSource": "bool IsGoodPair(int n, int m) { return n % 2 == 0 && m % 2 == 0; }"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 10
+            },
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 55
+            },
+            "args": [
+              20
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-t",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section C, Question 1(c), Blank T",
+      "title": "Section C, Question 1(c)",
+      "prompt": {
+        "en": "Let n and m be integers. We call the pair (n, m) a good pair if and only if both n and m are even. For example, (8, 4), (2, 6) and (10, 10) are good pairs, but (5, 2) and (7, 7) are not.\n\nComplete the function CountGoodPairs2(k) such that it returns the same value as CountGoodPairs1(k) for all 1 ≤k ≤1000."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "T",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 27
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int CountGoodPairs2(int k) {\n    int count = 0;\n    for (int n = 2; n <= k; n += 2) {\n        count += {{T}};\n    }\n    return count;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "CountGoodPairs2"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 10
+            },
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 55
+            },
+            "args": [
+              20
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-u",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section C, Question 2(a), Blank U1, U2",
+      "title": "Section C, Question 2(a)",
+      "prompt": {
+        "en": "Given a string s only consisting of digits from 0 to 9 inclusive. s possibly containing leading zeros. A contiguous substring s[i..j] (where i ≤j) is called good if and only if it, when being seen as a number, is a multiple of 3.\n\nComplete the function f(s) such that it returns the number of good substrings of a string s, where s is a string of length at most 1000."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "U1",
+          "maxChars": 10
+        },
+        {
+          "id": "U2",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 28
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int f(string s) {\n    int n = s.length();\n    int a = 0;\n    for (int i = 0; i < n; ++i) {\n        int sum = 0;\n        for (int j = i; j < n; ++j) {\n            sum += s[j] - '0';\n            if ({{U1}}) {\n                {{U2}};\n            }\n        }\n    }\n    return a;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              "0"
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              "3"
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              "12"
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              "123"
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 6
+            },
+            "args": [
+              "0012"
+            ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 6
+            },
+            "args": [
+              "999"
+            ]
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 11
+            },
+            "args": [
+              "123456"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-v",
+      "track": "cpp",
+      "printedRef": "Paper 2, Section C, Question 2(b), Blank V",
+      "title": "Section C, Question 2(b)",
+      "prompt": {
+        "en": "Given a string s only consisting of digits from 0 to 9 inclusive. s possibly containing leading zeros. A contiguous substring s[i..j] (where i ≤j) is called good if and only if it, when being seen as a number, is a multiple of 3.\n\nComplete the function g(s) so that for all string s with length at most 1000, the return value of g(s) is the same as the return value of f(s)."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "V",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2026hj.pdf",
+        "page": 28
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int g(string s) {\n    int n = s.length();\n    int a = 0;\n    int p[3] = {1, 0, 0};\n    int sum = 0;\n    for (int i = 0; i < n; ++i) {\n        sum += s[i] - '0';\n        {{V}};\n        ++p[sum % 3];\n    }\n    return a;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              "0"
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              "3"
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              "12"
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              "123"
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 6
+            },
+            "args": [
+              "0012"
+            ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 6
+            },
+            "args": [
+              "999"
+            ]
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 11
+            },
+            "args": [
+              "123456"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,1605 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2023-24-senior",
+    "season": "2023/24",
+    "division": "senior",
+    "title": "HKOI 2023/24 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2024hs_sol.pdf. Page numbers refer to the combined 19-page paper."
+    }
+  },
+  "tracks": [
+    {
+      "id": "cpp",
+      "label": "Section B · C++",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "shift",
+      "track": "cpp",
+      "markdown": "Let a be an array of integers of length n, where n ≥ 1. A left circular shift on the array is defined as setting a[0], a[1], · · · , a[n-3], a[n-2], a[n-1] to be a[1], a[2], · · · , a[n-2], a[n-1], a[0] simultaneously.\n\nFor example, if n = 5 and a = [1,2,3,4,5]. a would become [2,3,4,5,1] after one left circular shift."
+    },
+    {
+      "id": "query",
+      "track": "cpp",
+      "markdown": "Given an array (NOT necessarily sorted) A[0..N − 1] of N integers, and an array of queries Q[0..M − 1]. For query Q[j], output either the smallest index i (0 ≤ i < N) such that A[i] > Q[j], or N if no such index exists. You must output the answers to the queries in order."
+    },
+    {
+      "id": "coins",
+      "track": "cpp",
+      "markdown": "In Heung Shing, there are only four denominations of coins, $1, $2, $5 and $10. This results in multiple ways to pay the same amount without change. For example, there are 6 ways to pay $7 without change:\n\n| Way | Coins used |\n|---:|---|\n| 1 | $1 + $1 + $1 + $2 + $2 |\n| 2 | $2 + $5 |\n| 3 | $1 + $1 + $1 + $1 + $1 + $1 + $1 |\n| 4 | $1 + $1 + $5 |\n| 5 | $1 + $2 + $2 + $2 |\n| 6 | $1 + $1 + $1 + $1 + $1 + $2 |\n\nAlice has already completed a function CountNo1(n) that calculates the number of ways to pay $n without change, using $2, $5 and $10 coins only. The function signature is as follows.\n\n```cpp\nint CountNo1 (int n);\n```"
+    },
+    {
+      "id": "bitshift",
+      "track": "cpp",
+      "markdown": "Consider the following function:\n\n```cpp\nint f(int x) {\n    int a = 1 << x;\n    int b = 1;\n    int res = 0;\n    while (a) {\n        res += a * b;\n        a >>= 1;\n        ++b;\n    }\n    res += b;\n    return res;\n}\n```\n\nYou CANNOT call other functions in your answers to parts (a) and (b), including f."
+    }
+  ],
+  "questions": [
+    {
+      "id": "cpp-a",
+      "track": "cpp",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Given the ASCII code of 0 is 48, A is 65 and a is 97, complete the function f(c) so that it returns 0 if c is a digit, 1 if c is an uppercase letter, and 2 if c is a lowercase letter. Assume c must be either a digit, uppercase letter or lowercase letter."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int f(char c) {\n    return {{A}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              48
+            ]
+          },
+          {
+            "id": "1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              49
+            ]
+          },
+          {
+            "id": "9",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              57
+            ]
+          },
+          {
+            "id": "A",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              65
+            ]
+          },
+          {
+            "id": "Z",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              90
+            ]
+          },
+          {
+            "id": "a",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 300,
+            "args": [
+              97
+            ]
+          },
+          {
+            "id": "z",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 300,
+            "args": [
+              122
+            ]
+          },
+          {
+            "id": "m",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 300,
+            "args": [
+              109
+            ]
+          },
+          {
+            "id": "Q",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 300,
+            "args": [
+              81
+            ]
+          },
+          {
+            "id": "5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 300,
+            "args": [
+              53
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-b",
+      "track": "cpp",
+      "printedRef": "Section B, Question 2(a), Blank B",
+      "title": "Section B, Question 2(a)",
+      "prompt": {
+        "en": "Complete the following function LeftShift(a) that performs left circular shift on array a once."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 20
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 14
+      },
+      "contextId": "shift",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "void LeftShift (vector<int> &a) {\n    int n = a.size();\n    int temp = a[0];\n    for (int {{B}})\n        a[i - 1] = a[i];\n    a[n - 1] = temp;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "LeftShift"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "array-0",
+            "expected": {
+              "argsAfter": [
+                [
+                  1
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "id": "array-1",
+            "expected": {
+              "argsAfter": [
+                [
+                  2,
+                  1
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "id": "array-2",
+            "expected": {
+              "argsAfter": [
+                [
+                  2,
+                  3,
+                  4,
+                  5,
+                  1
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            ]
+          },
+          {
+            "id": "array-3",
+            "expected": {
+              "argsAfter": [
+                [
+                  0,
+                  8,
+                  8,
+                  -2
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                -2,
+                0,
+                8,
+                8
+              ]
+            ]
+          },
+          {
+            "id": "array-4",
+            "expected": {
+              "argsAfter": [
+                [
+                  7,
+                  7,
+                  7,
+                  7
+                ]
+              ]
+            },
+            "maxSteps": 3000,
+            "args": [
+              [
+                7,
+                7,
+                7,
+                7
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-c",
+      "track": "cpp",
+      "printedRef": "Section B, Question 2(b), Blank C1/C2",
+      "title": "Section B, Question 2(b)",
+      "prompt": {
+        "en": "Complete the following function LeftShiftK(a, k) that performs k left circular shifts on array a. Assume 0 ≤ k ≤ n."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C1",
+          "maxChars": 20
+        },
+        {
+          "id": "C2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 14
+      },
+      "contextId": "shift",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "void LeftShiftK (vector<int> &a, int k) {\n    int n = a.size();\n    vector<int> temp = a;\n    for (int {{C1}})\n        a[i] = a[i - n + k];\n    for (int i = 0; i < n - k; ++i)\n        a[i] = {{C2}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "LeftShiftK"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "rotate-0",
+            "expected": {
+              "argsAfter": [
+                [
+                  1
+                ],
+                0
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1
+              ],
+              0
+            ]
+          },
+          {
+            "id": "rotate-1",
+            "expected": {
+              "argsAfter": [
+                [
+                  1
+                ],
+                1
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1
+              ],
+              1
+            ]
+          },
+          {
+            "id": "rotate-2",
+            "expected": {
+              "argsAfter": [
+                [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ],
+                0
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              0
+            ]
+          },
+          {
+            "id": "rotate-3",
+            "expected": {
+              "argsAfter": [
+                [
+                  2,
+                  3,
+                  4,
+                  5,
+                  1
+                ],
+                1
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              1
+            ]
+          },
+          {
+            "id": "rotate-4",
+            "expected": {
+              "argsAfter": [
+                [
+                  3,
+                  4,
+                  5,
+                  1,
+                  2
+                ],
+                2
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              2
+            ]
+          },
+          {
+            "id": "rotate-5",
+            "expected": {
+              "argsAfter": [
+                [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ],
+                5
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              5
+            ]
+          },
+          {
+            "id": "rotate-6",
+            "expected": {
+              "argsAfter": [
+                [
+                  2,
+                  -1,
+                  0,
+                  2
+                ],
+                3
+              ]
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                -1,
+                0,
+                2,
+                2
+              ],
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-d",
+      "track": "cpp",
+      "printedRef": "Section B, Question 3(a), Blank D1/D2/D3",
+      "title": "Section B, Question 3(a)",
+      "prompt": {
+        "en": "Complete the function Query(A, Q), so that it produces the desired output to the queries. You CANNOT call other functions in your answer."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D1",
+          "maxChars": 1
+        },
+        {
+          "id": "D2",
+          "maxChars": 12
+        },
+        {
+          "id": "D3",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 15
+      },
+      "contextId": "query",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "void Query(vector<int> A, vector<int> Q) {\n    int N = A.size(), M = Q.size();\n    for (int j = 0; j < M; ++j) {\n        int ans = {{D1}};\n        for (int i = 0; i < N; ++i) {\n            if ({{D2}}) {\n                {{D3}};\n            }\n        }\n        cout << ans << endl;\n    }\n}",
+            "harness": {
+              "kind": "call",
+              "function": "Query"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "query-0",
+            "expected": {
+              "stdout": "0\n0\n0\n2\n3\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [
+                3,
+                1,
+                5
+              ],
+              [
+                0,
+                1,
+                2,
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "id": "query-1",
+            "expected": {
+              "stdout": "0\n3\n3\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [
+                5,
+                5,
+                5
+              ],
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          },
+          {
+            "id": "query-2",
+            "expected": {
+              "stdout": "0\n1\n1\n3\n3\n4\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [
+                -3,
+                0,
+                -1,
+                7
+              ],
+              [
+                -4,
+                -2,
+                -1,
+                0,
+                6,
+                7
+              ]
+            ]
+          },
+          {
+            "id": "query-3",
+            "expected": {
+              "stdout": "0\n0\n0\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [],
+              [
+                -1,
+                0,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "query-4",
+            "expected": {
+              "stdout": "0\n1\n1\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [
+                1
+              ],
+              [
+                0,
+                1,
+                2
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-e",
+      "track": "cpp",
+      "printedRef": "Section B, Question 3(b), Blank E1/E2",
+      "title": "Section B, Question 3(b)",
+      "prompt": {
+        "en": "For part (b) only, suppose that array A is sorted in non-descending order.\nComplete the function SingleQueryFast(A, q), so that it returns the answer to a single query q. You CANNOT call other functions in your answer."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E1",
+          "maxChars": 10
+        },
+        {
+          "id": "E2",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 15
+      },
+      "contextId": "query",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int SingleQueryFast (vector<int> A, int q) {\n    int N = A.size();\n    int l = 0, r = N;\n    while (l < r) {\n        int m = (l + r) / 2;\n        if ({{E1}})\n            r = m;\n        else\n            {{E2}};\n    }\n    return r;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "SingleQueryFast"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "sorted-0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              [],
+              0
+            ]
+          },
+          {
+            "id": "sorted-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1
+              ],
+              0
+            ]
+          },
+          {
+            "id": "sorted-2",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1
+              ],
+              1
+            ]
+          },
+          {
+            "id": "sorted-3",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                1,
+                2,
+                2,
+                7
+              ],
+              2
+            ]
+          },
+          {
+            "id": "sorted-4",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                -5,
+                -2,
+                0,
+                4,
+                9
+              ],
+              3
+            ]
+          },
+          {
+            "id": "sorted-5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                0,
+                0,
+                0
+              ],
+              -1
+            ]
+          },
+          {
+            "id": "sorted-6",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 5000,
+            "args": [
+              [
+                0,
+                0,
+                0
+              ],
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-f",
+      "track": "cpp",
+      "printedRef": "Section B, Question 3(c), Blank F1/F2/F3/F4",
+      "title": "Section B, Question 3(c)",
+      "prompt": {
+        "en": "Complete the function QueryFast(A, Q), so that it produces the desired output to the queries. You may call SingleQueryFast() in your answer."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F1",
+          "maxChars": 5
+        },
+        {
+          "id": "F2",
+          "maxChars": 20
+        },
+        {
+          "id": "F3",
+          "maxChars": 10
+        },
+        {
+          "id": "F4",
+          "maxChars": 30
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 16,
+        "note": "The paper permits a correctly implemented SingleQueryFast; a fixed implementation is prepended only in the grading harness."
+      },
+      "contextId": "query",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "void QueryFast (vector<int> A, vector<int> Q) {\n    int N = A.size(), M = Q.size();\n    vector<int> B(N);\n    for (int i = 0; i < N; ++i) {\n        B[i] = {{F1}};\n        if ({{F2}}) {\n            B[i] = {{F3}};\n        }\n    }\n    for (int j = 0; j < M; ++j) {\n        cout << {{F4}} << endl;\n    }\n}",
+            "harness": {
+              "kind": "call",
+              "function": "QueryFast"
+            },
+            "helperSource": "int SingleQueryFast(vector<int> A, int q) {\n    int l = 0, r = A.size();\n    while (l < r) {\n        int m = (l + r) / 2;\n        if (A[m] > q) r = m; else l = m + 1;\n    }\n    return r;\n}"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "query-0",
+            "expected": {
+              "stdout": "0\n0\n0\n2\n3\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [
+                3,
+                1,
+                5
+              ],
+              [
+                0,
+                1,
+                2,
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "id": "query-1",
+            "expected": {
+              "stdout": "0\n3\n3\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [
+                5,
+                5,
+                5
+              ],
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          },
+          {
+            "id": "query-2",
+            "expected": {
+              "stdout": "0\n1\n1\n3\n3\n4\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [
+                -3,
+                0,
+                -1,
+                7
+              ],
+              [
+                -4,
+                -2,
+                -1,
+                0,
+                6,
+                7
+              ]
+            ]
+          },
+          {
+            "id": "query-3",
+            "expected": {
+              "stdout": "0\n0\n0\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [],
+              [
+                -1,
+                0,
+                1
+              ]
+            ]
+          },
+          {
+            "id": "query-4",
+            "expected": {
+              "stdout": "0\n1\n1\n"
+            },
+            "maxSteps": 10000,
+            "args": [
+              [
+                1
+              ],
+              [
+                0,
+                1,
+                2
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-g",
+      "track": "cpp",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 16
+      },
+      "displayCode": {
+        "cpp": "int a[10] = {15, 8, 5, 7, 3, 9, 11, 6, 7, 13};\nint main() {\n    int sum = 0;\n    for (int i = 0; i < 10; ++i)\n        for (int j = i + 1; j < 10; ++j)\n            for (int k = j + 1; k < 10; ++k)\n                sum += a[i] ^ a[j] ^ a[k];\n    cout << sum;\n}"
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "880"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-h",
+      "track": "cpp",
+      "printedRef": "Section B, Question 5(a), Blank H",
+      "title": "Section B, Question 5(a)",
+      "prompt": {
+        "en": "Complete the following function Count(n) that calculates the number of ways to pay $n without change, using $1, $2, $5 and $10 coins. You can make calls to CountNo1 and Count inside your subprogram. Assume that −10⁴ ≤ n ≤ 10⁴."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 30
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 17,
+        "note": "The paper declares but does not print CountNo1; a fixed implementation is prepended only in the grading harness."
+      },
+      "contextId": "coins",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int Count(int n) {\n    if (n < 0) return 0;\n    else if (n == 0) return 1;\n    else return {{H}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "Count"
+            },
+            "helperSource": "int CountNo1(int n) {\n    if (n < 0) return 0;\n    int ans = 0;\n    for (int t = 0; t * 10 <= n; ++t)\n        for (int f = 0; t * 10 + f * 5 <= n; ++f)\n            if ((n - t * 10 - f * 5) % 2 == 0) ++ans;\n    return ans;\n}"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "n-5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 30000,
+            "args": [
+              -5
+            ]
+          },
+          {
+            "id": "n-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 30000,
+            "args": [
+              -1
+            ]
+          },
+          {
+            "id": "n0",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 30000,
+            "args": [
+              0
+            ]
+          },
+          {
+            "id": "n1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 30000,
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "n2",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 30000,
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "n3",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 30000,
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "n5",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 30000,
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "n7",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 30000,
+            "args": [
+              7
+            ]
+          },
+          {
+            "id": "n10",
+            "expected": {
+              "returnValue": 11
+            },
+            "maxSteps": 30000,
+            "args": [
+              10
+            ]
+          },
+          {
+            "id": "n11",
+            "expected": {
+              "returnValue": 12
+            },
+            "maxSteps": 30000,
+            "args": [
+              11
+            ]
+          },
+          {
+            "id": "n17",
+            "expected": {
+              "returnValue": 28
+            },
+            "maxSteps": 30000,
+            "args": [
+              17
+            ]
+          },
+          {
+            "id": "n20",
+            "expected": {
+              "returnValue": 40
+            },
+            "maxSteps": 30000,
+            "args": [
+              20
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-i",
+      "track": "cpp",
+      "printedRef": "Section B, Question 5(b), Blank I",
+      "title": "Section B, Question 5(b)",
+      "prompt": {
+        "en": "Alice does not wish to use too many $2 coins because they are not round. Complete the following function CountRestrict2(n, limit) that calculates the number of ways to pay $n without change, using $1, $2, $5 and $10 coins but with no more than limit $2 coins. You can make calls to Count inside your program. Assume that 0 ≤ n, limit ≤ 10³ and Count has been correctly implemented."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 30
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 17,
+        "note": "The paper allows a correctly implemented Count; a fixed implementation is prepended only in the grading harness."
+      },
+      "contextId": "coins",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int CountRestrict2 (int n, int limit) {\n    return {{I}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "CountRestrict2"
+            },
+            "helperSource": "int Count(int n) {\n    if (n < 0) return 0;\n    int ans = 0;\n    for (int t = 0; t * 10 <= n; ++t)\n        for (int f = 0; t * 10 + f * 5 <= n; ++f)\n            for (int two = 0; t * 10 + f * 5 + two * 2 <= n; ++two) ++ans;\n    return ans;\n}"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "0-0",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 30000,
+            "args": [
+              0,
+              0
+            ]
+          },
+          {
+            "id": "1-0",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 30000,
+            "args": [
+              1,
+              0
+            ]
+          },
+          {
+            "id": "2-0",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 30000,
+            "args": [
+              2,
+              0
+            ]
+          },
+          {
+            "id": "2-1",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 30000,
+            "args": [
+              2,
+              1
+            ]
+          },
+          {
+            "id": "7-0",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 30000,
+            "args": [
+              7,
+              0
+            ]
+          },
+          {
+            "id": "7-1",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 30000,
+            "args": [
+              7,
+              1
+            ]
+          },
+          {
+            "id": "7-3",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 30000,
+            "args": [
+              7,
+              3
+            ]
+          },
+          {
+            "id": "10-0",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 30000,
+            "args": [
+              10,
+              0
+            ]
+          },
+          {
+            "id": "10-2",
+            "expected": {
+              "returnValue": 8
+            },
+            "maxSteps": 30000,
+            "args": [
+              10,
+              2
+            ]
+          },
+          {
+            "id": "20-3",
+            "expected": {
+              "returnValue": 25
+            },
+            "maxSteps": 30000,
+            "args": [
+              20,
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-j",
+      "track": "cpp",
+      "printedRef": "Section B, Question 6(a), Blank J1/J2",
+      "title": "Section B, Question 6(a)",
+      "prompt": {
+        "en": "Complete function g such that functions f and g return the same result for all 0 ≤ x ≤ 10."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J1",
+          "maxChars": 4
+        },
+        {
+          "id": "J2",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 18
+      },
+      "contextId": "bitshift",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int g(int x) {\n    int a = {{J1}};\n    int b = 1;\n    int res = {{J2}};\n    while (a) {\n        res += a * b;\n        a >>= 1;\n        // ++b;\n    }\n    res += b;\n    return res;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "0",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 5000,
+            "args": [
+              0
+            ]
+          },
+          {
+            "id": "1",
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 5000,
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "2",
+            "expected": {
+              "returnValue": 15
+            },
+            "maxSteps": 5000,
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "3",
+            "expected": {
+              "returnValue": 31
+            },
+            "maxSteps": 5000,
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "4",
+            "expected": {
+              "returnValue": 63
+            },
+            "maxSteps": 5000,
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "5",
+            "expected": {
+              "returnValue": 127
+            },
+            "maxSteps": 5000,
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "6",
+            "expected": {
+              "returnValue": 255
+            },
+            "maxSteps": 5000,
+            "args": [
+              6
+            ]
+          },
+          {
+            "id": "7",
+            "expected": {
+              "returnValue": 511
+            },
+            "maxSteps": 5000,
+            "args": [
+              7
+            ]
+          },
+          {
+            "id": "8",
+            "expected": {
+              "returnValue": 1023
+            },
+            "maxSteps": 5000,
+            "args": [
+              8
+            ]
+          },
+          {
+            "id": "9",
+            "expected": {
+              "returnValue": 2047
+            },
+            "maxSteps": 5000,
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "10",
+            "expected": {
+              "returnValue": 4095
+            },
+            "maxSteps": 5000,
+            "args": [
+              10
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-k",
+      "track": "cpp",
+      "printedRef": "Section B, Question 6(b), Blank K1/K2",
+      "title": "Section B, Question 6(b)",
+      "prompt": {
+        "en": "Complete function h such that functions f and h return the same result for all 0 ≤ x ≤ 10."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "K1",
+          "maxChars": 4
+        },
+        {
+          "id": "K2",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2024hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2024hsa.pdf",
+        "page": 19
+      },
+      "contextId": "bitshift",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int h(int x) {\n    int a = {{K1}};\n    int b = 0;\n    int res = {{K2}};\n    while (a) {\n        res += a * b;\n        a >>= 1;\n        // ++b;\n    }\n    res += b;\n    return res;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "h"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "0",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 5000,
+            "args": [
+              0
+            ]
+          },
+          {
+            "id": "1",
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 5000,
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "2",
+            "expected": {
+              "returnValue": 15
+            },
+            "maxSteps": 5000,
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "3",
+            "expected": {
+              "returnValue": 31
+            },
+            "maxSteps": 5000,
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "4",
+            "expected": {
+              "returnValue": 63
+            },
+            "maxSteps": 5000,
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "5",
+            "expected": {
+              "returnValue": 127
+            },
+            "maxSteps": 5000,
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "6",
+            "expected": {
+              "returnValue": 255
+            },
+            "maxSteps": 5000,
+            "args": [
+              6
+            ]
+          },
+          {
+            "id": "7",
+            "expected": {
+              "returnValue": 511
+            },
+            "maxSteps": 5000,
+            "args": [
+              7
+            ]
+          },
+          {
+            "id": "8",
+            "expected": {
+              "returnValue": 1023
+            },
+            "maxSteps": 5000,
+            "args": [
+              8
+            ]
+          },
+          {
+            "id": "9",
+            "expected": {
+              "returnValue": 2047
+            },
+            "maxSteps": 5000,
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "10",
+            "expected": {
+              "returnValue": 4095
+            },
+            "maxSteps": 5000,
+            "args": [
+              10
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
