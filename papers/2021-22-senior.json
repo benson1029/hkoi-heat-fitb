@@ -14,48 +14,48 @@
   },
   "tracks": [
     {
-      "id": "cpp",
-      "label": "Section B · C++",
+      "id": "section-b",
+      "label": "Section B",
       "selection": "required"
     }
   ],
   "contexts": [
     {
       "id": "maze",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "Consider the following 8×8 maze. The arrow represents Alice.\n\n```text\n########\n#>.#..##\n#......#\n#..##.##\n##.....#\n#..##.##\n##..#.##\n########\n```\n\nAlice is facing the direction that the arrow is pointing, and would like to walk in the maze. In each move, she may only perform either one of the following actions:\n\n1. Walk to the cell in front of her, or\n2. Rotate 90 degrees clockwise and immediately walk to the cell in front of her.\n\nShe may perform an action only if it does not make her walk into a black cell (she cannot perform the rotation only and not move forward). She can move to the cells that she has visited and the path may end at any cell. The starting cell is considered visited."
     },
     {
       "id": "attacks",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "In a game, there is a game board of n rows and m columns, a monster is located on each cell. A warrior is located at (x,y), meaning the xth row and yth column. He has two attack modes: s-attack and e-attack.\n\nWith s-attack, he can kill all monsters on the diagonal from top left to bottom right passing through (x,y).\nWith e-attack, he can kill all monsters on the diagonal from top right to bottom left passing through (x,y).\n\nRefer to the following diagram. The warrior is located at (2,3), denoted as X.\nWith s-attack, He can kill all the monsters on cells denoted as S, including (2,3).\nWith e-attack, He can kill all the monsters on cells denoted as E, including (2,3).\n\n```text\n    1 2 3 4 5 6 7\n1   . S . E . . .\n2   . . X . . . .\n3   . E . S . . .\n4   E . . . S . .\n5   . . . . . S .\n```"
     },
     {
       "id": "numbers",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "Alice and Peter are playing a game of numbers! Rules of the game are as follows:\n\nIn the beginning of the game, each of Alice and Peter has an array of n integers. Alice and Peter take turns to remove an element from their array, with Alice being the first to move. The game ends when there is one element remaining in each of Alice’s and Peter’s array.\n\nAlice tries to maximise the absolute difference of the 2 remaining elements, while Peter tries to minimise it. Suppose Alice and Peter both play optimally, find the absolute difference of the remaining elements."
     },
     {
       "id": "multiply",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "Consider the following function:"
     },
     {
       "id": "digit",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "Consider the following function:"
     },
     {
       "id": "bridge",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "In a game, N participants, one by one in order, cross a bridge formed by K pairs of indistinguishable glass panels. At the beginning of the game, participants know nothing about how the glass panels are set up, except for the fact that: for every pair of glass panels, one of them is tempered glass which can support participant’s weight, and another one is fragile glass which cannot.\n\nIn every step, a participant chooses one panel from the next pair to step on. When a participant steps on a fragile glass panel, the panel breaks and the participant gets eliminated. If steps on a tempered glass panel, the participant continues to the next step. A participant wins when arrives at the other end of the bridge. Assume all participants are smart and only aim for their personal win, and they can see which panels are broken and the decisions made by participants in front of them.\n\nFor the questions below, if the answer is not an integer, express the answer using reduced fraction."
     }
   ],
   "questions": [
     {
       "id": "cpp-a",
-      "track": "cpp",
-      "printedRef": "Section B, Question 1, Blank A1/A2/A3",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blanks A1, A2, A3",
       "title": "Section B, Question 1",
       "prompt": {
         "en": "Complete the blanks below, so that g(a, b) returns the value of aᵇ. It is guaranteed that a, b > 0, aᵇ ≤ 2³¹ − 1."
@@ -254,7 +254,7 @@
     },
     {
       "id": "cpp-b",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 2, Blank B",
       "title": "Section B, Question 2",
       "prompt": {
@@ -285,7 +285,7 @@
     },
     {
       "id": "cpp-c",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 2, Blank C",
       "title": "Section B, Question 2",
       "prompt": {
@@ -316,7 +316,7 @@
     },
     {
       "id": "cpp-d",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 3, Blank D",
       "title": "Section B, Question 3",
       "prompt": {
@@ -432,7 +432,7 @@
     },
     {
       "id": "cpp-e",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 3, Blank E",
       "title": "Section B, Question 3",
       "prompt": {
@@ -548,7 +548,7 @@
     },
     {
       "id": "cpp-f",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 4, Blank F",
       "title": "Section B, Question 4",
       "prompt": {
@@ -578,7 +578,7 @@
     },
     {
       "id": "cpp-g",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 4, Blank G",
       "title": "Section B, Question 4",
       "prompt": {
@@ -608,7 +608,7 @@
     },
     {
       "id": "cpp-h",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 5, Blank H",
       "title": "Section B, Question 5",
       "prompt": {
@@ -641,8 +641,8 @@
     },
     {
       "id": "cpp-i",
-      "track": "cpp",
-      "printedRef": "Section B, Question 5, Blank I1/I2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blanks I1, I2",
       "title": "Section B, Question 5",
       "prompt": {
         "en": "The bug can be fixed by changing exactly one line. Find the line and correct it WITHOUT using asterisk (*) so that the function correctly returns the product xy for all integers 1 ≤ x, y ≤ 10⁴."
@@ -782,7 +782,7 @@
     },
     {
       "id": "cpp-j",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 6, Blank J",
       "title": "Section B, Question 6",
       "prompt": {
@@ -816,7 +816,7 @@
     },
     {
       "id": "cpp-k",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 7, Blank K",
       "title": "Section B, Question 7",
       "prompt": {
@@ -849,7 +849,7 @@
     },
     {
       "id": "cpp-l",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 7, Blank L",
       "title": "Section B, Question 7",
       "prompt": {
@@ -882,7 +882,7 @@
     },
     {
       "id": "cpp-m",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 8, Blank M",
       "title": "Section B, Question 8",
       "prompt": {
@@ -912,7 +912,7 @@
     },
     {
       "id": "cpp-n",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 8, Blank N",
       "title": "Section B, Question 8",
       "prompt": {

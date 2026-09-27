@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npm run prepare:assets && vite",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --maxWorkers=1 --fileParallelism=false",
     "prepare:assets": "node scripts/copy-pyodide.mjs",
     "build": "npm run prepare:assets && npm run typecheck && vite build",
     "validate:papers": "tsx src/cli/validate-papers.ts",

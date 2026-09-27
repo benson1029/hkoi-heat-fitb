@@ -15,7 +15,7 @@
   "tracks": [
     {
       "id": "paper1",
-      "label": "Paper 1 · compulsory",
+      "label": "Paper 1",
       "selection": "required"
     },
     {
@@ -253,26 +253,26 @@
           {
             "language": "cpp",
             "dialect": "c++20",
-          "source": "int main() {\n    string s = \"{{D}}\";\n    int a = 0;\n    int b = 0;\n    for (int i = 0; i < 8; ++i) {\n        if (s[i] == 'a')\n            a = a + 1;\n        else if (s[i] == 'b')\n            b = b + a;\n    }\n    cout << b;\n}\n",
+            "source": "int main() {\n    string s = \"{{D}}\";\n    int a = 0;\n    int b = 0;\n    for (int i = 0; i < 8; ++i) {\n        if (s[i] == 'a')\n            a = a + 1;\n        else if (s[i] == 'b')\n            b = b + a;\n    }\n    cout << b;\n}\n",
             "harness": {
               "kind": "program"
             }
           }
         ],
         "cases": [
-        {
-          "id": "printed-output",
-          "stdin": "",
-          "expected": {
-            "stdout": "14"
-          },
-          "expectedByLanguage": {
-            "python": {
-              "stdout": "14\n"
-            }
-          },
-          "maxSteps": 2000
-        }
+          {
+            "id": "printed-output",
+            "stdin": "",
+            "expected": {
+              "stdout": "14"
+            },
+            "expectedByLanguage": {
+              "python": {
+                "stdout": "14\n"
+              }
+            },
+            "maxSteps": 2000
+          }
         ]
       },
       "printedRef": "Paper 1, Section B, Question 4, Blank D"
@@ -1546,7 +1546,7 @@
           }
         ]
       },
-      "printedRef": "Paper 2 (Python), Section C, Question 2(a), Blanks I1 and I2",
+      "printedRef": "Paper 2 (Python), Section C, Question 2(a), Blanks I1, I2",
       "contextId": "python-c2"
     },
     {
@@ -1791,7 +1791,7 @@
           }
         ]
       },
-      "printedRef": "Paper 2 (Python), Section C, Question 2(b), Blanks J1, J2 and J3",
+      "printedRef": "Paper 2 (Python), Section C, Question 2(b), Blanks J1, J2, J3",
       "contextId": "python-c2"
     },
     {
@@ -2191,7 +2191,7 @@
           }
         ]
       },
-      "printedRef": "Paper 2 (C++), Section C, Question 1, Blanks Q1, Q2 and Q3"
+      "printedRef": "Paper 2 (C++), Section C, Question 1, Blanks Q1, Q2, Q3"
     },
     {
       "id": "cpp-r",
@@ -2450,7 +2450,7 @@
           }
         ]
       },
-      "printedRef": "Paper 2 (C++), Section C, Question 2(b), Blanks S1 and S2"
+      "printedRef": "Paper 2 (C++), Section C, Question 2(b), Blanks S1, S2"
     },
     {
       "id": "cpp-t",
@@ -2681,7 +2681,7 @@
           }
         ]
       },
-      "printedRef": "Paper 2 (C++), Section C, Question 2(c), Blanks T1 and T2"
+      "printedRef": "Paper 2 (C++), Section C, Question 2(c), Blanks T1, T2"
     }
   ],
   "contexts": [

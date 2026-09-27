@@ -4,7 +4,7 @@
     "id": "2021-22-junior",
     "season": "2021/22",
     "division": "junior",
-    "title": "HKOI 2021/22 Heat Event (Junior Group)",
+    "title": "HKOI 2021/22 Heat Event — Junior Group FITB",
     "source": {
       "paperUrl": "https://assets.hkoi.org/ref/2022hj.pdf",
       "answerSheetUrl": "https://assets.hkoi.org/ref/2022hja.pdf"
@@ -83,7 +83,7 @@
     {
       "id": "B",
       "track": "section-b",
-      "printedRef": "Section B, Question 2(a), Blank B1, Blank B2, Blank B3",
+      "printedRef": "Section B, Question 2(a), Blanks B1, B2, B3",
       "title": "Section B, Question 2(a)",
       "prompt": {
         "en": "Complete the following program so that it implements the greedy algorithm described above. At the end of the program, b[i] should equal the number of c[i]-cent coins used. The input and output sections of the program are omitted. You may assume that 1 ≤ n ≤ 100."
@@ -180,7 +180,7 @@
     {
       "id": "C",
       "track": "section-b",
-      "printedRef": "Section B, Question 2(b), Blank C1, Blank C2",
+      "printedRef": "Section B, Question 2(b), Blanks C1, C2",
       "title": "Section B, Question 2(b)",
       "prompt": {
         "en": "Unfortunately, Alice’s greedy algorithm does not always work. Find a counter-example with n = 3, 1 = c[0] < c[1] < c[2] ≤ 10, and m = 10. Write down the values of c[1] and c[2]."
@@ -341,7 +341,7 @@
     {
       "id": "F",
       "track": "section-b",
-      "printedRef": "Section B, Question 4, Blank F1, Blank F2, Blank F3",
+      "printedRef": "Section B, Question 4, Blanks F1, F2, F3",
       "title": "Section B, Question 4",
       "prompt": {
         "en": "The input to the following program is 401 integers between 1 and 1000 inclusive, given in non-descending order. Complete the following program so that it outputs an integer x, such that the sum of absolute difference of x and each input number is minimized. If there is multiple x that can achieve the same minimum sum, the program should output the least x."
@@ -557,7 +557,7 @@
     {
       "id": "I",
       "track": "section-b",
-      "printedRef": "Section B, Question 6, Blank I1, Blank I2",
+      "printedRef": "Section B, Question 6, Blanks I1, I2",
       "title": "Section B, Question 6",
       "prompt": {
         "en": "The following program tries to delete all negative numbers in the array. However, the program contains an error. The bug can be fixed by changing exactly one line. Find the line and correct it so that the program outputs the correct answers for all of the following cases:\n\n| Input | Output |\n|---|---|\n| 5 1 2 -3 -4 5 | 1 2 5 |\n| 2 -5 3 | 3 |\n| 4 -3 -4 8 -6 | 8 |"

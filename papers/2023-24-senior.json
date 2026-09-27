@@ -14,37 +14,37 @@
   },
   "tracks": [
     {
-      "id": "cpp",
-      "label": "Section B · C++",
+      "id": "section-b",
+      "label": "Section B",
       "selection": "required"
     }
   ],
   "contexts": [
     {
       "id": "shift",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "Let a be an array of integers of length n, where n ≥ 1. A left circular shift on the array is defined as setting a[0], a[1], · · · , a[n-3], a[n-2], a[n-1] to be a[1], a[2], · · · , a[n-2], a[n-1], a[0] simultaneously.\n\nFor example, if n = 5 and a = [1,2,3,4,5]. a would become [2,3,4,5,1] after one left circular shift."
     },
     {
       "id": "query",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "Given an array (NOT necessarily sorted) A[0..N − 1] of N integers, and an array of queries Q[0..M − 1]. For query Q[j], output either the smallest index i (0 ≤ i < N) such that A[i] > Q[j], or N if no such index exists. You must output the answers to the queries in order."
     },
     {
       "id": "coins",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "In Heung Shing, there are only four denominations of coins, $1, $2, $5 and $10. This results in multiple ways to pay the same amount without change. For example, there are 6 ways to pay $7 without change:\n\n| Way | Coins used |\n|---:|---|\n| 1 | $1 + $1 + $1 + $2 + $2 |\n| 2 | $2 + $5 |\n| 3 | $1 + $1 + $1 + $1 + $1 + $1 + $1 |\n| 4 | $1 + $1 + $5 |\n| 5 | $1 + $2 + $2 + $2 |\n| 6 | $1 + $1 + $1 + $1 + $1 + $2 |\n\nAlice has already completed a function CountNo1(n) that calculates the number of ways to pay $n without change, using $2, $5 and $10 coins only. The function signature is as follows.\n\n```cpp\nint CountNo1 (int n);\n```"
     },
     {
       "id": "bitshift",
-      "track": "cpp",
+      "track": "section-b",
       "markdown": "Consider the following function:\n\n```cpp\nint f(int x) {\n    int a = 1 << x;\n    int b = 1;\n    int res = 0;\n    while (a) {\n        res += a * b;\n        a >>= 1;\n        ++b;\n    }\n    res += b;\n    return res;\n}\n```\n\nYou CANNOT call other functions in your answers to parts (a) and (b), including f."
     }
   ],
   "questions": [
     {
       "id": "cpp-a",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 1, Blank A",
       "title": "Section B, Question 1",
       "prompt": {
@@ -181,7 +181,7 @@
     },
     {
       "id": "cpp-b",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 2(a), Blank B",
       "title": "Section B, Question 2(a)",
       "prompt": {
@@ -321,8 +321,8 @@
     },
     {
       "id": "cpp-c",
-      "track": "cpp",
-      "printedRef": "Section B, Question 2(b), Blank C1/C2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2(b), Blanks C1, C2",
       "title": "Section B, Question 2(b)",
       "prompt": {
         "en": "Complete the following function LeftShiftK(a, k) that performs k left circular shifts on array a. Assume 0 ≤ k ≤ n."
@@ -527,8 +527,8 @@
     },
     {
       "id": "cpp-d",
-      "track": "cpp",
-      "printedRef": "Section B, Question 3(a), Blank D1/D2/D3",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3(a), Blanks D1, D2, D3",
       "title": "Section B, Question 3(a)",
       "prompt": {
         "en": "Complete the function Query(A, Q), so that it produces the desired output to the queries. You CANNOT call other functions in your answer."
@@ -668,8 +668,8 @@
     },
     {
       "id": "cpp-e",
-      "track": "cpp",
-      "printedRef": "Section B, Question 3(b), Blank E1/E2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3(b), Blanks E1, E2",
       "title": "Section B, Question 3(b)",
       "prompt": {
         "en": "For part (b) only, suppose that array A is sorted in non-descending order.\nComplete the function SingleQueryFast(A, q), so that it returns the answer to a single query q. You CANNOT call other functions in your answer."
@@ -810,8 +810,8 @@
     },
     {
       "id": "cpp-f",
-      "track": "cpp",
-      "printedRef": "Section B, Question 3(c), Blank F1/F2/F3/F4",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3(c), Blanks F1, F2, F3, F4",
       "title": "Section B, Question 3(c)",
       "prompt": {
         "en": "Complete the function QueryFast(A, Q), so that it produces the desired output to the queries. You may call SingleQueryFast() in your answer."
@@ -957,7 +957,7 @@
     },
     {
       "id": "cpp-g",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 4, Blank G",
       "title": "Section B, Question 4",
       "prompt": {
@@ -989,7 +989,7 @@
     },
     {
       "id": "cpp-h",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 5(a), Blank H",
       "title": "Section B, Question 5(a)",
       "prompt": {
@@ -1149,7 +1149,7 @@
     },
     {
       "id": "cpp-i",
-      "track": "cpp",
+      "track": "section-b",
       "printedRef": "Section B, Question 5(b), Blank I",
       "title": "Section B, Question 5(b)",
       "prompt": {
@@ -1299,8 +1299,8 @@
     },
     {
       "id": "cpp-j",
-      "track": "cpp",
-      "printedRef": "Section B, Question 6(a), Blank J1/J2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6(a), Blanks J1, J2",
       "title": "Section B, Question 6(a)",
       "prompt": {
         "en": "Complete function g such that functions f and g return the same result for all 0 ≤ x ≤ 10."
@@ -1451,8 +1451,8 @@
     },
     {
       "id": "cpp-k",
-      "track": "cpp",
-      "printedRef": "Section B, Question 6(b), Blank K1/K2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6(b), Blanks K1, K2",
       "title": "Section B, Question 6(b)",
       "prompt": {
         "en": "Complete function h such that functions f and h return the same result for all 0 ≤ x ≤ 10."

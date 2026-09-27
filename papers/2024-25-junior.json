@@ -15,7 +15,7 @@
   "tracks": [
     {
       "id": "paper1",
-      "label": "Paper 1 · compulsory",
+      "label": "Paper 1",
       "selection": "required"
     },
     {
@@ -36,7 +36,7 @@
       "id": "paper1-a",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 1, Blank A",
-      "title": "Section B, Question 1",
+      "title": "Paper 1, Section B, Question 1",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -68,7 +68,7 @@
       "id": "paper1-b",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 2, Blank B",
-      "title": "Section B, Question 2",
+      "title": "Paper 1, Section B, Question 2",
       "prompt": {
         "en": "Complete the program such that it outputs ioi2025."
       },
@@ -123,7 +123,7 @@
       "id": "paper1-c",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 3, Blank C",
-      "title": "Section B, Question 3",
+      "title": "Paper 1, Section B, Question 3",
       "prompt": {
         "en": "Two different cards are chosen randomly from 9 cards numbered 1 to 9. Given that the sum of the numbers of the chosen cards is even, what is the probability that both cards are odd-numbered?"
       },
@@ -153,7 +153,7 @@
       "id": "paper1-d",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 4, Blank D",
-      "title": "Section B, Question 4",
+      "title": "Paper 1, Section B, Question 4",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -185,7 +185,7 @@
       "id": "paper1-e",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 5, Blank E",
-      "title": "Section B, Question 5",
+      "title": "Paper 1, Section B, Question 5",
       "prompt": {
         "en": "Alice and Bob are standing on an infinitely long number line. The positions on the number line are labelled . . . , −2, −1, 0, 1, 2, . . . from left to right.\n\nInitially, Alice is at position 2024, while Bob is at position 4040. Alice can jump 5 positions to the right each time, while Bob can jump 11 positions to the left each time.\n\nWhat is the minimum number of jumps made by Alice and Bob in total so that they end up at the same position?"
       },
@@ -213,7 +213,7 @@
       "id": "paper1-f",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 6, Blank F",
-      "title": "Section B, Question 6",
+      "title": "Paper 1, Section B, Question 6",
       "prompt": {
         "en": "For how many different integer inputs between 0 and 100 (inclusive) does this program output Cool?"
       },
@@ -245,7 +245,7 @@
       "id": "paper1-g",
       "track": "paper1",
       "printedRef": "Paper 1, Section C, Question 1(a), Blank G",
-      "title": "Section C, Question 1(a)",
+      "title": "Paper 1, Section C, Question 1(a)",
       "prompt": {
         "en": "Given an array a of n unique positive integers.\n\nYou are given a function f which, when calling f(i, j) where 0 ≤i, j < n, the values of a[i] and a[j] will be swapped if and only if a[i] > a[j].\n\nComplete the function g so that array a will be sorted in ascending order after calling g(n)."
       },
@@ -371,7 +371,7 @@
       "id": "paper1-h",
       "track": "paper1",
       "printedRef": "Paper 1, Section C, Question 1(b), Blank H",
-      "title": "Section C, Question 1(b)",
+      "title": "Paper 1, Section C, Question 1(b)",
       "prompt": {
         "en": "Given an array a of n unique positive integers.\n\nYou are given a function f which, when calling f(i, j) where 0 ≤i, j < n, the values of a[i] and a[j] will be swapped if and only if a[i] > a[j].\n\nComplete the function h so that array a will be sorted in ascending order after calling h(n)."
       },
@@ -497,7 +497,7 @@
       "id": "paper1-i",
       "track": "paper1",
       "printedRef": "Paper 1, Section C, Question 2(a), Blank I",
-      "title": "Section C, Question 2(a)",
+      "title": "Paper 1, Section C, Question 2(a)",
       "prompt": {
         "en": "A perfect grid is a grid with 3 rows and 3 columns, where each cell in the grid is filled with a unique integer between 1 and 9 (inclusive).\n\nConsider the following constraints:\n\n- The sums of the numbers in each row are all equal to X.\n- The sums of the numbers in each column are all equal to X.\n\nIt is known that there exists a perfect grid that satisfies all constraints above. Write down a possible value of X."
       },
@@ -525,7 +525,7 @@
       "id": "paper1-j",
       "track": "paper1",
       "printedRef": "Paper 1, Section C, Question 2(b), Blank J",
-      "title": "Section C, Question 2(b)",
+      "title": "Paper 1, Section C, Question 2(b)",
       "prompt": {
         "en": "A perfect grid is a grid with 3 rows and 3 columns, where each cell in the grid is filled with a unique integer between 1 and 9 (inclusive).\n\nConsider the following constraints:\n\n- The sums of the numbers in each row are all equal to Y.\n- The sums of the numbers in each column are all equal to Y.\n- The sum of numbers on the upper left corner and lower right corner is equal to Z.\n- The sum of numbers on the upper right corner and lower left corner is equal to Z.\n\nIt is known that there exists a perfect grid that satisfies all constraints above. Write down a possible value of Z."
       },
@@ -552,8 +552,8 @@
     {
       "id": "python-a",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 1, Blank A",
-      "title": "Section B, Question 1",
+      "printedRef": "Paper 2 (Python), Section B, Question 1, Blank A",
+      "title": "Paper 2 (Python), Section B, Question 1",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -583,8 +583,8 @@
     {
       "id": "python-b",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 2, Blank B",
-      "title": "Section B, Question 2",
+      "printedRef": "Paper 2 (Python), Section B, Question 2, Blank B",
+      "title": "Paper 2 (Python), Section B, Question 2",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -614,8 +614,8 @@
     {
       "id": "python-c",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 3, Blank C",
-      "title": "Section B, Question 3",
+      "printedRef": "Paper 2 (Python), Section B, Question 3, Blank C",
+      "title": "Paper 2 (Python), Section B, Question 3",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -645,8 +645,8 @@
     {
       "id": "python-d",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 4, Blank D",
-      "title": "Section B, Question 4",
+      "printedRef": "Paper 2 (Python), Section B, Question 4, Blank D",
+      "title": "Paper 2 (Python), Section B, Question 4",
       "prompt": {
         "en": "Let a be a non-empty list of integers. We merge adjacent equal elements into one, until no adjacent elements are equal. For example, [1, 2, 2, 3, 3, 3, 1] will become [1, 2, 3, 1]. Complete the function find_merged_length to return the length of the final list."
       },
@@ -754,8 +754,8 @@
     {
       "id": "python-e",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 5, Blank E",
-      "title": "Section B, Question 5",
+      "printedRef": "Paper 2 (Python), Section B, Question 5, Blank E",
+      "title": "Paper 2 (Python), Section B, Question 5",
       "prompt": {
         "en": "Complete the function fix_first_char, so that fix_first_char(s) returns string s, with the first character of s changed to character ‘H’."
       },
@@ -840,8 +840,8 @@
     {
       "id": "python-f",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 6, Blank F",
-      "title": "Section B, Question 6",
+      "printedRef": "Paper 2 (Python), Section B, Question 6, Blank F",
+      "title": "Paper 2 (Python), Section B, Question 6",
       "prompt": {
         "en": "Let a be a two-dimensional integer list of size n×m, complete the function f so that it returns the sum of absolute differences over all pairs of adjacent cell values."
       },
@@ -966,8 +966,8 @@
     {
       "id": "python-g",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 1(a), Blank G",
-      "title": "Section C, Question 1(a)",
+      "printedRef": "Paper 2 (Python), Section C, Question 1(a), Blank G",
+      "title": "Paper 2 (Python), Section C, Question 1(a)",
       "prompt": {
         "en": "Alice wants to check if a list of integers contains all equal elements. She implements this in a few different ways. It is guaranteed that the list a has at least one element.\n\nComplete the function check_all_equal1 to return True if and only if list a contains all equal elements."
       },
@@ -1069,8 +1069,8 @@
     {
       "id": "python-h",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 1(b), Blank H",
-      "title": "Section C, Question 1(b)",
+      "printedRef": "Paper 2 (Python), Section C, Question 1(b), Blank H",
+      "title": "Paper 2 (Python), Section C, Question 1(b)",
       "prompt": {
         "en": "Alice wants to check if a list of integers contains all equal elements. She implements this in a few different ways. It is guaranteed that the list a has at least one element.\n\nComplete the function check_all_equal2 to return True if and only if list a contains all equal elements."
       },
@@ -1172,8 +1172,8 @@
     {
       "id": "python-i",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 1(c), Blank I1, I2",
-      "title": "Section C, Question 1(c)",
+      "printedRef": "Paper 2 (Python), Section C, Question 1(c), Blanks I1, I2",
+      "title": "Paper 2 (Python), Section C, Question 1(c)",
       "prompt": {
         "en": "Alice wants to check if a list of integers contains all equal elements. She implements this in a few different ways. It is guaranteed that the list a has at least one element.\n\nComplete the function check_all_equal3 to return True if and only if the list a contains all equal elements."
       },
@@ -1279,8 +1279,8 @@
     {
       "id": "python-j",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 2(a), Blank J",
-      "title": "Section C, Question 2(a)",
+      "printedRef": "Paper 2 (Python), Section C, Question 2(a), Blank J",
+      "title": "Paper 2 (Python), Section C, Question 2(a)",
       "prompt": {
         "en": "You own a small boat. Now, using the boat, you want to transport n boxes identical in size but with different weights across the river.\n\nThe maximum capacity of the boat is 2 boxes, while the maximum weight the boat can support is w kg. You do not need to consider your own weight.\n\nThe weights of the boxes are given in a integer list a, which for all 0 ≤i < n, the weight of box i is a[i] kg. It is known that the weight of any single box does not exceeds w kg.\n\nComplete the function is_satisfied, so that is_satisfied(a, w, x, y) returns whether box x and box y can be put onto the boat at the same time."
       },
@@ -1381,8 +1381,8 @@
     {
       "id": "python-k",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 2(b), Blank K1, K2, K3, K4",
-      "title": "Section C, Question 2(b)",
+      "printedRef": "Paper 2 (Python), Section C, Question 2(b), Blanks K1, K2, K3, K4",
+      "title": "Paper 2 (Python), Section C, Question 2(b)",
       "prompt": {
         "en": "You own a small boat. Now, using the boat, you want to transport n boxes identical in size but with different weights across the river.\n\nThe maximum capacity of the boat is 2 boxes, while the maximum weight the boat can support is w kg. You do not need to consider your own weight.\n\nThe weights of the boxes are given in a integer list a, which for all 0 ≤i < n, the weight of box i is a[i] kg. It is known that the weight of any single box does not exceeds w kg.\n\nComplete the function find_minimum_rounds, so that find_minimum_rounds(a, w) returns the minimum number of round trips of boats, in order to transfer all the boxes across the river."
       },
@@ -1504,8 +1504,8 @@
     {
       "id": "cpp-l",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 1, Blank L",
-      "title": "Section B, Question 1",
+      "printedRef": "Paper 2 (C++), Section B, Question 1, Blank L",
+      "title": "Paper 2 (C++), Section B, Question 1",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -1535,8 +1535,8 @@
     {
       "id": "cpp-m",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 2, Blank M",
-      "title": "Section B, Question 2",
+      "printedRef": "Paper 2 (C++), Section B, Question 2, Blank M",
+      "title": "Paper 2 (C++), Section B, Question 2",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -1566,8 +1566,8 @@
     {
       "id": "cpp-n",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 3, Blank N",
-      "title": "Section B, Question 3",
+      "printedRef": "Paper 2 (C++), Section B, Question 3, Blank N",
+      "title": "Paper 2 (C++), Section B, Question 3",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -1597,8 +1597,8 @@
     {
       "id": "cpp-o",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 4, Blank O",
-      "title": "Section B, Question 4",
+      "printedRef": "Paper 2 (C++), Section B, Question 4, Blank O",
+      "title": "Paper 2 (C++), Section B, Question 4",
       "prompt": {
         "en": "In Byteland Secondary School, each school day consists of 7 periods numbered from 0 to 6, inclusive. The arrays alice and bob store the names of the lessons that Alice and Bob have for each period of the day, respectively. Complete the program such that it outputs the name of the earliest (by period number) lesson common to both Alice and Bob. In the case where Alice and Bob share no common periods, the output is empty."
       },
@@ -1640,8 +1640,8 @@
     {
       "id": "cpp-p",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 5, Blank P",
-      "title": "Section B, Question 5",
+      "printedRef": "Paper 2 (C++), Section B, Question 5, Blank P",
+      "title": "Paper 2 (C++), Section B, Question 5",
       "prompt": {
         "en": "Assume a is an array of n elements sorted in ascending order with unique elements. Complete the function NextLargerElement such that it returns the index of the smallest element in a that is larger than x. If there are no elements larger than x, NextLargerElement should return n."
       },
@@ -1751,8 +1751,8 @@
     {
       "id": "cpp-q",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 6, Blank Q",
-      "title": "Section B, Question 6",
+      "printedRef": "Paper 2 (C++), Section B, Question 6, Blank Q",
+      "title": "Paper 2 (C++), Section B, Question 6",
       "prompt": {
         "en": "Given an array of non-negative integers, its H-index is the largest integer h ≥0, such that at least h of the values in the array are greater than or equal to h. Complete the following function to compute the H-index of the array a."
       },
@@ -1858,8 +1858,8 @@
     {
       "id": "cpp-r",
       "track": "cpp",
-      "printedRef": "Paper 2, Section C, Question 1(a), Blank R1, R2",
-      "title": "Section C, Question 1(a)",
+      "printedRef": "Paper 2 (C++), Section C, Question 1(a), Blanks R1, R2",
+      "title": "Paper 2 (C++), Section C, Question 1(a)",
       "prompt": {
         "en": "Given an array a of n unique positive integers.\n\nComplete the function FindMax such that it returns the index of the largest element in a."
       },
@@ -1967,8 +1967,8 @@
     {
       "id": "cpp-s",
       "track": "cpp",
-      "printedRef": "Paper 2, Section C, Question 1(b), Blank S1, S2, S3",
-      "title": "Section C, Question 1(b)",
+      "printedRef": "Paper 2 (C++), Section C, Question 1(b), Blanks S1, S2, S3",
+      "title": "Paper 2 (C++), Section C, Question 1(b)",
       "prompt": {
         "en": "Given an array a of n unique positive integers.\n\nComplete the function FindKthSmallest such that it returns the index of the k-th smallest element in a."
       },
@@ -2073,8 +2073,8 @@
     {
       "id": "cpp-t",
       "track": "cpp",
-      "printedRef": "Paper 2, Section C, Question 2(a), Blank T1, T2",
-      "title": "Section C, Question 2(a)",
+      "printedRef": "Paper 2 (C++), Section C, Question 2(a), Blanks T1, T2",
+      "title": "Paper 2 (C++), Section C, Question 2(a)",
       "prompt": {
         "en": "The Byteland Meteorological Agency is upgrading their weather stations to be automated. One of the goals is to calculate the Maximum Sustained Wind over a period of data gathering. A Sustained Wind is the average value of a continuous window of len data points.\n\ndata_points stores the values of N data points gathered. It is guaranteed that 1 ≤len ≤N ≤10000 and 1 ≤data_points[i] ≤100.\n\nComplete the function MaxSum such that it returns the maximum sum of values of a continuous window of len data points."
       },
@@ -2190,8 +2190,8 @@
     {
       "id": "cpp-u",
       "track": "cpp",
-      "printedRef": "Paper 2, Section C, Question 2(b), Blank U",
-      "title": "Section C, Question 2(b)",
+      "printedRef": "Paper 2 (C++), Section C, Question 2(b), Blank U",
+      "title": "Paper 2 (C++), Section C, Question 2(b)",
       "prompt": {
         "en": "The Byteland Meteorological Agency is upgrading their weather stations to be automated. One of the goals is to calculate the Maximum Sustained Wind over a period of data gathering. A Sustained Wind is the average value of a continuous window of len data points.\n\ndata_points stores the values of N data points gathered. It is guaranteed that 1 ≤len ≤N ≤10000 and 1 ≤data_points[i] ≤100.\n\nAssuming MaxSum is correctly implemented, complete the function MaxSustainedWind such that it returns the maximum sustained wind in a floating point value."
       },

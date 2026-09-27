@@ -1,0 +1,1630 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2016-17-junior",
+    "season": "2016/17",
+    "division": "junior",
+    "title": "HKOI 2016/17 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2017hja.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2017hj_sol.pdf. Only Section B FITB is included; use the printed C++ version."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "questions": [
+    {
+      "id": "section-b-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blanks A1, A2",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Suppose array int a[10] (Pascal: a: array[0..9] of longint) contains 10 distinct integers. The program segment below tries to implement insertion sort to sort the array in ascending order. However, the program contains an error that can be fixed by changing exactly one line. Find the line and correct it. You may assume variables i, j, and t are declared as int (Pascal: longint)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A1",
+          "maxChars": 2
+        },
+        {
+          "id": "A2",
+          "maxChars": 18
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 11
+      },
+      "displayCode": {
+        "cpp": "51 for (i = 1; i <= 9; i++)\n52 {\n53     j = i - 1;\n54     t = a[i];\n55     while (j >= 0)\n56     {\n57         if (t > a[j])\n58             break;\n59         a[j + 1] = a[j];\n60         j = j - 1;\n61     }\n62     a[j] = t;\n63 }"
+      },
+      "grading": {
+        "kind": "cpp-line-repair",
+        "lineBlank": "A1",
+        "replacementBlank": "A2",
+        "firstLine": 51,
+        "source": "for (i = 1; i <= 9; i++)\n{\n    j = i - 1;\n    t = a[i];\n    while (j >= 0)\n    {\n        if (t > a[j])\n            break;\n        a[j + 1] = a[j];\n        j = j - 1;\n    }\n    a[j] = t;\n}",
+        "prefixSource": "int a[10]; int i,j,t; int main() { for(int z=0;z<10;z++) cin >> a[z];\n",
+        "suffixSource": "\nfor(int z=0;z<10;z++) cout << a[z] << \" \"; }",
+        "cases": [
+          {
+            "id": "case-1",
+            "stdin": "10 9 8 7 6 5 4 3 2 1\n",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 10 "
+            },
+            "maxSteps": 50000
+          },
+          {
+            "id": "case-2",
+            "stdin": "1 2 3 4 5 6 7 8 9 10\n",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 10 "
+            },
+            "maxSteps": 50000
+          },
+          {
+            "id": "case-3",
+            "stdin": "7 1 8 2 9 3 10 4 6 5\n",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 10 "
+            },
+            "maxSteps": 50000
+          },
+          {
+            "id": "case-4",
+            "stdin": "1 10 2 9 3 8 4 7 5 6\n",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 10 "
+            },
+            "maxSteps": 50000
+          },
+          {
+            "id": "case-5",
+            "stdin": "-5 7 10 20 -8 3 0 99 2 1\n",
+            "expected": {
+              "stdout": "-8 -5 0 1 2 3 7 10 20 99 "
+            },
+            "maxSteps": 50000
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Evaluate the reverse Polish expression “7 5 + 3 × 8 - 4 ÷”."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "7"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Rewrite the infix expression “7 + 5 × 3 - 8 ÷ 4” in reverse Polish notation where the ordering of numbers is the same as the original expression. Spaces between operators and operands are optional. (Hint: The above two expressions are not equivalent)"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 18
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "rpn-expression",
+        "answerBlank": "C",
+        "forms": [
+          "753*+84/-",
+          "753*84/-+"
+        ]
+      }
+    },
+    {
+      "id": "section-b-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blanks D1, D2, D3",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "There is a row of 18 seats, numbered 1 to 18. Three people are already seated with seat numbers 4, 13, and 18 (each marked by a cross in the following diagram).\n\nNow, three more people come. Where should they sit so that the minimum distance between any pair of people is maximal? Write down their seat numbers (in any order), as well as the maximal distance.\nThe distance between seat A and seat B (A < B) is B − A."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D1"
+        },
+        {
+          "id": "D2"
+        },
+        {
+          "id": "D3"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "integer-list",
+        "answerBlanks": [
+          "D1",
+          "D2",
+          "D3"
+        ],
+        "count": 3,
+        "minimum": 1,
+        "maximum": 18,
+        "distinct": true,
+        "minimumSpacing": {
+          "anchors": [
+            4,
+            13,
+            18
+          ],
+          "required": 3
+        }
+      }
+    },
+    {
+      "id": "section-b-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "There is a row of 18 seats, numbered 1 to 18. Three people are already seated with seat numbers 4, 13, and 18 (each marked by a cross in the following diagram).\n\nNow, three more people come. Where should they sit so that the minimum distance between any pair of people is maximal? Write down their seat numbers (in any order), as well as the maximal distance.\nThe distance between seat A and seat B (A < B) is B − A."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "3"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "A string is a palindrome if and only if it reads the same backward or forward. For example, abcba and adda are palindromes while abcab and abc are not. A substring of a string is a continuous segment of characters appearing in the given string. For example, a, ab, bc and abc are substrings of abc while ac is not.\n\nThe function f(st, ed) verifies if the substring s[st..ed] is a palindrome. It should return true if s[st..ed] is a palindrome and returns false otherwise. Please complete the following function so that it can verify if a substring is a palindrome correctly. Assume that st and ed are valid positions of the string and st <= ed."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string s;\nbool f(int st, int ed) {\n    int i;\n    for (i = st; i <= ed; i++)\n        if (s[i] != s[{{F}}])\n            return false;\n    return true;\n}\nint main() { int st,ed; cin >> s >> st >> ed; cout << f(st,ed); }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "a 0 0\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "aa 0 1\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "aa 0 0\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "ab 0 1\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "ab 0 0\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 1 2\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 0 3\n"
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 0 0\n"
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abca 1 2\n"
+          },
+          {
+            "id": "case-10",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abca 0 3\n"
+          },
+          {
+            "id": "case-11",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abca 0 0\n"
+          },
+          {
+            "id": "case-12",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcba 1 2\n"
+          },
+          {
+            "id": "case-13",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcba 0 4\n"
+          },
+          {
+            "id": "case-14",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcba 0 0\n"
+          },
+          {
+            "id": "case-15",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 2 3\n"
+          },
+          {
+            "id": "case-16",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 0 5\n"
+          },
+          {
+            "id": "case-17",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 0 0\n"
+          },
+          {
+            "id": "case-18",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdba 2 3\n"
+          },
+          {
+            "id": "case-19",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdba 0 5\n"
+          },
+          {
+            "id": "case-20",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcdba 0 0\n"
+          },
+          {
+            "id": "case-21",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "xabbay 2 3\n"
+          },
+          {
+            "id": "case-22",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "xabbay 0 5\n"
+          },
+          {
+            "id": "case-23",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "xabbay 0 0\n"
+          },
+          {
+            "id": "case-24",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abacaba 0 0\n"
+          },
+          {
+            "id": "case-25",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abacaba 2 3\n"
+          },
+          {
+            "id": "case-26",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abacaba 0 6\n"
+          },
+          {
+            "id": "case-27",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdefghij 4 5\n"
+          },
+          {
+            "id": "case-28",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdefghij 0 9\n"
+          },
+          {
+            "id": "case-29",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcdefghij 0 0\n"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "string s;\nbool f(int st, int ed) {\n    int i;\n    for (i = st; i <= ed; i++)\n        if (s[i] != s[{{F}}])\n            return false;\n    return true;\n}"
+      }
+    },
+    {
+      "id": "section-b-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Implement another approach to verify if s[st..ed] is a palindrome. Complete the following function."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 13
+      },
+      "contextId": "q4-recursive",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string s;\nbool f(int st, int ed) {\n    if (ed - st == 0)\n        return {{G}};\n    else if (ed - st == 1)\n        return s[st]==s[ed];\n    else if (ed - st >= 2)\n        return (s[st]==s[ed])&&f(st+1,ed-1);\n}\nint main() { int st,ed; cin >> s >> st >> ed; cout << f(st,ed); }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "a 0 0\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "aa 0 1\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "aa 0 0\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "ab 0 1\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "ab 0 0\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 1 2\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 0 3\n"
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 0 0\n"
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abca 1 2\n"
+          },
+          {
+            "id": "case-10",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abca 0 3\n"
+          },
+          {
+            "id": "case-11",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abca 0 0\n"
+          },
+          {
+            "id": "case-12",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcba 1 2\n"
+          },
+          {
+            "id": "case-13",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcba 0 4\n"
+          },
+          {
+            "id": "case-14",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcba 0 0\n"
+          },
+          {
+            "id": "case-15",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 2 3\n"
+          },
+          {
+            "id": "case-16",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 0 5\n"
+          },
+          {
+            "id": "case-17",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 0 0\n"
+          },
+          {
+            "id": "case-18",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdba 2 3\n"
+          },
+          {
+            "id": "case-19",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdba 0 5\n"
+          },
+          {
+            "id": "case-20",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcdba 0 0\n"
+          },
+          {
+            "id": "case-21",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "xabbay 2 3\n"
+          },
+          {
+            "id": "case-22",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "xabbay 0 5\n"
+          },
+          {
+            "id": "case-23",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "xabbay 0 0\n"
+          },
+          {
+            "id": "case-24",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abacaba 0 0\n"
+          },
+          {
+            "id": "case-25",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abacaba 2 3\n"
+          },
+          {
+            "id": "case-26",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abacaba 0 6\n"
+          },
+          {
+            "id": "case-27",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdefghij 4 5\n"
+          },
+          {
+            "id": "case-28",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdefghij 0 9\n"
+          },
+          {
+            "id": "case-29",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcdefghij 0 0\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank H",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Implement another approach to verify if s[st..ed] is a palindrome. Complete the following function."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 13
+      },
+      "contextId": "q4-recursive",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string s;\nbool f(int st, int ed) {\n    if (ed - st == 0)\n        return true;\n    else if (ed - st == 1)\n        return {{H}};\n    else if (ed - st >= 2)\n        return (s[st]==s[ed])&&f(st+1,ed-1);\n}\nint main() { int st,ed; cin >> s >> st >> ed; cout << f(st,ed); }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "a 0 0\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "aa 0 1\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "aa 0 0\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "ab 0 1\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "ab 0 0\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 1 2\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 0 3\n"
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 0 0\n"
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abca 1 2\n"
+          },
+          {
+            "id": "case-10",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abca 0 3\n"
+          },
+          {
+            "id": "case-11",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abca 0 0\n"
+          },
+          {
+            "id": "case-12",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcba 1 2\n"
+          },
+          {
+            "id": "case-13",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcba 0 4\n"
+          },
+          {
+            "id": "case-14",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcba 0 0\n"
+          },
+          {
+            "id": "case-15",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 2 3\n"
+          },
+          {
+            "id": "case-16",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 0 5\n"
+          },
+          {
+            "id": "case-17",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 0 0\n"
+          },
+          {
+            "id": "case-18",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdba 2 3\n"
+          },
+          {
+            "id": "case-19",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdba 0 5\n"
+          },
+          {
+            "id": "case-20",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcdba 0 0\n"
+          },
+          {
+            "id": "case-21",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "xabbay 2 3\n"
+          },
+          {
+            "id": "case-22",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "xabbay 0 5\n"
+          },
+          {
+            "id": "case-23",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "xabbay 0 0\n"
+          },
+          {
+            "id": "case-24",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abacaba 0 0\n"
+          },
+          {
+            "id": "case-25",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abacaba 2 3\n"
+          },
+          {
+            "id": "case-26",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abacaba 0 6\n"
+          },
+          {
+            "id": "case-27",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdefghij 4 5\n"
+          },
+          {
+            "id": "case-28",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdefghij 0 9\n"
+          },
+          {
+            "id": "case-29",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcdefghij 0 0\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank I",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Implement another approach to verify if s[st..ed] is a palindrome. Complete the following function."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 65
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 13
+      },
+      "contextId": "q4-recursive",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string s;\nbool f(int st, int ed) {\n    if (ed - st == 0)\n        return true;\n    else if (ed - st == 1)\n        return s[st]==s[ed];\n    else if (ed - st >= 2)\n        return {{I}};\n}\nint main() { int st,ed; cin >> s >> st >> ed; cout << f(st,ed); }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "a 0 0\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "aa 0 1\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "aa 0 0\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "ab 0 1\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "ab 0 0\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 1 2\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 0 3\n"
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abba 0 0\n"
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abca 1 2\n"
+          },
+          {
+            "id": "case-10",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abca 0 3\n"
+          },
+          {
+            "id": "case-11",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abca 0 0\n"
+          },
+          {
+            "id": "case-12",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcba 1 2\n"
+          },
+          {
+            "id": "case-13",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcba 0 4\n"
+          },
+          {
+            "id": "case-14",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcba 0 0\n"
+          },
+          {
+            "id": "case-15",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 2 3\n"
+          },
+          {
+            "id": "case-16",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 0 5\n"
+          },
+          {
+            "id": "case-17",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abccba 0 0\n"
+          },
+          {
+            "id": "case-18",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdba 2 3\n"
+          },
+          {
+            "id": "case-19",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdba 0 5\n"
+          },
+          {
+            "id": "case-20",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcdba 0 0\n"
+          },
+          {
+            "id": "case-21",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "xabbay 2 3\n"
+          },
+          {
+            "id": "case-22",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "xabbay 0 5\n"
+          },
+          {
+            "id": "case-23",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "xabbay 0 0\n"
+          },
+          {
+            "id": "case-24",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abacaba 0 0\n"
+          },
+          {
+            "id": "case-25",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abacaba 2 3\n"
+          },
+          {
+            "id": "case-26",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abacaba 0 6\n"
+          },
+          {
+            "id": "case-27",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdefghij 4 5\n"
+          },
+          {
+            "id": "case-28",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0"
+            },
+            "stdin": "abcdefghij 0 9\n"
+          },
+          {
+            "id": "case-29",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "abcdefghij 0 0\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank J",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the program so that when input is 4, the program gives the output to the right.\n\n1 2 3 4\n5 6 7 8\n9 10 11 12\n13 14 15 16"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 14
+      },
+      "contextId": "q5-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int a, val, i, j;\nint main() {\n    cin >> a;\n    for (i = 1; i <= a; i++)\n        for (j = 1; j <= a; j++) {\n            val = {{J}};\n            cout << val;\n            if (j != a)\n                cout << \" \";\n            else\n                cout << endl;\n        }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4\n5 6 7 8\n9 10 11 12\n13 14 15 16\n"
+            },
+            "stdin": "4\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-k",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank K",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the program so that when input is 5, the program gives the output to the right.\n\n1 2 3 4 5\n2 3 4 5 1\n3 4 5 1 2\n4 5 1 2 3\n5 1 2 3 4"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 20
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 14
+      },
+      "contextId": "q5-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int a, val, i, j;\nint main() {\n    cin >> a;\n    for (i = 1; i <= a; i++)\n        for (j = 1; j <= a; j++) {\n            val = {{K}};\n            cout << val;\n            if (j != a)\n                cout << \" \";\n            else\n                cout << endl;\n        }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5\n2 3 4 5 1\n3 4 5 1 2\n4 5 1 2 3\n5 1 2 3 4\n"
+            },
+            "stdin": "5\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-l",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank L",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "A three-digit positive integer is a wonderful integer if its sum of digits equals 8. For example, 125 and 332 are wonderful integers, while 801 and 232 are not. Complete the function so that is_wonderful(x) returns true if x is a wonderful integer and false if otherwise. You may assume that x is a three-digit positive integer."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L",
+          "maxChars": 70
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "bool is_wonderful(int x) {\n    return {{L}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "is_wonderful"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              100
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              107
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              116
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              125
+            ]
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              170
+            ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              206
+            ]
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              332
+            ]
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              404
+            ]
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              512
+            ]
+          },
+          {
+            "id": "case-10",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              701
+            ]
+          },
+          {
+            "id": "case-11",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              800
+            ]
+          },
+          {
+            "id": "case-12",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              801
+            ]
+          },
+          {
+            "id": "case-13",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              810
+            ]
+          },
+          {
+            "id": "case-14",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              900
+            ]
+          },
+          {
+            "id": "case-15",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              999
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "bool is_wonderful(int x) {\n    return {{L}};\n}"
+      }
+    },
+    {
+      "id": "section-b-m",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank M",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "M"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hj.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "M": [
+            "16"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int a[8] =\n{5, 7, 4, 3, 2, 6, 1, 8};\nint i, j, r;\nint main() {\n    r = 0;\n    for (i = 0; i <= 7; i++)\n        for (j = 0; j <= i - 1; j++)\n            if (a[j] > a[i])\n                r = r + 1;\n    cout << r;\n    return 0;\n}"
+      }
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q4-recursive",
+      "track": "section-b",
+      "title": "Question 4 · Recursive C++ function",
+      "markdown": "",
+      "displayCode": {
+        "cpp": "string s;\nbool f(int st, int ed) {\n    if (ed - st == 0)\n        return {{G}};\n    else if (ed - st == 1)\n        return {{H}};\n    else if (ed - st >= 2)\n        return {{I}};\n}"
+      }
+    },
+    {
+      "id": "q5-code",
+      "track": "section-b",
+      "title": "Question 5 · C++ program",
+      "markdown": "```cpp\nint a, val, i, j;\nint main() {\n    cin >> a;\n    for (i = 1; i <= a; i++)\n        for (j = 1; j <= a; j++) {\n            val = 　J/K　;\n            cout << val;\n            if (j != a)\n                cout << \" \";\n            else\n                cout << endl;\n        }\n}\n```"
+    }
+  ]
+}

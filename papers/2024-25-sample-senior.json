@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "paper": {
     "id": "2024-25-sample-senior",
-    "season": "2024/25 sample",
+    "season": "2024/25",
     "division": "senior",
     "title": "HKOI 2024/25 Heat Event Sample Paper — Senior Group FITB",
     "source": {
@@ -15,7 +15,7 @@
   "tracks": [
     {
       "id": "paper1",
-      "label": "Paper 1 · compulsory",
+      "label": "Paper 1",
       "selection": "required"
     },
     {
@@ -965,7 +965,7 @@
     {
       "id": "python-h",
       "track": "python",
-      "printedRef": "Paper 2 (Python), Section C, Question 1(b), Blank H1, Blank H2",
+      "printedRef": "Paper 2 (Python), Section C, Question 1(b), Blanks H1, H2",
       "title": "Paper 2 (Python), Section C, Question 1(b)",
       "prompt": {
         "en": "Complete the function count_troughs so that count_troughs(a) returns the number of troughs in a given binary sequence a. (Hint: there is no need to modify a or i.)"
@@ -1227,7 +1227,7 @@
     {
       "id": "python-j",
       "track": "python",
-      "printedRef": "Paper 2 (Python), Section C, Question 2, Blank J1, Blank J2, Blank J3",
+      "printedRef": "Paper 2 (Python), Section C, Question 2, Blanks J1, J2, J3",
       "title": "Paper 2 (Python), Section C, Question 2",
       "prompt": {
         "en": "Complete the following function g, so that the return value of h(x) is exactly x for all integers x between 0 and 7 (inclusive)."
@@ -1929,12 +1929,54 @@
         "firstLine": 11,
         "source": "int main() {\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    for (int i = 0;\n         i < a.size();\n         ++i)\n        cin >> a[i];\n    int sum = 0;\n    for (int i = 0;\n         i < a.size() - 1;\n         ++i)\n        sum += abs(a[i] - a[i + 1]);\n    cout << sum;\n}",
         "cases": [
-          { "id": "empty", "stdin": "0", "expected": { "stdout": "0" }, "maxSteps": 20000 },
-          { "id": "one", "stdin": "1 5", "expected": { "stdout": "0" }, "maxSteps": 20000 },
-          { "id": "example-three", "stdin": "3 1 3 4", "expected": { "stdout": "3" }, "maxSteps": 20000 },
-          { "id": "example-five", "stdin": "5 2 0 2 2 3", "expected": { "stdout": "5" }, "maxSteps": 20000 },
-          { "id": "two", "stdin": "2 7 -4", "expected": { "stdout": "11" }, "maxSteps": 20000 },
-          { "id": "equal", "stdin": "4 6 6 6 6", "expected": { "stdout": "0" }, "maxSteps": 20000 }
+          {
+            "id": "empty",
+            "stdin": "0",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "one",
+            "stdin": "1 5",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "example-three",
+            "stdin": "3 1 3 4",
+            "expected": {
+              "stdout": "3"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "example-five",
+            "stdin": "5 2 0 2 2 3",
+            "expected": {
+              "stdout": "5"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "two",
+            "stdin": "2 7 -4",
+            "expected": {
+              "stdout": "11"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "equal",
+            "stdin": "4 6 6 6 6",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 20000
+          }
         ]
       }
     }

@@ -1,0 +1,2309 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2019-20-senior",
+    "season": "2019/20",
+    "division": "senior",
+    "title": "HKOI 2019/20 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2020hsa.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2020hs_sol.pdf. C++ is used where printed alongside C; Pascal omitted. D1–D3 and E were officially cancelled; their printed 3 points are excluded from the graded maximum."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "questions": [
+    {
+      "id": "cpp-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "The input to the following program is an integer between 0 and $10^{100}$ inclusive in decimal notation without leading zeroes, separator symbols nor decimal point. Complete the following program so that it outputs Yes if and only if the input number is a multiple of 100."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 35
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string s; int n; int main(){cin>>s;n=s.length();if({{A}})cout<<\"Yes\";return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "n-0",
+            "expected": {
+              "stdout": "Yes"
+            },
+            "maxSteps": 20000,
+            "stdin": "0"
+          },
+          {
+            "id": "n-1",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 20000,
+            "stdin": "1"
+          },
+          {
+            "id": "n-2",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 20000,
+            "stdin": "10"
+          },
+          {
+            "id": "n-3",
+            "expected": {
+              "stdout": "Yes"
+            },
+            "maxSteps": 20000,
+            "stdin": "100"
+          },
+          {
+            "id": "n-4",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 20000,
+            "stdin": "101"
+          },
+          {
+            "id": "n-5",
+            "expected": {
+              "stdout": "Yes"
+            },
+            "maxSteps": 20000,
+            "stdin": "1000"
+          },
+          {
+            "id": "n-6",
+            "expected": {
+              "stdout": "Yes"
+            },
+            "maxSteps": 20000,
+            "stdin": "1200"
+          },
+          {
+            "id": "n-7",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 20000,
+            "stdin": "999"
+          },
+          {
+            "id": "n-8",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 20000,
+            "stdin": "1234567890"
+          },
+          {
+            "id": "n-9",
+            "expected": {
+              "stdout": "Yes"
+            },
+            "maxSteps": 20000,
+            "stdin": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "id": "n-10",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 20000,
+            "stdin": "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "string s;\nint n;\nint main() {\n    cin >> s;\n    n = s.length();\n    if ({{A}})\n        cout << \"Yes\";\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "cpp-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Complete the following program WITHOUT using array a so that array b is equal to array a."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 15,
+        "note": "Grading source appends observation output for b[1..8], which the printed program does not output."
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int a[9],b[9],i; int main(){for(i=0;i<=8;i++){a[i]=0;b[i]=0;}for(i=1;i<=8;i++){cin>>a[i];b[i] = a[i] - a[i - 1];}for(i=1;i<=8;i++){{B}};for(i=1;i<=8;i++){if(i>1)cout<<\" \";cout<<b[i];}return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "array-0",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8"
+            },
+            "maxSteps": 20000,
+            "stdin": "1 2 3 4 5 6 7 8"
+          },
+          {
+            "id": "array-1",
+            "expected": {
+              "stdout": "5 0 -3 11 -9 7 4 2"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 0 -3 11 -9 7 4 2"
+          },
+          {
+            "id": "array-2",
+            "expected": {
+              "stdout": "0 0 0 0 0 0 0 0"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 0 0 0 0 0 0 0"
+          },
+          {
+            "id": "array-3",
+            "expected": {
+              "stdout": "99 -99 99 -99 99 -99 99 -99"
+            },
+            "maxSteps": 20000,
+            "stdin": "99 -99 99 -99 99 -99 99 -99"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int a[9], b[9];\nint i;\nint main() {\n    for (i = 0; i <= 8; i++) {\n        a[i] = 0;\n        b[i] = 0;\n    }\n    for (i = 1; i <= 8; i++) {\n        cin >> a[i];\n        b[i] = a[i] - a[i - 1];\n    }\n    for (i = 1; i <= 8; i++)\n        {{B}};\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "cpp-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The above program is modified to the following program. Complete the following program WITHOUT using array a so that array b is equal to array a."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 15,
+        "note": "Grading source appends observation output for b[1..8], which the printed program does not output."
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int a[9],b[9],i; int main(){for(i=0;i<=8;i++){a[i]=0;b[i]=0;}for(i=1;i<=8;i++){cin>>a[i];b[i] = b[i - 1] + a[i];}for(i=1;i<=8;i++){{C}};for(i=1;i<=8;i++){if(i>1)cout<<\" \";cout<<b[i];}return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "array-0",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8"
+            },
+            "maxSteps": 20000,
+            "stdin": "1 2 3 4 5 6 7 8"
+          },
+          {
+            "id": "array-1",
+            "expected": {
+              "stdout": "5 0 -3 11 -9 7 4 2"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 0 -3 11 -9 7 4 2"
+          },
+          {
+            "id": "array-2",
+            "expected": {
+              "stdout": "0 0 0 0 0 0 0 0"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 0 0 0 0 0 0 0"
+          },
+          {
+            "id": "array-3",
+            "expected": {
+              "stdout": "99 -99 99 -99 99 -99 99 -99"
+            },
+            "maxSteps": 20000,
+            "stdin": "99 -99 99 -99 99 -99 99 -99"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int a[9], b[9];\nint i;\nint main() {\n    for (i = 0; i <= 8; i++) {\n        a[i] = 0;\n        b[i] = 0;\n    }\n    for (i = 1; i <= 8; i++) {\n        cin >> a[i];\n        b[i] = b[i - 1] + a[i];\n    }\n    for (i = 1; i <= 8; i++)\n        {{C}};\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "cpp-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blanks D1, D2, D3",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Complete the function cmp, so that the function cmp return 0 when string a is smaller than or equal to string b and return 1 when string a is larger than string b in lexicographical order."
+      },
+      "points": 0,
+      "blanks": [
+        {
+          "id": "D1",
+          "maxChars": 20
+        },
+        {
+          "id": "D2",
+          "maxChars": 10
+        },
+        {
+          "id": "D3",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "cancelled",
+        "reason": "Cancelled by HKOI."
+      },
+      "displayCode": {
+        "cpp": "int cmp(string a, string b) {\n    int x = a.length();\n    int y = b.length();\n    int s = 0;\n    while ({{D1}}) {\n        if ({{D2}}) {\n            return 0;\n        }\n        if ({{D3}}) {\n            return 1;\n        }\n        s = s + 1;\n    }\n    if (________ == x) {\n        return 0;\n    } else {\n        return 1;\n    }\n}"
+      }
+    },
+    {
+      "id": "cpp-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Complete the function cmp, so that the function cmp return 0 when string a is smaller than or equal to string b and return 1 when string a is larger than string b in lexicographical order."
+      },
+      "points": 0,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "cancelled",
+        "reason": "Cancelled by HKOI."
+      }
+    },
+    {
+      "id": "cpp-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Consider the following function. Write down the return value of f(121)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "3"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int f(int x) {\n    int res = 0;\n    int i;\n    for (i = 1; i <= x; i++)\n        if (x % i == 0)\n            res++;\n    return res;\n}"
+      }
+    },
+    {
+      "id": "cpp-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The following program uses the function f above. What is the output of the program?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "25"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int f(int x) {\n    int res = 0;\n    int i;\n    for (i = 1; i <= x; i++)\n        if (x % i == 0)\n            res++;\n    return res;\n}\nint c, i;\nint main() {\n    c = 0;\n    for (i = 1; i <= 10000; i++)\n        if (f(i) == 3)\n            c++;\n    cout << c;\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "cpp-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the function f, so that f(n) has the same return value as g(n) for 10 ≤ n ≤ 100."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H1",
+          "maxChars": 5
+        },
+        {
+          "id": "H2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int f(int n){if(n%4==2)return {{H1}};else return {{H2}};} int g(int n){int i,sum;sum=0;for(i=1;i<=n;i++)sum=sum^i;return sum;}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "n-10",
+            "expected": {
+              "returnValue": 11
+            },
+            "maxSteps": 5000,
+            "args": [
+              10
+            ]
+          },
+          {
+            "id": "n-11",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              11
+            ]
+          },
+          {
+            "id": "n-12",
+            "expected": {
+              "returnValue": 12
+            },
+            "maxSteps": 5000,
+            "args": [
+              12
+            ]
+          },
+          {
+            "id": "n-13",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              13
+            ]
+          },
+          {
+            "id": "n-14",
+            "expected": {
+              "returnValue": 15
+            },
+            "maxSteps": 5000,
+            "args": [
+              14
+            ]
+          },
+          {
+            "id": "n-15",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              15
+            ]
+          },
+          {
+            "id": "n-16",
+            "expected": {
+              "returnValue": 16
+            },
+            "maxSteps": 5000,
+            "args": [
+              16
+            ]
+          },
+          {
+            "id": "n-17",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              17
+            ]
+          },
+          {
+            "id": "n-18",
+            "expected": {
+              "returnValue": 19
+            },
+            "maxSteps": 5000,
+            "args": [
+              18
+            ]
+          },
+          {
+            "id": "n-19",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              19
+            ]
+          },
+          {
+            "id": "n-20",
+            "expected": {
+              "returnValue": 20
+            },
+            "maxSteps": 5000,
+            "args": [
+              20
+            ]
+          },
+          {
+            "id": "n-21",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              21
+            ]
+          },
+          {
+            "id": "n-22",
+            "expected": {
+              "returnValue": 23
+            },
+            "maxSteps": 5000,
+            "args": [
+              22
+            ]
+          },
+          {
+            "id": "n-23",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              23
+            ]
+          },
+          {
+            "id": "n-24",
+            "expected": {
+              "returnValue": 24
+            },
+            "maxSteps": 5000,
+            "args": [
+              24
+            ]
+          },
+          {
+            "id": "n-25",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              25
+            ]
+          },
+          {
+            "id": "n-26",
+            "expected": {
+              "returnValue": 27
+            },
+            "maxSteps": 5000,
+            "args": [
+              26
+            ]
+          },
+          {
+            "id": "n-27",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              27
+            ]
+          },
+          {
+            "id": "n-28",
+            "expected": {
+              "returnValue": 28
+            },
+            "maxSteps": 5000,
+            "args": [
+              28
+            ]
+          },
+          {
+            "id": "n-29",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              29
+            ]
+          },
+          {
+            "id": "n-73",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              73
+            ]
+          },
+          {
+            "id": "n-74",
+            "expected": {
+              "returnValue": 75
+            },
+            "maxSteps": 5000,
+            "args": [
+              74
+            ]
+          },
+          {
+            "id": "n-75",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              75
+            ]
+          },
+          {
+            "id": "n-76",
+            "expected": {
+              "returnValue": 76
+            },
+            "maxSteps": 5000,
+            "args": [
+              76
+            ]
+          },
+          {
+            "id": "n-77",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              77
+            ]
+          },
+          {
+            "id": "n-78",
+            "expected": {
+              "returnValue": 79
+            },
+            "maxSteps": 5000,
+            "args": [
+              78
+            ]
+          },
+          {
+            "id": "n-79",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              79
+            ]
+          },
+          {
+            "id": "n-80",
+            "expected": {
+              "returnValue": 80
+            },
+            "maxSteps": 5000,
+            "args": [
+              80
+            ]
+          },
+          {
+            "id": "n-81",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              81
+            ]
+          },
+          {
+            "id": "n-82",
+            "expected": {
+              "returnValue": 83
+            },
+            "maxSteps": 5000,
+            "args": [
+              82
+            ]
+          },
+          {
+            "id": "n-83",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              83
+            ]
+          },
+          {
+            "id": "n-84",
+            "expected": {
+              "returnValue": 84
+            },
+            "maxSteps": 5000,
+            "args": [
+              84
+            ]
+          },
+          {
+            "id": "n-85",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              85
+            ]
+          },
+          {
+            "id": "n-86",
+            "expected": {
+              "returnValue": 87
+            },
+            "maxSteps": 5000,
+            "args": [
+              86
+            ]
+          },
+          {
+            "id": "n-87",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              87
+            ]
+          },
+          {
+            "id": "n-88",
+            "expected": {
+              "returnValue": 88
+            },
+            "maxSteps": 5000,
+            "args": [
+              88
+            ]
+          },
+          {
+            "id": "n-89",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              89
+            ]
+          },
+          {
+            "id": "n-90",
+            "expected": {
+              "returnValue": 91
+            },
+            "maxSteps": 5000,
+            "args": [
+              90
+            ]
+          },
+          {
+            "id": "n-91",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              91
+            ]
+          },
+          {
+            "id": "n-92",
+            "expected": {
+              "returnValue": 92
+            },
+            "maxSteps": 5000,
+            "args": [
+              92
+            ]
+          },
+          {
+            "id": "n-93",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              93
+            ]
+          },
+          {
+            "id": "n-94",
+            "expected": {
+              "returnValue": 95
+            },
+            "maxSteps": 5000,
+            "args": [
+              94
+            ]
+          },
+          {
+            "id": "n-95",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              95
+            ]
+          },
+          {
+            "id": "n-96",
+            "expected": {
+              "returnValue": 96
+            },
+            "maxSteps": 5000,
+            "args": [
+              96
+            ]
+          },
+          {
+            "id": "n-97",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000,
+            "args": [
+              97
+            ]
+          },
+          {
+            "id": "n-98",
+            "expected": {
+              "returnValue": 99
+            },
+            "maxSteps": 5000,
+            "args": [
+              98
+            ]
+          },
+          {
+            "id": "n-99",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 5000,
+            "args": [
+              99
+            ]
+          },
+          {
+            "id": "n-100",
+            "expected": {
+              "returnValue": 100
+            },
+            "maxSteps": 5000,
+            "args": [
+              100
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int f(int n) {\n    if (n % 4 == 2)\n        return {{H1}};\n    else\n        return {{H2}};\n}\nint g(int n) {\n    int i, sum;\n    sum = 0;\n    for (i = 1; i <= n; i++) sum = sum ^ i;\n    return sum;\n}"
+      }
+    },
+    {
+      "id": "cpp-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank I",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the function median, so that median(a, b, c) returns the median of integers a, b, c."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I1",
+          "maxChars": 40
+        },
+        {
+          "id": "I2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int median(int a,int b,int c){if {{I1}} return b;else return {{I2}};}",
+            "harness": {
+              "kind": "call",
+              "function": "median"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "t-0",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              -3,
+              -3
+            ]
+          },
+          {
+            "id": "t-1",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              -3,
+              0
+            ]
+          },
+          {
+            "id": "t-2",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              -3,
+              3
+            ]
+          },
+          {
+            "id": "t-3",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              -1,
+              1
+            ]
+          },
+          {
+            "id": "t-4",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              0,
+              -3
+            ]
+          },
+          {
+            "id": "t-5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "t-6",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              0,
+              3
+            ]
+          },
+          {
+            "id": "t-7",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              1,
+              -1
+            ]
+          },
+          {
+            "id": "t-8",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              3,
+              -3
+            ]
+          },
+          {
+            "id": "t-9",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              3,
+              0
+            ]
+          },
+          {
+            "id": "t-10",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              3,
+              3
+            ]
+          },
+          {
+            "id": "t-11",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              -3,
+              1
+            ]
+          },
+          {
+            "id": "t-12",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              -1,
+              -1
+            ]
+          },
+          {
+            "id": "t-13",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "t-14",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              1,
+              -3
+            ]
+          },
+          {
+            "id": "t-15",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              1,
+              0
+            ]
+          },
+          {
+            "id": "t-16",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              1,
+              3
+            ]
+          },
+          {
+            "id": "t-17",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              3,
+              1
+            ]
+          },
+          {
+            "id": "t-18",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              -3,
+              -3
+            ]
+          },
+          {
+            "id": "t-19",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              -3,
+              0
+            ]
+          },
+          {
+            "id": "t-20",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              -3,
+              3
+            ]
+          },
+          {
+            "id": "t-21",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              -1,
+              1
+            ]
+          },
+          {
+            "id": "t-22",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              0,
+              -3
+            ]
+          },
+          {
+            "id": "t-23",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "t-24",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              0,
+              3
+            ]
+          },
+          {
+            "id": "t-25",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              1,
+              -1
+            ]
+          },
+          {
+            "id": "t-26",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              3,
+              -3
+            ]
+          },
+          {
+            "id": "t-27",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              3,
+              0
+            ]
+          },
+          {
+            "id": "t-28",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              3,
+              3
+            ]
+          },
+          {
+            "id": "t-29",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              -3,
+              -1
+            ]
+          },
+          {
+            "id": "t-30",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              -1,
+              -3
+            ]
+          },
+          {
+            "id": "t-31",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              -1,
+              0
+            ]
+          },
+          {
+            "id": "t-32",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              -1,
+              3
+            ]
+          },
+          {
+            "id": "t-33",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              0,
+              -1
+            ]
+          },
+          {
+            "id": "t-34",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "t-35",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              3,
+              -1
+            ]
+          },
+          {
+            "id": "t-36",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              -3,
+              -3
+            ]
+          },
+          {
+            "id": "t-37",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              -3,
+              0
+            ]
+          },
+          {
+            "id": "t-38",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              -3,
+              3
+            ]
+          },
+          {
+            "id": "t-39",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              -1,
+              1
+            ]
+          },
+          {
+            "id": "t-40",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              0,
+              -3
+            ]
+          },
+          {
+            "id": "t-41",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "t-42",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              0,
+              3
+            ]
+          },
+          {
+            "id": "t-43",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              1,
+              -1
+            ]
+          },
+          {
+            "id": "t-44",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              3,
+              -3
+            ]
+          },
+          {
+            "id": "t-45",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              100,
+              -100,
+              0
+            ]
+          },
+          {
+            "id": "t-46",
+            "expected": {
+              "returnValue": 100
+            },
+            "maxSteps": 20000,
+            "args": [
+              100,
+              100,
+              -100
+            ]
+          },
+          {
+            "id": "t-47",
+            "expected": {
+              "returnValue": -100
+            },
+            "maxSteps": 20000,
+            "args": [
+              -100,
+              -100,
+              100
+            ]
+          }
+        ]
+      },
+      "contextId": "median-range"
+    },
+    {
+      "id": "cpp-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank J",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the function range, so that range(x,y,z) returns the range of x, y, z (i.e. the greatest value minus the least value among x, y, z) for integers x, y, z (−100 ≤ x, y, z ≤ 100)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 23
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int range(int a,int b,int c){int m=median(a,b,c);return {{J}};}",
+            "harness": {
+              "kind": "call",
+              "function": "range"
+            },
+            "helperSource": "int median(int a,int b,int c){if((a<=b&&b<=c)||(c<=b&&b<=a))return b;else return median(b,c,a);}int f(int a){if(a<0)return -a;else return a;}"
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "t-0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              -3,
+              -3
+            ]
+          },
+          {
+            "id": "t-1",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              -3,
+              0
+            ]
+          },
+          {
+            "id": "t-2",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              -3,
+              3
+            ]
+          },
+          {
+            "id": "t-3",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              -1,
+              1
+            ]
+          },
+          {
+            "id": "t-4",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              0,
+              -3
+            ]
+          },
+          {
+            "id": "t-5",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "t-6",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              0,
+              3
+            ]
+          },
+          {
+            "id": "t-7",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              1,
+              -1
+            ]
+          },
+          {
+            "id": "t-8",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              3,
+              -3
+            ]
+          },
+          {
+            "id": "t-9",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              3,
+              0
+            ]
+          },
+          {
+            "id": "t-10",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              -3,
+              3,
+              3
+            ]
+          },
+          {
+            "id": "t-11",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              -3,
+              1
+            ]
+          },
+          {
+            "id": "t-12",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              -1,
+              -1
+            ]
+          },
+          {
+            "id": "t-13",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "t-14",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              1,
+              -3
+            ]
+          },
+          {
+            "id": "t-15",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              1,
+              0
+            ]
+          },
+          {
+            "id": "t-16",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              1,
+              3
+            ]
+          },
+          {
+            "id": "t-17",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              -1,
+              3,
+              1
+            ]
+          },
+          {
+            "id": "t-18",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              -3,
+              -3
+            ]
+          },
+          {
+            "id": "t-19",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              -3,
+              0
+            ]
+          },
+          {
+            "id": "t-20",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              -3,
+              3
+            ]
+          },
+          {
+            "id": "t-21",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              -1,
+              1
+            ]
+          },
+          {
+            "id": "t-22",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              0,
+              -3
+            ]
+          },
+          {
+            "id": "t-23",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "t-24",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              0,
+              3
+            ]
+          },
+          {
+            "id": "t-25",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              1,
+              -1
+            ]
+          },
+          {
+            "id": "t-26",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              3,
+              -3
+            ]
+          },
+          {
+            "id": "t-27",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              3,
+              0
+            ]
+          },
+          {
+            "id": "t-28",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              0,
+              3,
+              3
+            ]
+          },
+          {
+            "id": "t-29",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              -3,
+              -1
+            ]
+          },
+          {
+            "id": "t-30",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              -1,
+              -3
+            ]
+          },
+          {
+            "id": "t-31",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              -1,
+              0
+            ]
+          },
+          {
+            "id": "t-32",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              -1,
+              3
+            ]
+          },
+          {
+            "id": "t-33",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              0,
+              -1
+            ]
+          },
+          {
+            "id": "t-34",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "t-35",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              1,
+              3,
+              -1
+            ]
+          },
+          {
+            "id": "t-36",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              -3,
+              -3
+            ]
+          },
+          {
+            "id": "t-37",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              -3,
+              0
+            ]
+          },
+          {
+            "id": "t-38",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              -3,
+              3
+            ]
+          },
+          {
+            "id": "t-39",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              -1,
+              1
+            ]
+          },
+          {
+            "id": "t-40",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              0,
+              -3
+            ]
+          },
+          {
+            "id": "t-41",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "t-42",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              0,
+              3
+            ]
+          },
+          {
+            "id": "t-43",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              1,
+              -1
+            ]
+          },
+          {
+            "id": "t-44",
+            "expected": {
+              "returnValue": 6
+            },
+            "maxSteps": 20000,
+            "args": [
+              3,
+              3,
+              -3
+            ]
+          },
+          {
+            "id": "t-45",
+            "expected": {
+              "returnValue": 200
+            },
+            "maxSteps": 20000,
+            "args": [
+              100,
+              -100,
+              0
+            ]
+          },
+          {
+            "id": "t-46",
+            "expected": {
+              "returnValue": 200
+            },
+            "maxSteps": 20000,
+            "args": [
+              100,
+              100,
+              -100
+            ]
+          },
+          {
+            "id": "t-47",
+            "expected": {
+              "returnValue": 200
+            },
+            "maxSteps": 20000,
+            "args": [
+              -100,
+              -100,
+              100
+            ]
+          }
+        ]
+      },
+      "contextId": "median-range"
+    },
+    {
+      "id": "cpp-k",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank K",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "The program tries to evaluate an additive expression from the input. However, the program contains an error. For example, the program outputs 51 when the input is 100+1. What is the output when the input is 10+10?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 19
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "K": [
+            "-480"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "string s;\nint sum, temp, len, i, x;\nint main() {\n    cin >> s;\n    sum = 0;\n    temp = 0;\n    len = s.length();\n    i = 0;\n    while (i < len)\n    {\n        if (s[i] == '+')\n        {\n            sum = sum + temp;\n            temp = 0;\n        }\n        x = int(s[i]) - int('0');\n        temp = temp * 10 + x;\n        i++;\n    }\n    cout << sum + temp;\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "cpp-l",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank L",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "The bug can be fixed by changing exactly one line. Find the line and correct it so that it outputs the correct answer for all of the following cases:\n\n| Input | Output |\n|---|---|\n| 123+4567 | 4690 |\n| 2019+20 | 2039 |\n| 12+13 | 25 |\n| 89+43 | 132 |\n| 1+2+3+4 | 10 |"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L1",
+          "maxChars": 2
+        },
+        {
+          "id": "L2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hs.pdf",
+        "page": 19
+      },
+      "grading": {
+        "kind": "cpp-line-repair",
+        "lineBlank": "L1",
+        "replacementBlank": "L2",
+        "firstLine": 71,
+        "source": "string s;\nint sum,temp,len,i,x;\nint main(){\ncin >> s;\nsum = 0;\ntemp = 0;\nlen = s.length();\ni = 0;\nwhile (i < len)\n{\nif (s[i] == '+')\n{\nsum = sum + temp;\ntemp = 0;\n}\nx = int(s[i]) - int('0');\ntemp = temp * 10 + x;\ni++;\n}\ncout << sum + temp;\nreturn 0;\n}",
+        "cases": [
+          {
+            "id": "expr-0",
+            "expected": {
+              "stdout": "4690"
+            },
+            "maxSteps": 20000,
+            "stdin": "123+4567"
+          },
+          {
+            "id": "expr-1",
+            "expected": {
+              "stdout": "2039"
+            },
+            "maxSteps": 20000,
+            "stdin": "2019+20"
+          },
+          {
+            "id": "expr-2",
+            "expected": {
+              "stdout": "25"
+            },
+            "maxSteps": 20000,
+            "stdin": "12+13"
+          },
+          {
+            "id": "expr-3",
+            "expected": {
+              "stdout": "132"
+            },
+            "maxSteps": 20000,
+            "stdin": "89+43"
+          },
+          {
+            "id": "expr-4",
+            "expected": {
+              "stdout": "10"
+            },
+            "maxSteps": 20000,
+            "stdin": "1+2+3+4"
+          },
+          {
+            "id": "expr-5",
+            "expected": {
+              "stdout": "101"
+            },
+            "maxSteps": 20000,
+            "stdin": "100+1"
+          },
+          {
+            "id": "expr-6",
+            "expected": {
+              "stdout": "20"
+            },
+            "maxSteps": 20000,
+            "stdin": "10+10"
+          },
+          {
+            "id": "expr-7",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 20000,
+            "stdin": "0+0+0"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "string s;\nint sum, temp, len, i, x;\nint main() {\n    cin >> s;\n    sum = 0;\n    temp = 0;\n    len = s.length();\n    i = 0;\n    while (i < len)\n    {\n        if (s[i] == '+')\n        {\n            sum = sum + temp;\n            temp = 0;\n        }\n        x = int(s[i]) - int('0');\n        temp = temp * 10 + x;\n        i++;\n    }\n    cout << sum + temp;\n    return 0;\n}"
+      }
+    }
+  ],
+  "contexts": [
+    {
+      "id": "median-range",
+      "track": "section-b",
+      "title": "Question 6 · C++ program segment",
+      "markdown": "Consider the following program segment:",
+      "displayCode": {
+        "cpp": "int median(int a, int b, int c) {\n    if {{I1}}\n        return b;\n    else\n        return {{I2}};\n}\nint f(int a) {\n    if (a < 0)\n        return -a;\n    else\n        return a;\n}\nint range(int a, int b, int c) {\n    int m = median(a, b, c);\n    return {{J}};\n}"
+      }
+    }
+  ]
+}

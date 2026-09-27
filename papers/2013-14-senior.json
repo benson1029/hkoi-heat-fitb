@@ -1,0 +1,887 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2013-14-senior",
+    "season": "2013/14",
+    "division": "senior",
+    "title": "HKOI 2013/14 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+      "note": "Section B pp.12–15. Printed 20 marks includes officially cancelled F (2 marks); active total 18. Official solution: https://assets.hkoi.org/ref/2014hs_sol.pdf"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q2",
+      "track": "section-b",
+      "title": "Section B q2",
+      "markdown": "\"Nonopus card\" is a form of electronic money. By inputting the amount of its deposit into the following program, it automatically detects if the deposit is positive. If not, $200 is (repeatedly) added until the deposit becomes positive. Then it outputs the final deposit. You may assume that the input x must be an integer in [-2000, 2000]. Complete the program.\n\n```c\n#include <stdio.h>\nint x;\nint main(){\n  scanf(\"%d\", &x);\n  if (x > 0) printf(\"%d\", x);\n  else printf(\"%d\", {{C}});\n  return 0;\n}\n```"
+    },
+    {
+      "id": "q3",
+      "track": "section-b",
+      "title": "Section B q3",
+      "markdown": "For a given graph, we put 1, 2, 3 or 4 into each circle such that every two adjacent circles have different numbers. We call such an arrangement \"4-numbering\". Two 4-coloring arrangements are different if any pair of the corresponding numbers do not match."
+    },
+    {
+      "id": "q4",
+      "track": "section-b",
+      "title": "Section B q4",
+      "markdown": "```c\n51 #include <stdio.h>\n52 int n, i;\n53 int main() {\n54    printf(\"Input integer n: \");\n55    scanf(\"%d\", &n);\n56    for (i = 1; i <= 45; i++) {\n57       if (i*(i+1) == n*2) {\n58           printf(\"n is a triangular number\");\n59       }\n60    }\n61    printf(\"n is not a triangular number\");\n62    return 0;\n63 }\n```"
+    },
+    {
+      "id": "q5",
+      "track": "section-b",
+      "title": "Section B q5",
+      "markdown": "",
+      "displayCode": {
+        "c": "p = 0;\nwhile (p < 8) {\n    if (a[p] > a[p+1]) {\n          {{J}};\n   if ({{K1}})\n              {{K2}};\n    } else {\n          {{L}};\n    }\n}"
+      }
+    },
+    {
+      "id": "q6",
+      "track": "section-b",
+      "title": "Section B q6",
+      "markdown": "What are the three lines of output of the following printed C program?\n\n```c\n#include <stdio.h>\nint main() {\n  int i, j;\n  char s[] = \"..>..<.>..\";\n  for (i = 1; i <= 3; i++) {\n    for (j = 0; j <= 8; j++) {\n      if (s[j+1] == '<') {\n        s[j] = '<';\n        s[j+1] = '.';\n      }\n      if (s[8-j] == '>') {\n        s[9-j] = '>';\n        s[8-j] = '.';\n      }\n    }\n    printf(\"%s\\n\", s);\n  }\n  return 0;\n}\n```"
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Convert FACADE₁₆ into octal. A = ?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "A",
+          "label": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "76545336"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Convert 1010010000111101₂ into hexadecimal. B = ?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B",
+          "label": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "A43D"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Complete C so the printed program outputs the final positive deposit."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C",
+          "label": "C",
+          "maxChars": 19,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint x;\nint main(){\n  scanf(\"%d\", &x);\n  if (x > 0) printf(\"%d\", x);\n  else printf(\"%d\", {{C}});\n  return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "deposit1",
+            "stdin": "-2000",
+            "expected": {
+              "stdout": "200"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit2",
+            "stdin": "-1999",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit3",
+            "stdin": "-601",
+            "expected": {
+              "stdout": "199"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit4",
+            "stdin": "-400",
+            "expected": {
+              "stdout": "200"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit5",
+            "stdin": "-399",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit6",
+            "stdin": "-200",
+            "expected": {
+              "stdout": "200"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit7",
+            "stdin": "-199",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit8",
+            "stdin": "-1",
+            "expected": {
+              "stdout": "199"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit9",
+            "stdin": "0",
+            "expected": {
+              "stdout": "200"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit10",
+            "stdin": "1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit11",
+            "stdin": "200",
+            "expected": {
+              "stdout": "200"
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "deposit12",
+            "stdin": "2000",
+            "expected": {
+              "stdout": "2000"
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "contextId": "q2"
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "How many 4-numberings are there for the five-vertex path graph shown?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D",
+          "label": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "D": [
+            "324"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q3",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2014-senior-graph-d.png",
+        "alt": "Official 2014 Senior Section B graph figure"
+      }
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "How many 4-numberings are there for the four-cycle graph shown?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E",
+          "label": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "84"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q3",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2014-senior-graph-e.png",
+        "alt": "Official 2014 Senior Section B graph figure"
+      }
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank F",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Now, how many different 4-numbering arrangements are there for the graph on the right?"
+      },
+      "points": 0,
+      "blanks": [
+        {
+          "id": "F",
+          "label": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "cancelled",
+        "reason": "Cancelled by HKOI."
+      },
+      "contextId": "q3",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2014-senior-graph-f.png",
+        "alt": "Official 2014 Senior Section B graph figure"
+      }
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The above program determines whether input n is a triangular number. You may assume that n is an integer in [1, 1000]. However there is one error. Determine the type of error (compilation, run-time or logic), line number and then correct it."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "label": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "Logic",
+            "logic",
+            "logic error"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q4"
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank H",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The above program determines whether input n is a triangular number. You may assume that n is an integer in [1, 1000]. However there is one error. Determine the type of error (compilation, run-time or logic), line number and then correct it."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H",
+          "label": "H",
+          "maxChars": 2
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "H": [
+            "59"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q4"
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank I",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The above program determines whether input n is a triangular number. You may assume that n is an integer in [1, 1000]. However there is one error. Determine the type of error (compilation, run-time or logic), line number and then correct it."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I",
+          "label": "I",
+          "maxChars": 23,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint n, i;\nint main() {\n  printf(\"Input integer n: \");\n  scanf(\"%d\", &n);\n  for (i = 1; i <= 45; i++) {\n    if (i*(i+1) == n*2) {\n      printf(\"n is a triangular number\");\n      {{I}}\n  }\n  printf(\"n is not a triangular number\");\n  return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "tri1",
+            "stdin": "1",
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri2",
+            "stdin": "2",
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri3",
+            "stdin": "3",
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri4",
+            "stdin": "4",
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri6",
+            "stdin": "6",
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri10",
+            "stdin": "10",
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri15",
+            "stdin": "15",
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri21",
+            "stdin": "21",
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri45",
+            "stdin": "45",
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri990",
+            "stdin": "990",
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "tri1000",
+            "stdin": "1000",
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q4"
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank J",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume function/procedure swap(i, j) swaps the values of a[i] and a[j]. Say if a[3] = 5 and a[6] = 1, after swap(3, 6), a[3] becomes 1 and a[6] becomes 5. Complete the following program segment so that it sorts array a[9] (Pascal: a[0..8]) in ascending order."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J",
+          "label": "J",
+          "maxChars": 13,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint a[9],p;\nvoid swap(int i,int j){int t=a[i];a[i]=a[j];a[j]=t;}\nint main(){\n  for(int i=0;i<9;++i)scanf(\"%d\",&a[i]);\np = 0;\nwhile (p < 8) {\n  if (a[p] > a[p+1]) {\n    {{J}};\n    if (p>0)\n      p=p-1;\n  } else {\n    p=p+1;\n  }\n}\n  for(int i=0;i<9;++i)printf(\"%d \",a[i]);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "sort1",
+            "stdin": "1 2 3 4 5 6 7 8 9",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort2",
+            "stdin": "9 8 7 6 5 4 3 2 1",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort3",
+            "stdin": "5 1 7 3 9 2 8 4 6",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort4",
+            "stdin": "1 1 2 3 5 8 13 21 34",
+            "expected": {
+              "stdout": "1 1 2 3 5 8 13 21 34 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort5",
+            "stdin": "10 10 10 10 10 10 10 10 10",
+            "expected": {
+              "stdout": "10 10 10 10 10 10 10 10 10 "
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q5"
+    },
+    {
+      "id": "K",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blanks K1, K2",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume function/procedure swap(i, j) swaps the values of a[i] and a[j]. Say if a[3] = 5 and a[6] = 1, after swap(3, 6), a[3] becomes 1 and a[6] becomes 5. Complete the following program segment so that it sorts array a[9] (Pascal: a[0..8]) in ascending order."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K1",
+          "label": "K1",
+          "maxChars": 7,
+          "forbiddenChars": "?:"
+        },
+        {
+          "id": "K2",
+          "label": "K2",
+          "maxChars": 13,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint a[9],p;\nvoid swap(int i,int j){int t=a[i];a[i]=a[j];a[j]=t;}\nint main(){\n  for(int i=0;i<9;++i)scanf(\"%d\",&a[i]);\np = 0;\nwhile (p < 8) {\n  if (a[p] > a[p+1]) {\n    swap(p,p+1);\n    if ({{K1}})\n      {{K2}};\n  } else {\n    p=p+1;\n  }\n}\n  for(int i=0;i<9;++i)printf(\"%d \",a[i]);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "sort1",
+            "stdin": "1 2 3 4 5 6 7 8 9",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort2",
+            "stdin": "9 8 7 6 5 4 3 2 1",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort3",
+            "stdin": "5 1 7 3 9 2 8 4 6",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort4",
+            "stdin": "1 1 2 3 5 8 13 21 34",
+            "expected": {
+              "stdout": "1 1 2 3 5 8 13 21 34 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort5",
+            "stdin": "10 10 10 10 10 10 10 10 10",
+            "expected": {
+              "stdout": "10 10 10 10 10 10 10 10 10 "
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q5"
+    },
+    {
+      "id": "L",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank L",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume function/procedure swap(i, j) swaps the values of a[i] and a[j]. Say if a[3] = 5 and a[6] = 1, after swap(3, 6), a[3] becomes 1 and a[6] becomes 5. Complete the following program segment so that it sorts array a[9] (Pascal: a[0..8]) in ascending order."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "L",
+          "label": "L",
+          "maxChars": 13,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint a[9],p;\nvoid swap(int i,int j){int t=a[i];a[i]=a[j];a[j]=t;}\nint main(){\n  for(int i=0;i<9;++i)scanf(\"%d\",&a[i]);\np = 0;\nwhile (p < 8) {\n  if (a[p] > a[p+1]) {\n    swap(p,p+1);\n    if (p>0)\n      p=p-1;\n  } else {\n    {{L}};\n  }\n}\n  for(int i=0;i<9;++i)printf(\"%d \",a[i]);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "sort1",
+            "stdin": "1 2 3 4 5 6 7 8 9",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort2",
+            "stdin": "9 8 7 6 5 4 3 2 1",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort3",
+            "stdin": "5 1 7 3 9 2 8 4 6",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort4",
+            "stdin": "1 1 2 3 5 8 13 21 34",
+            "expected": {
+              "stdout": "1 1 2 3 5 8 13 21 34 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "sort5",
+            "stdin": "10 10 10 10 10 10 10 10 10",
+            "expected": {
+              "stdout": "10 10 10 10 10 10 10 10 10 "
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q5"
+    },
+    {
+      "id": "M",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank M",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Line 1 of output."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "M",
+          "label": "M",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "M": [
+            "...><...>."
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q6"
+    },
+    {
+      "id": "N",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank N",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Line 2 of output."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "N",
+          "label": "N",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "N": [
+            "...<.....>"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q6"
+    },
+    {
+      "id": "O",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank O",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Line 3 of output."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "O",
+          "label": "O",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2014hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "O": [
+            "..<......>"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q6"
+    }
+  ]
+}

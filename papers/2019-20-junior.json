@@ -1,0 +1,1050 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2019-20-junior",
+    "season": "2019/20",
+    "division": "junior",
+    "title": "HKOI 2019/20 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "The input to the following program is an integer between 0 and $10^{100}$ inclusive in decimal notation without leading zeroes, separator symbols nor decimal point. Complete the following program so that it outputs Yes if and only if the input number is a multiple of 100."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 35
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "string s;\nint n;\nint main() {\n    cin >> s;\n    n = s.length();\n    if ({{A}})\n        cout << \"Yes\";\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "zero",
+            "stdin": "0",
+            "expected": {
+              "stdout": "Yes"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "one-hundred",
+            "stdin": "100",
+            "expected": {
+              "stdout": "Yes"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "large-multiple",
+            "stdin": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "expected": {
+              "stdout": "Yes"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "nonmultiple",
+            "stdin": "101",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "single-nonzero",
+            "stdin": "1",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "trailing-one-zero",
+            "stdin": "10",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "string s;\nint n;\nint main() {\n    cin >> s;\n    n = s.length();\n    if ({{A}})\n        cout << \"Yes\";\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Complete the following program WITHOUT using array a so that array b is equal to array a."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "int a[9], b[9];\nint i;\nint main() {\n    for (i = 0; i <= 8; i++) {\n        a[i] = 0;\n        b[i] = 0;\n    }\n    for (i = 1; i <= 8; i++) {\n        cin >> a[i];\n        b[i] = a[i] - a[i - 1];\n    }\n    for (i = 1; i <= 8; i++)\n        {{B}};\n    for (i = 1; i <= 8; i++) cout << b[i] << (i == 8 ? \"\" : \" \");\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "array-0",
+            "stdin": "1 2 3 4 5 6 7 8",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "array-1",
+            "stdin": "8 7 6 5 4 3 2 1",
+            "expected": {
+              "stdout": "8 7 6 5 4 3 2 1"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "array-2",
+            "stdin": "0 0 0 0 0 0 0 0",
+            "expected": {
+              "stdout": "0 0 0 0 0 0 0 0"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "array-3",
+            "stdin": "-3 4 -5 6 -7 8 -9 10",
+            "expected": {
+              "stdout": "-3 4 -5 6 -7 8 -9 10"
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int a[9], b[9];\nint i;\nint main() {\n    for (i = 0; i <= 8; i++) {\n        a[i] = 0;\n        b[i] = 0;\n    }\n    for (i = 1; i <= 8; i++) {\n        cin >> a[i];\n        b[i] = a[i] - a[i - 1];\n    }\n    for (i = 1; i <= 8; i++)\n        {{B}};\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The above program is modified to the following program. Complete the following program WITHOUT using array a so that array b is equal to array a."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "int a[9], b[9];\nint i;\nint main() {\n    for (i = 0; i <= 8; i++) {\n        a[i] = 0;\n        b[i] = 0;\n    }\n    for (i = 1; i <= 8; i++) {\n        cin >> a[i];\n        b[i] = b[i - 1] + a[i];\n    }\n    for (i = 1; i <= 8; i++)\n        {{C}};\n    for (i = 1; i <= 8; i++) cout << b[i] << (i == 8 ? \"\" : \" \");\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "array-0",
+            "stdin": "1 2 3 4 5 6 7 8",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "array-1",
+            "stdin": "8 7 6 5 4 3 2 1",
+            "expected": {
+              "stdout": "8 7 6 5 4 3 2 1"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "array-2",
+            "stdin": "0 0 0 0 0 0 0 0",
+            "expected": {
+              "stdout": "0 0 0 0 0 0 0 0"
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "array-3",
+            "stdin": "-3 4 -5 6 -7 8 -9 10",
+            "expected": {
+              "stdout": "-3 4 -5 6 -7 8 -9 10"
+            },
+            "maxSteps": 20000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int a[9], b[9];\nint i;\nint main() {\n    for (i = 0; i <= 8; i++) {\n        a[i] = 0;\n        b[i] = 0;\n    }\n    for (i = 1; i <= 8; i++) {\n        cin >> a[i];\n        b[i] = b[i - 1] + a[i];\n    }\n    for (i = 1; i <= 8; i++)\n        {{C}};\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blanks D1, D2, D3",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Complete the function cmp, so that the function cmp return 0 when string a is smaller than or equal to string b and return 1 when string a is larger than string b in lexicographical order."
+      },
+      "points": 0,
+      "blanks": [
+        {
+          "id": "D1",
+          "maxChars": 20
+        },
+        {
+          "id": "D2",
+          "maxChars": 10
+        },
+        {
+          "id": "D3",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "cancelled",
+        "reason": "Cancelled by HKOI."
+      },
+      "displayCode": {
+        "cpp": "int cmp(string a, string b) {\n    int x = a.length();\n    int y = b.length();\n    int s = 0;\n    while ({{D1}}) {\n        if ({{D2}}) {\n            return 0;\n        }\n        if ({{D3}}) {\n            return 1;\n        }\n        s = s + 1;\n    }\n    if (________ == x) {\n        return 0;\n    } else {\n        return 1;\n    }\n}"
+      }
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Complete the function cmp, so that the function cmp return 0 when string a is smaller than or equal to string b and return 1 when string a is larger than string b in lexicographical order."
+      },
+      "points": 0,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 3
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "cancelled",
+        "reason": "Cancelled by HKOI."
+      }
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Write down the return values of f(10) and f(121)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "4"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int f(int x) {\n    int res = 0;\n    int i;\n    for (i = 1; i <= x; i++)\n        if (x % i == 0)\n            res++;\n    return res;\n}"
+      }
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Write down the return values of f(10) and f(121)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "3"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank H",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The following program uses the function f above. What is the output of the program?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "H": [
+            "25"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int f(int x) {\n    int res = 0;\n    int i;\n    for (i = 1; i <= x; i++)\n        if (x % i == 0)\n            res++;\n    return res;\n}\nint c, i;\nint main() {\n    c = 0;\n    for (i = 1; i <= 10000; i++)\n        if (f(i) == 3)\n            c++;\n    cout << c;\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank I",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Write down the return value of g(10)."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "11"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int f(int n) {\n    int start, acc, i;\n    start = (n - 2) / 4 * 4 + 2;\n    acc = ________;\n    for (i = start + 1; i <= n; i++)\n        acc = ________;\n    return acc;\n}\nint g(int n) {\n    int i, sum;\n    sum = 0;\n    for (i = 1; i <= n; i++)\n        sum = sum ^ i;\n    return sum;\n}"
+      }
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blanks J1, J2",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the function f, so that f(n) has the same return value as g(n) for $10 \\leq n \\leq 100$."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J1",
+          "maxChars": 10
+        },
+        {
+          "id": "J2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "source": "int f(int n) {\n    int start, acc, i;\n    start = (n - 2) / 4 * 4 + 2;\n    acc = {{J1}};\n    for (i = start + 1; i <= n; i++)\n        acc = {{J2}};\n    return acc;\n}\nint g(int n) {\n    int i, sum;\n    sum = 0;\n    for (i = 1; i <= n; i++)\n        sum = sum ^ i;\n    return sum;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "n-10",
+            "args": [
+              10
+            ],
+            "expected": {
+              "returnValue": 11
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-11",
+            "args": [
+              11
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-12",
+            "args": [
+              12
+            ],
+            "expected": {
+              "returnValue": 12
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-13",
+            "args": [
+              13
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-14",
+            "args": [
+              14
+            ],
+            "expected": {
+              "returnValue": 15
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-15",
+            "args": [
+              15
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-16",
+            "args": [
+              16
+            ],
+            "expected": {
+              "returnValue": 16
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-17",
+            "args": [
+              17
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-18",
+            "args": [
+              18
+            ],
+            "expected": {
+              "returnValue": 19
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-19",
+            "args": [
+              19
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-20",
+            "args": [
+              20
+            ],
+            "expected": {
+              "returnValue": 20
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-21",
+            "args": [
+              21
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-22",
+            "args": [
+              22
+            ],
+            "expected": {
+              "returnValue": 23
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-23",
+            "args": [
+              23
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-24",
+            "args": [
+              24
+            ],
+            "expected": {
+              "returnValue": 24
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-25",
+            "args": [
+              25
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-30",
+            "args": [
+              30
+            ],
+            "expected": {
+              "returnValue": 31
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-31",
+            "args": [
+              31
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-32",
+            "args": [
+              32
+            ],
+            "expected": {
+              "returnValue": 32
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-33",
+            "args": [
+              33
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-38",
+            "args": [
+              38
+            ],
+            "expected": {
+              "returnValue": 39
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-49",
+            "args": [
+              49
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-50",
+            "args": [
+              50
+            ],
+            "expected": {
+              "returnValue": 51
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-51",
+            "args": [
+              51
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-52",
+            "args": [
+              52
+            ],
+            "expected": {
+              "returnValue": 52
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-63",
+            "args": [
+              63
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-64",
+            "args": [
+              64
+            ],
+            "expected": {
+              "returnValue": 64
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-65",
+            "args": [
+              65
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-78",
+            "args": [
+              78
+            ],
+            "expected": {
+              "returnValue": 79
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-99",
+            "args": [
+              99
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "n-100",
+            "args": [
+              100
+            ],
+            "expected": {
+              "returnValue": 100
+            },
+            "maxSteps": 3000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int f(int n) {\n    int start, acc, i;\n    start = (n - 2) / 4 * 4 + 2;\n    acc = {{J1}};\n    for (i = start + 1; i <= n; i++)\n        acc = {{J2}};\n    return acc;\n}\nint g(int n) {\n    int i, sum;\n    sum = 0;\n    for (i = 1; i <= n; i++)\n        sum = sum ^ i;\n    return sum;\n}"
+      }
+    },
+    {
+      "id": "K",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank K",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the function range, so that range(x,y,z) returns the range of x,y,z (i.e. the greatest value minus the least value among x,y,z) for integers x,y,z ($-100 \\leq x,y,z \\leq 100$)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 23
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "dialect": "c++98",
+            "helperSource": "int median(int a, int b, int c) {\n    if ((a <= b && b <= c) || (c <= b && b <= a)) return b;\n    if ((b <= a && a <= c) || (c <= a && a <= b)) return a;\n    return c;\n}",
+            "source": "int f(int a) {\n    if (a < 0)\n        return -a;\n    else\n        return a;\n}\nint range(int a, int b, int c) {\n    int m = median(a, b, c);\n    return {{K}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "range"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "range-0",
+            "args": [
+              1,
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "range-1",
+            "args": [
+              3,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "range-2",
+            "args": [
+              -100,
+              0,
+              100
+            ],
+            "expected": {
+              "returnValue": 200
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "range-3",
+            "args": [
+              5,
+              5,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "range-4",
+            "args": [
+              0,
+              0,
+              9
+            ],
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "range-5",
+            "args": [
+              -5,
+              -2,
+              -3
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "range-6",
+            "args": [
+              100,
+              -100,
+              100
+            ],
+            "expected": {
+              "returnValue": 200
+            },
+            "maxSteps": 3000
+          },
+          {
+            "id": "range-7",
+            "args": [
+              1,
+              3,
+              2
+            ],
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 3000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int f(int a) {\n    if (a < 0)\n        return -a;\n    else\n        return a;\n}\nint range(int a, int b, int c) {\n    int m = median(a, b, c);\n    return {{K}};\n}"
+      }
+    },
+    {
+      "id": "L",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank L",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "The program tries to evaluate an additive expression from the input. However, the program contains an error. For example, the program outputs 51 when the input is 100+1. What is the output when the input is 10+10?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "L"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "L": [
+            "-480"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "string s;\nint sum, temp, len, i, x;\nint main() {\n    cin >> s;\n    sum = 0;\n    temp = 0;\n    len = s.length();\n    i = 0;\n    while (i < len)\n    {\n        if (s[i] == '+')\n        {\n            sum = sum + temp;\n            temp = 0;\n        }\n        x = int(s[i]) - int('0');\n        temp = temp * 10 + x;\n        i++;\n    }\n    cout << sum + temp;\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "M",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blanks M1, M2",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "The bug can be fixed by changing exactly one line. Find the line and correct it so that it outputs the correct answer for all of the following cases:\n\n| Input | Output |\n|---|---|\n| 123+4567 | 4690 |\n| 2019+20 | 2039 |\n| 12+13 | 25 |\n| 89+43 | 132 |\n| 1+2+3+4 | 10 |"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "M1",
+          "maxChars": 2
+        },
+        {
+          "id": "M2",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2020hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2020hja.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "cpp-line-repair",
+        "lineBlank": "M1",
+        "replacementBlank": "M2",
+        "firstLine": 71,
+        "source": "string s;\nint sum, temp, len, i, x;\nint main() {\n    cin >> s;\n    sum = 0;\n    temp = 0;\n    len = s.length();\n    i = 0;\n    while (i < len)\n    {\n        if (s[i] == '+')\n        {\n            sum = sum + temp;\n            temp = 0;\n        }\n        x = int(s[i]) - int('0');\n        temp = temp * 10 + x;\n        i++;\n    }\n    cout << sum + temp;\n    return 0;\n}",
+        "cases": [
+          {
+            "id": "printed-0",
+            "stdin": "123+4567",
+            "expected": {
+              "stdout": "4690"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "printed-1",
+            "stdin": "2019+20",
+            "expected": {
+              "stdout": "2039"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "printed-2",
+            "stdin": "12+13",
+            "expected": {
+              "stdout": "25"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "printed-3",
+            "stdin": "89+43",
+            "expected": {
+              "stdout": "132"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "printed-4",
+            "stdin": "1+2+3+4",
+            "expected": {
+              "stdout": "10"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "printed-5",
+            "stdin": "0+0",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 5000
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "string s;\nint sum, temp, len, i, x;\nint main() {\n    cin >> s;\n    sum = 0;\n    temp = 0;\n    len = s.length();\n    i = 0;\n    while (i < len)\n    {\n        if (s[i] == '+')\n        {\n            sum = sum + temp;\n            temp = 0;\n        }\n        x = int(s[i]) - int('0');\n        temp = temp * 10 + x;\n        i++;\n    }\n    cout << sum + temp;\n    return 0;\n}"
+      }
+    }
+  ]
+}

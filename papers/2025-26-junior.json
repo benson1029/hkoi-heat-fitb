@@ -15,7 +15,7 @@
   "tracks": [
     {
       "id": "paper1",
-      "label": "Paper 1 · compulsory",
+      "label": "Paper 1",
       "selection": "required"
     },
     {
@@ -36,7 +36,7 @@
       "id": "paper1-a",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 1, Blank A",
-      "title": "Section B, Question 1",
+      "title": "Paper 1, Section B, Question 1",
       "prompt": {
         "en": "You have three pendulums. They are released from their respective top positions simultaneously at the 0th second. They would return to their starting positions every 6, 8, and 12 seconds respectively. What is the smallest positive time (in seconds) will they all be back to their starting positions?"
       },
@@ -64,7 +64,7 @@
       "id": "paper1-b",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 2, Blank B",
-      "title": "Section B, Question 2",
+      "title": "Paper 1, Section B, Question 2",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -96,7 +96,7 @@
       "id": "paper1-c",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 3, Blank C",
-      "title": "Section B, Question 3",
+      "title": "Paper 1, Section B, Question 3",
       "prompt": {
         "en": "If f() returns a random integer between 0 and 31 inclusive uniformly and independently, what is the probability that the above program outputs 0? Please provide the answer as a fraction in its simplest form."
       },
@@ -128,7 +128,7 @@
       "id": "paper1-d",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 4, Blank D",
-      "title": "Section B, Question 4",
+      "title": "Paper 1, Section B, Question 4",
       "prompt": {
         "en": "Complete the program such that it outputs 4."
       },
@@ -183,7 +183,7 @@
       "id": "paper1-e",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 5, Blank E",
-      "title": "Section B, Question 5",
+      "title": "Paper 1, Section B, Question 5",
       "prompt": {
         "en": "Consider all arithmetic expressions of length between 1 and 7 (inclusive) that consists of 1 and + only. The arithmetic expressions should not start or end with +, or have consecutive +. For example, 1, 11, 111+111 and 1+1+11 are valid arithmetic expressions, while +1+1+ and 1++1 are not. How many different values can be evaluated from these arithmetic expressions?"
       },
@@ -211,7 +211,7 @@
       "id": "paper1-f",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 6, Blank F",
-      "title": "Section B, Question 6",
+      "title": "Paper 1, Section B, Question 6",
       "prompt": {
         "en": "8 balls are arranged in a circular formation as shown in the figure on the right. Each ball is colored black or white. For every pair of balls of the same color, draw a straight line segment connecting their centers. The color of the line segment is the same as that of the balls.\n\nIn one operation, you may remove a single line segment, the cost of removing it equals the number of opposite-color line segments it intersects. Repeat until all the line segments are removed; the total cost is the sum of costs of all operations. What is the minimum total cost needed to remove all line segments?"
       },
@@ -243,8 +243,8 @@
     {
       "id": "paper1-g",
       "track": "paper1",
-      "printedRef": "Paper 1, Section C, Question 1(a), Blank G1, G2",
-      "title": "Section C, Question 1(a)",
+      "printedRef": "Paper 1, Section C, Question 1(a), Blanks G1, G2",
+      "title": "Paper 1, Section C, Question 1(a)",
       "prompt": {
         "en": "A repdigit is a positive integer whose decimal representation consists of the same digit repeated (e.g., 1, 11, 7, 777 are repdigits, while 15, 23, 998 are not).\n\nComplete the function f(x) to return the smallest repdigit which consists of only digit 1 and is greater than x. For example, when x is 111, f should return 1111. It is guaranteed that x is a repdigit consisting of only digit 1, and 1 ≤x ≤11111."
       },
@@ -331,8 +331,8 @@
     {
       "id": "paper1-h",
       "track": "paper1",
-      "printedRef": "Paper 1, Section C, Question 1(b), Blank H1, H2",
-      "title": "Section C, Question 1(b)",
+      "printedRef": "Paper 1, Section C, Question 1(b), Blanks H1, H2",
+      "title": "Paper 1, Section C, Question 1(b)",
       "prompt": {
         "en": "Assuming f(x) is correctly implemented, complete the function g(x) to return the smallest repdigit greater than x. For example, when x is 222, g should return 333. It is guaranteed that x is a repdigit, and 1 ≤x ≤99999."
       },
@@ -432,7 +432,7 @@
       "id": "paper1-i",
       "track": "paper1",
       "printedRef": "Paper 1, Section C, Question 2(a), Blank I",
-      "title": "Section C, Question 2(a)",
+      "title": "Paper 1, Section C, Question 2(a)",
       "prompt": {
         "en": "According to the triangle inequality, three positive integers may only form the side lengths of a valid triangle if and only if the sum of any two integers is greater than the third number.\n\nComplete the function f(a, b, c) such that it returns True (C++: true) if and only if the three integers a, b, c form the side lengths of a valid triangle. It is guaranteed that 1 ≤a < b < c ≤1000."
       },
@@ -560,8 +560,8 @@
     {
       "id": "paper1-j",
       "track": "paper1",
-      "printedRef": "Paper 1, Section C, Question 2(b), Blank J1, J2",
-      "title": "Section C, Question 2(b)",
+      "printedRef": "Paper 1, Section C, Question 2(b), Blanks J1, J2",
+      "title": "Paper 1, Section C, Question 2(b)",
       "prompt": {
         "en": "Assuming f is correctly implemented. Let a be an array of length n of distinct positive integers in ascending order. Complete the function g(a) to return the number of valid triples in a that form the side lengths of a valid triangle. The triples are unordered, for example, (2, 3, 4) is considered the same triple as (4, 3, 2)."
       },
@@ -686,8 +686,8 @@
     {
       "id": "python-a",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 1, Blank A",
-      "title": "Section B, Question 1",
+      "printedRef": "Paper 2 (Python), Section B, Question 1, Blank A",
+      "title": "Paper 2 (Python), Section B, Question 1",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -717,8 +717,8 @@
     {
       "id": "python-b",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 2, Blank B",
-      "title": "Section B, Question 2",
+      "printedRef": "Paper 2 (Python), Section B, Question 2, Blank B",
+      "title": "Paper 2 (Python), Section B, Question 2",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -748,8 +748,8 @@
     {
       "id": "python-c",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 3, Blank C",
-      "title": "Section B, Question 3",
+      "printedRef": "Paper 2 (Python), Section B, Question 3, Blank C",
+      "title": "Paper 2 (Python), Section B, Question 3",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -779,8 +779,8 @@
     {
       "id": "python-d",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 4, Blank D",
-      "title": "Section B, Question 4",
+      "printedRef": "Paper 2 (Python), Section B, Question 4, Blank D",
+      "title": "Paper 2 (Python), Section B, Question 4",
       "prompt": {
         "en": "Assume a function is_cube(x) is correctly implemented. It takes in a positive integer x, and returns True if and only if x is a perfect cube.\n\nComplete the following function f such that for all positive integers n ≤10⁹, it returns the number of pairs of positive integers (a, b) such that a² + b³ = n."
       },
@@ -889,8 +889,8 @@
     {
       "id": "python-e",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 5, Blank E",
-      "title": "Section B, Question 5",
+      "printedRef": "Paper 2 (Python), Section B, Question 5, Blank E",
+      "title": "Paper 2 (Python), Section B, Question 5",
       "prompt": {
         "en": "Complete the following program such that it outputs 101101101."
       },
@@ -932,8 +932,8 @@
     {
       "id": "python-f",
       "track": "python",
-      "printedRef": "Paper 2, Section B, Question 6, Blank F",
-      "title": "Section B, Question 6",
+      "printedRef": "Paper 2 (Python), Section B, Question 6, Blank F",
+      "title": "Paper 2 (Python), Section B, Question 6",
       "prompt": {
         "en": "The months of the year are encoded in binary, where the N-th month of the year (1 ≤N ≤12) is represented by a 4-digit binary number ABCD₂, such that 0 ≤A, B, C, D ≤1 and N = 8A + 4B + 2C + D. For example, January is represented by A = 0, B = 0, C = 0, D = 1, February by A = 0, B = 0, C = 1, D = 0, ... and December by A = 1, B = 1, C = 0, D = 0.\n\nComplete the function has_r(A, B, C, D), so that given four integers A, B, C, D representing a valid month of the year, it returns Yes if and only if that month’s English name contains the letter r.\n\nHint: The months that contain the letter r are January, February, March, April, September, October, November and December."
       },
@@ -1124,8 +1124,8 @@
     {
       "id": "python-g",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 1(a), Blank G",
-      "title": "Section C, Question 1(a)",
+      "printedRef": "Paper 2 (Python), Section C, Question 1(a), Blank G",
+      "title": "Paper 2 (Python), Section C, Question 1(a)",
       "prompt": {
         "en": "We denote a non-empty list of integers of length n as beautiful if and only if it consists of x, x+1, x+2, ..., x+n−1 in this order for some integer x.\n\nComplete the function is_beautiful1(a) to return True if and only if list a is beautiful. It is guaranteed that the list a has at least one element."
       },
@@ -1228,8 +1228,8 @@
     {
       "id": "python-h",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 1(b), Blank H",
-      "title": "Section C, Question 1(b)",
+      "printedRef": "Paper 2 (Python), Section C, Question 1(b), Blank H",
+      "title": "Paper 2 (Python), Section C, Question 1(b)",
       "prompt": {
         "en": "We denote a non-empty list of integers of length n as beautiful if and only if it consists of x, x+1, x+2, ..., x+n−1 in this order for some integer x.\n\nComplete the function is_beautiful2(a) to return True if and only if list a is beautiful. It is guaranteed that the list a has at least one element."
       },
@@ -1332,8 +1332,8 @@
     {
       "id": "python-i",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 1(c), Blank I",
-      "title": "Section C, Question 1(c)",
+      "printedRef": "Paper 2 (Python), Section C, Question 1(c), Blank I",
+      "title": "Paper 2 (Python), Section C, Question 1(c)",
       "prompt": {
         "en": "We denote a non-empty list of integers of length n as beautiful if and only if it consists of x, x+1, x+2, ..., x+n−1 in this order for some integer x.\n\nComplete the function is_beautiful3(a) to return True if and only if list a is beautiful. It is guaranteed that the list a has at least one element."
       },
@@ -1436,8 +1436,8 @@
     {
       "id": "python-j",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 2(a), Blank J",
-      "title": "Section C, Question 2(a)",
+      "printedRef": "Paper 2 (Python), Section C, Question 2(a), Blank J",
+      "title": "Paper 2 (Python), Section C, Question 2(a)",
       "prompt": {
         "en": "Complete the program f(x) such that it produces the correct output for these inputs:\n\n| Input | Output |\n| --- | --- |\n| python marathon | Yes |\n| pair repair | Yes |\n| class glass | Yes |\n| crate rate | Yes |\n| return burn | No |\n| closet set | No |\n| butter button | No |"
       },
@@ -1543,8 +1543,8 @@
     {
       "id": "python-k",
       "track": "python",
-      "printedRef": "Paper 2, Section C, Question 2(b), Blank K",
-      "title": "Section C, Question 2(b)",
+      "printedRef": "Paper 2 (Python), Section C, Question 2(b), Blank K",
+      "title": "Paper 2 (Python), Section C, Question 2(b)",
       "prompt": {
         "en": "Complete the program f(x) such that it produces the correct output for these inputs:\n\n| Input | Output |\n| --- | --- |\n| secure rescue | Yes |\n| state taste | Yes |\n| night thing | Yes |\n| loop pool | Yes |\n| time mine | No |\n| write white | No |\n| violet violin | No |"
       },
@@ -1650,8 +1650,8 @@
     {
       "id": "cpp-l",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 1, Blank L",
-      "title": "Section B, Question 1",
+      "printedRef": "Paper 2 (C++), Section B, Question 1, Blank L",
+      "title": "Paper 2 (C++), Section B, Question 1",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -1681,8 +1681,8 @@
     {
       "id": "cpp-m",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 2, Blank M",
-      "title": "Section B, Question 2",
+      "printedRef": "Paper 2 (C++), Section B, Question 2, Blank M",
+      "title": "Paper 2 (C++), Section B, Question 2",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -1712,8 +1712,8 @@
     {
       "id": "cpp-n",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 3, Blank N",
-      "title": "Section B, Question 3",
+      "printedRef": "Paper 2 (C++), Section B, Question 3, Blank N",
+      "title": "Paper 2 (C++), Section B, Question 3",
       "prompt": {
         "en": "Across all inputs, how many distinct integers can the program output?"
       },
@@ -1743,8 +1743,8 @@
     {
       "id": "cpp-o",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 4, Blank O",
-      "title": "Section B, Question 4",
+      "printedRef": "Paper 2 (C++), Section B, Question 4, Blank O",
+      "title": "Paper 2 (C++), Section B, Question 4",
       "prompt": {
         "en": "Complete the function IsNotEqual(x, y) such that it returns true if and only if x is not equal to y for all integers −10000 ≤x, y ≤10000."
       },
@@ -1875,8 +1875,8 @@
     {
       "id": "cpp-p",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 5, Blank P",
-      "title": "Section B, Question 5",
+      "printedRef": "Paper 2 (C++), Section B, Question 5, Blank P",
+      "title": "Paper 2 (C++), Section B, Question 5",
       "prompt": {
         "en": "Complete the following function AreAllOnes(a), such that it returns true if and only if all elements in the array are equal to 1."
       },
@@ -2002,8 +2002,8 @@
     {
       "id": "cpp-q",
       "track": "cpp",
-      "printedRef": "Paper 2, Section B, Question 6, Blank Q",
-      "title": "Section B, Question 6",
+      "printedRef": "Paper 2 (C++), Section B, Question 6, Blank Q",
+      "title": "Paper 2 (C++), Section B, Question 6",
       "prompt": {
         "en": "This is the 30th edition of HKOI. If you look up HKOI’s website, you will find that the 1st HKOI was \"HKOI 1997\". Let e be the edition number, the naming format, \"HKOI {1997+e−1}\", remained in use until the 18th HKOI (\"HKOI 2014\"). Since the 19th HKOI (\"HKOI 2014/15\"), the naming format has changed to \"HKOI {1997 + e −2}/{the two least significant digits of (1997 + e −1)}\".\n\nAssuming that the naming format will not change again in the future, complete the function f(e) below, such that for all 1 ≤e ≤100, it outputs the correct eth HKOI’s name following the naming formats above."
       },
@@ -2088,8 +2088,8 @@
     {
       "id": "cpp-r",
       "track": "cpp",
-      "printedRef": "Paper 2, Section C, Question 1(a), Blank R",
-      "title": "Section C, Question 1(a)",
+      "printedRef": "Paper 2 (C++), Section C, Question 1(a), Blank R",
+      "title": "Paper 2 (C++), Section C, Question 1(a)",
       "prompt": {
         "en": "Let n and m be integers. We call the pair (n, m) a good pair if and only if both n and m are even. For example, (8, 4), (2, 6) and (10, 10) are good pairs, but (5, 2) and (7, 7) are not.\n\nComplete the function IsGoodPair(n, m) such that it returns true if and only if (n, m) is a good pair, where 1 ≤n, m ≤10^9."
       },
@@ -2204,8 +2204,8 @@
     {
       "id": "cpp-s",
       "track": "cpp",
-      "printedRef": "Paper 2, Section C, Question 1(b), Blank S",
-      "title": "Section C, Question 1(b)",
+      "printedRef": "Paper 2 (C++), Section C, Question 1(b), Blank S",
+      "title": "Paper 2 (C++), Section C, Question 1(b)",
       "prompt": {
         "en": "Let n and m be integers. We call the pair (n, m) a good pair if and only if both n and m are even. For example, (8, 4), (2, 6) and (10, 10) are good pairs, but (5, 2) and (7, 7) are not.\n\nAssume IsGoodPair(n, m) is implemented correctly, complete the function CountGoodPairs1(k) such that it returns the number of unique good pairs where 1 ≤n, m ≤k for all 1 ≤k ≤1000."
       },
@@ -2301,8 +2301,8 @@
     {
       "id": "cpp-t",
       "track": "cpp",
-      "printedRef": "Paper 2, Section C, Question 1(c), Blank T",
-      "title": "Section C, Question 1(c)",
+      "printedRef": "Paper 2 (C++), Section C, Question 1(c), Blank T",
+      "title": "Paper 2 (C++), Section C, Question 1(c)",
       "prompt": {
         "en": "Let n and m be integers. We call the pair (n, m) a good pair if and only if both n and m are even. For example, (8, 4), (2, 6) and (10, 10) are good pairs, but (5, 2) and (7, 7) are not.\n\nComplete the function CountGoodPairs2(k) such that it returns the same value as CountGoodPairs1(k) for all 1 ≤k ≤1000."
       },
@@ -2397,8 +2397,8 @@
     {
       "id": "cpp-u",
       "track": "cpp",
-      "printedRef": "Paper 2, Section C, Question 2(a), Blank U1, U2",
-      "title": "Section C, Question 2(a)",
+      "printedRef": "Paper 2 (C++), Section C, Question 2(a), Blanks U1, U2",
+      "title": "Paper 2 (C++), Section C, Question 2(a)",
       "prompt": {
         "en": "Given a string s only consisting of digits from 0 to 9 inclusive. s possibly containing leading zeros. A contiguous substring s[i..j] (where i ≤j) is called good if and only if it, when being seen as a number, is a multiple of 3.\n\nComplete the function f(s) such that it returns the number of good substrings of a string s, where s is a string of length at most 1000."
       },
@@ -2507,8 +2507,8 @@
     {
       "id": "cpp-v",
       "track": "cpp",
-      "printedRef": "Paper 2, Section C, Question 2(b), Blank V",
-      "title": "Section C, Question 2(b)",
+      "printedRef": "Paper 2 (C++), Section C, Question 2(b), Blank V",
+      "title": "Paper 2 (C++), Section C, Question 2(b)",
       "prompt": {
         "en": "Given a string s only consisting of digits from 0 to 9 inclusive. s possibly containing leading zeros. A contiguous substring s[i..j] (where i ≤j) is called good if and only if it, when being seen as a number, is a multiple of 3.\n\nComplete the function g(s) so that for all string s with length at most 1000, the return value of g(s) is the same as the return value of f(s)."
       },

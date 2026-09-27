@@ -4,7 +4,7 @@
     "id": "2011-12-senior",
     "season": "2011/12",
     "division": "senior",
-    "title": "HKOI2012 Heat Event (Senior Group)",
+    "title": "HKOI 2011/12 Heat Event — Senior Group FITB",
     "source": {
       "paperUrl": "https://assets.hkoi.org/ref/2012hse.pdf",
       "answerSheetUrl": "https://assets.hkoi.org/ref/2012hsa.pdf",
@@ -22,8 +22,8 @@
     {
       "id": "A",
       "track": "section-b",
-      "printedRef": "Section B Q1 A",
-      "title": "Section B Q1 A",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
       "prompt": {
         "en": "A. Write an expression which gives the maximum of two non-negative integers x and y."
       },
@@ -32,7 +32,8 @@
         {
           "id": "A",
           "label": "A",
-          "maxChars": 13
+          "maxChars": 13,
+          "forbiddenChars": "?:<>"
         }
       ],
       "source": {
@@ -41,17 +42,95 @@
         "page": 8
       },
       "grading": {
-        "kind": "pending",
-        "reason": "Requires the median helper m(a,b,c), C expression evaluation, and invariant checking over the permitted non-negative domain.",
-        "intendedEngine": "c"
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "c",
+            "helperSource": "int m(int a, int b, int c) {\n  if (a > b) { int t = a; a = b; b = t; }\n  if (b > c) { int t = b; b = c; c = t; }\n  if (a > b) { int t = a; a = b; b = t; }\n  return b;\n}",
+            "source": "int f(int x, int y) { return {{A}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "case1",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case2",
+            "args": [
+              1,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case3",
+            "args": [
+              0,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case4",
+            "args": [
+              99,
+              13
+            ],
+            "expected": {
+              "returnValue": 99
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case5",
+            "args": [
+              32767,
+              1
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case6",
+            "args": [
+              32767,
+              32767
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          }
+        ]
       },
       "contextId": "section-b-q1"
     },
     {
       "id": "B",
       "track": "section-b",
-      "printedRef": "Section B Q1 B",
-      "title": "Section B Q1 B",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
       "prompt": {
         "en": "B. Write an expression which gives the maximum of two integers x and y"
       },
@@ -60,7 +139,8 @@
         {
           "id": "B",
           "label": "B",
-          "maxChars": 25
+          "maxChars": 25,
+          "forbiddenChars": "?:<>"
         }
       ],
       "source": {
@@ -69,26 +149,160 @@
         "page": 8
       },
       "grading": {
-        "kind": "pending",
-        "reason": "Requires the median helper m(a,b,c), C expression evaluation, and invariant checking over the full signed integer domain.",
-        "intendedEngine": "c"
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "c",
+            "helperSource": "int m(int a, int b, int c) {\n  if (a > b) { int t = a; a = b; b = t; }\n  if (b > c) { int t = b; b = c; c = t; }\n  if (a > b) { int t = a; a = b; b = t; }\n  return b;\n}",
+            "source": "int f(int x, int y) { return {{B}}; }",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "case1",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case2",
+            "args": [
+              1,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case3",
+            "args": [
+              0,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case4",
+            "args": [
+              99,
+              13
+            ],
+            "expected": {
+              "returnValue": 99
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case5",
+            "args": [
+              32767,
+              1
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case6",
+            "args": [
+              32767,
+              32767
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case7",
+            "args": [
+              -32768,
+              -32768
+            ],
+            "expected": {
+              "returnValue": -32768
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case8",
+            "args": [
+              -32768,
+              32767
+            ],
+            "expected": {
+              "returnValue": 32767
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case9",
+            "args": [
+              -5,
+              -7
+            ],
+            "expected": {
+              "returnValue": -5
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case10",
+            "args": [
+              -5,
+              3
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "case11",
+            "args": [
+              0,
+              -1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          }
+        ]
       },
       "contextId": "section-b-q1"
     },
     {
       "id": "C",
       "track": "section-b",
-      "printedRef": "Section B Q2 C",
-      "title": "Section B Q2 C",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
       "prompt": {
-        "en": ""
+        "en": "For problem C to E, please consider the following situation.\n\nAlice has written a program to find all the prime numbers in the range [1,25]. Complete the following program segment below."
       },
       "points": 2,
       "blanks": [
         {
           "id": "C",
           "label": "C",
-          "maxChars": 9
+          "maxChars": 9,
+          "forbiddenChars": "?:"
         }
       ],
       "source": {
@@ -97,26 +311,45 @@
         "page": 8
       },
       "grading": {
-        "kind": "pending",
-        "reason": "Requires independent blank testing for the printed C code while preserving its undeclared-variable preface and omitted declaration line.",
-        "intendedEngine": "c"
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint is_prime[6];\nint prime, i, j;\nint main() {\n  is_prime[2]=1;\n  is_prime[3]=1;\n  is_prime[4]=0;\n  is_prime[5]={{C}};\n  for (i=6; i<=25; i++) {\n    prime=1;\n    for (j=2; j<=5; j++)\n      if (is_prime[j]&&i%j==0)\n        prime=0;\n    if (prime==1) printf(\"%d\\n\",i);\n  }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "prime-1-to-25",
+            "stdin": "",
+            "expected": {
+              "stdout": "7\n11\n13\n17\n19\n23\n"
+            },
+            "maxSteps": 10000
+          }
+        ]
       },
       "contextId": "section-b-q2"
     },
     {
       "id": "D",
       "track": "section-b",
-      "printedRef": "Section B Q2 D",
-      "title": "Section B Q2 D",
+      "printedRef": "Section B, Question 2, Blank D",
+      "title": "Section B, Question 2",
       "prompt": {
-        "en": ""
+        "en": "For problem C to E, please consider the following situation.\n\nAlice has written a program to find all the prime numbers in the range [1,25]. Complete the following program segment below."
       },
       "points": 2,
       "blanks": [
         {
           "id": "D",
           "label": "D",
-          "maxChars": 5
+          "maxChars": 5,
+          "forbiddenChars": "?:"
         }
       ],
       "source": {
@@ -125,26 +358,45 @@
         "page": 8
       },
       "grading": {
-        "kind": "pending",
-        "reason": "Requires independent blank testing for the printed C code while preserving its undeclared-variable preface and omitted declaration line.",
-        "intendedEngine": "c"
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint is_prime[6];\nint prime, i, j;\nint main() {\n  is_prime[2]=1;\n  is_prime[3]=1;\n  is_prime[4]=0;\n  is_prime[5]=1;\n  for (i={{D}}; i<=25; i++) {\n    prime=1;\n    for (j=2; j<=5; j++)\n      if (is_prime[j]&&i%j==0)\n        prime=0;\n    if (prime==1) printf(\"%d\\n\",i);\n  }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "prime-1-to-25",
+            "stdin": "",
+            "expected": {
+              "stdout": "7\n11\n13\n17\n19\n23\n"
+            },
+            "maxSteps": 10000
+          }
+        ]
       },
       "contextId": "section-b-q2"
     },
     {
       "id": "E",
       "track": "section-b",
-      "printedRef": "Section B Q2 E",
-      "title": "Section B Q2 E",
+      "printedRef": "Section B, Question 2, Blank E",
+      "title": "Section B, Question 2",
       "prompt": {
-        "en": ""
+        "en": "For problem C to E, please consider the following situation.\n\nAlice has written a program to find all the prime numbers in the range [1,25]. Complete the following program segment below."
       },
       "points": 2,
       "blanks": [
         {
           "id": "E",
           "label": "E",
-          "maxChars": 39
+          "maxChars": 39,
+          "forbiddenChars": "?:"
         }
       ],
       "source": {
@@ -153,19 +405,37 @@
         "page": 8
       },
       "grading": {
-        "kind": "pending",
-        "reason": "Requires independent blank testing for the printed C code while preserving its undeclared-variable preface and omitted declaration line.",
-        "intendedEngine": "c"
+        "kind": "program",
+        "targetPolicy": "all",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint is_prime[6];\nint prime, i, j;\nint main() {\n  is_prime[2]=1;\n  is_prime[3]=1;\n  is_prime[4]=0;\n  is_prime[5]=1;\n  for (i=6; i<=25; i++) {\n    prime=1;\n    for (j=2; j<=5; j++)\n      if ({{E}})\n        prime=0;\n    if (prime==1) printf(\"%d\\n\",i);\n  }\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "prime-1-to-25",
+            "stdin": "",
+            "expected": {
+              "stdout": "7\n11\n13\n17\n19\n23\n"
+            },
+            "maxSteps": 10000
+          }
+        ]
       },
       "contextId": "section-b-q2"
     },
     {
       "id": "F",
       "track": "section-b",
-      "printedRef": "Section B Q3 F",
-      "title": "Section B Q3 F",
+      "printedRef": "Section B, Question 3, Blank F",
+      "title": "Section B, Question 3",
       "prompt": {
-        "en": "If we add all of its digits for a certain positive integer, we could get a new positive integer. This procedure could be repeated, until the final result has only one digit.\n\nFor example, 1234 would produce a new integer 10 (1+2+3+4), and finally 1 (1+0). Janet wants to write a program to input a 5-digit positive integer less than 32768, and output the final single digit after performing the above-mentioned procedure.\n\nHere is her code:\n\n```c\n#include <stdio.h>\nint x;\nint main(){\n  scanf(\"%d\",&x);\n  printf(\"%d\", x-(x+1)/9*9);\n}\n```\n\nHowever, she realizes that her program does not work for some cases.\nHelp Janet write down in F a counter-example which is within the input range."
+        "en": "If we add all of its digits for a certain positive integer, we could get a new positive integer. This procedure could be repeated, until the final result has only one digit.\n\nFor example, 1234 would produce a new integer 10 (1+2+3+4), and finally 1 (1+0). Janet wants to write a program to input a 5-digit positive integer less than 32768, and output the final single digit after performing the above-mentioned procedure.\n\nHere is her code:\n\nHowever, she realizes that her program does not work for some cases. Help Janet write down in F a counter-example which is within the input range.\n\nScoring:\n2 marks if the written integer is a correct counter-example\n3 marks if the written counter-example is the maximum possible integer"
       },
       "points": 3,
       "blanks": [
@@ -181,18 +451,28 @@
         "page": 9
       },
       "grading": {
-        "kind": "pending",
-        "reason": "Requires the printed two-tier 2/3-mark scoring rubric for any correct counter-example versus the maximum counter-example; v1 grading is pass/fail only.",
-        "intendedEngine": "c"
+        "kind": "counterexample-max",
+        "answerBlank": "F",
+        "minimum": 10000,
+        "maximum": 32767,
+        "modulus": 9,
+        "residues": [
+          0,
+          8
+        ],
+        "partialPoints": 2
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\nint x;\nint main(){\n   scanf(\"%d\",&x);\n   printf(\"%d\", x-(x+1)/9*9);\n}"
       }
     },
     {
       "id": "G",
       "track": "section-b",
-      "printedRef": "Section B Q4 G",
-      "title": "Section B Q4 G",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
       "prompt": {
-        "en": "G. Write a command to make the robot visit each grid at least once."
+        "en": "Write a command to make the robot visit each grid at least once."
       },
       "points": 1,
       "blanks": [
@@ -263,10 +543,10 @@
     {
       "id": "H",
       "track": "section-b",
-      "printedRef": "Section B Q4 H",
-      "title": "Section B Q4 H",
+      "printedRef": "Section B, Question 4, Blank H",
+      "title": "Section B, Question 4",
       "prompt": {
-        "en": "H. Assume that the robot can be start at any position in the grid, Write a command to make the robot visit each grid at least once."
+        "en": "Assume that the robot can be start at any position in the grid, Write a command to make the robot visit each grid at least once."
       },
       "points": 1.5,
       "blanks": [
@@ -332,10 +612,10 @@
     {
       "id": "I",
       "track": "section-b",
-      "printedRef": "Section B Q4 I",
-      "title": "Section B Q4 I",
+      "printedRef": "Section B, Question 4, Blank I",
+      "title": "Section B, Question 4",
       "prompt": {
-        "en": "I. Write a command to make the robot visit each '.' grid at least once."
+        "en": "Write a command to make the robot visit each '.' grid at least once."
       },
       "points": 2,
       "blanks": [
@@ -411,10 +691,10 @@
     {
       "id": "J",
       "track": "section-b",
-      "printedRef": "Section B Q4 J",
-      "title": "Section B Q4 J",
+      "printedRef": "Section B, Question 4, Blank J",
+      "title": "Section B, Question 4",
       "prompt": {
-        "en": "J. Assume that the robot can be start at any position in the grid, write a command to make the robot visit each '.' grid at least once."
+        "en": "Assume that the robot can be start at any position in the grid, write a command to make the robot visit each '.' grid at least once."
       },
       "points": 2.5,
       "blanks": [
@@ -485,10 +765,10 @@
     {
       "id": "K",
       "track": "section-b",
-      "printedRef": "Section B Q4 K",
-      "title": "Section B Q4 K",
+      "printedRef": "Section B, Question 4, Blank K",
+      "title": "Section B, Question 4",
       "prompt": {
-        "en": "K. Assume that the robot can be start at any position in the grid and the obstacle can also appear anywhere in the grid, Write a command to make the robot visit each '.' grid at least once."
+        "en": "Assume that the robot can be start at any position in the grid and the obstacle can also appear anywhere in the grid, Write a command to make the robot visit each '.' grid at least once."
       },
       "points": 3,
       "blanks": [
@@ -1687,8 +1967,11 @@
     {
       "id": "section-b-q2",
       "track": "section-b",
-      "title": "Section B Q2",
-      "markdown": "For problem C to E, please consider the following situation.\n\nAlice has written a program to find all the prime numbers in the range [1,25]. Complete the following program segment below.\n\n```c\nint is_prime[6];\nint prime;\n......\nis_prime[2]=1;\nis_prime[3]=1;\nis_prime[4]=0;\nis_prime[5]= ______(C)_______;\nfor (i=___(D)_____; i<=25; i++) {\n  prime=1;\n  for (j=2; j<=5; j++)\n    if (________(E)_______)\n      prime=0;\n  if (prime==1) printf(\"%d\\n\",i);\n}\n```"
+      "title": "Question 2 · C program segment",
+      "markdown": "",
+      "displayCode": {
+        "c": "int is_prime[6];\nint prime;\n......\nis_prime[2]=1;\nis_prime[3]=1;\nis_prime[4]=0;\nis_prime[5]= {{C}};\nfor (i={{D}}; i<=25; i++) {\n   prime=1;\n   for (j=2; j<=5; j++)\n      if ({{E}})\n         prime=0;\n   if (prime==1) printf(\"%d\\n\",i);\n}"
+      }
     },
     {
       "id": "robot-open-grid",

@@ -14,15 +14,15 @@
   },
   "tracks": [
     {
-      "id": "junior",
-      "label": "Junior · compulsory",
+      "id": "section-b",
+      "label": "Section B",
       "selection": "required"
     }
   ],
   "questions": [
     {
       "id": "junior-a",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 1, Blank A",
       "title": "Section B, Question 1",
       "prompt": {
@@ -69,8 +69,8 @@
     },
     {
       "id": "junior-b",
-      "track": "junior",
-      "printedRef": "Section B, Question 2, Blanks B1/B2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blanks B1, B2",
       "title": "Section B, Question 2",
       "prompt": {
         "en": "Complete the following function f(a, b), so that if a < b, f(a, b) returns -1; if a = b, f(a, b) returns 0, and if a > b, f(a, b) returns 1."
@@ -290,8 +290,8 @@
     },
     {
       "id": "junior-c",
-      "track": "junior",
-      "printedRef": "Section B, Question 3(a), Blanks C1/C2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3(a), Blanks C1, C2",
       "title": "Section B, Question 3(a)",
       "prompt": {
         "en": "Currently, the Byteland Meteorological Agency’s tropical cyclone warning system consists of two signals. If at least 4 weather stations observe wind speeds larger or equal to 41, the Strong Wind Signal will be issued, and if there are at least 4 weather stations’ wind speeds larger or equal to 63, the Gale Signal will be issued. Note that if the Gale Signal is issued, the Strong Wind Signal will not be issued.\n\nspeeds stores the current wind speeds of every weather station.\n\nComplete the function Signal2 such that it outputs the signal currently issued."
@@ -480,7 +480,7 @@
     },
     {
       "id": "junior-d",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 3(b), Blank D",
       "title": "Section B, Question 3(b)",
       "prompt": {
@@ -668,7 +668,7 @@
     },
     {
       "id": "junior-e",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 4(a), Blank E",
       "title": "Section B, Question 4(a)",
       "prompt": {
@@ -852,8 +852,8 @@
     },
     {
       "id": "junior-f",
-      "track": "junior",
-      "printedRef": "Section B, Question 4(b), Blanks F1/F2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4(b), Blanks F1, F2",
       "title": "Section B, Question 4(b)",
       "prompt": {
         "en": "Complete the function CountTroughs so that the function CountTroughs(A) returns the number of troughs in a given binary sequence A."
@@ -1051,8 +1051,8 @@
     },
     {
       "id": "junior-g",
-      "track": "junior",
-      "printedRef": "Section B, Question 4(c), Blanks G1/G2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4(c), Blanks G1, G2",
       "title": "Section B, Question 4(c)",
       "prompt": {
         "en": "Complete the function CountTroughsFaster so that CountTroughsFaster(A) returns the number of troughs in a given binary sequence A. (Hint: there is no need to modify A or i.)"
@@ -1249,7 +1249,7 @@
     },
     {
       "id": "junior-h",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 5(a), Blank H",
       "title": "Section B, Question 5(a)",
       "prompt": {
@@ -1278,7 +1278,7 @@
     },
     {
       "id": "junior-i",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 5(b), Blank I",
       "title": "Section B, Question 5(b)",
       "prompt": {
@@ -1307,8 +1307,8 @@
     },
     {
       "id": "junior-j",
-      "track": "junior",
-      "printedRef": "Section B, Question 6, Blanks J1/J2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blanks J1, J2",
       "title": "Section B, Question 6",
       "prompt": {
         "en": "The following function attempts to calculate the check digit for a string containing only digits according to the steps below:\n\n1. Multiply the odd-positioned digits by 2.\n2. If multiplying a digit results in a two-digit number, add up the two digits to get a single-digit number.\n3. Calculate the sum of all the even-positioned digits and the modified odd-positioned digits.\n4. Add 13 to the sum and then multiply the sum by 9. The unit digit (the rightmost digit) of the answer is the check digit.\n\nExample: 54328 → (10)4(6)2(16) → 1 + 4 + 6 + 2 + 7 = 20 → (20 + 13) × 9 = 297 → 7.\n\nComplete the following function f, so that it returns the check digit as described above."
@@ -1443,7 +1443,7 @@
     },
     {
       "id": "junior-k",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 7, Blank K",
       "title": "Section B, Question 7",
       "prompt": {
@@ -1475,8 +1475,8 @@
     },
     {
       "id": "junior-l",
-      "track": "junior",
-      "printedRef": "Section B, Question 7, Blanks L1/L2/L3",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blanks L1, L2, L3",
       "title": "Section B, Question 7",
       "prompt": {
         "en": "Complete the following function g, so that the return value of h(x) is exactly x for all integers x between 0 and 7 (inclusive)."

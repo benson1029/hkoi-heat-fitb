@@ -1,0 +1,826 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2013-14-junior",
+    "season": "2013/14",
+    "division": "junior",
+    "title": "HKOI 2013/14 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2014hja.pdf",
+      "page": 1,
+      "note": "English question paper with the printed C version; Section B only."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q2-code",
+      "track": "section-b",
+      "title": "Question 2 · C function",
+      "markdown": "",
+      "displayCode": {
+        "c": "int f(int n) {\n  if ({{B1}}) {{B2}};\n  else return {{C}};\n}"
+      }
+    },
+    {
+      "id": "q3-code",
+      "track": "section-b",
+      "title": "Question 3 · C program",
+      "markdown": "```c\n#include <stdio.h>\nint n, a, i, s;\nint main() {\n  scanf(\"%d\", &n);\n  s = 0;\n  for (i = 1; i <= n; i++) {\n    scanf(\"%d\", &a);\n    if (a > 0)\n      s = s+a;\n  }\n  printf(\"%.3f\", (double)s/n);\n  return 0;\n}\n```"
+    },
+    {
+      "id": "q4-code",
+      "track": "section-b",
+      "title": "Question 4 · Numbered C program",
+      "markdown": "```c\n51 #include <stdio.h>\n52 int n, i;\n53 int main() {\n54    printf(\"Input integer n: \");\n55    scanf(\"%d\", &n);\n56    for (i = 1; i <= 45; i++) {\n57       if (i*(i+1) == n*2) {\n58           printf(\"n is a triangular number\");\n59       }\n60    }\n61    printf(\"n is not a triangular number\");\n62    return 0;\n63 }\n```"
+    },
+    {
+      "id": "q5-code",
+      "track": "section-b",
+      "title": "Question 5 · C sorting segment",
+      "markdown": "",
+      "displayCode": {
+        "c": "p = 0;\nwhile (p < 8) {\n    if (a[p] > a[p+1]) {\n          {{I}};\n   if ({{J1}})\n              {{J2}};\n    } else {\n          {{K}};\n    }\n}"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "section-b-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "You want to carry some items from one city to another. There are two types of goods that you can choose:\nRice - each bag weighs 2 kg and can be sold for $6.\nCabbage - each pack weighs 3 kg and can be sold for $10.\nWhat is the maximum dollar amount you can get after selling the goods, assuming that you can only carry not more than 16 kg of goods?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "52"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blanks B1, B2",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Assume n = 1, 2, 3 or 4. Function f(n) computes the n-th prime number. Complete the function."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B1",
+          "maxChars": 10
+        },
+        {
+          "id": "B2",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 10
+      },
+      "contextId": "q2-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int n) {\n  if ({{B1}}) {{B2}};\n  else return n*2-1;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Assume n = 1, 2, 3 or 4. Function f(n) computes the n-th prime number. Complete the function."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 10
+      },
+      "contextId": "q2-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int f(int n) {\n  if (n==1) return 2;\n  else return {{C}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 2
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 3
+            },
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 7
+            },
+            "args": [
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Consider the following program:\n\nWhat is the output of the program when given the following input?\n8\n6 3 -2 9 13 1 2 5"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 11
+      },
+      "contextId": "q3-code",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "D": [
+            "4.875"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blanks E1, E2",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "What should X and Y be if the program outputs 32.500 given the following input? Write down one possible combination.\n4\n100 200 X Y"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E1"
+        },
+        {
+          "id": "E2"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 11
+      },
+      "contextId": "q3-code",
+      "grading": {
+        "kind": "signed-wrap-sum",
+        "answerBlanks": [
+          "E1",
+          "E2"
+        ],
+        "minimum": 1,
+        "maximum": 2147483647,
+        "requiredSum": 4294967126
+      }
+    },
+    {
+      "id": "section-b-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The above program determines whether input n is a triangular number. You may assume that n is an integer in [1, 1000]. However there is one error. Determine the type of error (compilation, run-time or logic), line number and then correct it."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 12
+      },
+      "contextId": "q4-code",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "Logic",
+            "logic"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The above program determines whether input n is a triangular number. You may assume that n is an integer in [1, 1000]. However there is one error. Determine the type of error (compilation, run-time or logic), line number and then correct it."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 2
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 12
+      },
+      "contextId": "q4-code",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "59"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank H",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The above program determines whether input n is a triangular number. You may assume that n is an integer in [1, 1000]. However there is one error. Determine the type of error (compilation, run-time or logic), line number and then correct it."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 23
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 12
+      },
+      "contextId": "q4-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint n, i;\nint main() {\n   printf(\"Input integer n: \");\n   scanf(\"%d\", &n);\n   for (i = 1; i <= 45; i++) {\n      if (i*(i+1) == n*2) {\n          printf(\"n is a triangular number\");\n      {{H}}\n   }\n   printf(\"n is not a triangular number\");\n   return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "stdin": "1\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "stdin": "2\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "stdin": "3\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "stdin": "4\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "stdin": "6\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "stdin": "7\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "stdin": "10\n"
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "stdin": "15\n"
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "stdin": "21\n"
+          },
+          {
+            "id": "case-10",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "stdin": "22\n"
+          },
+          {
+            "id": "case-11",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "stdin": "55\n"
+          },
+          {
+            "id": "case-12",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "stdin": "56\n"
+          },
+          {
+            "id": "case-13",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is a triangular number"
+            },
+            "stdin": "990\n"
+          },
+          {
+            "id": "case-14",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "stdin": "991\n"
+          },
+          {
+            "id": "case-15",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "Input integer n: n is not a triangular number"
+            },
+            "stdin": "1000\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank I",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume function/procedure swap(i, j) swaps the values of a[i] and a[j]. Say if a[3] = 5 and a[6] = 1, after swap(3, 6), a[3] becomes 1 and a[6] becomes 5. Complete the following program segment so that it sorts array a[9] (Pascal: a[0..8]) in ascending order."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 13
+      },
+      "contextId": "q5-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int p;\nint main(){ for(int z=0;z<9;z++) scanf(\"%d\",&a[z]);\np = 0;\nwhile (p < 8) {\n    if (a[p] > a[p+1]) {\n          {{I}};\n   if (p>0)\n              p=p-1;\n    } else {\n          p=p+1;\n    }\n}\nfor(int z=0;z<9;z++) printf(\"%d \",a[z]); }",
+            "harness": {
+              "kind": "program"
+            },
+            "helperSource": "int a[9];\nvoid swap(int i,int j){ int t=a[i]; a[i]=a[j]; a[j]=t; }"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "9 8 7 6 5 4 3 2 1\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "1 2 3 4 5 6 7 8 9\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "4 1 7 2 9 3 8 6 5\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "1 9 2 8 3 7 4 6 5\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "5 4 3 2 1 6 7 8 9\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blanks J1, J2",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume function/procedure swap(i, j) swaps the values of a[i] and a[j]. Say if a[3] = 5 and a[6] = 1, after swap(3, 6), a[3] becomes 1 and a[6] becomes 5. Complete the following program segment so that it sorts array a[9] (Pascal: a[0..8]) in ascending order."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J1",
+          "maxChars": 7
+        },
+        {
+          "id": "J2",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 13
+      },
+      "contextId": "q5-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int p;\nint main(){ for(int z=0;z<9;z++) scanf(\"%d\",&a[z]);\np = 0;\nwhile (p < 8) {\n    if (a[p] > a[p+1]) {\n          swap(p,p+1);\n   if ({{J1}})\n              {{J2}};\n    } else {\n          p=p+1;\n    }\n}\nfor(int z=0;z<9;z++) printf(\"%d \",a[z]); }",
+            "harness": {
+              "kind": "program"
+            },
+            "helperSource": "int a[9];\nvoid swap(int i,int j){ int t=a[i]; a[i]=a[j]; a[j]=t; }"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "9 8 7 6 5 4 3 2 1\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "1 2 3 4 5 6 7 8 9\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "4 1 7 2 9 3 8 6 5\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "1 9 2 8 3 7 4 6 5\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "5 4 3 2 1 6 7 8 9\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-k",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank K",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume function/procedure swap(i, j) swaps the values of a[i] and a[j]. Say if a[3] = 5 and a[6] = 1, after swap(3, 6), a[3] becomes 1 and a[6] becomes 5. Complete the following program segment so that it sorts array a[9] (Pascal: a[0..8]) in ascending order."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 13
+      },
+      "contextId": "q5-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int p;\nint main(){ for(int z=0;z<9;z++) scanf(\"%d\",&a[z]);\np = 0;\nwhile (p < 8) {\n    if (a[p] > a[p+1]) {\n          swap(p,p+1);\n   if (p>0)\n              p=p-1;\n    } else {\n          {{K}};\n    }\n}\nfor(int z=0;z<9;z++) printf(\"%d \",a[z]); }",
+            "harness": {
+              "kind": "program"
+            },
+            "helperSource": "int a[9];\nvoid swap(int i,int j){ int t=a[i]; a[i]=a[j]; a[j]=t; }"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "9 8 7 6 5 4 3 2 1\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "1 2 3 4 5 6 7 8 9\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "4 1 7 2 9 3 8 6 5\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "1 9 2 8 3 7 4 6 5\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 "
+            },
+            "stdin": "5 4 3 2 1 6 7 8 9\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-l",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank L",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Now, complete the following implementation of function/procedure swap(i, j)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L",
+          "maxChars": 23
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2014hje.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int a[9];\nvoid swap(int i, int j) {\n    a[i] = a[i] + a[j];\n    {{L}};\n    a[i] = a[i] - a[j];\n}\nint main(){int i,j; scanf(\"%d %d\",&i,&j);for(int k=0;k<9;k++)scanf(\"%d\",&a[k]);swap(i,j);for(int k=0;k<9;k++)printf(\"%d \",a[k]);}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "9 2 3 4 5 6 7 8 1 "
+            },
+            "stdin": "0 8\n1 2 3 4 5 6 7 8 9\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "5 4 3 7 1 6 2 8 9 "
+            },
+            "stdin": "3 6\n5 4 3 2 1 6 7 8 9\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "0 -3 10 4 7 2 8 1 6 "
+            },
+            "stdin": "1 2\n0 10 -3 4 7 2 8 1 6\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "-50 100 1 2 3 4 5 6 7 "
+            },
+            "stdin": "0 1\n100 -50 1 2 3 4 5 6 7\n"
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "void swap(int i, int j) {\n    a[i] = a[i] + a[j];\n    {{L}};\n    a[i] = a[i] - a[j];\n}"
+      }
+    }
+  ]
+}

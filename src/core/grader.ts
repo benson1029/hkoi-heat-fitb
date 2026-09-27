@@ -8,6 +8,7 @@ import { checkTriangleAffine } from '../engines/probability/triangle';
 import { checkUniformCppExpression } from '../engines/probability/uniform-cpp';
 import { cppEngine } from '../engines/cpp';
 import { pythonEngine } from '../engines/python';
+import { matchesLogoDrawing, type DrawingSegment } from './logo-drawing';
 
 const MAX_PY_SOURCE_BYTES = 200_000;
 const MAX_C_SOURCE_BYTES = 128 * 1024;
@@ -101,6 +102,7 @@ async function gradeTarget(question: Question, answers: Record<string, string>, 
 }
 
 export async function gradeQuestion(question: Question, answersForQuestion: Record<string, string>, language?: Language): Promise<QuestionGrade> {
+  if (question.grading.kind === 'cancelled') return { questionId: question.id, status: 'cancelled', score: 0, maxScore: 0, cases: [], message: question.grading.reason };
   if (question.grading.kind === 'pending') return singleResult(question, 'pending', question.grading.reason);
   const answers: Record<string, string> = {};
   for (const blank of question.blanks) answers[blank.id] = answersForQuestion?.[blank.id]?.replace(/\r\n?/g, '\n') ?? '';
@@ -114,6 +116,193 @@ export async function gradeQuestion(question: Question, answersForQuestion: Reco
       return !accepted[blank.id].some(candidate => (normalize === 'trim' ? candidate.trim() : candidate) === value);
     });
     return singleResult(question, wrong ? 'fail' : 'pass', wrong ? `Blank ${wrong.id} does not match an accepted value.` : undefined);
+  }
+  if (question.grading.kind === 'rpn-expression') {
+    const spec = question.grading;
+    const normalized = answers[spec.answerBlank].replace(/\s+/g, '').replace(/×/g, '*').replace(/÷/g, '/');
+    return singleResult(question, spec.forms.includes(normalized) ? 'pass' : 'fail');
+  }
+  if (question.grading.kind === 'counterexample-max') {
+    const spec = question.grading;
+    const raw = answers[spec.answerBlank].trim();
+    if (!/^\d+$/.test(raw)) return singleResult(question, 'fail', 'Enter an integer in the stated range.');
+    const candidate = Number(raw);
+    if (!Number.isSafeInteger(candidate) || candidate < spec.minimum || candidate > spec.maximum || !spec.residues.includes(candidate % spec.modulus)) {
+      return singleResult(question, 'fail', 'This input is not a valid counterexample.');
+    }
+    const maximum = Math.max(...spec.residues.map(residue => spec.maximum - ((spec.maximum - residue) % spec.modulus + spec.modulus) % spec.modulus));
+    if (candidate === maximum) return singleResult(question, 'pass');
+    return { questionId: question.id, status: 'partial', score: spec.partialPoints, maxScore: question.points, cases: [],
+      message: `Valid counterexample. The maximum valid value earns ${question.points} points.` };
+  }
+  if (question.grading.kind === 'signed-wrap-sum') {
+    const spec = question.grading;
+    const raw = spec.answerBlanks.map(blankId => answers[blankId].trim());
+    if (raw.some(item => !/^-?\d+$/.test(item))) return singleResult(question, 'fail', 'Enter two integers.');
+    const values = raw.map(Number);
+    if (values.some(value => !Number.isSafeInteger(value) || value < spec.minimum || value > spec.maximum)) {
+      return singleResult(question, 'fail', 'A value is outside the stated integer range.');
+    }
+    return singleResult(question, values[0] + values[1] === spec.requiredSum ? 'pass' : 'fail');
+  }
+  if (question.grading.kind === 'nand-expression') {
+    const spec = question.grading;
+    const source = answers[spec.answerBlank].replace(/\s+/g, '');
+    if (source.length > 100 || /[^ABQ()]/.test(source)) return singleResult(question, 'fail', 'Use A, B, Q, and parentheses only.');
+    let at = 0;
+    type NandNode = 'A' | 'B' | [NandNode, NandNode];
+    function parse(): NandNode {
+      const token = source[at++];
+      if (token === 'A' || token === 'B') return token;
+      if (token !== '(') throw new Error('Expected an operand or opening parenthesis.');
+      const left = parse();
+      if (source[at++] !== 'Q') throw new Error('Expected NAND operator Q.');
+      const right = parse();
+      if (source[at++] !== ')') throw new Error('Every NAND operation must be parenthesized.');
+      return [left, right];
+    }
+    let tree: NandNode;
+    try { tree = parse(); if (at !== source.length) throw new Error('Unexpected trailing characters.'); }
+    catch (error) { return singleResult(question, 'fail', error instanceof Error ? error.message : String(error)); }
+    function evaluate(node: NandNode, a: boolean, b: boolean): boolean {
+      return node === 'A' ? a : node === 'B' ? b : !(evaluate(node[0], a, b) && evaluate(node[1], a, b));
+    }
+    const inputs: [boolean, boolean][] = [[true,true],[true,false],[false,true],[false,false]];
+    return singleResult(question, inputs.every(([a,b], index) => evaluate(tree, a, b) === spec.expected[index]) ? 'pass' : 'fail');
+  }
+  if (question.grading.kind === 'die-face') {
+    const spec = question.grading;
+    const value = answers[spec.answerBlank].trim().toLowerCase();
+    if (!/^[.o]{3}\/[.o]{3}\/[.o]{3}$/.test(value)) return singleResult(question, 'fail', 'Enter a 3×3 pip grid.');
+    if (value === spec.expected) return singleResult(question, 'pass');
+    const count = [...value].filter(char => char === 'o').length;
+    const expectedCount = [...spec.expected].filter(char => char === 'o').length;
+    if (count === expectedCount) return { questionId: question.id, status: 'partial', score: question.points / 2,
+      maxScore: question.points, cases: [], message: 'Pip count is correct; orientation differs.' };
+    return singleResult(question, 'fail', 'Pip count differs.');
+  }
+  if (question.grading.kind === 'prime-power-pair') {
+    const spec = question.grading;
+    const input = [answers[spec.correctBlank].trim(), answers[spec.incorrectBlank].trim()];
+    if (input.some(value => !/^\d+$/.test(value))) return singleResult(question, 'fail', 'Enter two positive integers.');
+    const values = input.map(Number);
+    if (values.some(value => !Number.isSafeInteger(value) || value < spec.minimum || value > spec.maximum)) {
+      return singleResult(question, 'fail', 'A number is outside the allowed range.');
+    }
+    function isPrimePower(number: number): boolean {
+      let n = number, distinct = 0;
+      for (let divisor = 2; divisor * divisor <= n; divisor += divisor === 2 ? 1 : 2) {
+        if (n % divisor !== 0) continue;
+        if (++distinct > 1) return false;
+        do { n /= divisor; } while (n % divisor === 0);
+      }
+      if (n > 1) distinct++;
+      return distinct === 1;
+    }
+    return singleResult(question, isPrimePower(values[0]) && !isPrimePower(values[1]) ? 'pass' : 'fail');
+  }
+  if (question.grading.kind === 'float-input-error') {
+    const values = question.grading.answerBlanks.map(blankId => answers[blankId].trim());
+    const numericPrefix = /^[+-]?(?:0[xX][0-9a-fA-F]+(?:\.[0-9a-fA-F]*)?[pP][+-]?\d+|(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?|inf(?:inity)?|nan(?:\([^)]*\))?)/i;
+    const causesError = (value: string) => {
+      const match = numericPrefix.exec(value);
+      if (!match) return true;
+      if (/nan|inf/i.test(match[0])) return false;
+      if (/0[xX]/.test(match[0])) {
+        const hex = /^[+-]?0[xX]([0-9a-fA-F]+)(?:\.([0-9a-fA-F]*))?[pP]([+-]?\d+)/.exec(match[0]);
+        if (!hex) return true;
+        return (parseInt(hex[1], 16) + [...(hex[2] ?? '')].reduce((sum, digit, index) => sum + parseInt(digit, 16) / 16 ** (index + 1), 0)) * 2 ** Number(hex[3]) === 0;
+      }
+      return Number(match[0]) === 0;
+    };
+    const valid = values.map(causesError);
+    const score = Number(valid[0]) + Number(valid[1] && values[1] !== values[0]);
+    return { questionId: question.id, status: score === 2 ? 'pass' : score === 1 ? 'partial' : 'fail',
+      score, maxScore: question.points, cases: [], message: score === 1 ? 'One valid, distinct input earns one point.' : undefined };
+  }
+  if (question.grading.kind === 'logo-drawing') {
+    const spec = question.grading;
+    const raw = answers[spec.answerBlank];
+    if (raw.length > 10_000) return singleResult(question, 'fail', 'Drawing is too large.');
+    let segments: DrawingSegment[];
+    try {
+      const parsed: unknown = JSON.parse(raw);
+      if (!Array.isArray(parsed) || parsed.length < 1 || parsed.length > 40 || !parsed.every(segment =>
+        Array.isArray(segment) && segment.length === 2 && segment.every(point =>
+          Array.isArray(point) && point.length === 2 && point.every(value => typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1)))) {
+        throw new Error('Invalid drawing coordinates.');
+      }
+      segments = parsed as DrawingSegment[];
+    } catch { return singleResult(question, 'fail', 'Draw lines on the canvas to answer.'); }
+    const passed = matchesLogoDrawing(segments, spec.segments, spec.tolerance);
+    return singleResult(question, passed ? 'pass' : 'fail', passed ? undefined : 'Draw the two overlapping triangles with all six sides. Rough lines are fine.');
+  }
+  if (question.grading.kind === 'integer-list') {
+    const spec = question.grading;
+    const pieces = spec.answerBlanks.length === 1
+      ? answers[spec.answerBlanks[0]].trim().split(/[\s,;]+/)
+      : spec.answerBlanks.map(blankId => answers[blankId].trim());
+    if (pieces.length !== spec.count || pieces.some(piece => !/^-?\d+$/.test(piece))) return singleResult(question, 'fail', `Enter ${spec.count} integers.`);
+    const values = pieces.map(Number);
+    if (values.some(value => !Number.isSafeInteger(value) || value < spec.minimum || value > spec.maximum ||
+        spec.forbidden?.includes(value) || spec.allowed && !spec.allowed.includes(value) ||
+        spec.squareOnly && (value < 0 || !Number.isInteger(Math.sqrt(value))))) {
+      return singleResult(question, 'fail', 'A number is outside the allowed values.');
+    }
+    if (spec.distinct && new Set(values).size !== values.length) return singleResult(question, 'fail', 'The numbers must be distinct.');
+    if (spec.inversionCount !== undefined) {
+      let inversions = 0;
+      for (let i = 0; i < values.length; i++) for (let j = i + 1; j < values.length; j++) if (values[i] > values[j]) inversions++;
+      if (inversions !== spec.inversionCount) return singleResult(question, 'fail', `Expected ${spec.inversionCount} inversions; got ${inversions}.`);
+    }
+    if (spec.minimumSpacing) {
+      const ordered = [...values, ...spec.minimumSpacing.anchors].sort((a, b) => a - b);
+      if (new Set(ordered).size !== ordered.length || ordered.some((value, index) => index > 0 && value - ordered[index - 1] < spec.minimumSpacing!.required)) {
+        return singleResult(question, 'fail', `Adjacent seats must be at least ${spec.minimumSpacing.required} apart.`);
+      }
+    }
+    return singleResult(question, 'pass');
+  }
+  if (question.grading.kind === 'grid-checkpoints') {
+    const spec = question.grading;
+    const labels = answers[spec.answerBlank].trim().toUpperCase().split(/[\s,;]+/);
+    if (labels.length !== 2 || labels.some(label => !/^[A-Z](?:[1-9]|1[0-2])$/.test(label)) || labels[0] === labels[1]) {
+      return singleResult(question, 'fail', 'Enter two distinct cells, such as E1 C5.');
+    }
+    const cells = labels.map(label => [label.charCodeAt(0) - 65, Number(label.slice(1)) - 1] as const);
+    if (cells.some(([x, y]) => x < 0 || x >= spec.width || y < 0 || y >= spec.height ||
+        x === 0 && y === 0 || x === spec.width - 1 && y === spec.height - 1)) {
+      return singleResult(question, 'fail', 'Choose cells inside the grid, excluding S and T.');
+    }
+    const paths = Array.from({ length: spec.height }, () => Array.from({ length: spec.width }, () => [0, 0, 0]));
+    paths[0][0][0] = 1;
+    for (let y = 0; y < spec.height; y++) for (let x = 0; x < spec.width; x++) {
+      if (x === 0 && y === 0) continue;
+      const isCheckpoint = cells.some(([cx, cy]) => cx === x && cy === y);
+      for (let visited = 0; visited <= 2; visited++) {
+        const previous = (x > 0 ? paths[y][x - 1][visited] : 0) + (y > 0 ? paths[y - 1][x][visited] : 0);
+        paths[y][x][Math.min(2, visited + Number(isCheckpoint))] += previous;
+      }
+    }
+    const count = paths[spec.height - 1][spec.width - 1][1];
+    return singleResult(question, count === spec.expectedPaths ? 'pass' : 'fail',
+      count === spec.expectedPaths ? undefined : `The grid has ${count} paths through exactly one C; expected ${spec.expectedPaths}.`);
+  }
+  if (question.grading.kind === 'matrix-sums') {
+    const spec = question.grading;
+    const parts = answers[spec.answerBlank].trim().split(/[\s,;]+/);
+    const count = spec.rowSums.length * spec.colSums.length;
+    if (parts.length !== count || parts.some(part => !/^-?\d+$/.test(part))) return singleResult(question, 'fail', `Enter ${count} numbers in row order.`);
+    const values = parts.map(Number);
+    if (values.some(value => !spec.values.includes(value)) || spec.values.some(value => values.filter(item => item === value).length !== spec.each)) {
+      return singleResult(question, 'fail', 'The listed numbers must each occur the stated number of times.');
+    }
+    const width = spec.colSums.length;
+    if (spec.rowSums.some((target, row) => values.slice(row * width, (row + 1) * width).reduce((a, b) => a + b, 0) !== target) ||
+        spec.colSums.some((target, col) => spec.rowSums.reduce((sum, _, row) => sum + values[row * width + col], 0) !== target)) {
+      return singleResult(question, 'fail', 'A row or column sum does not match its target.');
+    }
+    return singleResult(question, 'pass');
   }
   if (question.grading.kind === 'program-input') {
     const spec = question.grading;
@@ -154,10 +343,10 @@ export async function gradeQuestion(question: Question, answersForQuestion: Reco
     const lines = spec.source.split('\n');
     const index = Number(lineText) - spec.firstLine;
     if (!Number.isSafeInteger(index) || index < 0 || index >= lines.length) return singleResult(question, 'fail', 'Line number is outside the printed program.');
-    lines[index] = replacement;
-    const patched = lines.join('\n');
+    lines[index] = spec.mode === 'append' ? lines[index] + replacement : replacement;
+    const patched = `${spec.prefixSource ?? ''}${lines.join('\n')}${spec.suffixSource ?? ''}`;
     if (new TextEncoder().encode(patched).length > MAX_C_SOURCE_BYTES) return singleResult(question, 'fail', 'Patched source byte limit exceeded.');
-    const target: ProgramTarget = { language: 'cpp', dialect: 'c++20', source: patched, harness: spec.harness ?? { kind: 'program' } };
+    const target: ProgramTarget = { language: spec.language ?? 'cpp', dialect: spec.language === 'c' ? 'c99' : 'c++20', source: patched, harness: spec.harness ?? { kind: 'program' } };
     const cases: CaseGrade[] = [];
     for (const testCase of spec.cases) {
       let result: EngineResult;
@@ -168,7 +357,10 @@ export async function gradeQuestion(question: Question, answersForQuestion: Reco
     }
     const status: QuestionGrade['status'] = cases.every(item => item.status === 'pass') ? 'pass'
       : cases.some(item => item.status === 'fail') ? 'fail' : 'inconclusive';
-    return { questionId: question.id, status, score: status === 'pass' ? question.points : status === 'fail' ? 0 : null, maxScore: question.points, cases };
+    const partial = status === 'fail' && spec.linePoints !== undefined && spec.correctLines?.includes(Number(lineText));
+    return { questionId: question.id, status: partial ? 'partial' : status,
+      score: status === 'pass' ? question.points : partial ? spec.linePoints! : status === 'fail' ? 0 : null,
+      maxScore: question.points, cases };
   }
   if (question.grading.kind === 'coin-counterexample') {
     const spec = question.grading;

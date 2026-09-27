@@ -20,7 +20,7 @@ const answers: PaperAnswers = {
 };
 
 it('grades the official 2023/24 Senior Section B answers', async () => {
-  const result = await gradePaper(paper, answers, ['cpp']);
+  const result = await gradePaper(paper, answers, ['section-b']);
   expect(result.questions).toHaveLength(11);
   expect(result.questions.filter(item => item.status !== 'pass')).toEqual([]);
   expect(result.scoredPoints).toBe(20);

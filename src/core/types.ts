@@ -31,6 +31,10 @@ export interface PaperContext {
   title?: string;
   /** Safe Markdown shown once before its grouped questions. */
   markdown: string;
+  /** Printed code shared by separately scored questions. Markers name blank IDs or answer-set slots. */
+  displayCode?: Partial<Record<Language, string>>;
+  /** For alternative subparts that fill the same printed code slots differently. */
+  answerSets?: { questionId: string; label: string; bindings: Record<string, string> }[];
 }
 
 export interface DirectedGraphFigure {
@@ -88,7 +92,103 @@ export interface Question {
   grading: GradingSpec;
 }
 
-export type GradingSpec = ProgramGrading | ProgramInputGrading | CppLineRepairGrading | CoinCounterexampleGrading | ChecksumCollisionGrading | ZigzagPathGrading | LiteralGrading | RobotGridGrading | GraphGrading | GraphReversalGrading | TriangleAffineGrading | UniformCppExpressionGrading | PendingGrading;
+export type GradingSpec = ProgramGrading | ProgramInputGrading | CppLineRepairGrading | CoinCounterexampleGrading | ChecksumCollisionGrading | ZigzagPathGrading | LiteralGrading | RobotGridGrading | GraphGrading | GraphReversalGrading | TriangleAffineGrading | UniformCppExpressionGrading | GridCheckpointsGrading | IntegerListGrading | MatrixSumsGrading | RpnExpressionGrading | CounterexampleMaxGrading | SignedWrapSumGrading | NandExpressionGrading | DieFaceGrading | PrimePowerPairGrading | FloatInputErrorGrading | LogoDrawingGrading | PendingGrading | CancelledGrading;
+
+export interface LogoDrawingGrading {
+  kind: 'logo-drawing';
+  answerBlank: string;
+  /** Target line segments in normalized drawing coordinates. */
+  segments: [[number, number], [number, number]][];
+  tolerance: number;
+}
+
+export interface FloatInputErrorGrading {
+  kind: 'float-input-error';
+  answerBlanks: [string, string];
+}
+
+export interface DieFaceGrading {
+  kind: 'die-face';
+  answerBlank: string;
+  /** Three rows of three pip/empty cells separated by '/'. */
+  expected: string;
+}
+
+export interface PrimePowerPairGrading {
+  kind: 'prime-power-pair';
+  correctBlank: string;
+  incorrectBlank: string;
+  minimum: number;
+  maximum: number;
+}
+
+export interface NandExpressionGrading {
+  kind: 'nand-expression';
+  answerBlank: string;
+  /** Output for A,B = TT, TF, FT, FF. */
+  expected: [boolean, boolean, boolean, boolean];
+}
+
+export interface CounterexampleMaxGrading {
+  kind: 'counterexample-max';
+  answerBlank: string;
+  minimum: number;
+  maximum: number;
+  modulus: number;
+  residues: number[];
+  partialPoints: number;
+}
+
+export interface SignedWrapSumGrading {
+  kind: 'signed-wrap-sum';
+  answerBlanks: [string, string];
+  minimum: number;
+  maximum: number;
+  requiredSum: number;
+}
+
+export interface RpnExpressionGrading {
+  kind: 'rpn-expression';
+  answerBlank: string;
+  /** Officially accepted token sequences; all operands are single digit. */
+  forms: string[];
+}
+
+export interface MatrixSumsGrading {
+  kind: 'matrix-sums';
+  answerBlank: string;
+  values: number[];
+  each: number;
+  rowSums: number[];
+  colSums: number[];
+}
+
+export interface GridCheckpointsGrading {
+  kind: 'grid-checkpoints';
+  answerBlank: string;
+  width: number;
+  height: number;
+  expectedPaths: number;
+}
+
+export interface IntegerListGrading {
+  kind: 'integer-list';
+  answerBlanks: string[];
+  count: number;
+  minimum: number;
+  maximum: number;
+  distinct?: boolean;
+  squareOnly?: boolean;
+  forbidden?: number[];
+  allowed?: number[];
+  inversionCount?: number;
+  minimumSpacing?: { anchors: number[]; required: number };
+}
+
+export interface CancelledGrading {
+  kind: 'cancelled';
+  reason: string;
+}
 
 export interface ProgramInputGrading {
   kind: 'program-input';
@@ -126,10 +226,17 @@ export interface ZigzagPathGrading {
 
 export interface CppLineRepairGrading {
   kind: 'cpp-line-repair';
+  language?: 'cpp' | 'c';
   lineBlank: string;
   replacementBlank: string;
+  correctLines?: number[];
+  linePoints?: number;
   firstLine: number;
   source: string;
+  /** Fixed code outside the numbered lines shown to the student. */
+  prefixSource?: string;
+  suffixSource?: string;
+  mode?: 'replace' | 'append';
   harness?: ProgramTarget['harness'];
   cases: ProgramCase[];
 }
@@ -251,7 +358,7 @@ export interface ProgramEngine {
 }
 
 export type PaperAnswers = Record<string, Record<string, string>>;
-export type GradeStatus = 'pass' | 'fail' | 'inconclusive' | 'pending';
+export type GradeStatus = 'pass' | 'partial' | 'fail' | 'inconclusive' | 'pending' | 'cancelled';
 
 export interface CaseGrade {
   id: string;

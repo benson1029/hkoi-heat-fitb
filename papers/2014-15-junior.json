@@ -1,0 +1,1557 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2014-15-junior",
+    "season": "2014/15",
+    "division": "junior",
+    "title": "HKOI 2014/15 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Given that function datecmp is returning 1 (Pascal: true) if date 1 (d1, m1, y1) is earlier than date 2 (d2, m2, y2), returning 0 (Pascal: false) if otherwise. Please complete the blank in the following program."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int datehash(int d, int m, int y) {\n    return {{A}};\n}\nint datecmp(int d1, int m1, int y1, int d2, int m2, int y2) {\n    return datehash(d1, m1, y1) < datehash(d2, m2, y2);\n}",
+            "harness": {
+              "kind": "call",
+              "function": "datecmp"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "dates-0",
+            "args": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-1",
+            "args": [
+              1,
+              1,
+              1,
+              31,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-2",
+            "args": [
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-3",
+            "args": [
+              1,
+              1,
+              1,
+              28,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-4",
+            "args": [
+              1,
+              1,
+              1,
+              31,
+              12,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-5",
+            "args": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-6",
+            "args": [
+              1,
+              1,
+              1,
+              31,
+              12,
+              9998
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-7",
+            "args": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-8",
+            "args": [
+              1,
+              1,
+              1,
+              31,
+              12,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-9",
+            "args": [
+              31,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-10",
+            "args": [
+              31,
+              1,
+              1,
+              31,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-11",
+            "args": [
+              31,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-12",
+            "args": [
+              31,
+              1,
+              1,
+              28,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-13",
+            "args": [
+              31,
+              1,
+              1,
+              31,
+              12,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-14",
+            "args": [
+              31,
+              1,
+              1,
+              1,
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-15",
+            "args": [
+              31,
+              1,
+              1,
+              31,
+              12,
+              9998
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-16",
+            "args": [
+              31,
+              1,
+              1,
+              1,
+              1,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-17",
+            "args": [
+              31,
+              1,
+              1,
+              31,
+              12,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-18",
+            "args": [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-19",
+            "args": [
+              1,
+              2,
+              1,
+              31,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-20",
+            "args": [
+              1,
+              2,
+              1,
+              1,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-21",
+            "args": [
+              1,
+              2,
+              1,
+              28,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-22",
+            "args": [
+              1,
+              2,
+              1,
+              31,
+              12,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-23",
+            "args": [
+              1,
+              2,
+              1,
+              1,
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-24",
+            "args": [
+              1,
+              2,
+              1,
+              31,
+              12,
+              9998
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-25",
+            "args": [
+              1,
+              2,
+              1,
+              1,
+              1,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-26",
+            "args": [
+              1,
+              2,
+              1,
+              31,
+              12,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-27",
+            "args": [
+              28,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-28",
+            "args": [
+              28,
+              2,
+              1,
+              31,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-29",
+            "args": [
+              28,
+              2,
+              1,
+              1,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-30",
+            "args": [
+              28,
+              2,
+              1,
+              28,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-31",
+            "args": [
+              28,
+              2,
+              1,
+              31,
+              12,
+              1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-32",
+            "args": [
+              28,
+              2,
+              1,
+              1,
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-33",
+            "args": [
+              28,
+              2,
+              1,
+              31,
+              12,
+              9998
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-34",
+            "args": [
+              28,
+              2,
+              1,
+              1,
+              1,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-35",
+            "args": [
+              28,
+              2,
+              1,
+              31,
+              12,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-36",
+            "args": [
+              31,
+              12,
+              1,
+              1,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-37",
+            "args": [
+              31,
+              12,
+              1,
+              31,
+              1,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-38",
+            "args": [
+              31,
+              12,
+              1,
+              1,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-39",
+            "args": [
+              31,
+              12,
+              1,
+              28,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-40",
+            "args": [
+              31,
+              12,
+              1,
+              31,
+              12,
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-41",
+            "args": [
+              31,
+              12,
+              1,
+              1,
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-42",
+            "args": [
+              31,
+              12,
+              1,
+              31,
+              12,
+              9998
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-43",
+            "args": [
+              31,
+              12,
+              1,
+              1,
+              1,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "dates-44",
+            "args": [
+              31,
+              12,
+              1,
+              31,
+              12,
+              9999
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "int datehash(int d, int m, int y) {\n    return {{A}};\n}\nint datecmp(int d1, int m1, int y1, int d2, int m2, int y2) {\n    return datehash(d1, m1, y1) < datehash(d2, m2, y2);\n}"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Given two inputs A and B, represent the following truth table using boolean expressions with variables A, B, brackets and Q (NAND) only.\n\n| A | B | Result |\n|---|---|---|\n| T | T | T |\n| T | F | F |\n| F | T | F |\n| F | F | F |"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 16
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "nand-expression",
+        "answerBlank": "B",
+        "expected": [
+          true,
+          false,
+          false,
+          false
+        ]
+      },
+      "contextId": "nand"
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "There are some ice cubes floating. The rectangles represent the cubes and the narrow gaps between rectangles mean that you can walk from between the two ice cubes. Alice is on one of the ice cubes. As ice cubes keep on melting, she needs to move from one ice cube to another ice cube. Once she leaves an ice cube, the ice cube melts and Alice can no longer stand on that ice cube. Eventually she will be trapped on one of the ice cube having no way to go. Bob, who is the enemy of Alice, would like to know all the possibilities of Alice's position when she will be trapped. Please write down the index(es) of that/those ice cube(s)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "integer-list",
+        "answerBlanks": [
+          "C"
+        ],
+        "count": 6,
+        "minimum": 1,
+        "maximum": 9,
+        "distinct": true,
+        "allowed": [
+          1,
+          2,
+          5,
+          6,
+          8,
+          9
+        ]
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2014-15-junior-q3.png",
+        "alt": "Printed nine labeled ice cubes and their walkable gaps."
+      }
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank D",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "If the input n is 4, complete the program such that the output is\n\n```text\n*       *\n *     * \n  *   *  \n   * *   \n    *    \n   * *   \n  *   *  \n *     * \n*       *\n```"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 14
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "#include <stdio.h>\nint main() {\n    int n, i, j;\n    scanf(\"%d\", &n);\n    for (i = 0; i <= 2*n; i++) {\n        for (j = 0; j <= 2*n; j++) {\n            if ({{D}})\n                printf(\"*\");\n            else\n                printf(\" \");\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "printed-output",
+            "stdin": "4",
+            "expected": {
+              "stdout": "*       *\n *     * \n  *   *  \n   * *   \n    *    \n   * *   \n  *   *  \n *     * \n*       *\n"
+            },
+            "maxSteps": 15000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\nint main() {\n  int n, i, j;\n  scanf(\"%d\", &n);\n  for (i = 0; i <= 2*n; i++) {\n    for (j = 0; j <= 2*n; j++) {\n      if ({{D}})\n        printf(\"*\");\n      else\n        printf(\" \");\n    }\n    printf(\"\\n\");\n  }\n  return 0;\n}"
+      },
+      "contextId": "grid"
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank E",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "If the input n is 5, complete the program such that the output is\n\n```text\n***********\n*         *\n*    *    *\n*         *\n*    *    *\n* * * * * *\n*    *    *\n*         *\n*    *    *\n*         *\n***********\n```"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 14
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "#include <stdio.h>\nint main() {\n    int n, i, j;\n    scanf(\"%d\", &n);\n    for (i = 0; i <= 2*n; i++) {\n        for (j = 0; j <= 2*n; j++) {\n            if ({{E}})\n                printf(\"*\");\n            else\n                printf(\" \");\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "printed-output",
+            "stdin": "5",
+            "expected": {
+              "stdout": "***********\n*         *\n*    *    *\n*         *\n*    *    *\n* * * * * *\n*    *    *\n*         *\n*    *    *\n*         *\n***********\n"
+            },
+            "maxSteps": 15000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\nint main() {\n  int n, i, j;\n  scanf(\"%d\", &n);\n  for (i = 0; i <= 2*n; i++) {\n    for (j = 0; j <= 2*n; j++) {\n      if ({{E}})\n        printf(\"*\");\n      else\n        printf(\" \");\n    }\n    printf(\"\\n\");\n  }\n  return 0;\n}"
+      },
+      "contextId": "grid"
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank F",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Write an expression which gives the maximum of three positive integers x, y and z."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int answer(int x,int y,int z){return {{F}};}",
+            "harness": {
+              "kind": "call",
+              "function": "answer"
+            },
+            "helperSource": "int f(int a,int b,int c){int m=a;if(b<m)m=b;if(c<m)m=c;return m;}"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "max-0",
+            "args": [
+              1,
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "max-1",
+            "args": [
+              3,
+              2,
+              1
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "max-2",
+            "args": [
+              5,
+              5,
+              5
+            ],
+            "expected": {
+              "returnValue": 5
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "max-3",
+            "args": [
+              1,
+              100,
+              2
+            ],
+            "expected": {
+              "returnValue": 100
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "max-4",
+            "args": [
+              100,
+              1,
+              100
+            ],
+            "expected": {
+              "returnValue": 100
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "max-5",
+            "args": [
+              7,
+              9,
+              8
+            ],
+            "expected": {
+              "returnValue": 9
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "max-6",
+            "args": [
+              2,
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "max-7",
+            "args": [
+              10,
+              20,
+              30
+            ],
+            "expected": {
+              "returnValue": 30
+            },
+            "maxSteps": 2000
+          }
+        ]
+      }
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank G",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Let x, y, z be 3 integers (1 ≤ x, y, z ≤ 100). Procedure isTri determines if a valid triangle can be formed with sides of length x, y and z. Please complete the procedure by using f(a, b, c)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 23
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int answer(int x,int y,int z){return {{G}};}",
+            "harness": {
+              "kind": "call",
+              "function": "answer"
+            },
+            "helperSource": "int f(int a,int b,int c){int m=a;if(b<m)m=b;if(c<m)m=c;return m;}"
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "triangle-0",
+            "args": [
+              3,
+              4,
+              5
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "triangle-1",
+            "args": [
+              1,
+              1,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "triangle-2",
+            "args": [
+              2,
+              2,
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "triangle-3",
+            "args": [
+              100,
+              100,
+              100
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "triangle-4",
+            "args": [
+              1,
+              100,
+              100
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "triangle-5",
+            "args": [
+              1,
+              2,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "triangle-6",
+            "args": [
+              9,
+              9,
+              17
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "triangle-7",
+            "args": [
+              9,
+              9,
+              18
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "void isTri(int x, int y, int z) {\n    if ({{G}})\n        printf(\"Valid triangle\");\n    else\n        printf(\"Cannot form a triangle\");\n}"
+      }
+    },
+    {
+      "id": "HI",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blanks H, I",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "The goal of the following program segment is to factorize a positive integer n into product of prime numbers. However, one of the lines is incorrect. Please find it and correct it."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 2
+        },
+        {
+          "id": "I",
+          "maxChars": 20
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "cpp-line-repair",
+        "language": "c",
+        "lineBlank": "H",
+        "replacementBlank": "I",
+        "correctLines": [
+          52
+        ],
+        "linePoints": 1,
+        "firstLine": 50,
+        "source": "k = 2;\nwhile (k <= n) {\n    if (n%k == 0) {\n        n = n/k;\n        if (n > 1)\n            printf(\"%d * \", k);\n        else\n            printf(\"%d\", k);\n    }\n    k = k+1;\n}",
+        "prefixSource": "int n,k;\nint main(){scanf(\"%d\",&n);\n",
+        "suffixSource": "\nreturn 0;\n}",
+        "cases": [
+          {
+            "id": "eight",
+            "stdin": "8",
+            "expected": {
+              "stdout": "2 * 2 * 2"
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "twelve",
+            "stdin": "12",
+            "expected": {
+              "stdout": "2 * 2 * 3"
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "prime",
+            "stdin": "31",
+            "expected": {
+              "stdout": "31"
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "one",
+            "stdin": "1",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "power",
+            "stdin": "27",
+            "expected": {
+              "stdout": "3 * 3 * 3"
+            },
+            "maxSteps": 15000
+          },
+          {
+            "id": "mixed",
+            "stdin": "30",
+            "expected": {
+              "stdout": "2 * 3 * 5"
+            },
+            "maxSteps": 15000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "k = 2;\nwhile (k <= n) {\n    if (n%k == 0) {\n        n = n/k;\n        if (n > 1)\n            printf(\"%d * \", k);\n        else\n            printf(\"%d\", k);\n    }\n    k = k+1;\n}"
+      }
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank J",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Calculate how many different \"Lucky number\" are there:"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "J": [
+            "2000"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "K",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank K",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Write down the 1234th \"Lucky number\":"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "K": [
+            "72367"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "L",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank L",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "The above program segment is used for checking whether an integer is a \"Lucky number\". Please complete it."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L",
+          "maxChars": 22
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2015hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2015hja.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int check(int a[6]){return a[2]>0&&a[4]>0&&a[2]%2==0&&a[4]%2==0&&{{L}};}",
+            "harness": {
+              "kind": "call",
+              "function": "check"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "digits-0",
+            "args": [
+              [
+                0,
+                1,
+                2,
+                1,
+                2,
+                1
+              ]
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "digits-1",
+            "args": [
+              [
+                0,
+                7,
+                2,
+                3,
+                6,
+                7
+              ]
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "digits-2",
+            "args": [
+              [
+                0,
+                2,
+                2,
+                1,
+                2,
+                1
+              ]
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "digits-3",
+            "args": [
+              [
+                0,
+                1,
+                1,
+                1,
+                2,
+                1
+              ]
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "digits-4",
+            "args": [
+              [
+                0,
+                1,
+                2,
+                2,
+                2,
+                1
+              ]
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "digits-5",
+            "args": [
+              [
+                0,
+                1,
+                2,
+                1,
+                3,
+                1
+              ]
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "digits-6",
+            "args": [
+              [
+                0,
+                1,
+                2,
+                1,
+                2,
+                2
+              ]
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "digits-7",
+            "args": [
+              [
+                0,
+                1,
+                2,
+                1,
+                2,
+                0
+              ]
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "digits-8",
+            "args": [
+              [
+                0,
+                9,
+                8,
+                7,
+                6,
+                5
+              ]
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "digits-9",
+            "args": [
+              [
+                0,
+                0,
+                2,
+                1,
+                2,
+                1
+              ]
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "if (a[2] > 0 && a[4] > 0 && a[2] % 2 == 0 && a[4] % 2 == 0 && {{L}})\n    printf(\"It is a Lucky number\");\nelse\n    printf(\"It is not a Lucky number\");"
+      }
+    }
+  ],
+  "contexts": [
+    {
+      "id": "nand",
+      "track": "section-b",
+      "markdown": "The NAND(not-and) function has many applications. The truth table of NAND, with two inputs, is as follows\n\n| A | B | A NAND B |\n|---|---|---|\n| T | T | F |\n| T | F | T |\n| F | T | T |\n| F | F | T |\n\nLet's use Q to represent the NAND function. Therefore the NAND of X and Y is (XQY), and this result is also a boolean expression. Also A and B themselves are boolean expressions. For example, the NOT function of A can be expressed as (AQA).\n\nPlease note that brackets in the above example are compulsory, no mark will be given for answers that miss brackets in the following questions."
+    },
+    {
+      "id": "grid",
+      "track": "section-b",
+      "markdown": "The following program reads an integer n and outputs a (2n+1) x (2n+1) grid."
+    }
+  ]
+}

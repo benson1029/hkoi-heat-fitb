@@ -14,16 +14,16 @@
   },
   "tracks": [
     {
-      "id": "junior",
-      "label": "Junior · compulsory",
+      "id": "section-b",
+      "label": "Section B",
       "selection": "required"
     }
   ],
   "questions": [
     {
       "id": "junior-a",
-      "track": "junior",
-      "printedRef": "Section B, Question 1, Blanks A1/A2/A3",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blanks A1, A2, A3",
       "title": "Section B, Question 1",
       "prompt": {
         "en": "Let text be a string. For every slash (/) in text, it is guaranteed that there must be 2023 immediately in front of each slash, and 24 immediately after each slash. For example, text can be HKOI2023/24Heat or 2023/242023/24, but cannot be 2023/2024 or /24.\n\nComplete the function Update(text), such that Update(text) change all 2023/24 in text into 2022/23."
@@ -122,8 +122,8 @@
     },
     {
       "id": "junior-b",
-      "track": "junior",
-      "printedRef": "Section B, Question 2(a), Blanks B1/B2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2(a), Blanks B1, B2",
       "title": "Section B, Question 2(a)",
       "prompt": {
         "en": "Let a be an array of integers of length n.\n\nComplete the following subprogram ReversePrefix with an input parameter k (0 < k ≤ n) that reverses the subarray a[0], a[1], · · · , a[k-1]."
@@ -215,8 +215,8 @@
     },
     {
       "id": "junior-c",
-      "track": "junior",
-      "printedRef": "Section B, Question 2(b), Blanks C1/C2/C3",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2(b), Blanks C1, C2, C3",
       "title": "Section B, Question 2(b)",
       "prompt": {
         "en": "The subprogram ReverseSubarray with input parameters l and r (0 ≤ l < r ≤ n) reverses the subarray a[l], a[l+1], · · · , a[r-1]. By using ReversePrefix only, complete the subprogram. Assume that ReversePrefix has been correctly implemented."
@@ -305,7 +305,7 @@
     },
     {
       "id": "junior-d",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 3, Blank D",
       "title": "Section B, Question 3",
       "prompt": {
@@ -333,15 +333,63 @@
             "language": "cpp",
             "dialect": "c++20",
             "source": "int MyAbs(int x) {\n    if (x >= 0) return x;\n    else return {{D}};\n}",
-            "harness": { "kind": "call", "function": "MyAbs" }
+            "harness": {
+              "kind": "call",
+              "function": "MyAbs"
+            }
           }
         ],
         "cases": [
-          { "id": "minus-one", "args": [-1], "expected": { "returnValue": 1 }, "maxSteps": 1000 },
-          { "id": "minus-seven", "args": [-7], "expected": { "returnValue": 7 }, "maxSteps": 1000 },
-          { "id": "lower-bound", "args": [-2147483647], "expected": { "returnValue": 2147483647 }, "maxSteps": 1000 },
-          { "id": "zero", "args": [0], "expected": { "returnValue": 0 }, "maxSteps": 1000 },
-          { "id": "positive", "args": [12345], "expected": { "returnValue": 12345 }, "maxSteps": 1000 }
+          {
+            "id": "minus-one",
+            "args": [
+              -1
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "minus-seven",
+            "args": [
+              -7
+            ],
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "lower-bound",
+            "args": [
+              -2147483647
+            ],
+            "expected": {
+              "returnValue": 2147483647
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "zero",
+            "args": [
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1000
+          },
+          {
+            "id": "positive",
+            "args": [
+              12345
+            ],
+            "expected": {
+              "returnValue": 12345
+            },
+            "maxSteps": 1000
+          }
         ]
       },
       "displayCode": {
@@ -350,7 +398,7 @@
     },
     {
       "id": "junior-e",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 4, Blank E",
       "title": "Section B, Question 4",
       "prompt": {
@@ -382,7 +430,7 @@
     },
     {
       "id": "junior-f",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 4, Blank F",
       "title": "Section B, Question 4",
       "prompt": {
@@ -408,9 +456,13 @@
           "language": "cpp",
           "dialect": "c++20",
           "source": "int main() {\n    string a[8];\n    for (int i = 0; i < 8; ++i) {\n        cin >> a[i];\n    }\n    int count = 0;\n    for (int i = 0; i < 8; ++i) {\n        for (int j = i + 1; j < 8; ++j) {\n            for (int k = 0; k < 5; ++k) {\n                if (a[i].length() > k && a[j].length() > k\n                    && a[i][k] == a[j][k]) {\n                    ++count;\n                }\n            }\n        }\n    }\n    cout << count;\n}",
-          "harness": { "kind": "program" }
+          "harness": {
+            "kind": "program"
+          }
         },
-        "expected": { "stdout": "40" },
+        "expected": {
+          "stdout": "40"
+        },
         "maxSteps": 20000
       },
       "displayCode": {
@@ -419,8 +471,8 @@
     },
     {
       "id": "junior-g",
-      "track": "junior",
-      "printedRef": "Section B, Question 5, Blanks G1/G2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blanks G1, G2",
       "title": "Section B, Question 5",
       "prompt": {
         "en": "Alice and Bob is playing a game. There is a 1 × N grid where every cell is initially white. Alice and Bob take turns to perform the following actions.\n\n1. Choose any cell such that the cell and all its adjacent cells are white.\n2. Paint the chosen cell black.\n\nAlice plays first and if a player cannot make a valid move, they lose. Note: two cells are adjacent to each other if they share a common edge. For example, when N = 3, Alice can paint the cell 2 black and win since Bob has no valid moves after that.\n\nIf both players play optimally, can Alice win the following games? If yes, find any winning first move and write down the cell’s number. If no, write down 0. Determine this for N = 4 (G1) and N = 5 (G2). Number the cells from 1 to N."
@@ -455,8 +507,8 @@
     },
     {
       "id": "junior-h",
-      "track": "junior",
-      "printedRef": "Section B, Question 5, Blanks H1/H2",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blanks H1, H2",
       "title": "Section B, Question 5",
       "prompt": {
         "en": "Alice and Bob is playing a game. There is a 1 × N grid where every cell is initially white. Alice and Bob take turns to perform the following actions.\n\n1. Choose any cell such that the cell and all its adjacent cells are white.\n2. Paint the chosen cell black.\n\nAlice plays first and if a player cannot make a valid move, they lose. Note: two cells are adjacent to each other if they share a common edge. For example, when N = 3, Alice can paint the cell 2 black and win since Bob has no valid moves after that.\n\nIf both players play optimally, can Alice win the following games? If yes, find any winning first move and write down the cell’s number. If no, write down 0. Determine this for N = 9 (H1) and N = 13 (H2). Number the cells from 1 to N."
@@ -491,7 +543,7 @@
     },
     {
       "id": "junior-i",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 6, Blank I",
       "title": "Section B, Question 6",
       "prompt": {
@@ -538,7 +590,7 @@
     },
     {
       "id": "junior-j",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 6, Blank J",
       "title": "Section B, Question 6",
       "prompt": {
@@ -585,7 +637,7 @@
     },
     {
       "id": "junior-k",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 6, Blank K",
       "title": "Section B, Question 6",
       "prompt": {
@@ -632,7 +684,7 @@
     },
     {
       "id": "junior-l",
-      "track": "junior",
+      "track": "section-b",
       "printedRef": "Section B, Question 7, Blank L",
       "title": "Section B, Question 7",
       "prompt": {

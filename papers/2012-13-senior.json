@@ -1,0 +1,784 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2012-13-senior",
+    "season": "2012/13",
+    "division": "senior",
+    "title": "HKOI 2012/13 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+      "note": "Section B pp.13–16; official solutions at https://assets.hkoi.org/ref/2013hs_sol.pdf"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q2",
+      "track": "section-b",
+      "title": "Section B q2",
+      "markdown": "The above figure shows a map of a village with 4 houses. Houses and roads may be visited/used zero or more times. Examples of paths of length 3 are H→K→O→I and K→I→O→I. Please note that H→K→O→I, H→O→K→I and I→O→K→H are considered different."
+    },
+    {
+      "id": "q3",
+      "track": "section-b",
+      "title": "Section B q3",
+      "markdown": "Assume stack s contains some integers and r be an empty stack.\n\nYou can perform the following operations on the stack:\n\n- `push(a,x)`: push the integer x into stack a\n- `pop(a)`: pop an integer from the top of stack a and return that value\n- `peek(a)`: return the top value of stack a\n- `empty(a)`: return TRUE if stack a is empty, return FALSE otherwise\n\nComplete the program such that stack r store the content of s in ascending order from bottom to top.",
+      "displayCode": {
+        "c": "while (!empty(s)){\n  tmp = pop(s);\n  while (!empty(r) && {{D}}>tmp) {\n    push({{E}});\n  }\n  push(r,tmp);\n}"
+      }
+    },
+    {
+      "id": "q4",
+      "track": "section-b",
+      "title": "Section B q4",
+      "markdown": "```c\n50 #include <stdio.h>\n51 #include <math.h>\n52 int x1,y1,x2,y2;\n53 int dist(int x1, int y1, int x2, int y2) {\n54     return floor(sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)));\n55 }\n56 int main() {\n57     scanf(\"%d %d %d %d\",&x1,&y1,&x2,&y2);\n58     if (dist(x1,y1,x2,y2)<1)\n59         printf(\"The distance is less than 1\\n\");\n60     else if (dist(x1,y1,x2,y2)==1)\n61         printf(\"The distance is 1\\n\");\n62     else\n63         printf(\"The distance is greater than 1\\n\");\n64     return 0;\n65 }\n```"
+    },
+    {
+      "id": "q5",
+      "track": "section-b",
+      "title": "Section B q5",
+      "markdown": "Assume array a (C: a[n]) consists of distinct positive integers and max(i,j) returns the maximum value between a[i] to a[j] inclusive. Complete the program such that it finds the second maximum value of array a.",
+      "displayCode": {
+        "c": "maximum = max(0, n-1);\ni = 0; j = n-1;\nwhile (j>i) {\n  k = {{H}};\n  if ({{I}} == maximum)\n    j = k;\n  else\n    i = k+1;\n}\na[i] = -a[i];\nsecondmaximum = {{J}};\na[i] = -a[i];"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Let x be the minimum positive multiple of 17 that contains only digit '1'. How many digits does x have?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "label": "A",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "16"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The total number of different paths of length 3 is"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B",
+          "label": "B",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "108"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q2",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2013-senior-village.png",
+        "alt": "Official 2013 Senior village map with houses H, K, O and I"
+      }
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The total number of different paths of length 6 is C."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C",
+          "label": "C",
+          "maxChars": 8
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "2916"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q2"
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank D",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Fill blank D in the printed C stack sorting segment."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D",
+          "label": "D",
+          "maxChars": 21,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint s=0, r=1, tmp;\nint as[20], ar[20], ns=0, nr=0;\nint empty(int id) { if(id==0) return ns==0; return nr==0; }\nint peek(int id) { if(id==0) return as[ns-1]; return ar[nr-1]; }\nint pop(int id) { if(id==0) return as[--ns]; return ar[--nr]; }\nvoid push(int id,int x) { if(id==0) as[ns++]=x; else ar[nr++]=x; }\nint main() {\n  int n,x;\n  scanf(\"%d\",&n);\n  for(int i=0;i<n;++i) { scanf(\"%d\",&x); push(s,x); }\n  while (!empty(s)){\n    tmp = pop(s);\n    while (!empty(r) && {{D}}>tmp) {\n      push(s,pop(r));\n    }\n    push(r,tmp);\n  }\n  for(int i=0;i<nr;++i) printf(\"%d \",ar[i]);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "stack1",
+            "stdin": "4 4 1 3 2",
+            "expected": {
+              "stdout": "1 2 3 4 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "stack2",
+            "stdin": "4 9 5 1 7",
+            "expected": {
+              "stdout": "1 5 7 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "stack3",
+            "stdin": "1 1",
+            "expected": {
+              "stdout": "1 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "stack4",
+            "stdin": "3 2 2 1",
+            "expected": {
+              "stdout": "1 2 2 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "stack5",
+            "stdin": "4 3 1 3 1",
+            "expected": {
+              "stdout": "1 1 3 3 "
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q3"
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Fill blank E in the printed C stack sorting segment."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E",
+          "label": "E",
+          "maxChars": 21,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint s=0, r=1, tmp;\nint as[20], ar[20], ns=0, nr=0;\nint empty(int id) { if(id==0) return ns==0; return nr==0; }\nint peek(int id) { if(id==0) return as[ns-1]; return ar[nr-1]; }\nint pop(int id) { if(id==0) return as[--ns]; return ar[--nr]; }\nvoid push(int id,int x) { if(id==0) as[ns++]=x; else ar[nr++]=x; }\nint main() {\n  int n,x;\n  scanf(\"%d\",&n);\n  for(int i=0;i<n;++i) { scanf(\"%d\",&x); push(s,x); }\n  while (!empty(s)){\n    tmp = pop(s);\n    while (!empty(r) && peek(r)>tmp) {\n      push({{E}});\n    }\n    push(r,tmp);\n  }\n  for(int i=0;i<nr;++i) printf(\"%d \",ar[i]);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "stack1",
+            "stdin": "4 4 1 3 2",
+            "expected": {
+              "stdout": "1 2 3 4 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "stack2",
+            "stdin": "4 9 5 1 7",
+            "expected": {
+              "stdout": "1 5 7 9 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "stack3",
+            "stdin": "1 1",
+            "expected": {
+              "stdout": "1 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "stack4",
+            "stdin": "3 2 2 1",
+            "expected": {
+              "stdout": "1 2 2 "
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "stack5",
+            "stdin": "4 3 1 3 1",
+            "expected": {
+              "stdout": "1 1 3 3 "
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q3"
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The program checks if the distance between two coordinates (x1,y1), (x2,y2) is less than, equal to, or greater than 1. You may assume that x1,y1,x2 and y2 are integers in [-10000,10000]. Unfortunately, this program contains a logic error but it can be fixed by changing a single line. Identify the line and rewrite it.\n\nNote for C Version: y1 is defined as double y1(double) in <math.h>. In this question please assume that there is no such definition. Disregard if you do not understand this note."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F",
+          "label": "F",
+          "maxChars": 2
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "54"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q4"
+    },
+    {
+      "id": "G",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The program checks if the distance between two coordinates (x1,y1), (x2,y2) is less than, equal to, or greater than 1. You may assume that x1,y1,x2 and y2 are integers in [-10000,10000]. Unfortunately, this program contains a logic error but it can be fixed by changing a single line. Identify the line and rewrite it.\n\nNote for C Version: y1 is defined as double y1(double) in <math.h>. In this question please assume that there is no such definition. Disregard if you do not understand this note."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G",
+          "label": "G",
+          "maxChars": 42,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\n#include <stdlib.h>\nint x1,y1,x2,y2;\nint dist(int x1, int y1, int x2, int y2) {\n  {{G}}\n}\nint main() {\n  scanf(\"%d %d %d %d\",&x1,&y1,&x2,&y2);\n  if (dist(x1,y1,x2,y2)<1)\n    printf(\"The distance is less than 1\\n\");\n  else if (dist(x1,y1,x2,y2)==1)\n    printf(\"The distance is 1\\n\");\n  else\n    printf(\"The distance is greater than 1\\n\");\n  return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "distance1",
+            "stdin": "0 0 0 0",
+            "expected": {
+              "stdout": "The distance is less than 1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "distance2",
+            "stdin": "0 0 1 0",
+            "expected": {
+              "stdout": "The distance is 1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "distance3",
+            "stdin": "0 0 1 1",
+            "expected": {
+              "stdout": "The distance is greater than 1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "distance4",
+            "stdin": "0 0 -1 -1",
+            "expected": {
+              "stdout": "The distance is greater than 1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "distance5",
+            "stdin": "0 0 2 0",
+            "expected": {
+              "stdout": "The distance is greater than 1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "distance6",
+            "stdin": "500 -300 500 -299",
+            "expected": {
+              "stdout": "The distance is 1\n"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "distance7",
+            "stdin": "10000 -10000 -10000 10000",
+            "expected": {
+              "stdout": "The distance is greater than 1\n"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q4"
+    },
+    {
+      "id": "H",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Fill blank H in the printed second maximum program."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H",
+          "label": "H",
+          "maxChars": 21,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint a[20], n, maximum, secondmaximum, i, j, k;\nint max(int l,int r) { int m=a[l]; for(int t=l+1;t<=r;++t) if(a[t]>m)m=a[t]; return m; }\nint main() {\n  scanf(\"%d\",&n);\n  for(int t=0;t<n;++t)scanf(\"%d\",&a[t]);\n  maximum=max(0,n-1);\n  i=0; j=n-1;\n  while(j>i) {\n    k={{H}};\n    if (max(0,k)==maximum) j=k;\n    else i=k+1;\n  }\n  a[i]=-a[i];\n  secondmaximum=max(0,n-1);\n  a[i]=-a[i];\n  printf(\"%d\",secondmaximum);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "second1",
+            "stdin": "2 4 1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second2",
+            "stdin": "2 1 2",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second3",
+            "stdin": "5 8 2 4 1 7",
+            "expected": {
+              "stdout": "7"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second4",
+            "stdin": "6 1 9 8 7 6 5",
+            "expected": {
+              "stdout": "8"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second5",
+            "stdin": "8 20 1 2 3 4 5 6 7",
+            "expected": {
+              "stdout": "7"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second6",
+            "stdin": "8 3 5 1 7 9 2 4 8",
+            "expected": {
+              "stdout": "8"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q5"
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank I",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Fill blank I in the printed second maximum program."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I",
+          "label": "I",
+          "maxChars": 21,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint a[20], n, maximum, secondmaximum, i, j, k;\nint max(int l,int r) { int m=a[l]; for(int t=l+1;t<=r;++t) if(a[t]>m)m=a[t]; return m; }\nint main() {\n  scanf(\"%d\",&n);\n  for(int t=0;t<n;++t)scanf(\"%d\",&a[t]);\n  maximum=max(0,n-1);\n  i=0; j=n-1;\n  while(j>i) {\n    k=(i+j)/2;\n    if ({{I}}==maximum) j=k;\n    else i=k+1;\n  }\n  a[i]=-a[i];\n  secondmaximum=max(0,n-1);\n  a[i]=-a[i];\n  printf(\"%d\",secondmaximum);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "second1",
+            "stdin": "2 4 1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second2",
+            "stdin": "2 1 2",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second3",
+            "stdin": "5 8 2 4 1 7",
+            "expected": {
+              "stdout": "7"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second4",
+            "stdin": "6 1 9 8 7 6 5",
+            "expected": {
+              "stdout": "8"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second5",
+            "stdin": "8 20 1 2 3 4 5 6 7",
+            "expected": {
+              "stdout": "7"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second6",
+            "stdin": "8 3 5 1 7 9 2 4 8",
+            "expected": {
+              "stdout": "8"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q5"
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank J",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Fill blank J in the printed second maximum program."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J",
+          "label": "J",
+          "maxChars": 21,
+          "forbiddenChars": "?:"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint a[20], n, maximum, secondmaximum, i, j, k;\nint max(int l,int r) { int m=a[l]; for(int t=l+1;t<=r;++t) if(a[t]>m)m=a[t]; return m; }\nint main() {\n  scanf(\"%d\",&n);\n  for(int t=0;t<n;++t)scanf(\"%d\",&a[t]);\n  maximum=max(0,n-1);\n  i=0; j=n-1;\n  while(j>i) {\n    k=(i+j)/2;\n    if (max(0,k)==maximum) j=k;\n    else i=k+1;\n  }\n  a[i]=-a[i];\n  secondmaximum={{J}};\n  a[i]=-a[i];\n  printf(\"%d\",secondmaximum);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "second1",
+            "stdin": "2 4 1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second2",
+            "stdin": "2 1 2",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second3",
+            "stdin": "5 8 2 4 1 7",
+            "expected": {
+              "stdout": "7"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second4",
+            "stdin": "6 1 9 8 7 6 5",
+            "expected": {
+              "stdout": "8"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second5",
+            "stdin": "8 20 1 2 3 4 5 6 7",
+            "expected": {
+              "stdout": "7"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "second6",
+            "stdin": "8 3 5 1 7 9 2 4 8",
+            "expected": {
+              "stdout": "8"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "contextId": "q5"
+    },
+    {
+      "id": "K",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank K",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Observe the following non-standard die.\n\nNow, complete its net on the answer sheet.\n\n1 mark for each correct value. 2 marks for each correct value and orientation."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K",
+          "label": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "die-face",
+        "answerBlank": "K",
+        "expected": "ooo/.../ooo"
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2013-senior-die.png",
+        "alt": "Official 2013 Senior non-standard die views and blank net"
+      }
+    },
+    {
+      "id": "L",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank L",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Observe the following non-standard die.\n\nNow, complete its net on the answer sheet.\n\n1 mark for each correct value. 2 marks for each correct value and orientation."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L",
+          "label": "L"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "die-face",
+        "answerBlank": "L",
+        "expected": "o../.o./..o"
+      }
+    },
+    {
+      "id": "M",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank M",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Observe the following non-standard die.\n\nNow, complete its net on the answer sheet.\n\n1 mark for each correct value. 2 marks for each correct value and orientation."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "M",
+          "label": "M"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hse.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2013hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "die-face",
+        "answerBlank": "M",
+        "expected": "..o/.../o.."
+      }
+    }
+  ]
+}

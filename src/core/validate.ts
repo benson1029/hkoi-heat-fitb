@@ -54,7 +54,7 @@ const programCase = z.object({
       cpp: observation.optional(),
       c: observation.optional()
     }).strict().optional(),
-    maxSteps: z.number().int().positive().max(50_000)
+    maxSteps: z.number().int().positive().max(250_000)
 }).strict();
 
 const programGrading = z.object({
@@ -69,15 +69,21 @@ const programInputGrading = z.object({
   answerBlank: id,
   target: programTarget,
   expected: observation,
-  maxSteps: z.number().int().positive().max(50_000)
+  maxSteps: z.number().int().positive().max(250_000)
 }).strict();
 
 const cppLineRepairGrading = z.object({
   kind: z.literal('cpp-line-repair'),
+  language: z.enum(['cpp', 'c']).optional(),
   lineBlank: id,
   replacementBlank: id,
+  correctLines: z.array(z.number().int().positive()).min(1).max(20).optional(),
+  linePoints: z.number().positive().finite().optional(),
   firstLine: z.number().int().positive().max(10_000),
   source: z.string().min(1).max(128 * 1024),
+  prefixSource: z.string().max(128 * 1024).optional(),
+  suffixSource: z.string().max(128 * 1024).optional(),
+  mode: z.enum(['replace', 'append']).optional(),
   harness: z.discriminatedUnion('kind', [
     z.object({ kind: z.literal('call'), function: id }).strict(),
     z.object({ kind: z.literal('program') }).strict()
@@ -192,6 +198,73 @@ const pendingGrading = z.object({
   intendedEngine: z.string().max(80).optional()
 }).strict();
 
+const cancelledGrading = z.object({
+  kind: z.literal('cancelled'),
+  reason: z.string().min(1).max(2_000)
+}).strict();
+
+const gridCheckpointsGrading = z.object({
+  kind: z.literal('grid-checkpoints'), answerBlank: id,
+  width: z.number().int().min(2).max(12), height: z.number().int().min(2).max(12),
+  expectedPaths: z.number().int().nonnegative().max(1_000_000)
+}).strict();
+
+const integerListGrading = z.object({
+  kind: z.literal('integer-list'), answerBlanks: z.array(id).min(1).max(30),
+  count: z.number().int().min(1).max(30),
+  minimum: z.number().int().min(-100_000).max(100_000), maximum: z.number().int().min(-100_000).max(100_000),
+  distinct: z.boolean().optional(), squareOnly: z.boolean().optional(),
+  forbidden: z.array(z.number().int()).max(100).optional(), allowed: z.array(z.number().int()).max(100).optional(),
+  inversionCount: z.number().int().nonnegative().max(435).optional(),
+  minimumSpacing: z.object({ anchors: z.array(z.number().int()).max(100), required: z.number().int().nonnegative() }).strict().optional()
+}).strict();
+
+const matrixSumsGrading = z.object({
+  kind: z.literal('matrix-sums'), answerBlank: id,
+  values: z.array(z.number().int()).min(1).max(12), each: z.number().int().positive().max(12),
+  rowSums: z.array(z.number().int()).min(1).max(12), colSums: z.array(z.number().int()).min(1).max(12)
+}).strict();
+
+const rpnExpressionGrading = z.object({
+  kind: z.literal('rpn-expression'), answerBlank: id,
+  forms: z.array(z.string().regex(/^[0-9+*\/-]+$/).min(1).max(60)).min(1).max(20)
+}).strict();
+
+const counterexampleMaxGrading = z.object({
+  kind: z.literal('counterexample-max'), answerBlank: id,
+  minimum: z.number().int(), maximum: z.number().int(), modulus: z.number().int().positive().max(1000),
+  residues: z.array(z.number().int().nonnegative()).min(1).max(100), partialPoints: z.number().nonnegative().finite()
+}).strict();
+
+const signedWrapSumGrading = z.object({
+  kind: z.literal('signed-wrap-sum'), answerBlanks: z.tuple([id,id]),
+  minimum: z.number().int(), maximum: z.number().int(), requiredSum: z.number().int()
+}).strict();
+
+const nandExpressionGrading = z.object({
+  kind: z.literal('nand-expression'), answerBlank: id,
+  expected: z.tuple([z.boolean(), z.boolean(), z.boolean(), z.boolean()])
+}).strict();
+
+const dieFaceGrading = z.object({
+  kind: z.literal('die-face'), answerBlank: id,
+  expected: z.string().regex(/^[.o]{3}\/[.o]{3}\/[.o]{3}$/)
+}).strict();
+
+const primePowerPairGrading = z.object({
+  kind: z.literal('prime-power-pair'), correctBlank: id, incorrectBlank: id,
+  minimum: z.number().int().min(2).max(2147483647), maximum: z.number().int().min(2).max(2147483647)
+}).strict();
+
+const floatInputErrorGrading = z.object({ kind: z.literal('float-input-error'), answerBlanks: z.tuple([id,id]) }).strict();
+
+const logoDrawingGrading = z.object({
+  kind: z.literal('logo-drawing'), answerBlank: id,
+  segments: z.array(z.tuple([z.tuple([z.number().min(0).max(1),z.number().min(0).max(1)]),
+    z.tuple([z.number().min(0).max(1),z.number().min(0).max(1)])])).min(1).max(30),
+  tolerance: z.number().positive().max(0.15)
+}).strict();
+
 const question = z.object({
   id,
   track: id,
@@ -208,7 +281,7 @@ const question = z.object({
   points: z.number().nonnegative().finite().max(100),
   blanks: z.array(blank).min(1).max(30),
   source: sourceRef.optional(),
-  grading: z.discriminatedUnion('kind', [programGrading, programInputGrading, cppLineRepairGrading, coinCounterexampleGrading, checksumCollisionGrading, zigzagPathGrading, literalGrading, robotGrading, graphGrading, graphReversalGrading, triangleAffineGrading, uniformCppExpressionGrading, pendingGrading])
+  grading: z.discriminatedUnion('kind', [programGrading, programInputGrading, cppLineRepairGrading, coinCounterexampleGrading, checksumCollisionGrading, zigzagPathGrading, literalGrading, robotGrading, graphGrading, graphReversalGrading, triangleAffineGrading, uniformCppExpressionGrading, gridCheckpointsGrading, integerListGrading, matrixSumsGrading, rpnExpressionGrading, counterexampleMaxGrading, signedWrapSumGrading, nandExpressionGrading, dieFaceGrading, primePowerPairGrading, floatInputErrorGrading, logoDrawingGrading, pendingGrading, cancelledGrading])
 }).strict();
 
 const paperSchema = z.object({
@@ -227,7 +300,17 @@ const paperSchema = z.object({
     choiceGroup: id.optional()
   }).strict()).min(1).max(10),
   contexts: z.array(z.object({
-    id, track: id, title: z.string().max(200).optional(), markdown: text
+    id, track: id, title: z.string().max(200).optional(), markdown: text,
+    displayCode: z.object({
+      python: z.string().max(200_000).optional(),
+      cpp: z.string().max(200_000).optional(),
+      c: z.string().max(200_000).optional()
+    }).strict().optional(),
+    answerSets: z.array(z.object({
+      questionId: id,
+      label: z.string().min(1).max(80),
+      bindings: z.record(id, id)
+    }).strict()).min(2).max(20).optional()
   }).strict()).max(100).optional(),
   questions: z.array(question).min(1).max(200)
 }).strict();
@@ -250,6 +333,55 @@ function checkQuestion(q: Question): void {
     const nodes = new Set(q.figure.nodes.map(node => node.id));
     for (const edge of q.figure.edges) if (!nodes.has(edge.from) || !nodes.has(edge.to)) {
       throw new Error(`Question ${q.id}: figure edge references an unknown node`);
+    }
+  }
+  if (q.grading.kind === 'cancelled' && q.points !== 0) throw new Error(`Question ${q.id}: cancelled question must award zero points`);
+  if (q.grading.kind === 'grid-checkpoints' && !blankIds.includes(q.grading.answerBlank)) throw new Error(`Question ${q.id}: checkpoint blank is unknown`);
+  if (q.grading.kind === 'rpn-expression' && !blankIds.includes(q.grading.answerBlank)) throw new Error(`Question ${q.id}: RPN blank is unknown`);
+  if (q.grading.kind === 'nand-expression' && !blankIds.includes(q.grading.answerBlank)) throw new Error(`Question ${q.id}: NAND blank is unknown`);
+  if (q.grading.kind === 'logo-drawing' && !blankIds.includes(q.grading.answerBlank)) throw new Error(`Question ${q.id}: drawing blank is unknown`);
+  if (q.grading.kind === 'die-face' && !blankIds.includes(q.grading.answerBlank)) throw new Error(`Question ${q.id}: die-face blank is unknown`);
+  if (q.grading.kind === 'prime-power-pair') {
+    const spec = q.grading;
+    if (!blankIds.includes(spec.correctBlank) || !blankIds.includes(spec.incorrectBlank) || spec.correctBlank === spec.incorrectBlank || spec.minimum >= spec.maximum) {
+      throw new Error(`Question ${q.id}: prime-power-pair contract is invalid`);
+    }
+  }
+  if (q.grading.kind === 'float-input-error' && (q.grading.answerBlanks[0] === q.grading.answerBlanks[1] || q.grading.answerBlanks.some(blankId => !blankIds.includes(blankId)))) {
+    throw new Error(`Question ${q.id}: float-input-error blank is invalid`);
+  }
+  if (q.grading.kind === 'counterexample-max') {
+    const spec = q.grading;
+    if (!blankIds.includes(spec.answerBlank) || spec.minimum > spec.maximum || spec.partialPoints >= q.points ||
+        spec.residues.some(value => value >= spec.modulus) || new Set(spec.residues).size !== spec.residues.length) {
+      throw new Error(`Question ${q.id}: counterexample-max contract is invalid`);
+    }
+  }
+  if (q.grading.kind === 'signed-wrap-sum') {
+    const spec = q.grading;
+    if (spec.answerBlanks[0] === spec.answerBlanks[1] || spec.answerBlanks.some(blankId => !blankIds.includes(blankId)) ||
+        spec.minimum > spec.maximum || spec.requiredSum < spec.minimum * 2 || spec.requiredSum > spec.maximum * 2) {
+      throw new Error(`Question ${q.id}: signed-wrap-sum contract is invalid`);
+    }
+  }
+  if (q.grading.kind === 'matrix-sums') {
+    const spec = q.grading;
+    if (!blankIds.includes(spec.answerBlank) || new Set(spec.values).size !== spec.values.length ||
+        spec.values.length * spec.each !== spec.rowSums.length * spec.colSums.length ||
+        spec.rowSums.reduce((a, b) => a + b, 0) !== spec.colSums.reduce((a, b) => a + b, 0) ||
+        spec.values.reduce((a, b) => a + b, 0) * spec.each !== spec.rowSums.reduce((a, b) => a + b, 0)) {
+      throw new Error(`Question ${q.id}: matrix-sums contract is invalid`);
+    }
+  }
+  if (q.grading.kind === 'integer-list') {
+    const spec = q.grading;
+    unique(spec.answerBlanks, `integer answer in ${q.id}`);
+    if (spec.answerBlanks.some(blankId => !blankIds.includes(blankId)) ||
+        (spec.answerBlanks.length !== 1 && spec.answerBlanks.length !== spec.count) ||
+        spec.minimum > spec.maximum ||
+        spec.inversionCount !== undefined && spec.inversionCount > spec.count * (spec.count - 1) / 2 ||
+        spec.minimumSpacing && (spec.minimumSpacing.anchors.some(value => value < spec.minimum || value > spec.maximum) || spec.minimumSpacing.required > spec.maximum - spec.minimum)) {
+      throw new Error(`Question ${q.id}: integer-list contract is invalid`);
     }
   }
   if (q.grading.kind === 'program') {
@@ -279,9 +411,14 @@ function checkQuestion(q: Question): void {
       throw new Error(`Question ${q.id}: program-input target or blank is invalid`);
     }
   } else if (q.grading.kind === 'cpp-line-repair') {
-    if (!blankIds.includes(q.grading.lineBlank) || !blankIds.includes(q.grading.replacementBlank)) throw new Error(`Question ${q.id}: line repair blank is unknown`);
-    unique(q.grading.cases.map(testCase => testCase.id), `case in ${q.id}`);
-    if (q.grading.firstLine + q.grading.source.split('\n').length > 10_100) throw new Error(`Question ${q.id}: repair line range is invalid`);
+    const spec = q.grading;
+    if (!blankIds.includes(spec.lineBlank) || !blankIds.includes(spec.replacementBlank)) throw new Error(`Question ${q.id}: line repair blank is unknown`);
+    unique(spec.cases.map(testCase => testCase.id), `case in ${q.id}`);
+    if (spec.firstLine + spec.source.split('\n').length > 10_100) throw new Error(`Question ${q.id}: repair line range is invalid`);
+    if (spec.linePoints !== undefined && (!spec.correctLines || spec.linePoints >= q.points || spec.correctLines.some(line => line < spec.firstLine || line >= spec.firstLine + spec.source.split('\n').length))) {
+      throw new Error(`Question ${q.id}: line repair partial-credit contract is invalid`);
+    }
+    if (spec.prefixSource?.includes('{{') || spec.suffixSource?.includes('{{')) throw new Error(`Question ${q.id}: repair wrapper cannot contain answer markers`);
   } else if (q.grading.kind === 'coin-counterexample') {
     if (!blankIds.includes(q.grading.middleBlank) || !blankIds.includes(q.grading.largestBlank)) throw new Error(`Question ${q.id}: coin blank is unknown`);
     if (q.grading.amount > 10_000 || q.grading.largestLimit > 1_000) throw new Error(`Question ${q.id}: coin search budget is too large`);
@@ -372,6 +509,44 @@ export function validatePaper(input: unknown): PaperConfig {
   const contexts = new Map((paper.contexts ?? []).map(context => [context.id, context]));
   for (const context of paper.contexts ?? []) if (!tracks.has(context.track)) {
     throw new Error(`Context ${context.id}: unknown track ${context.track}`);
+  }
+  for (const context of paper.contexts ?? []) {
+    if (context.answerSets && !context.displayCode) throw new Error(`Context ${context.id}: answerSets require displayCode`);
+    if (!context.displayCode) continue;
+    const owners = new Map<string, string>();
+    const grouped = paper.questions.filter(item => item.contextId === context.id);
+    for (const question of grouped) {
+      for (const blank of question.blanks) {
+        if (owners.has(blank.id)) throw new Error(`Context ${context.id}: blank ${blank.id} has multiple owners`);
+        owners.set(blank.id, question.id);
+      }
+    }
+    const markers = new Set<string>();
+    for (const code of Object.values(context.displayCode)) {
+      if (code === undefined) continue;
+      for (const match of code.matchAll(/{{([A-Za-z0-9][A-Za-z0-9._-]*)}}/g)) {
+        markers.add(match[1]);
+      }
+    }
+    if (!markers.size) throw new Error(`Context ${context.id}: displayCode needs an editable blank`);
+    if (context.answerSets) {
+      unique(context.answerSets.map(set => set.questionId), `answer set question in ${context.id}`);
+      for (const set of context.answerSets) {
+        const question = grouped.find(item => item.id === set.questionId);
+        if (!question) throw new Error(`Context ${context.id}: unknown answer set question ${set.questionId}`);
+        const slots = Object.keys(set.bindings);
+        if (slots.length !== markers.size || slots.some(slot => !markers.has(slot))) {
+          throw new Error(`Context ${context.id}: answer set ${set.questionId} must bind every code slot`);
+        }
+        const bound = Object.values(set.bindings);
+        unique(bound, `answer set blank in ${set.questionId}`);
+        if (bound.length !== question.blanks.length || bound.some(blank => !question.blanks.some(item => item.id === blank))) {
+          throw new Error(`Context ${context.id}: answer set ${set.questionId} must bind its question blanks`);
+        }
+      }
+    } else for (const marker of markers) if (!owners.has(marker)) {
+      throw new Error(`Context ${context.id}: unknown displayCode marker ${marker}`);
+    }
   }
   for (const track of paper.tracks) {
     if (track.selection === 'choice' && !track.choiceGroup) throw new Error(`Choice track ${track.id} needs choiceGroup`);

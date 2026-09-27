@@ -22,7 +22,7 @@ const answers: PaperAnswers = {
 };
 
 it('grades the official 2022/23 Senior Section B answers', async () => {
-  const result = await gradePaper(paper, answers, ['cpp']);
+  const result = await gradePaper(paper, answers, ['section-b']);
   expect(result.questions).toHaveLength(13);
   expect(result.questions.filter(item => item.status !== 'pass')).toEqual([]);
   expect(result.scoredPoints).toBe(20);

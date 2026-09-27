@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useRef, useState } from 'react';
-import type { ChangeEvent, ReactNode } from 'react';
+import type { ChangeEvent, PointerEvent as ReactPointerEvent, ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -67,6 +67,8 @@ function statusName(status: QuestionGrade['status']): string {
     case 'fail': return 'Failed tests';
     case 'inconclusive': return 'Could not determine';
     case 'pending': return 'Grader pending';
+    case 'cancelled': return 'Cancelled';
+    case 'partial': return 'Partially correct';
   }
 }
 
@@ -112,8 +114,35 @@ function Sidebar({
   importing: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [paperQuery, setPaperQuery] = useState('');
+  const [divisionFilter, setDivisionFilter] = useState<'all' | 'junior' | 'senior'>('all');
   const publicPapers = papers.filter((paper) => !paper.private);
   const privatePapers = papers.filter((paper) => paper.private);
+  const matchingPapers = publicPapers.filter(({ config }) => {
+    const { paper } = config;
+    const matchesDivision = divisionFilter === 'all' || paper.division === divisionFilter;
+    const searchText = `${paper.season} ${paper.division} ${paper.title || ''} ${paper.id}`.toLowerCase();
+    return matchesDivision && searchText.includes(paperQuery.trim().toLowerCase());
+  });
+  const byYear = new Map<string, PaperItem[]>();
+  for (const item of matchingPapers) {
+    const year = item.config.paper.season;
+    byYear.set(year, [...(byYear.get(year) || []), item]);
+  }
+  for (const items of byYear.values()) items.sort((a, b) => {
+    const rank = (item: PaperItem) => item.config.paper.id.includes('sample') ? 2 : item.config.paper.division === 'junior' ? 0 : 1;
+    return rank(a) - rank(b);
+  });
+
+  function paperName(item: PaperItem): string {
+    const { paper } = item.config;
+    return paper.id.includes('sample') ? 'Sample' : paper.division === 'junior' ? 'Junior' : 'Senior';
+  }
+
+  function paperFullName(item: PaperItem): string {
+    const { paper } = item.config;
+    return `${paper.season} ${paper.id.includes('sample') ? 'Senior sample' : paper.division} paper`;
+  }
 
   function paperButton(item: PaperItem) {
     const paper = item.config.paper;
@@ -123,9 +152,10 @@ function Sidebar({
           className={`paper-option ${selectedKey === item.key ? 'selected' : ''}`}
           onClick={() => onSelect(item.key)}
           aria-current={selectedKey === item.key ? 'page' : undefined}
+          aria-label={paperFullName(item)}
+          title={paper.title || paperFullName(item)}
         >
-          <span className="paper-option-title">{paper.title || `${paper.season} ${paper.division} Heat`}</span>
-          <span className="paper-option-detail">{paper.season} · {paper.division}</span>
+          {paperName(item)}
         </button>
         {item.private && (
           <button className="remove-paper" onClick={() => onRemove(item.key)} aria-label={`Remove ${paper.title || paper.id}`} title="Remove private paper">×</button>
@@ -137,15 +167,32 @@ function Sidebar({
   return (
     <aside className="sidebar" aria-label="Paper library">
       <div className="brand"><span className="brand-mark" aria-hidden="true">H</span><strong>HKOI Heat FITB</strong></div>
-      <div className="sidebar-content">
-        <div className="sidebar-heading">Past papers</div>
-        <nav className="paper-list" aria-label="Bundled papers">
-          {publicPapers.length ? publicPapers.map(paperButton) : <p className="sidebar-empty">Bundled papers are being prepared.</p>}
+      <div className="paper-browser">
+        <div className="paper-tools">
+          <label className="visually-hidden" htmlFor="paper-search">Find a paper</label>
+          <input id="paper-search" type="search" placeholder="Find a year or paper" value={paperQuery} onChange={(event) => setPaperQuery(event.target.value)} />
+          <div className="division-filter" role="group" aria-label="Division">
+            {(['all', 'junior', 'senior'] as const).map((division) => <button key={division} type="button"
+              className={divisionFilter === division ? 'active' : ''} aria-pressed={divisionFilter === division}
+              onClick={() => setDivisionFilter(division)}>{division === 'all' ? 'All' : division === 'junior' ? 'Junior' : 'Senior'}</button>)}
+          </div>
+        </div>
+        <nav className="paper-year-list" aria-label="Past papers">
+          {[...byYear.entries()].map(([year, items]) => <div className="paper-year" key={year}>
+            <span className="paper-year-label">{year}</span>
+            <div className="paper-year-options">{items.map(paperButton)}</div>
+          </div>)}
+          {!matchingPapers.length && <p className="sidebar-empty">No matching papers.</p>}
         </nav>
-
-        <div className="sidebar-heading private-heading">Imported</div>
-        <p className="private-copy">Files remain in this tab.</p>
-        {privatePapers.length > 0 && <nav className="paper-list" aria-label="Imported papers">{privatePapers.map(paperButton)}</nav>}
+        {privatePapers.length > 0 && <div className="imported-papers"><div className="sidebar-heading">Imported</div>
+          <nav className="paper-year-options" aria-label="Imported papers">{privatePapers.map(paperButton)}</nav></div>}
+      </div>
+      <div className="sidebar-footer">
+        <label className="visually-hidden" htmlFor="mobile-paper-select">Choose a paper</label>
+        <select id="mobile-paper-select" className="mobile-paper-select" value={selectedKey || ''} onChange={(event) => onSelect(event.target.value)}>
+          <optgroup label="Past papers">{publicPapers.map((item) => <option key={item.key} value={item.key}>{paperFullName(item)}</option>)}</optgroup>
+          {privatePapers.length > 0 && <optgroup label="Imported">{privatePapers.map((item) => <option key={item.key} value={item.key}>{item.fileName || paperFullName(item)}</option>)}</optgroup>}
+        </select>
         <input
           ref={inputRef}
           className="visually-hidden"
@@ -170,7 +217,7 @@ function TrackPicker({ paper, selected, onChange }: { paper: PaperConfig; select
     const key = track.choiceGroup || track.id;
     groups.set(key, [...(groups.get(key) || []), track]);
   }
-  if (!required.length && !groups.size) return null;
+  if (!groups.size) return null;
   return (
     <div className="track-picker" aria-label="Paper sections">
       {required.map((track) => <span className="track-required" key={track.id}>{track.label}</span>)}
@@ -185,7 +232,7 @@ function TrackPicker({ paper, selected, onChange }: { paper: PaperConfig; select
                 type="button"
                 aria-pressed={selected.includes(option.id)}
                 onClick={() => onChange([...selected.filter((id) => !options.some((item) => item.id === id)), option.id])}
-              >{option.label}</button>
+              >{group === 'paper2' ? option.label.replace(/^Paper 2 · /, '') : option.label}</button>
             ))}
           </div>
         </div>
@@ -264,9 +311,42 @@ function QuestionFigure({ figure, questionId }: { figure: PaperFigure; questionI
   </svg></figure>;
 }
 
-function ContextBlock({ context }: { context: PaperContext }) {
+function contextCode(context: PaperContext, selectedLanguage?: Language): { language: Language; source: string } | null {
+  const language = (selectedLanguage && context.displayCode?.[selectedLanguage]
+    ? selectedLanguage : Object.keys(context.displayCode ?? {})[0]) as Language | undefined;
+  const source = language ? context.displayCode?.[language] : undefined;
+  return language && source ? { language, source } : null;
+}
+
+function ContextBlock({ context, questions, answers, selectedLanguage, activeQuestionId, onSelectAnswerSet, onAnswer }: {
+  context: PaperContext;
+  questions: Question[];
+  answers: PaperAnswers;
+  selectedLanguage?: Language;
+  activeQuestionId?: string;
+  onSelectAnswerSet: (questionId: string) => void;
+  onAnswer: (questionId: string, blankId: string, value: string) => void;
+}) {
   const [open, setOpen] = useState(true);
-  return <details className="context-block" open={open} onToggle={(event) => setOpen(event.currentTarget.open)}><summary>{context.title || 'Shared instructions'}</summary><MarkdownPrompt text={context.markdown} /></details>;
+  const code = contextCode(context, selectedLanguage);
+  const activeSet = Math.max(0, context.answerSets?.findIndex((item) => item.questionId === activeQuestionId) ?? 0);
+  const set = context.answerSets?.[activeSet];
+  const owners = set
+    ? new Map(Object.entries(set.bindings).flatMap(([slot, blankId]) => {
+      const question = questions.find((item) => item.id === set.questionId);
+      const blank = question?.blanks.find((item) => item.id === blankId);
+      return question && blank ? [[slot, { question, blank }] as const] : [];
+    }))
+    : new Map(questions.flatMap((question) => question.blanks.map((blank) => [blank.id, { question, blank }] as const)));
+  return <details id={`context-${context.id}`} className="context-block" open={open} onToggle={(event) => setOpen(event.currentTarget.open)}>
+    <summary>{context.title || 'Shared instructions'}</summary>
+    {context.markdown && <MarkdownPrompt text={context.markdown} />}
+    {context.answerSets && <div className="language-tabs" role="tablist" aria-label={`${context.title || 'Code'} answer set`}>
+      {context.answerSets.map((item, index) => <button key={item.questionId} type="button" role="tab" aria-selected={index === activeSet}
+        className={index === activeSet ? 'active' : ''} onClick={() => onSelectAnswerSet(item.questionId)}>{item.label}</button>)}
+    </div>}
+    {code && <SharedCodeTemplate language={code.language} source={code.source} owners={owners} answers={answers} onAnswer={onAnswer} />}
+  </details>;
 }
 
 function AnswerInput({
@@ -290,6 +370,7 @@ function AnswerInput({
   return (
     <span className={inline ? 'answer-inline' : 'answer-field'}>
       {!inline && showLabel && <label className="answer-label" htmlFor={`${questionTitle}-${blank.id}`}>{blank.label || `Blank ${blank.id}`}</label>}
+      {inline && <span className="inline-blank-label" aria-hidden="true">{blank.label || blank.id}</span>}
       {blank.multiline ? (
         <textarea
           id={inline ? undefined : `${questionTitle}-${blank.id}`}
@@ -353,6 +434,28 @@ function CodeTemplate({
   );
 }
 
+function SharedCodeTemplate({ language, source, owners, answers, onAnswer }: {
+  language: Language;
+  source: string;
+  owners: Map<string, { question: Question; blank: Blank }>;
+  answers: PaperAnswers;
+  onAnswer: (questionId: string, blankId: string, value: string) => void;
+}) {
+  const parts = source.split(/(\{\{[A-Za-z][A-Za-z0-9_-]*\}\})/g);
+  return <div className="code-frame">
+    <div className="code-toolbar"><span className="code-dots" aria-hidden="true"><i /><i /><i /></span><span>{language.toUpperCase()} · code completion</span></div>
+    <pre className="code-source"><code>{parts.map((part, index) => {
+      const marker = /^\{\{([A-Za-z][A-Za-z0-9_-]*)\}\}$/.exec(part);
+      if (!marker) return <span key={index}>{highlighted(part)}</span>;
+      const owner = owners.get(marker[1]);
+      if (!owner) return <span key={index}>{part}</span>;
+      if (owner.question.grading.kind === 'cancelled') return <span key={index}>________</span>;
+      return <AnswerInput key={index} blank={owner.blank} value={answers[owner.question.id]?.[owner.blank.id] || ''}
+        onChange={(value) => onAnswer(owner.question.id, owner.blank.id, value)} inline questionTitle={owner.question.printedRef} />;
+    })}</code></pre>
+  </div>;
+}
+
 function DisplayCode({ language, source }: { language: Language; source: string }) {
   return <div className="code-frame">
     <div className="code-toolbar"><span className="code-dots" aria-hidden="true"><i /><i /><i /></span><span>{language.toUpperCase()}</span></div>
@@ -407,8 +510,8 @@ function GraphAnswer({
 function QuestionResult({ result }: { result: QuestionGrade }) {
   return (
     <div className={`question-result result-${result.status}`} role="status">
-      <div className="result-topline"><strong>{statusName(result.status)}</strong><span>{result.score === null ? 'No score' : `${result.score} / ${result.maxScore} points`}</span></div>
-      {result.message && <p>{result.message}</p>}
+      <div className="result-topline"><strong>{statusName(result.status)}</strong><span>{result.status === 'cancelled' ? 'Excluded from score' : result.score === null ? 'No score' : `${result.score} / ${result.maxScore} points`}</span></div>
+      {result.message && result.status !== 'cancelled' && <p>{result.message}</p>}
       {result.cases.length > 0 && <details className="case-details"><summary>{result.cases.filter((item) => item.status === 'pass').length} of {result.cases.length} checks passed · details</summary>
         <ul>{result.cases.map((testCase) => <li key={testCase.id} className={`case-${testCase.status}`}><span aria-hidden="true">{testCase.status === 'pass' ? '✓' : testCase.status === 'fail' ? '×' : '•'}</span> <strong>{testCase.id}</strong>{testCase.message ? ` — ${testCase.message}` : ''}</li>)}</ul>
       </details>}
@@ -480,9 +583,68 @@ function RobotAnswer({
   </div>;
 }
 
+function DieFaceAnswer({ question, answerBlank, value, onAnswer }: {
+  question: Question; answerBlank: string; value: string; onAnswer: (id: string, value: string) => void;
+}) {
+  const clean = /^[.o]{3}\/[.o]{3}\/[.o]{3}$/.test(value) ? value : '.../.../...';
+  const cells = clean.replaceAll('/', '').split('');
+  function toggle(index: number) {
+    const next = [...cells];
+    next[index] = next[index] === 'o' ? '.' : 'o';
+    onAnswer(answerBlank, `${next.slice(0, 3).join('')}/${next.slice(3, 6).join('')}/${next.slice(6).join('')}`);
+  }
+  return <div className="die-editor">
+    <div className="die-grid" role="group" aria-label={`${question.printedRef}: die face`}>
+      {cells.map((cell, index) => <button key={index} type="button" className={`die-cell ${cell === 'o' ? 'has-pip' : ''}`}
+        aria-label={`Row ${Math.floor(index / 3) + 1}, column ${index % 3 + 1}`}
+        aria-pressed={cell === 'o'} onClick={() => toggle(index)}><span aria-hidden="true">{cell === 'o' ? '●' : ''}</span></button>)}
+    </div>
+    <span className="die-hint">Click cells to place pips.</span>
+  </div>;
+}
+
+function LogoDrawingAnswer({ question, answerBlank, value, onAnswer }: {
+  question: Question; answerBlank: string; value: string; onAnswer: (id: string, value: string) => void;
+}) {
+  type Point = [number, number];
+  type Segment = [Point, Point];
+  const [start, setStart] = useState<Point | null>(null);
+  const [end, setEnd] = useState<Point | null>(null);
+  let segments: Segment[] = [];
+  try { const parsed = JSON.parse(value); if (Array.isArray(parsed)) segments = parsed; } catch { /* No saved drawing. */ }
+  function point(event: ReactPointerEvent<SVGSVGElement>): Point {
+    const box = event.currentTarget.getBoundingClientRect();
+    return [Math.max(0, Math.min(1, (event.clientX - box.left) / box.width)),
+      Math.max(0, Math.min(1, (event.clientY - box.top) / box.height))];
+  }
+  function begin(event: ReactPointerEvent<SVGSVGElement>) {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    const next = point(event); setStart(next); setEnd(next);
+  }
+  function finish(event: ReactPointerEvent<SVGSVGElement>) {
+    if (!start) return;
+    const last = point(event);
+    if (Math.hypot(start[0] - last[0], start[1] - last[1]) > 0.015 && segments.length < 40)
+      onAnswer(answerBlank, JSON.stringify([...segments, [start, last]]));
+    setStart(null); setEnd(null);
+  }
+  const line = ([a,b]: Segment, key: number) => <line key={key} x1={a[0]*400} y1={a[1]*320} x2={b[0]*400} y2={b[1]*320} />;
+  return <div className="drawing-editor">
+    <svg className="drawing-canvas" viewBox="0 0 400 320" aria-label={`${question.printedRef}: draw the program output with line drags`}
+      onPointerDown={begin} onPointerMove={event => { if (start) setEnd(point(event)); }} onPointerUp={finish}
+      onPointerCancel={() => { setStart(null); setEnd(null); }}>
+      <rect width="400" height="320" className="drawing-background" />
+      <g className="drawing-lines">{segments.map(line)}{start && end && line([start,end],-1)}</g>
+    </svg>
+    <div className="drawing-tools"><span>Draw six rough sides with separate drags; the joins need not be exact.</span><button type="button" onClick={() => onAnswer(answerBlank, JSON.stringify(segments.slice(0,-1)))} disabled={!segments.length}>Undo</button><button type="button" onClick={() => onAnswer(answerBlank, '[]')} disabled={!segments.length}>Clear</button></div>
+  </div>;
+}
+
 function QuestionCard({
   question,
   selectedLanguage,
+  sharedCode,
+  onEditShared,
   paperSource,
   values,
   result,
@@ -492,6 +654,8 @@ function QuestionCard({
 }: {
   question: Question;
   selectedLanguage?: Language;
+  sharedCode: boolean;
+  onEditShared?: () => void;
   paperSource?: SourceRef;
   values: Record<string, string>;
   result?: QuestionGrade;
@@ -504,7 +668,7 @@ function QuestionCard({
   const selectedTarget = grading.kind === 'program' ? grading.targets.find((item) => item.language === selectedLanguage) : undefined;
   const target = grading.kind === 'program' ? selectedTarget ?? grading.targets[Math.min(targetIndex, grading.targets.length - 1)] : null;
   const displayLanguage = (selectedLanguage && question.displayCode?.[selectedLanguage] ? selectedLanguage : Object.keys(question.displayCode ?? {})[0]) as Language | undefined;
-  const displaySource = displayLanguage ? question.displayCode?.[displayLanguage] : undefined;
+  const displaySource = !sharedCode && displayLanguage ? question.displayCode?.[displayLanguage] : undefined;
   const displayHasBlanks = !!displaySource && /\{\{[A-Za-z][A-Za-z0-9_-]*\}\}/.test(displaySource);
   const source = question.source?.paperUrl ? question.source : paperSource;
   const sourceUrl = officialPaperLink(source);
@@ -512,11 +676,13 @@ function QuestionCard({
     <article className="question-card" id={`question-${question.id}`}>
       <div className="question-head"><h3>{question.printedRef}</h3><div className="question-tools"><span>{question.points} {question.points === 1 ? 'point' : 'points'}</span>{sourceUrl && <a className="source-link" href={sourceUrl} target="_blank" rel="noopener noreferrer">Paper PDF{source?.page ? ` · p. ${source.page}` : ''} <span aria-hidden="true">↗</span></a>}</div></div>
       {question.prompt.en && <MarkdownPrompt text={question.prompt.en} />}
+      {sharedCode && onEditShared && <button type="button" className="shared-code-link" onClick={onEditShared}>Edit in shared code ↑</button>}
       {question.figure && <QuestionFigure figure={question.figure} questionId={question.id} />}
-      {displaySource && displayLanguage && (displayHasBlanks
+      {displaySource && displayLanguage && grading.kind === 'cancelled' && <DisplayCode language={displayLanguage} source={displaySource.replace(/\{\{[A-Za-z][A-Za-z0-9_-]*\}\}/g, '________')} />}
+      {displaySource && displayLanguage && grading.kind !== 'cancelled' && (displayHasBlanks
         ? <CodeTemplate target={{ language: displayLanguage, source: displaySource, harness: { kind: 'call', function: 'display' } }} question={question} values={values} onAnswer={onAnswer} />
         : <DisplayCode language={displayLanguage} source={displaySource} />)}
-      {grading.kind === 'program' && !displaySource && (
+      {grading.kind === 'program' && !displaySource && !sharedCode && (
         <>
           {grading.targets.length > 1 && !selectedTarget && <div className="language-tabs" role="tablist" aria-label={`${question.title} source language`}>{grading.targets.map((item, current) => <button type="button" key={`${item.language}-${current}`} role="tab" aria-selected={current === targetIndex} className={current === targetIndex ? 'active' : ''} onClick={() => setTargetIndex(current)}>{item.language.toUpperCase()}</button>)}</div>}
           {target && <CodeTemplate target={target} question={question} values={values} onAnswer={onAnswer} />}
@@ -524,9 +690,12 @@ function QuestionCard({
       )}
       {grading.kind === 'graph' && <GraphAnswer question={question} grading={grading} values={values} onAnswer={onAnswer} />}
       {grading.kind === 'robot-grid' && <RobotAnswer question={question} grading={grading} values={values} onAnswer={onAnswer} />}
-      {(grading.kind !== 'program' || (!!displaySource && !displayHasBlanks)) && grading.kind !== 'graph' && grading.kind !== 'robot-grid' && !displayHasBlanks && <div className="answer-fields">{question.blanks.map((blank) => <AnswerInput key={blank.id} blank={blank} value={values[blank.id] || ''} onChange={(value) => onAnswer(blank.id, value)} showLabel={question.blanks.length > 1} questionTitle={question.printedRef} />)}</div>}
+      {grading.kind === 'die-face' && <DieFaceAnswer question={question} answerBlank={grading.answerBlank} value={values[grading.answerBlank] || ''} onAnswer={onAnswer} />}
+      {grading.kind === 'logo-drawing' && <LogoDrawingAnswer question={question} answerBlank={grading.answerBlank} value={values[grading.answerBlank] || ''} onAnswer={onAnswer} />}
+      {!sharedCode && (grading.kind !== 'program' || (!!displaySource && !displayHasBlanks)) && grading.kind !== 'graph' && grading.kind !== 'robot-grid' && grading.kind !== 'die-face' && grading.kind !== 'logo-drawing' && grading.kind !== 'cancelled' && !displayHasBlanks && <div className="answer-fields">{question.blanks.map((blank) => <AnswerInput key={blank.id} blank={blank} value={values[blank.id] || ''} onChange={(value) => onAnswer(blank.id, value)} showLabel={question.blanks.length > 1} questionTitle={question.printedRef} />)}</div>}
       {grading.kind === 'pending' && <p className="pending-note">Grader pending: {grading.reason}</p>}
-      <div className="question-actions"><button type="button" className="check-button" onClick={onCheck} disabled={busy || grading.kind === 'pending'}>{busy ? 'Checking…' : 'Check'}</button></div>
+      {grading.kind === 'cancelled' && <p className="cancelled-note">{grading.reason}</p>}
+      {grading.kind !== 'cancelled' && <div className="question-actions"><button type="button" className="check-button" onClick={onCheck} disabled={busy || grading.kind === 'pending'}>{busy ? 'Checking…' : 'Check'}</button></div>}
       {result && <QuestionResult result={result} />}
     </article>
   );
@@ -548,6 +717,7 @@ export default function App() {
   const selectedItem = papers.find((item) => item.key === selectedKey) || null;
   const paper = selectedItem?.config || null;
   const [selectedTracks, setSelectedTracks] = useState<string[]>(() => paper ? initialTracks(paper) : []);
+  const [activeContextQuestions, setActiveContextQuestions] = useState<Record<string, string>>({});
   const [answersByPaper, setAnswersByPaper] = useState<Record<string, PaperAnswers>>({});
   const [resultsByPaper, setResultsByPaper] = useState<Record<string, GradeMap>>({});
   const [fullResults, setFullResults] = useState<Record<string, PaperGrade | null>>({});
@@ -664,7 +834,34 @@ export default function App() {
         <div className="section-bar"><h2>Questions</h2><button type="button" className="check-all-button" disabled={busyAll || !!busyQuestion || visibleQuestions.length === 0} onClick={checkAll}>{busyAll ? 'Checking…' : 'Check all'}</button></div>
         <nav className="question-nav" aria-label="Jump to question">{sections.map((section) => <div className="question-nav-group" key={section.key}><strong>{section.label}</strong><div>{section.questions.map((question) => <a key={question.id} href={`#question-${question.id}`} className={results[question.id] ? `nav-${results[question.id].status}` : ''}>{jumpName(question)}</a>)}</div></div>)}</nav>
         {gradeError && <div className="global-error" role="alert">{gradeError}</div>}
-        <div className="questions-list">{sections.map((section) => <section className="paper-section" key={section.key}><h2>{section.label}</h2>{section.questions.map((question) => <Fragment key={`${paper.paper.id}:${question.id}`}>{contextStarts.get(question.id) && <ContextBlock context={contextStarts.get(question.id)!} />}<QuestionCard question={question} selectedLanguage={selectedLanguage} paperSource={paper.paper.source} values={answers[question.id] || {}} result={results[question.id]} busy={busyAll || !!busyQuestion} onAnswer={(blankId, value) => changeAnswer(question.id, blankId, value)} onCheck={() => checkOne(question)} /></Fragment>)}</section>)}</div>
+        <div className="questions-list">{sections.map((section) => <section className="paper-section" key={section.key}>
+          <h2>{section.label}</h2>
+          {section.questions.map((question) => {
+            const start = contextStarts.get(question.id);
+            const context = paper.contexts?.find((item) => item.id === question.contextId);
+            const shared = context ? contextCode(context, selectedLanguage) : null;
+            const markers = new Set([...shared?.source.matchAll(/{{([A-Za-z0-9][A-Za-z0-9._-]*)}}/g) ?? []].map((match) => match[1]));
+            const answerSet = context?.answerSets?.find((item) => item.questionId === question.id);
+            const sharedCode = question.blanks.length > 0 && (answerSet
+              ? question.blanks.every((blank) => Object.values(answerSet.bindings).includes(blank.id))
+              : question.blanks.every((blank) => markers.has(blank.id)));
+            return <Fragment key={`${paper.paper.id}:${question.id}`}>
+              {start && <ContextBlock context={start} questions={paper.questions.filter((item) => item.contextId === start.id)} answers={answers}
+                selectedLanguage={selectedLanguage} activeQuestionId={activeContextQuestions[`${paper.paper.id}:${start.id}`]}
+                onSelectAnswerSet={(questionId) => setActiveContextQuestions((all) => ({ ...all, [`${paper.paper.id}:${start.id}`]: questionId }))}
+                onAnswer={changeAnswer} />}
+              <QuestionCard question={question} selectedLanguage={selectedLanguage} sharedCode={sharedCode} paperSource={paper.paper.source}
+                values={answers[question.id] || {}} result={results[question.id]} busy={busyAll || !!busyQuestion}
+                onEditShared={sharedCode && context ? () => {
+                  if (answerSet) setActiveContextQuestions((all) => ({ ...all, [`${paper.paper.id}:${context.id}`]: question.id }));
+                  const element = document.getElementById(`context-${context.id}`);
+                  if (element instanceof HTMLDetailsElement) element.open = true;
+                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } : undefined}
+                onAnswer={(blankId, value) => changeAnswer(question.id, blankId, value)} onCheck={() => checkOne(question)} />
+            </Fragment>;
+          })}
+        </section>)}</div>
         {visibleQuestions.length === 0 && <div className="empty-state">There are no questions in the selected sections.</div>}
       </> : <div className="welcome-state"><h1>No paper selected</h1><p>Import a paper JSON file to begin.</p></div>}
     </main>

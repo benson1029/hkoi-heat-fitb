@@ -15,7 +15,7 @@
   "tracks": [
     {
       "id": "paper1",
-      "label": "Paper 1 · compulsory",
+      "label": "Paper 1",
       "selection": "required"
     },
     {
@@ -40,7 +40,29 @@
     {
       "id": "p1-q1-matrix",
       "track": "paper1",
-      "markdown": "Consider the following program:"
+      "markdown": "Consider the following program:",
+      "displayCode": {
+        "python": "a = [\n    [1, 2, 3, 4],\n    [5, 6, 7, 8],\n    [9, 10, 11, 12],\n    [13, 14, 15, 16]\n]\n\nfor i in range(4):\n    for j in range(4):\n        print(a[{{index1}}][{{index2}}],\n              end=\" \")\n\n    print()",
+        "cpp": "vector<vector<int>> a = {\n    {1, 2, 3, 4},\n    {5, 6, 7, 8},\n    {9, 10, 11, 12},\n    {13, 14, 15, 16}\n};\n\nint main() {\n    for (int i = 0; i < 4; ++i) {\n        for (int j = 0; j < 4; ++j) {\n            cout << a[{{index1}}][{{index2}}]\n                 << \" \";\n        }\n        cout << endl;\n    }\n}"
+      },
+      "answerSets": [
+        {
+          "questionId": "paper1-g",
+          "label": "(a) · G",
+          "bindings": {
+            "index1": "G1",
+            "index2": "G2"
+          }
+        },
+        {
+          "questionId": "paper1-h",
+          "label": "(b) · H",
+          "bindings": {
+            "index1": "H1",
+            "index2": "H2"
+          }
+        }
+      ]
     },
     {
       "id": "py-q1-box",
@@ -73,7 +95,7 @@
       "id": "paper1-a",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 1, Blank A",
-      "title": "Section B, Question 1",
+      "title": "Paper 1, Section B, Question 1",
       "prompt": {
         "en": "There is a screen and two buttons in front of you. Initially, the screen shows the number 0. You can perform the following actions in any arbitrary order:\n\n- Click the red button: Increase the number on the screen by 1.\n- Click the blue button: Multiply the number on the screen by 3.\n\nAt least how many button clicks are required such that the screen shows the number 330?"
       },
@@ -101,7 +123,7 @@
       "id": "paper1-b",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 2, Blank B",
-      "title": "Section B, Question 2",
+      "title": "Paper 1, Section B, Question 2",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -133,7 +155,7 @@
       "id": "paper1-c",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 3, Blank C",
-      "title": "Section B, Question 3",
+      "title": "Paper 1, Section B, Question 3",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -165,7 +187,7 @@
       "id": "paper1-d",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 4, Blank D",
-      "title": "Section B, Question 4",
+      "title": "Paper 1, Section B, Question 4",
       "prompt": {
         "en": "12 seats are arranged around a circular table, with each accommodating at most one person. In how many ways can people be seated, so that every 6 consecutive seats contains exactly 4 occupied seats? Two seating arrangements are considered different if and only if there is at least one seat that is occupied in one arrangement but empty in the other."
       },
@@ -193,7 +215,7 @@
       "id": "paper1-e",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 5, Blank E",
-      "title": "Section B, Question 5",
+      "title": "Paper 1, Section B, Question 5",
       "prompt": {
         "en": "Given an array $A = [6, 0, -8, 4, 8, 6, -4, 2]$. How many pairs $(L, R)$ are there, such that $0 \\le L \\le R \\le 7$ and sum of elements in the subarray $A[L], A[L + 1], \\ldots, A[R]$ is between 10 and 14, inclusive? For example, $(3, 4)$ is a valid pair, since the sum of $A[3]$ and $A[4]$ is 12, while $(1, 3)$ is not a valid pair, since the sum of $A[1]$, $A[2]$ and $A[3]$ is -4."
       },
@@ -221,7 +243,7 @@
       "id": "paper1-f",
       "track": "paper1",
       "printedRef": "Paper 1, Section B, Question 6, Blank F",
-      "title": "Section B, Question 6",
+      "title": "Paper 1, Section B, Question 6",
       "prompt": {
         "en": "Complete the program f(a, b, c) so that, for integers 1 ≤ a, b, c ≤ 3, it returns True (C++: true) if and only if a, b, c are either all the same or all different."
       },
@@ -723,8 +745,8 @@
     {
       "id": "paper1-g",
       "track": "paper1",
-      "printedRef": "Paper 1, Section C, Question 1(a), Blank G1/G2",
-      "title": "Section C, Question 1(a)",
+      "printedRef": "Paper 1, Section C, Question 1(a), Blanks G1, G2",
+      "title": "Paper 1, Section C, Question 1(a)",
       "prompt": {
         "en": "Complete the program so that it outputs the following:\n\n```text\n13 9 5 1\n14 10 6 2\n15 11 7 3\n16 12 8 4\n```"
       },
@@ -778,8 +800,8 @@
     {
       "id": "paper1-h",
       "track": "paper1",
-      "printedRef": "Paper 1, Section C, Question 1(b), Blank H1/H2",
-      "title": "Section C, Question 1(b)",
+      "printedRef": "Paper 1, Section C, Question 1(b), Blanks H1, H2",
+      "title": "Paper 1, Section C, Question 1(b)",
       "prompt": {
         "en": "Complete the program so that it outputs the following:\n\n```text\n1 3 1 3\n1 3 1 3\n5 7 5 7\n5 7 5 7\n```"
       },
@@ -834,7 +856,7 @@
       "id": "paper1-i",
       "track": "paper1",
       "printedRef": "Paper 1, Section C, Question 2(a), Blank I",
-      "title": "Section C, Question 2(a)",
+      "title": "Paper 1, Section C, Question 2(a)",
       "prompt": {
         "en": "What is the minimum number of edges you must remove from the graph, such that it is impossible to walk from A to E passing through exactly 5 edges?"
       },
@@ -995,7 +1017,7 @@
       "id": "paper1-j",
       "track": "paper1",
       "printedRef": "Paper 1, Section C, Question 2(b), Blank J",
-      "title": "Section C, Question 2(b)",
+      "title": "Paper 1, Section C, Question 2(b)",
       "prompt": {
         "en": "What is the minimum number of edges you must remove from the graph, such that it is impossible to walk from A to E passing through exactly 6 edges?"
       },
@@ -1156,7 +1178,7 @@
       "id": "paper1-k",
       "track": "paper1",
       "printedRef": "Paper 1, Section C, Question 2(c), Blank K",
-      "title": "Section C, Question 2(c)",
+      "title": "Paper 1, Section C, Question 2(c)",
       "prompt": {
         "en": "What is the minimum number of edges you must remove from the graph, such that it is impossible to walk from A to E passing through exactly 9 edges?"
       },
@@ -1317,7 +1339,7 @@
       "id": "python-a",
       "track": "python",
       "printedRef": "Paper 2 (Python), Section B, Question 1, Blank A",
-      "title": "Section B, Question 1",
+      "title": "Paper 2 (Python), Section B, Question 1",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -1348,7 +1370,7 @@
       "id": "python-b",
       "track": "python",
       "printedRef": "Paper 2 (Python), Section B, Question 2, Blank B",
-      "title": "Section B, Question 2",
+      "title": "Paper 2 (Python), Section B, Question 2",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -1379,7 +1401,7 @@
       "id": "python-c",
       "track": "python",
       "printedRef": "Paper 2 (Python), Section B, Question 3, Blank C",
-      "title": "Section B, Question 3",
+      "title": "Paper 2 (Python), Section B, Question 3",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -1410,7 +1432,7 @@
       "id": "python-d",
       "track": "python",
       "printedRef": "Paper 2 (Python), Section B, Question 4, Blank D",
-      "title": "Section B, Question 4",
+      "title": "Paper 2 (Python), Section B, Question 4",
       "prompt": {
         "en": "Complete the program such that it outputs 721398."
       },
@@ -1452,7 +1474,7 @@
       "id": "python-e",
       "track": "python",
       "printedRef": "Paper 2 (Python), Section B, Question 5, Blank E",
-      "title": "Section B, Question 5",
+      "title": "Paper 2 (Python), Section B, Question 5",
       "prompt": {
         "en": "Complete the function duration(a_h, a_m, b_h, b_m), such that given four non-negative integers a_h, a_m, b_h and b_m, the function returns the time difference of a_h:a_m and b_h:b_m (in HHMM format). It is guaranteed that 0 ≤ a_h, b_h ≤ 23, 0 ≤ a_m, b_m ≤ 59, and a_h:a_m is earlier than b_h:b_m in a day.\n\nFor example, duration(10, 30, 14, 15) should return 345 and duration(7, 15, 20, 45) should return 1330."
       },
@@ -1579,7 +1601,7 @@
       "id": "python-f",
       "track": "python",
       "printedRef": "Paper 2 (Python), Section B, Question 6, Blank F",
-      "title": "Section B, Question 6",
+      "title": "Paper 2 (Python), Section B, Question 6",
       "prompt": {
         "en": "Complete the program such that it outputs HKOI."
       },
@@ -1621,7 +1643,7 @@
       "id": "python-g",
       "track": "python",
       "printedRef": "Paper 2 (Python), Section C, Question 1(a), Blank G",
-      "title": "Section C, Question 1(a)",
+      "title": "Paper 2 (Python), Section C, Question 1(a)",
       "prompt": {
         "en": "Given a box, represented by a list X of length K. Complete the function cumulative_count(X) that modifies the list X, such that X[i] is the number of balls inside the box with written number not exceeding i for all 0 ≤ i < K. Assume 1 ≤ K ≤ 10 and 0 ≤ X[i] ≤ 1000 for all i."
       },
@@ -1772,7 +1794,7 @@
       "id": "python-h",
       "track": "python",
       "printedRef": "Paper 2 (Python), Section C, Question 1(b), Blank H",
-      "title": "Section C, Question 1(b)",
+      "title": "Paper 2 (Python), Section C, Question 1(b)",
       "prompt": {
         "en": "Complete the function prize_count(A, B) such that it returns a list C, where C[i] contains the number of ways Alice can pick balls to get prize i for all 0 ≤ i < K. Assume 1 ≤ K ≤ 10, 0 ≤ A[i], B[i] ≤ 1000 for all i, and cumulative_count(X) has been correctly implemented."
       },
@@ -1916,7 +1938,7 @@
       "id": "python-i",
       "track": "python",
       "printedRef": "Paper 2 (Python), Section C, Question 2(a), Blank I",
-      "title": "Section C, Question 2(a)",
+      "title": "Paper 2 (Python), Section C, Question 2(a)",
       "prompt": {
         "en": "Her first attempt is as follows: Consider the function f(x, y, z) below. The function checks each of the three conditions once, and returns 1 immediately if some condition is met. Finally, the function returns 0 if none of the conditions is met. Complete the program such that the function f(x, y, z) returns the correct value for all 0 ≤ x, y, z ≤ 1."
       },
@@ -2048,8 +2070,8 @@
     {
       "id": "python-j",
       "track": "python",
-      "printedRef": "Paper 2 (Python), Section C, Question 2(b), Blank J1/J2",
-      "title": "Section C, Question 2(b)",
+      "printedRef": "Paper 2 (Python), Section C, Question 2(b), Blanks J1, J2",
+      "title": "Paper 2 (Python), Section C, Question 2(b)",
       "prompt": {
         "en": "Let’s assume f(x, y, z) is implemented correctly. Complete the function g(x, y, z), such that f(x, y, z) = g(x, y, z) for 0 ≤ x, y, z ≤ 1."
       },
@@ -2186,7 +2208,7 @@
       "id": "cpp-k",
       "track": "cpp",
       "printedRef": "Paper 2 (C++), Section B, Question 1, Blank K",
-      "title": "Section B, Question 1",
+      "title": "Paper 2 (C++), Section B, Question 1",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -2217,7 +2239,7 @@
       "id": "cpp-l",
       "track": "cpp",
       "printedRef": "Paper 2 (C++), Section B, Question 2, Blank L",
-      "title": "Section B, Question 2",
+      "title": "Paper 2 (C++), Section B, Question 2",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -2248,7 +2270,7 @@
       "id": "cpp-m",
       "track": "cpp",
       "printedRef": "Paper 2 (C++), Section B, Question 3, Blank M",
-      "title": "Section B, Question 3",
+      "title": "Paper 2 (C++), Section B, Question 3",
       "prompt": {
         "en": "What is the output of the following program?"
       },
@@ -2279,7 +2301,7 @@
       "id": "cpp-n",
       "track": "cpp",
       "printedRef": "Paper 2 (C++), Section B, Question 4, Blank N",
-      "title": "Section B, Question 4",
+      "title": "Paper 2 (C++), Section B, Question 4",
       "prompt": {
         "en": "Complete the following program so that it outputs hkoj-uoj-joj."
       },
@@ -2321,7 +2343,7 @@
       "id": "cpp-o",
       "track": "cpp",
       "printedRef": "Paper 2 (C++), Section B, Question 5, Blank O",
-      "title": "Section B, Question 5",
+      "title": "Paper 2 (C++), Section B, Question 5",
       "prompt": {
         "en": "Let x be an integer between 1 and 10 inclusive. Complete the following function IsValidTyphoonSignal(x) such that it returns true if and only if x is a valid typhoon signal. The valid typhoon signals are 1, 3, 8, 9 and 10, while other numbers are invalid."
       },
@@ -2457,7 +2479,7 @@
       "id": "cpp-p",
       "track": "cpp",
       "printedRef": "Paper 2 (C++), Section B, Question 6, Blank P",
-      "title": "Section B, Question 6",
+      "title": "Paper 2 (C++), Section B, Question 6",
       "prompt": {
         "en": "Let a[0..n-1] be an array of integers sorted in ascending order. Assume that f(a, x) is a function that returns the smallest index i such that a[i] ≥ x, or returns n if no such index exists.\n\nComplete the function g(a, x) so that it returns |x - a[0]| + |x - a[1]| + ··· + |x - a[n-1]|. You may assume that no integer overflow occurs.\n\nHere, |x| is defined as the absolute value of x: if x ≥ 0, then |x| = x; if x < 0, then |x| = -x. For example, |3| = 3, |-1| = 1."
       },
@@ -2586,7 +2608,7 @@
       "id": "cpp-q",
       "track": "cpp",
       "printedRef": "Paper 2 (C++), Section C, Question 1(a), Blank Q",
-      "title": "Section C, Question 1(a)",
+      "title": "Paper 2 (C++), Section C, Question 1(a)",
       "prompt": {
         "en": "Write down the return value of f(7, 3)."
       },
@@ -2617,8 +2639,8 @@
     {
       "id": "cpp-r",
       "track": "cpp",
-      "printedRef": "Paper 2 (C++), Section C, Question 1(b), Blank R1/R2",
-      "title": "Section C, Question 1(b)",
+      "printedRef": "Paper 2 (C++), Section C, Question 1(b), Blanks R1, R2",
+      "title": "Paper 2 (C++), Section C, Question 1(b)",
       "prompt": {
         "en": "Without calling the function f(n, k), complete the following function g(n, k), so that g(n, k) has the same return value as f(n, k) for 1 ≤ k ≤ n ≤ 30."
       },
@@ -2769,7 +2791,7 @@
       "id": "cpp-s",
       "track": "cpp",
       "printedRef": "Paper 2 (C++), Section C, Question 2(a), Blank S",
-      "title": "Section C, Question 2(a)",
+      "title": "Paper 2 (C++), Section C, Question 2(a)",
       "prompt": {
         "en": "Write down the return value of r(1122444669, 6)."
       },
@@ -2801,7 +2823,7 @@
       "id": "cpp-t",
       "track": "cpp",
       "printedRef": "Paper 2 (C++), Section C, Question 2(b), Blank T",
-      "title": "Section C, Question 2(b)",
+      "title": "Paper 2 (C++), Section C, Question 2(b)",
       "prompt": {
         "en": "Complete the following function rnd(x, n), so that rnd(x, n) returns the value of x rounded off to the nearest 10ⁿ. It is guaranteed that 0 ≤ x ≤ 10⁹ and 0 ≤ n ≤ 9. You may use the variable p and/or the function r."
       },

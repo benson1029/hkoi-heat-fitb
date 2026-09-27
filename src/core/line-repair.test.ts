@@ -18,3 +18,11 @@ it('runs the program after replacing only the chosen printed line', async () => 
   expect((await gradeQuestion(question, { T1: '10', T2: 'int x = 2;' })).status).toBe('fail');
   expect((await gradeQuestion(question, { T1: '12', T2: 'int x = 3;' })).status).toBe('fail');
 });
+
+it('wraps a numbered segment and can append to its selected line', async () => {
+  const segmented: Question = { ...question, grading: {
+    ...question.grading as Extract<Question['grading'], { kind: 'cpp-line-repair' }>,
+    firstLine: 51, source: 'int x = 1;', prefixSource: 'int main() {\n', suffixSource: '\ncout << x;\n}', mode: 'append'
+  } };
+  expect((await gradeQuestion(segmented, { T1: '51', T2: ' x++;' })).status).toBe('pass');
+});

@@ -1,0 +1,894 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2020-21-junior",
+    "season": "2020/21",
+    "division": "junior",
+    "title": "HKOI 2020/21 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2021hj_sol.pdf. C++ is used when printed, otherwise C; Pascal omitted."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "questions": [
+    {
+      "id": "section-b-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Consider the following function. Write down the return values of g(426), g(825) and g(1000) (true/false)."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "A1"
+        },
+        {
+          "id": "A2"
+        },
+        {
+          "id": "A3"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A1": [
+            "true"
+          ],
+          "A2": [
+            "true"
+          ],
+          "A3": [
+            "false"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "c": "bool g(int x){int c=0;while(x>0){c=c+x%10;x=x/10;}return(c%3==0);}"
+      }
+    },
+    {
+      "id": "section-b-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank B",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Write down the number of possible integer x such that 1 ≤ x ≤ 1000 and g(x) returns false."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "667"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "c": "bool g(int x){int c=0;while(x>0){c=c+x%10;x=x/10;}return(c%3==0);}"
+      }
+    },
+    {
+      "id": "section-b-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Fill in each of the numbers 0, 1, 2 three times in the table below such that each row and column meets the target sum. (The number at the leftmost is the target sum for each row; the number at the top is the target sum for each column.)\n\n| Target sum | 1 | 5 | 3 |\n|---|---:|---:|---:|\n| 5 |  |  |  |\n| 3 |  |  |  |\n| 1 |  |  |  |\n\nEnter the nine values in row-major order, separated by spaces or commas."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "C"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "matrix-sums",
+        "answerBlank": "C",
+        "values": [
+          0,
+          1,
+          2
+        ],
+        "each": 3,
+        "rowSums": [
+          5,
+          3,
+          1
+        ],
+        "colSums": [
+          1,
+          5,
+          3
+        ]
+      }
+    },
+    {
+      "id": "section-b-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank D",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Fill in each of the numbers 121, 112, 102 three times in the table below such that each row and column meets the target sum.\n\n| Target sum | 316 | 335 | 354 |\n|---|---:|---:|---:|\n| 316 |  |  |  |\n| 354 |  |  |  |\n| 335 |  |  |  |\n\nEnter the nine values in row-major order, separated by spaces or commas."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "matrix-sums",
+        "answerBlank": "D",
+        "values": [
+          121,
+          112,
+          102
+        ],
+        "each": 3,
+        "rowSums": [
+          316,
+          354,
+          335
+        ],
+        "colSums": [
+          316,
+          335,
+          354
+        ]
+      }
+    },
+    {
+      "id": "section-b-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Complete the following program such that its output is n."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "char q[11]={'h','k','o','i','2','0','n','o','v','2','1'};int a,b;int main(){a=0;b=0;while(b<11){a=a+1;b={{E}};}cout<<q[a];}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "character-n",
+            "maxSteps": 10000,
+            "expected": {
+              "stdout": "n"
+            }
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "char q[11]={'h','k','o','i','2','0','n','o','v','2','1'};int a,b;int main(){a=0;b=0;while(b<11){a=a+1;b={{E}};}cout<<q[a];}"
+      }
+    },
+    {
+      "id": "section-b-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Find a 10-digit number where the first digit is how many zeros in the number, the second digit is how many 1s in the number etc. until the tenth digit which is how many 9s in the number. For example, 1000009000 means that there should be exactly one 0 and nine 6s in this number, which is obviously incorrect."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F",
+          "allowedChars": "0123456789"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program-input",
+        "answerBlank": "F",
+        "target": {
+          "language": "cpp",
+          "source": "int main(){string s;cin>>s;if(s.length()!=10){cout<<0;return 0;}int count[10]={0};for(int i=0;i<10;i++){if(s[i]<'0'||s[i]>'9'){cout<<0;return 0;}count[s[i]-'0']++;}for(int i=0;i<10;i++)if(count[i]!=s[i]-'0'){cout<<0;return 0;}cout<<1;}",
+          "harness": {
+            "kind": "program"
+          }
+        },
+        "expected": {
+          "stdout": "1"
+        },
+        "maxSteps": 5000
+      }
+    },
+    {
+      "id": "section-b-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank G",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "SwapInt(x, y) and SwapChar(x, y) are procedures that swap the values of x and y. Consider the following program. If the input is ABBBAB, what is the output?"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 6
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "G": [
+            "125346"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "string s;int a[50],n,i,j;void SwapInt(int& x,int& y){int t;t=x;x=y;y=t;}void SwapChar(char& x,char& y){char t;t=x;x=y;y=t;}int main(){cin>>s;n=s.length();for(i=0;i<=n-1;i++)a[i]=i+1;for(i=0;i<=n-1;i++)for(j=i;j<=n-2;j++)if(s[j]>s[j+1]){SwapInt(a[j],a[j+1]);SwapChar(s[j],s[j+1]);}for(i=0;i<=n-1;i++)cout<<a[i];return 0;}"
+      }
+    },
+    {
+      "id": "section-b-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Give an input with A and B only, such that the program outputs 246135."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 6,
+          "allowedChars": "AB"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 13,
+        "note": "Grading source inlines the printed SwapInt/SwapChar reference swaps because the checked C++ subset does not model scalar reference parameters."
+      },
+      "grading": {
+        "kind": "program-input",
+        "answerBlank": "H",
+        "target": {
+          "language": "cpp",
+          "source": "int main(){string s;cin>>s;int a[50],n=s.length();for(int i=0;i<n;i++)a[i]=i+1;for(int i=0;i<n;i++)for(int j=i;j<=n-2;j++)if(s[j]>s[j+1]){int t=a[j];a[j]=a[j+1];a[j+1]=t;char c=s[j];s[j]=s[j+1];s[j+1]=c;}for(int i=0;i<n;i++)cout<<a[i];}",
+          "harness": {
+            "kind": "program"
+          }
+        },
+        "expected": {
+          "stdout": "246135"
+        },
+        "maxSteps": 5000
+      },
+      "displayCode": {
+        "cpp": "string s;int a[50],n,i,j;void SwapInt(int& x,int& y){int t;t=x;x=y;y=t;}void SwapChar(char& x,char& y){char t;t=x;x=y;y=t;}int main(){cin>>s;n=s.length();for(i=0;i<=n-1;i++)a[i]=i+1;for(i=0;i<=n-1;i++)for(j=i;j<=n-2;j++)if(s[j]>s[j+1]){SwapInt(a[j],a[j+1]);SwapChar(s[j],s[j+1]);}for(i=0;i<=n-1;i++)cout<<a[i];return 0;}"
+      }
+    },
+    {
+      "id": "section-b-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank I",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "The above IsPrime function tries to check whether x is a prime. A prime is any integer greater than 1 that is only divisible by 1 and itself. However, there is a bug in the function. For how many x where 1 ≤ x ≤ 100 does the function return a wrong answer?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "4"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "41 bool IsPrime (int x) {\n42 int i;\n43 bool a;\n44 a = true;\n45 if (x == 1)\n46 a = false;\n47 i = 2;\n48 while (i * i < x)\n49 {\n50 if (x % i == 0)\n51 a = false;\n52 i++;\n53 }\n54 return a;\n55 }\n56 \n57 "
+      }
+    },
+    {
+      "id": "section-b-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank J",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "The bug can be fixed by changing exactly one line. Find the line and correct it so that the function correctly determines whether x is a prime for all 1 ≤ x ≤ 10⁹. Enter the line number and correction."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "J1",
+          "maxChars": 2
+        },
+        {
+          "id": "J2",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "cpp-line-repair",
+        "lineBlank": "J1",
+        "replacementBlank": "J2",
+        "firstLine": 41,
+        "source": "bool IsPrime (int x) {\nint i;\nbool a;\na = true;\nif (x == 1)\na = false;\ni = 2;\nwhile (i * i < x)\n{\nif (x % i == 0)\na = false;\ni++;\n}\nreturn a;\n}\n\n",
+        "harness": {
+          "kind": "call",
+          "function": "IsPrime"
+        },
+        "cases": [
+          {
+            "id": "x-1",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "x-2",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "x-3",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "x-4",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "x-5",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "x-7",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              7
+            ]
+          },
+          {
+            "id": "x-9",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "x-11",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              11
+            ]
+          },
+          {
+            "id": "x-16",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              16
+            ]
+          },
+          {
+            "id": "x-25",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              25
+            ]
+          },
+          {
+            "id": "x-36",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              36
+            ]
+          },
+          {
+            "id": "x-49",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              49
+            ]
+          },
+          {
+            "id": "x-97",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              97
+            ]
+          },
+          {
+            "id": "x-121",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              121
+            ]
+          },
+          {
+            "id": "x-169",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              169
+            ]
+          },
+          {
+            "id": "x-997",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              997
+            ]
+          },
+          {
+            "id": "x-1009",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 1
+            },
+            "args": [
+              1009
+            ]
+          },
+          {
+            "id": "x-1024",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              1024
+            ]
+          },
+          {
+            "id": "x-9991",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              9991
+            ]
+          },
+          {
+            "id": "x-10000",
+            "maxSteps": 50000,
+            "expected": {
+              "returnValue": 0
+            },
+            "args": [
+              10000
+            ]
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "41 bool IsPrime (int x) {\n42 int i;\n43 bool a;\n44 a = true;\n45 if (x == 1)\n46 a = false;\n47 i = 2;\n48 while (i * i < x)\n49 {\n50 if (x % i == 0)\n51 a = false;\n52 i++;\n53 }\n54 return a;\n55 }\n56 \n57 "
+      }
+    },
+    {
+      "id": "section-b-k",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank K",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Complete the program so it outputs this 9×9 pattern:\n\n```text\n##.......\n###......\n.###.....\n..###....\n...###...\n....###..\n.....###.\n......###\n.......##\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int n,i,j;int main(){n=9;for(i=1;i<=n;i++){for(j=1;j<=n;j++)if({{K}})cout<<'#';else cout<<'.';cout<<endl;}return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "pattern",
+            "maxSteps": 10000,
+            "expected": {
+              "stdout": "##.......\n###......\n.###.....\n..###....\n...###...\n....###..\n.....###.\n......###\n.......##\n"
+            }
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int n,i,j;int main(){n=9;for(i=1;i<=n;i++){for(j=1;j<=n;j++)if({{K}})cout<<'#';else cout<<'.';cout<<endl;}return 0;}"
+      }
+    },
+    {
+      "id": "section-b-l",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank L",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Complete the program so it outputs this 9×9 pattern:\n\n```text\n.......##\n......###\n.....###.\n....###..\n...###...\n..###....\n.###.....\n###......\n##.......\n```"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "L",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int n,i,j;int main(){n=9;for(i=1;i<=n;i++){for(j=1;j<=n;j++)if({{L}})cout<<'#';else cout<<'.';cout<<endl;}return 0;}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "any",
+        "cases": [
+          {
+            "id": "pattern",
+            "maxSteps": 10000,
+            "expected": {
+              "stdout": ".......##\n......###\n.....###.\n....###..\n...###...\n..###....\n.###.....\n###......\n##.......\n"
+            }
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int n,i,j;int main(){n=9;for(i=1;i<=n;i++){for(j=1;j<=n;j++)if({{L}})cout<<'#';else cout<<'.';cout<<endl;}return 0;}"
+      }
+    },
+    {
+      "id": "section-b-m",
+      "track": "section-b",
+      "printedRef": "Section B, Question 8, Blank M",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "In International Chess, a bishop can move diagonally. In this question, we suppose it can only move to a grid with its edge touching the grid it is located in. You can use commands ↘ (south-east), ↗ (north-east), ↙ (south-west), and ↖ (north-west). [command]n repeats a command n times, where n is from 1 to 9. Commands are executed from left to right. If a fundamental command would move the bishop off the board, it is skipped. Suppose the bishop is initially at the top-left cell of the chessboard. Write a command to make the bishop visit each white grid in the chessboard at least once."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "M",
+          "maxChars": 13
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2021hj.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2021hja.pdf",
+        "page": 17
+      },
+      "grading": {
+        "kind": "robot-grid",
+        "answerBlank": "M",
+        "dialect": {
+          "commands": {
+            "↘": [
+              1,
+              1
+            ],
+            "↗": [
+              1,
+              -1
+            ],
+            "↙": [
+              -1,
+              1
+            ],
+            "↖": [
+              -1,
+              -1
+            ]
+          },
+          "repeatSyntax": "bracket-number",
+          "maxRepeat": 9,
+          "invalidMove": "ignore"
+        },
+        "worlds": [
+          {
+            "id": "white-squares",
+            "width": 8,
+            "height": 8,
+            "starts": [
+              [
+                0,
+                0
+              ]
+            ],
+            "blocked": [],
+            "requiredVisited": [
+              [
+                0,
+                0
+              ],
+              [
+                2,
+                0
+              ],
+              [
+                4,
+                0
+              ],
+              [
+                6,
+                0
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                3,
+                1
+              ],
+              [
+                5,
+                1
+              ],
+              [
+                7,
+                1
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                2,
+                2
+              ],
+              [
+                4,
+                2
+              ],
+              [
+                6,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                3
+              ],
+              [
+                5,
+                3
+              ],
+              [
+                7,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                4,
+                4
+              ],
+              [
+                6,
+                4
+              ],
+              [
+                1,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                5,
+                5
+              ],
+              [
+                7,
+                5
+              ],
+              [
+                0,
+                6
+              ],
+              [
+                2,
+                6
+              ],
+              [
+                4,
+                6
+              ],
+              [
+                6,
+                6
+              ],
+              [
+                1,
+                7
+              ],
+              [
+                3,
+                7
+              ],
+              [
+                5,
+                7
+              ],
+              [
+                7,
+                7
+              ]
+            ],
+            "maxMoves": 1000
+          }
+        ]
+      }
+    }
+  ]
+}

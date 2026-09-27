@@ -108,12 +108,29 @@ describe('checked C/C++ subset', () => {
     expect(call(source, 'f', [1, 2, 3])).toMatchObject({ kind: 'ok', observation: { returnValue: 1 } });
     expect(call(source, 'f', [1, 1, 2])).toMatchObject({ kind: 'ok', observation: { returnValue: 0 } });
   });
+  it('supports functional integer casts in legacy printed code', () => {
+    expect(call("int f(){char c='7';return int(c)-int('0');}")).toMatchObject({ kind: 'ok', observation: { returnValue: 7 } });
+  });
+  it('initializes and prints a C char array from a string literal', () => {
+    expect(program('char s[8]="pace";int main(){printf("%s",s);return 0;}', '', 1000))
+      .toMatchObject({ kind: 'ok', observation: { stdout: 'pace' } });
+    expect(program('char s[3]="pace";int main(){printf("%s",s);}', '', 1000)).toMatchObject({ kind: 'compile-error' });
+  });
+  it('calls a declared max helper before the built-in max', () => {
+    expect(call('int max(int i,int j){return i+j+10;}int f(){return max(1,2);}', 'f'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 13 } });
+  });
+  it('prints a square root with the printed C float format', () => {
+    expect(program('int main(){int x=2;printf("%.3f",sqrt(x));}', '', 1000))
+      .toMatchObject({ kind: 'ok', observation: { stdout: '1.414' } });
+  });
   it('constructs vector<int>, copies vector parameters, and checks indices', () => {
     const source = 'int f(vector<int> a){int n=a.size();a[0]=9;return a[0]+a[n-1];}';
     expect(call(source, 'f', [[1, 2, 3]])).toMatchObject({ kind: 'ok', observation: { returnValue: 12 } });
     expect(call('int f(){vector<int>a(3,4);return a[2];}')).toMatchObject({ kind: 'ok', observation: { returnValue: 4 } });
     expect(call('int f(){std::vector<int>a={1,2};return a[2];}')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('bounds') });
-    expect(call('int f(){vector<int>a(10001);return 0;}')).toMatchObject({ kind: 'unsupported' });
+    expect(call('int f(){vector<int>a(16385);return 0;}')).toMatchObject({ kind: 'unsupported' });
+    expect(call('int f(){int a[10001];a[10000]=7;return a[10000];}')).toMatchObject({ kind: 'ok', observation: { returnValue: 7 } });
     expect(call('int f(vector<int>a){return a[0];}int g(){int a[1]={1};return f(a);}', 'g')).toMatchObject({ kind: 'compile-error' });
   });
   it('models size_t underflow and checked abs for the printed vector repair', () => {

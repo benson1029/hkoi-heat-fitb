@@ -1,0 +1,2746 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2015-16-junior",
+    "season": "2015/16",
+    "division": "junior",
+    "title": "HKOI 2015/16 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf"
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "collatz",
+      "track": "section-b",
+      "title": "Question 2",
+      "markdown": "The 3n + 1 conjecture (Collatz conjecture) is a famous open problem.",
+      "displayCode": {
+        "c": "scanf(\"%d\", &x);\nwhile ({{B}}) {\n    printf(\"%d, \", x);\n    if ({{C}})\n        x = x * 3 + 1;\n    else\n        {{D}};\n}\nprintf(\"1\");"
+      }
+    },
+    {
+      "id": "crosses",
+      "track": "section-b",
+      "title": "Question 6",
+      "markdown": "A “cross shape” is shown below.\n\n```text\n * \n***\n * \n```\n\nConsider the following grid. There are 2 cross shapes center at (2, 2) and (4, 4) respectively. (\".\" denotes an empty grid cell, (x, y) denotes the grid in row x and column y)\n\n```text\n.*...\n***..\n.*.*.\n..***\n...*.\n```\n\nWe call 2 cross shapes touch each other if they share the same corner but no edge. We call 2 cross shapes connected if they share the same edge. Therefore, the above cross shapes touch each other.\n\nConsider the following program segment, (a, b) stored the coordinate of the center of a cross shape, (x, y) stored the coordinate of center of another cross shape.",
+      "displayCode": {
+        "c": "scanf(\"%d%d%d%d\", &a, &b, &x, &y);\nif ({{J}})\nprintf(\"They are connected\");\nif ({{K}})\nprintf(\"They touch each other\");"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "A",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Complete the following program such that it reads an integer input between 0 and 1000000 (inclusive) and outputs the number’s square root, corrected to 3 decimal places. For example, the program should output 1.414 when the input is 2, and output 3.000 when the input is 9."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "#include <stdio.h>\nint main() {\n    int x;\n    scanf(\"%d\", &x);\n    {{A}};\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "zero",
+            "stdin": "0",
+            "expected": {
+              "stdout": "0.000"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "two",
+            "stdin": "2",
+            "expected": {
+              "stdout": "1.414"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "nine",
+            "stdin": "9",
+            "expected": {
+              "stdout": "3.000"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "million",
+            "stdin": "1000000",
+            "expected": {
+              "stdout": "1000.000"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "ten",
+            "stdin": "10",
+            "expected": {
+              "stdout": "3.162"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\n#include <math.h>\nint main() {\n    int x;\n    scanf(\"%d\", &x);\n    {{A}};\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "B",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Complete the following program segment such that it reads x as the value of S0, and prints the sequence until the appearance of the first \"1\"."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int x;\nint main(){\nscanf(\"%d\", &x);\nwhile ({{B}}) {\n    printf(\"%d, \", x);\n    if (x%2==1)\n        x = x * 3 + 1;\n    else\n        x=x/2;\n}\nprintf(\"1\");\nreturn 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "six",
+            "stdin": "6",
+            "expected": {
+              "stdout": "6, 3, 10, 5, 16, 8, 4, 2, 1"
+            },
+            "maxSteps": 40000
+          },
+          {
+            "id": "one",
+            "stdin": "1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "seven",
+            "stdin": "7",
+            "expected": {
+              "stdout": "7, 22, 11, 34, 17, 52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1"
+            },
+            "maxSteps": 40000
+          }
+        ]
+      },
+      "contextId": "collatz"
+    },
+    {
+      "id": "C",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Complete the following program segment such that it reads x as the value of S0, and prints the sequence until the appearance of the first \"1\"."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int x;\nint main(){\nscanf(\"%d\", &x);\nwhile (x>1) {\n    printf(\"%d, \", x);\n    if ({{C}})\n        x = x * 3 + 1;\n    else\n        x=x/2;\n}\nprintf(\"1\");\nreturn 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "six",
+            "stdin": "6",
+            "expected": {
+              "stdout": "6, 3, 10, 5, 16, 8, 4, 2, 1"
+            },
+            "maxSteps": 40000
+          },
+          {
+            "id": "one",
+            "stdin": "1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "seven",
+            "stdin": "7",
+            "expected": {
+              "stdout": "7, 22, 11, 34, 17, 52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1"
+            },
+            "maxSteps": 40000
+          }
+        ]
+      },
+      "contextId": "collatz"
+    },
+    {
+      "id": "D",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank D",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Complete the following program segment such that it reads x as the value of S0, and prints the sequence until the appearance of the first \"1\"."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int x;\nint main(){\nscanf(\"%d\", &x);\nwhile (x>1) {\n    printf(\"%d, \", x);\n    if (x%2==1)\n        x = x * 3 + 1;\n    else\n        {{D}};\n}\nprintf(\"1\");\nreturn 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "six",
+            "stdin": "6",
+            "expected": {
+              "stdout": "6, 3, 10, 5, 16, 8, 4, 2, 1"
+            },
+            "maxSteps": 40000
+          },
+          {
+            "id": "one",
+            "stdin": "1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "seven",
+            "stdin": "7",
+            "expected": {
+              "stdout": "7, 22, 11, 34, 17, 52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1"
+            },
+            "maxSteps": 40000
+          }
+        ]
+      },
+      "contextId": "collatz"
+    },
+    {
+      "id": "E",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Among the ten people, there are at most E programmers and at least F programmers."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "7"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "F",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank F",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Among the ten people, there are at most E programmers and at least F programmers."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "F": [
+            "4"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "GH",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blanks G, H",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Suppose array a (Pascal: a[1..n] of longint, C: int a[n]) contains distinct integers sorted in ascending order, integer n stores the size of array a and integer x stores the integer to find. The program below tries to implement binary search to check whether integer x exists in array a. However, the program contains an error that can be fixed by changing exactly one line. Find the line and correct it. You may assume variables l, r, mid are declared as int (Pascal: longint)."
+      },
+      "points": 3,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 2
+        },
+        {
+          "id": "H",
+          "maxChars": 18
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 11
+      },
+      "grading": {
+        "kind": "cpp-line-repair",
+        "language": "c",
+        "lineBlank": "G",
+        "replacementBlank": "H",
+        "correctLines": [
+          61
+        ],
+        "linePoints": 1,
+        "firstLine": 51,
+        "source": "l = 0;\nr = n - 1;\nwhile (l <= r)\n{\n    mid = (l + r) / 2;\n    if (a[mid] < x)\n        l = mid + 1;\n    else\n        r = mid - 1;\n}\nif (a[mid] == x)\n    printf(\"Found\");\nelse\n    printf(\"Not found\");",
+        "prefixSource": "int a[100];\nint n, x, l, r, mid;\nint main() {\n    scanf(\"%d%d\", &n, &x);\n    for (int t = 0; t < n; t++) scanf(\"%d\", &a[t]);\n",
+        "suffixSource": "\nreturn 0;\n}",
+        "cases": [
+          {
+            "id": "present-middle",
+            "stdin": "5 4 1 2 4 8 16",
+            "expected": {
+              "stdout": "Found"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "absent-between",
+            "stdin": "5 3 1 2 4 8 16",
+            "expected": {
+              "stdout": "Not found"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "above-maximum",
+            "stdin": "5 17 1 2 4 8 16",
+            "expected": {
+              "stdout": "Not found"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "below-minimum",
+            "stdin": "5 0 1 2 4 8 16",
+            "expected": {
+              "stdout": "Not found"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "empty",
+            "stdin": "0 3",
+            "expected": {
+              "stdout": "Not found"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "singleton-present",
+            "stdin": "1 7 7",
+            "expected": {
+              "stdout": "Found"
+            },
+            "maxSteps": 10000
+          },
+          {
+            "id": "singleton-absent",
+            "stdin": "1 8 7",
+            "expected": {
+              "stdout": "Not found"
+            },
+            "maxSteps": 10000
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "51 l = 0;\n52 r = n - 1;\n53 while (l <= r)\n54 {\n55 mid = (l + r) / 2;\n56 if (a[mid] < x)\n57 l = mid + 1;\n58 else\n59 r = mid - 1;\n60 }\n61 if (a[mid] == x)\n62 printf(\"Found\");\n63 else\n64 printf(\"Not found\");"
+      }
+    },
+    {
+      "id": "I",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blanks I1, I2",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "The following program attempts to output all factors of positive integer input x.\n\nI1. Write down a positive integer input x that is greater than 30, so that the program outputs all the factors of x correctly.\n\nI2. Write down a positive integer input x that is greater than 30, so that the program outputs all the factors of x incorrectly.\n\n2 marks are given only if both correct."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I1"
+        },
+        {
+          "id": "I2"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "prime-power-pair",
+        "correctBlank": "I1",
+        "incorrectBlank": "I2",
+        "minimum": 31,
+        "maximum": 99999
+      },
+      "displayCode": {
+        "c": "#include <stdio.h>\nint i, k, t, x;\nint main() {\nscanf(\"%d\", &x);\nk = x;\nprintf(\"1\\n\");\nif (x > 1) {\nfor (i = 2; i <= x; i++) {\nt = 1;\nwhile (k % i == 0) {\nk = k / i;\nt = t * i;\nprintf(\"%d\\n\", t);\n}\n}\n}\nreturn 0;\n}"
+      }
+    },
+    {
+      "id": "J",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank J",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the following blanks so that the program can correctly determine whether the cross shapes touch, connect or not. The program should output \"They touch each other\" if and only if they touch each other. The program should output \"They are connected\" if and only if they are connected. It is guaranteed that two crosses do not overlap. Note: You are allowed to use the abs function."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int check(int a,int b,int x,int y){return {{J}};}",
+            "harness": {
+              "kind": "call",
+              "function": "check"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "centers-0",
+            "args": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-1",
+            "args": [
+              0,
+              0,
+              3,
+              0
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-2",
+            "args": [
+              0,
+              0,
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-3",
+            "args": [
+              0,
+              0,
+              -2,
+              -2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-4",
+            "args": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-5",
+            "args": [
+              0,
+              0,
+              5,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-6",
+            "args": [
+              2,
+              3,
+              4,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-7",
+            "args": [
+              2,
+              3,
+              5,
+              3
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-8",
+            "args": [
+              2,
+              3,
+              6,
+              6
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "contextId": "crosses"
+    },
+    {
+      "id": "K",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank K",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete the following blanks so that the program can correctly determine whether the cross shapes touch, connect or not. The program should output \"They touch each other\" if and only if they touch each other. The program should output \"They are connected\" if and only if they are connected. It is guaranteed that two crosses do not overlap. Note: You are allowed to use the abs function."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 50
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int check(int a,int b,int x,int y){return {{K}};}",
+            "harness": {
+              "kind": "call",
+              "function": "check"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "centers-0",
+            "args": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-1",
+            "args": [
+              0,
+              0,
+              3,
+              0
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-2",
+            "args": [
+              0,
+              0,
+              2,
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-3",
+            "args": [
+              0,
+              0,
+              -2,
+              -2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-4",
+            "args": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-5",
+            "args": [
+              0,
+              0,
+              5,
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-6",
+            "args": [
+              2,
+              3,
+              4,
+              5
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-7",
+            "args": [
+              2,
+              3,
+              5,
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          },
+          {
+            "id": "centers-8",
+            "args": [
+              2,
+              3,
+              6,
+              6
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 2000
+          }
+        ]
+      },
+      "contextId": "crosses"
+    },
+    {
+      "id": "L",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank L",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Answer for L was given to the contestants: length(s) / strlen(s)"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "L": [
+            "strlen(s)"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "M",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank M",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "s is a string containing some English words separated by spaces. Complete the following program segment so that it prints out the acronym of s. The acronym of a string includes the first letter and all capital letters that immediately follow a space."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "M",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2016hje.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2016hja.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "dialect": "c99",
+            "source": "int check(char s[],int i){return {{M}};}",
+            "harness": {
+              "kind": "call",
+              "function": "check"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "word-0",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-1",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-2",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-3",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-4",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              5
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-5",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              6
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-6",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              7
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-7",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              8
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-8",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              9
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-9",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              10
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-10",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              11
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-11",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              12
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-12",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              13
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-13",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              14
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-14",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              15
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-15",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              16
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-16",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              17
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-17",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              18
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-18",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              19
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-19",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              20
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-20",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              21
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-21",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              22
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-22",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              23
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-23",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              24
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-24",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              25
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-25",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              26
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-26",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              27
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-27",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              28
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-28",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              29
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-29",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              30
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-30",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              31
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-31",
+            "args": [
+              [
+                72,
+                111,
+                110,
+                103,
+                32,
+                75,
+                111,
+                110,
+                103,
+                32,
+                79,
+                108,
+                121,
+                109,
+                112,
+                105,
+                97,
+                100,
+                32,
+                105,
+                110,
+                32,
+                73,
+                110,
+                102,
+                111,
+                114,
+                109,
+                97,
+                116,
+                105,
+                99,
+                115,
+                0
+              ],
+              32
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-32",
+            "args": [
+              [
+                65,
+                66,
+                67,
+                0
+              ],
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-33",
+            "args": [
+              [
+                65,
+                66,
+                67,
+                0
+              ],
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-34",
+            "args": [
+              [
+                97,
+                32,
+                66,
+                32,
+                99,
+                32,
+                68,
+                0
+              ],
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-35",
+            "args": [
+              [
+                97,
+                32,
+                66,
+                32,
+                99,
+                32,
+                68,
+                0
+              ],
+              2
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-36",
+            "args": [
+              [
+                97,
+                32,
+                66,
+                32,
+                99,
+                32,
+                68,
+                0
+              ],
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-37",
+            "args": [
+              [
+                97,
+                32,
+                66,
+                32,
+                99,
+                32,
+                68,
+                0
+              ],
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-38",
+            "args": [
+              [
+                97,
+                32,
+                66,
+                32,
+                99,
+                32,
+                68,
+                0
+              ],
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-39",
+            "args": [
+              [
+                97,
+                32,
+                66,
+                32,
+                99,
+                32,
+                68,
+                0
+              ],
+              6
+            ],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-66",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              1
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-67",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              2
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-68",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              3
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-69",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              4
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-70",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              5
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-71",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              6
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-72",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              7
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-73",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              8
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-74",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              9
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          },
+          {
+            "id": "word-75",
+            "args": [
+              [
+                72,
+                101,
+                108,
+                108,
+                111,
+                32,
+                119,
+                111,
+                114,
+                108,
+                100,
+                0
+              ],
+              10
+            ],
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 1500
+          }
+        ]
+      },
+      "displayCode": {
+        "c": "len = L;\nprintf(\"%c\", s[0]);\nfor (i = 1; i <= len - 1; i++)\n    if ({{M}})\n        printf(\"%c\", s[i]);"
+      }
+    }
+  ]
+}

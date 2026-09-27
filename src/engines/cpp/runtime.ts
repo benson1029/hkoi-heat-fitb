@@ -15,7 +15,7 @@ const normal: Flow = { kind: 'normal' };
 const INT_MIN = -(1n << 31n), INT_MAX = (1n << 31n) - 1n;
 const LONG_MIN = -(1n << 63n), LONG_MAX = (1n << 63n) - 1n;
 const UINT_MOD = 1n << 64n;
-const MAX_ARRAY = 10000, MAX_STRING = 65536, MAX_OUTPUT = 65536, MAX_CALL_DEPTH = 64;
+const MAX_ARRAY = 16384, MAX_STRING = 65536, MAX_OUTPUT = 65536, MAX_CALL_DEPTH = 64;
 
 function int(value: bigint, type: ScalarType = 'int'): Value { return { kind: 'integer', value, type }; }
 function asInt(value: Value): { value: bigint; type: ScalarType } {
@@ -76,7 +76,7 @@ export class CheckedRuntime {
   private inputPos = 0;
   private readonly maxSteps: number;
   constructor(private readonly unit: TranslationUnit, private readonly target: ProgramTarget, private readonly testCase: ProgramCase) {
-    this.maxSteps = Math.min(Math.max(1, testCase.maxSteps), 50000);
+    this.maxSteps = Math.min(Math.max(1, testCase.maxSteps), 250000);
     this.input = (testCase.stdin ?? '').trim().split(/\s+/).filter(Boolean);
   }
   get stepCount(): number { return this.steps; }
@@ -306,9 +306,15 @@ export class CheckedRuntime {
       const slot: ArraySlot = { kind: 'array', type, cells, alive: true, owner: true };
       this.bind(decl.name, slot);
       if (decl.init !== undefined) {
-        if (!Array.isArray(decl.init)) throw new CppFault('unsupported', 'Array initializer must be a brace list');
-        if (decl.init.length > cells.length) throw new CppFault('compile-error', 'Too many array initializers');
-        for (let i = 0; i < cells.length; i++) this.write(cells[i], i < decl.init.length ? this.scalarInit(decl.init[i]) : int(0n));
+        if (!Array.isArray(decl.init)) {
+          const value = this.scalarInit(decl.init);
+          if (type !== 'char' || value.kind !== 'string') throw new CppFault('unsupported', 'Array initializer must be a brace list');
+          if (value.value.length + 1 > cells.length) throw new CppFault('compile-error', 'String initializer is too long for char array');
+          for (let i = 0; i < cells.length; i++) this.write(cells[i], int(BigInt(i < value.value.length ? value.value.charCodeAt(i) : 0)));
+        } else {
+          if (decl.init.length > cells.length) throw new CppFault('compile-error', 'Too many array initializers');
+          for (let i = 0; i < cells.length; i++) this.write(cells[i], i < decl.init.length ? this.scalarInit(decl.init[i]) : int(0n));
+        }
       }
     } else {
       const slot: ScalarSlot = { kind: 'scalar', type, value: 0n, initialized: global, alive: true };
@@ -430,9 +436,16 @@ export class CheckedRuntime {
       cells.splice(first.position, sorted.length, ...sorted);
       return { kind: 'void' };
     }
-    if (name === 'bool') {
-      if (args.length !== 1) throw new CppFault('compile-error', 'bool cast expects one argument');
-      return int(truth(this.evaluate(args[0])) ? 1n : 0n, 'bool');
+    if (['bool', 'int', 'long long', 'char', 'double', 'size_t'].includes(name)) {
+      if (args.length !== 1) throw new CppFault('compile-error', `${name} cast expects one argument`);
+      const value = this.evaluate(args[0]);
+      if (name === 'bool') return int(truth(value) ? 1n : 0n, 'bool');
+      if (name === 'double') return { kind: 'floating', value: asDouble(value) };
+      const number = value.kind === 'floating' ? value.value : Number(asInt(value).value);
+      if (!Number.isFinite(number) || value.kind === 'floating' && (number < Number(LONG_MIN) || number >= Number(UINT_MOD)))
+        throw new CppFault('runtime-error', 'Out-of-range floating-to-integer conversion');
+      const integer = value.kind === 'floating' ? BigInt(Math.trunc(number)) : asInt(value).value;
+      return int(narrow(integer, name as 'int' | 'long long' | 'char' | 'size_t'), name as 'int' | 'long long' | 'char' | 'size_t');
     }
     if (name === 'abs' || name === 'std::abs') {
       if (args.length !== 1) throw new CppFault('compile-error', 'abs expects one argument');
@@ -440,6 +453,12 @@ export class CheckedRuntime {
       if (value.type === 'size_t') throw new CppFault('compile-error', 'abs of unsigned size_t is ambiguous');
       const resultType = promoted(value.type);
       return int(narrow(value.value < 0n ? -value.value : value.value, resultType), resultType);
+    }
+    if (name === 'sqrt' || name === 'std::sqrt') {
+      if (args.length !== 1) throw new CppFault('compile-error', 'sqrt expects one argument');
+      const number = asDouble(this.evaluate(args[0]));
+      if (number < 0) throw new CppFault('runtime-error', 'sqrt of a negative value');
+      return { kind: 'floating', value: Math.sqrt(number) };
     }
     if (/^[A-Za-z_]\w*\.(?:length|size|begin|end)$/.test(name)) {
       if (args.length !== 0) throw new CppFault('compile-error', `${name} takes no arguments`);
@@ -481,10 +500,36 @@ export class CheckedRuntime {
         if (fmt.value[p] !== '%') { output += fmt.value[p]; continue; }
         if (fmt.value[++p] === '%') { output += '%'; continue; }
         let spec = fmt.value[p];
+        let precision = 6;
+        if (spec === '.') {
+          const digits = fmt.value[++p];
+          if (!/^[0-9]$/.test(digits ?? '') || fmt.value[++p] !== 'f') throw new CppFault('unsupported', 'Only single-digit printf float precision is modeled');
+          precision = Number(digits);
+          spec = 'f';
+        }
         if (spec === 'l' && fmt.value[p + 1] === 'l') { spec = `ll${fmt.value[p + 2]}`; p += 2; }
-        if (!['d', 'c', 'lld'].includes(spec)) throw new CppFault('unsupported', `printf format %${spec} is not modeled`);
+        if (!['d', 'c', 's', 'f', 'lld'].includes(spec)) throw new CppFault('unsupported', `printf format %${spec} is not modeled`);
         if (i >= values.length) throw new CppFault('compile-error', 'Missing printf argument');
-        const arg = asInt(values[i++]);
+        const next = values[i++];
+        if (spec === 'f') {
+          if (next.kind !== 'floating') throw new CppFault('compile-error', '%f requires a floating-point argument');
+          output += next.value.toFixed(precision);
+          continue;
+        }
+        if (spec === 's') {
+          if (next.kind === 'string') { output += next.value; continue; }
+          if (next.kind !== 'array' || next.slot.type !== 'char') throw new CppFault('compile-error', '%s requires a char array or string literal');
+          let terminated = false;
+          for (const cell of next.slot.cells) {
+            if (cell.kind !== 'scalar') throw new CppFault('compile-error', '%s requires a char array');
+            const code = Number(asInt(this.read(cell)).value);
+            if (code === 0) { terminated = true; break; }
+            output += String.fromCharCode(code < 0 ? code + 256 : code);
+          }
+          if (!terminated) throw new CppFault('runtime-error', '%s reads beyond an unterminated char array');
+          continue;
+        }
+        const arg = asInt(next);
         if (spec === 'lld' && arg.type !== 'long long' || spec !== 'lld' && arg.type === 'long long')
           throw new CppFault('runtime-error', 'printf argument type does not match format');
         const value = arg.value;
@@ -547,6 +592,7 @@ export class CheckedRuntime {
       case 'call': {
         for (let i = 0; i < expr.args.length; i++) for (let j = i + 1; j < expr.args.length; j++)
           if (unsequenced(expr.args[i], expr.args[j])) throw new CppFault('runtime-error', 'Unsequenced modification across function arguments');
+        if (this.unit.functions.has(expr.name)) return this.call(expr.name, expr.args.map(a => this.evaluate(a)));
         const built = this.builtin(expr.name, expr.args);
         if (built) return built;
         return this.call(expr.name, expr.args.map(a => this.evaluate(a)));

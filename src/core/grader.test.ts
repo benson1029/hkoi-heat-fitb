@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import source from '../../papers/2024-25-senior.json';
-import legacySource from '../../papers/2011-12-senior.json';
+import cancelledSource from '../../papers/2019-20-junior.json';
 import { gradeQuestion } from './grader';
 import { validatePaper } from './validate';
 
@@ -17,8 +17,8 @@ it('grades the official graph construction through the shared API', async () => 
   expect(result.score).toBe(question('paper1-j').points);
 });
 
-it('distinguishes a missing answer from an unported grader', async () => {
+it('distinguishes a missing answer from a cancelled question', async () => {
   expect((await gradeQuestion(question('paper1-j'), {})).status).toBe('fail');
-  const legacy = validatePaper(legacySource);
-  expect((await gradeQuestion(legacy.questions.find(item => item.id === 'A')!, {})).status).toBe('pending');
+  const cancelled = validatePaper(cancelledSource);
+  expect((await gradeQuestion(cancelled.questions.find(item => item.id === 'D')!, {})).status).toBe('cancelled');
 });

@@ -1,0 +1,1846 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2018-19-senior",
+    "season": "2018/19",
+    "division": "senior",
+    "title": "HKOI 2018/19 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2019hs_sol.pdf. Section B is on paper pp. 12–18. C++ is used where C and C++ are printed."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "factors",
+      "track": "section-b",
+      "markdown": "Given a positive integer n, we say n is:\n\n- Abundant, if the sum of factors of n is larger than 2n;\n- Deficient, if the sum of factors of n is smaller than 2n;\n- Perfect, if the sum of factors of n is equal to 2n.\n\nFor example, the sum of factors of 4 is 1 + 2 + 4 = 7, which is smaller than 2 × 4 = 8, so 4 is deficient. The sum of factors of 28 is 1 + 2 + 4 + 7 + 14 + 28 = 56, which is equal to 2 × 28 = 56, so 28 is perfect.\n\nYou need to write a program which, given input n, determines if n is abundant, deficient, or perfect. It is guaranteed that n is a positive integer in the range [1, 10⁷]."
+    },
+    {
+      "id": "bubble",
+      "track": "section-b",
+      "markdown": "Consider the following program:\n\n```cpp\nint a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}\n```"
+    },
+    {
+      "id": "dangling",
+      "track": "section-b",
+      "markdown": "The input to the following program is an integer between 1 and 30 inclusive.\n\n```cpp\n71 int x;\n72 int main() {\n73     cin >> x;\n74     if (x % 2 == 0)\n75         if (x % 3 == 0)\n76             cout << \"six\";\n77         else\n78             cout << \"ODD\";\n79     return 0;\n80 }\n```\n\nThe program tries to output according to the followings:\n\n1. If the input is a multiple of 6, output the message six\n2. If the input is an odd number, output the message ODD\n3. Nothing should be outputted if none of the above conditions are met"
+    },
+    {
+      "id": "factor-classification",
+      "track": "section-b",
+      "title": "Question 4 · C++ program",
+      "markdown": "",
+      "displayCode": {
+        "cpp": "int sum_factors(int n) {\n    ... // omitted 省略\n}\nint n, sum;\nint main() {\n    cin >> n;\n    sum = {{F}};\n    if ({{G1}})\n        cout << \"Abundant\"; // 盈數\n    else if ({{G2}})\n        cout << \"Perfect\"; // 完全數\n    else\n        cout << \"Deficient\"; // 虧數\n    return 0;\n}"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "cpp-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "What is the output of the following program?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "10"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "displayCode": {
+        "cpp": "int a[101];\nint i, j, sum;\nint main() {\n    for (i = 1; i <= 100; i++)\n        a[i] = 0;\n    for (i = 1; i <= 100; i++) {\n        j = i;\n        while (j <= 100) {\n            a[j] = 1 - a[j];\n            j = j + i;\n        }\n    }\n    sum = 0;\n    for (i = 1; i <= 100; i++)\n        sum = sum + a[i];\n    cout << sum;\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "cpp-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The following program inputs 2n + 1 integers. Each integer between 1 and n + 1 (inclusive), other than one that is only inputted once, is inputted twice. Complete the program, so that it outputs the number that is inputted only once."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int n, x, ans, i;\nint main() {\n    cin >> n;\n    ans = 0;\n    for (i = 0; i <= 2 * n; i++) {\n        cin >> x;\n        {{B}};\n    }\n    cout << ans;\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "n-1-single-1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "1 2 2 1"
+          },
+          {
+            "id": "n-1-single-2",
+            "expected": {
+              "stdout": "2"
+            },
+            "maxSteps": 10000,
+            "stdin": "1 2 1 1"
+          },
+          {
+            "id": "n-2-single-3",
+            "expected": {
+              "stdout": "3"
+            },
+            "maxSteps": 10000,
+            "stdin": "2 1 1 2 2 3"
+          },
+          {
+            "id": "n-3-single-1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "3 4 4 3 3 2 2 1"
+          },
+          {
+            "id": "n-5-single-4",
+            "expected": {
+              "stdout": "4"
+            },
+            "maxSteps": 10000,
+            "stdin": "5 6 6 5 5 4 3 3 2 2 1 1"
+          },
+          {
+            "id": "n-9-single-10",
+            "expected": {
+              "stdout": "10"
+            },
+            "maxSteps": 10000,
+            "stdin": "9 10 9 9 8 8 7 7 6 6 5 5 4 4 3 3 2 2 1 1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "Complete the function below, so that the function returns true if and only if x is a power of two."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "bool is_power_of_two(int x) {\n    if (x <= 0)\n        return false;\n    else if ({{C}})\n        return true;\n    else\n        return false;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "is_power_of_two"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "value-0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              -2147483648
+            ]
+          },
+          {
+            "id": "value-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              -1024
+            ]
+          },
+          {
+            "id": "value-2",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              -3
+            ]
+          },
+          {
+            "id": "value-3",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              -1
+            ]
+          },
+          {
+            "id": "value-4",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              0
+            ]
+          },
+          {
+            "id": "value-5",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "value-6",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "value-7",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "value-8",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "value-9",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              5
+            ]
+          },
+          {
+            "id": "value-10",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              8
+            ]
+          },
+          {
+            "id": "value-11",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              9
+            ]
+          },
+          {
+            "id": "value-12",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              16
+            ]
+          },
+          {
+            "id": "value-13",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              31
+            ]
+          },
+          {
+            "id": "value-14",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              32
+            ]
+          },
+          {
+            "id": "value-15",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              63
+            ]
+          },
+          {
+            "id": "value-16",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              64
+            ]
+          },
+          {
+            "id": "value-17",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              127
+            ]
+          },
+          {
+            "id": "value-18",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              128
+            ]
+          },
+          {
+            "id": "value-19",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              1023
+            ]
+          },
+          {
+            "id": "value-20",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              1024
+            ]
+          },
+          {
+            "id": "value-21",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              1073741824
+            ]
+          },
+          {
+            "id": "value-22",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              2147483647
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blanks D1, D2",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Your friend John reads your code and comments that it is inefficient. To help you, he provides you his implementation of the function. You are advised to test it on several small inputs to understand how it works.\n\nFind two values of n between 11 and 99 (inclusive), for which John’s function fails to return the correct answer."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D1",
+          "maxChars": 4
+        },
+        {
+          "id": "D2",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "integer-list",
+        "answerBlanks": [
+          "D1",
+          "D2"
+        ],
+        "count": 2,
+        "minimum": 11,
+        "maximum": 99,
+        "distinct": true,
+        "squareOnly": true
+      },
+      "contextId": "factors",
+      "displayCode": {
+        "cpp": "int sum_factors(int n) {\n    int sum = 0;\n    int i = 1;\n    while (i * i <= n) {\n        if (n % i == 0)\n            sum = sum + i + n / i;\n        i++;\n    }\n    return sum;\n}"
+      }
+    },
+    {
+      "id": "cpp-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blanks E1, E2",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Complete the modified implementation below so that it returns the correct answer for all n."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "E1",
+          "maxChars": 10
+        },
+        {
+          "id": "E2",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int sum_factors(int n) {\n    int sum = 0;\n    int i = 1;\n    while (i * i <= n) {\n        if (n % i == 0)\n            sum = sum + i + n / i;\n        if ({{E1}})\n            sum = {{E2}};\n        i++;\n    }\n    return sum;\n}",
+            "harness": {
+              "kind": "call",
+              "function": "sum_factors"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "n-1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 30000,
+            "args": [
+              1
+            ]
+          },
+          {
+            "id": "n-2",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 30000,
+            "args": [
+              2
+            ]
+          },
+          {
+            "id": "n-3",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 30000,
+            "args": [
+              3
+            ]
+          },
+          {
+            "id": "n-4",
+            "expected": {
+              "returnValue": 7
+            },
+            "maxSteps": 30000,
+            "args": [
+              4
+            ]
+          },
+          {
+            "id": "n-6",
+            "expected": {
+              "returnValue": 12
+            },
+            "maxSteps": 30000,
+            "args": [
+              6
+            ]
+          },
+          {
+            "id": "n-12",
+            "expected": {
+              "returnValue": 28
+            },
+            "maxSteps": 30000,
+            "args": [
+              12
+            ]
+          },
+          {
+            "id": "n-16",
+            "expected": {
+              "returnValue": 31
+            },
+            "maxSteps": 30000,
+            "args": [
+              16
+            ]
+          },
+          {
+            "id": "n-25",
+            "expected": {
+              "returnValue": 31
+            },
+            "maxSteps": 30000,
+            "args": [
+              25
+            ]
+          },
+          {
+            "id": "n-28",
+            "expected": {
+              "returnValue": 56
+            },
+            "maxSteps": 30000,
+            "args": [
+              28
+            ]
+          },
+          {
+            "id": "n-36",
+            "expected": {
+              "returnValue": 91
+            },
+            "maxSteps": 30000,
+            "args": [
+              36
+            ]
+          },
+          {
+            "id": "n-49",
+            "expected": {
+              "returnValue": 57
+            },
+            "maxSteps": 30000,
+            "args": [
+              49
+            ]
+          },
+          {
+            "id": "n-64",
+            "expected": {
+              "returnValue": 127
+            },
+            "maxSteps": 30000,
+            "args": [
+              64
+            ]
+          },
+          {
+            "id": "n-81",
+            "expected": {
+              "returnValue": 121
+            },
+            "maxSteps": 30000,
+            "args": [
+              81
+            ]
+          },
+          {
+            "id": "n-97",
+            "expected": {
+              "returnValue": 98
+            },
+            "maxSteps": 30000,
+            "args": [
+              97
+            ]
+          },
+          {
+            "id": "n-99",
+            "expected": {
+              "returnValue": 156
+            },
+            "maxSteps": 30000,
+            "args": [
+              99
+            ]
+          },
+          {
+            "id": "n-100",
+            "expected": {
+              "returnValue": 217
+            },
+            "maxSteps": 30000,
+            "args": [
+              100
+            ]
+          },
+          {
+            "id": "n-101",
+            "expected": {
+              "returnValue": 102
+            },
+            "maxSteps": 30000,
+            "args": [
+              101
+            ]
+          },
+          {
+            "id": "n-945",
+            "expected": {
+              "returnValue": 1920
+            },
+            "maxSteps": 30000,
+            "args": [
+              945
+            ]
+          },
+          {
+            "id": "n-1024",
+            "expected": {
+              "returnValue": 2047
+            },
+            "maxSteps": 30000,
+            "args": [
+              1024
+            ]
+          },
+          {
+            "id": "n-10000",
+            "expected": {
+              "returnValue": 24211
+            },
+            "maxSteps": 30000,
+            "args": [
+              10000
+            ]
+          }
+        ]
+      },
+      "contextId": "factors",
+      "displayCode": {
+        "cpp": "int sum_factors(int n) {\n    int sum = 0;\n    int i = 1;\n    while (i * i <= n) {\n        if (n % i == 0)\n            sum = sum + i + n / i;\n        if ({{E1}})\n            sum = {{E2}};\n        i++;\n    }\n    return sum;\n}"
+      }
+    },
+    {
+      "id": "cpp-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Given a positive integer n, we say n is:\n\n- Abundant, if the sum of factors of n is larger than 2n;\n- Deficient, if the sum of factors of n is smaller than 2n;\n- Perfect, if the sum of factors of n is equal to 2n.\n\nIt is guaranteed that n is a positive integer in the range [1, 10⁷].\n\nNow, you have a correct and efficient implementation for the function sum_factors(). Complete the program below, calling the function when appropriate, so that the program correctly determines whether the input number n is abundant, deficient, or perfect."
+      },
+      "points": 0.5,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int sum_factors(int n) {\n    int sum = 0;\n    int i = 1;\n    while (i * i <= n) {\n        if (n % i == 0)\n            sum = sum + i + n / i;\n        if (i*i==n)\n            sum = sum-i;\n        i++;\n    }\n    return sum;\n}\nint n, sum;\nint main() {\n    cin >> n;\n    sum = {{F}};\n    if (sum>2*n)\n        cout << \"Abundant\";\n    else if (sum==2*n)\n        cout << \"Perfect\";\n    else\n        cout << \"Deficient\";\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "n-1",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "1"
+          },
+          {
+            "id": "n-2",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "2"
+          },
+          {
+            "id": "n-3",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "3"
+          },
+          {
+            "id": "n-4",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "4"
+          },
+          {
+            "id": "n-6",
+            "expected": {
+              "stdout": "Perfect"
+            },
+            "maxSteps": 30000,
+            "stdin": "6"
+          },
+          {
+            "id": "n-12",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "12"
+          },
+          {
+            "id": "n-18",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "18"
+          },
+          {
+            "id": "n-20",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "20"
+          },
+          {
+            "id": "n-28",
+            "expected": {
+              "stdout": "Perfect"
+            },
+            "maxSteps": 30000,
+            "stdin": "28"
+          },
+          {
+            "id": "n-70",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "70"
+          },
+          {
+            "id": "n-96",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "96"
+          },
+          {
+            "id": "n-100",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "100"
+          },
+          {
+            "id": "n-120",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "120"
+          },
+          {
+            "id": "n-496",
+            "expected": {
+              "stdout": "Perfect"
+            },
+            "maxSteps": 30000,
+            "stdin": "496"
+          },
+          {
+            "id": "n-945",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "945"
+          },
+          {
+            "id": "n-1024",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "1024"
+          }
+        ]
+      },
+      "contextId": "factor-classification"
+    },
+    {
+      "id": "cpp-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blanks G1, G2",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Given a positive integer n, we say n is:\n\n- Abundant, if the sum of factors of n is larger than 2n;\n- Deficient, if the sum of factors of n is smaller than 2n;\n- Perfect, if the sum of factors of n is equal to 2n.\n\nIt is guaranteed that n is a positive integer in the range [1, 10⁷].\n\nNow, you have a correct and efficient implementation for the function sum_factors(). Complete the program below, calling the function when appropriate, so that the program correctly determines whether the input number n is abundant, deficient, or perfect."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G1",
+          "maxChars": 10
+        },
+        {
+          "id": "G2",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int sum_factors(int n) {\n    int sum = 0;\n    int i = 1;\n    while (i * i <= n) {\n        if (n % i == 0)\n            sum = sum + i + n / i;\n        if (i*i==n)\n            sum = sum-i;\n        i++;\n    }\n    return sum;\n}\nint n, sum;\nint main() {\n    cin >> n;\n    sum = sum_factors(n);\n    if ({{G1}})\n        cout << \"Abundant\";\n    else if ({{G2}})\n        cout << \"Perfect\";\n    else\n        cout << \"Deficient\";\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "n-1",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "1"
+          },
+          {
+            "id": "n-2",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "2"
+          },
+          {
+            "id": "n-3",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "3"
+          },
+          {
+            "id": "n-4",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "4"
+          },
+          {
+            "id": "n-6",
+            "expected": {
+              "stdout": "Perfect"
+            },
+            "maxSteps": 30000,
+            "stdin": "6"
+          },
+          {
+            "id": "n-12",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "12"
+          },
+          {
+            "id": "n-18",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "18"
+          },
+          {
+            "id": "n-20",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "20"
+          },
+          {
+            "id": "n-28",
+            "expected": {
+              "stdout": "Perfect"
+            },
+            "maxSteps": 30000,
+            "stdin": "28"
+          },
+          {
+            "id": "n-70",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "70"
+          },
+          {
+            "id": "n-96",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "96"
+          },
+          {
+            "id": "n-100",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "100"
+          },
+          {
+            "id": "n-120",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "120"
+          },
+          {
+            "id": "n-496",
+            "expected": {
+              "stdout": "Perfect"
+            },
+            "maxSteps": 30000,
+            "stdin": "496"
+          },
+          {
+            "id": "n-945",
+            "expected": {
+              "stdout": "Abundant"
+            },
+            "maxSteps": 30000,
+            "stdin": "945"
+          },
+          {
+            "id": "n-1024",
+            "expected": {
+              "stdout": "Deficient"
+            },
+            "maxSteps": 30000,
+            "stdin": "1024"
+          }
+        ]
+      },
+      "contextId": "factor-classification"
+    },
+    {
+      "id": "cpp-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Consider the following program:\n\nIf the input is 10 9 8 7 6 5 4 3 2 1, what is the output?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "H": [
+            "45"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "bubble",
+      "displayCode": {
+        "cpp": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "cpp-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank I",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Consider the following program:\n\nIf the input is 4 4 10 10 10 3 3 3 6 6, what is the output?"
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "I": [
+            "21"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "bubble",
+      "displayCode": {
+        "cpp": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "cpp-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank J",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Consider the following program:\n\nGive an input such that the program outputs 42."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 20
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "program-input",
+        "answerBlank": "J",
+        "target": {
+          "language": "cpp",
+          "source": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}",
+          "harness": {
+            "kind": "program"
+          }
+        },
+        "expected": {
+          "stdout": "42"
+        },
+        "maxSteps": 15000
+      },
+      "contextId": "bubble",
+      "displayCode": {
+        "cpp": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}"
+      }
+    },
+    {
+      "id": "cpp-k",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank K",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "On the entrance gate of a building, there is a numpad with nine buttons, for the digits from 1 to 9. The numpad is used to input gate passcode. The gate passcode is a four digit number that can be input using the numpad. In addition, the product of the first digit and the second digit equals the number formed by the last two digits. For example, 7535 is a possible gate passcode because 7 × 5 = 35. How many possible gate passcodes are there?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "K": [
+            "50"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "cpp-l",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blanks L1, L2, L3",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "Given an array a[0..99] which consists of 100 integers. Its elements are sorted in descending order. Complete the function f(target), so that, among all indices i with a[i] greater than or equal to target, it returns the largest one. If no such index exists, it should return -1 instead.\n\nIt is guaranteed that the array elements and target are integers between -1000 and 1000 inclusive. Note that the same integer may appear more than once in the array."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L1",
+          "maxChars": 15
+        },
+        {
+          "id": "L2",
+          "maxChars": 10
+        },
+        {
+          "id": "L3",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 17,
+        "note": "The published solution (https://assets.hkoi.org/ref/2019hs_sol.pdf, p.4) prints L3=m-1, but that fails for valid arrays: a=[100,99,...,1], target=-1000 returns 98 instead of 99. L3=l-1 is correct and is used by these semantic tests."
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int a[100];\nint f(int target) {\n    int l = 0;\n    int r = 100;\n    int m;\n    while (l < r) {\n        m = (l + r) / 2;\n        if ({{L1}})\n            {{L2}};\n        else\n            r = m;\n    }\n    return {{L3}};\n}\nint main() {\n    for (int i=0; i<100; i++) cin >> a[i];\n    int target;\n    cin >> target;\n    cout << f(target);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "array-0-target-0",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 -1000"
+          },
+          {
+            "id": "array-0-target-900",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 -100"
+          },
+          {
+            "id": "array-0-target-1000",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0"
+          },
+          {
+            "id": "array-0-target-1001",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 1"
+          },
+          {
+            "id": "array-0-target-1005",
+            "expected": {
+              "stdout": "95"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 5"
+          },
+          {
+            "id": "array-0-target-1050",
+            "expected": {
+              "stdout": "50"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 50"
+          },
+          {
+            "id": "array-0-target-1099",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 99"
+          },
+          {
+            "id": "array-0-target-1100",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 100"
+          },
+          {
+            "id": "array-0-target-2000",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 1000"
+          },
+          {
+            "id": "array-1-target-0",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 -1000"
+          },
+          {
+            "id": "array-1-target-900",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 -100"
+          },
+          {
+            "id": "array-1-target-1000",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 0"
+          },
+          {
+            "id": "array-1-target-1001",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 1"
+          },
+          {
+            "id": "array-1-target-1005",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5"
+          },
+          {
+            "id": "array-1-target-1050",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 50"
+          },
+          {
+            "id": "array-1-target-1099",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 99"
+          },
+          {
+            "id": "array-1-target-1100",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 100"
+          },
+          {
+            "id": "array-1-target-2000",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 1000"
+          },
+          {
+            "id": "array-2-target-0",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -1000"
+          },
+          {
+            "id": "array-2-target-900",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100"
+          },
+          {
+            "id": "array-2-target-1000",
+            "expected": {
+              "stdout": "69"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 0"
+          },
+          {
+            "id": "array-2-target-1001",
+            "expected": {
+              "stdout": "29"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 1"
+          },
+          {
+            "id": "array-2-target-1005",
+            "expected": {
+              "stdout": "29"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 5"
+          },
+          {
+            "id": "array-2-target-1050",
+            "expected": {
+              "stdout": "29"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 50"
+          },
+          {
+            "id": "array-2-target-1099",
+            "expected": {
+              "stdout": "29"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 99"
+          },
+          {
+            "id": "array-2-target-1100",
+            "expected": {
+              "stdout": "29"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 100"
+          },
+          {
+            "id": "array-2-target-2000",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 1000"
+          },
+          {
+            "id": "array-3-target-0",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6 -7 -7 -8 -8 -9 -9 -10 -10 -11 -11 -12 -12 -13 -13 -14 -14 -15 -15 -16 -16 -17 -17 -18 -18 -19 -19 -20 -20 -21 -21 -22 -22 -23 -23 -24 -24 -25 -25 -26 -26 -27 -27 -28 -28 -29 -29 -30 -30 -31 -31 -32 -32 -33 -33 -34 -34 -35 -35 -36 -36 -37 -37 -38 -38 -39 -39 -40 -40 -41 -41 -42 -42 -43 -43 -44 -44 -45 -45 -46 -46 -47 -47 -48 -48 -49 -49 -50 -1000"
+          },
+          {
+            "id": "array-3-target-900",
+            "expected": {
+              "stdout": "99"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6 -7 -7 -8 -8 -9 -9 -10 -10 -11 -11 -12 -12 -13 -13 -14 -14 -15 -15 -16 -16 -17 -17 -18 -18 -19 -19 -20 -20 -21 -21 -22 -22 -23 -23 -24 -24 -25 -25 -26 -26 -27 -27 -28 -28 -29 -29 -30 -30 -31 -31 -32 -32 -33 -33 -34 -34 -35 -35 -36 -36 -37 -37 -38 -38 -39 -39 -40 -40 -41 -41 -42 -42 -43 -43 -44 -44 -45 -45 -46 -46 -47 -47 -48 -48 -49 -49 -50 -100"
+          },
+          {
+            "id": "array-3-target-1000",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6 -7 -7 -8 -8 -9 -9 -10 -10 -11 -11 -12 -12 -13 -13 -14 -14 -15 -15 -16 -16 -17 -17 -18 -18 -19 -19 -20 -20 -21 -21 -22 -22 -23 -23 -24 -24 -25 -25 -26 -26 -27 -27 -28 -28 -29 -29 -30 -30 -31 -31 -32 -32 -33 -33 -34 -34 -35 -35 -36 -36 -37 -37 -38 -38 -39 -39 -40 -40 -41 -41 -42 -42 -43 -43 -44 -44 -45 -45 -46 -46 -47 -47 -48 -48 -49 -49 -50 0"
+          },
+          {
+            "id": "array-3-target-1001",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6 -7 -7 -8 -8 -9 -9 -10 -10 -11 -11 -12 -12 -13 -13 -14 -14 -15 -15 -16 -16 -17 -17 -18 -18 -19 -19 -20 -20 -21 -21 -22 -22 -23 -23 -24 -24 -25 -25 -26 -26 -27 -27 -28 -28 -29 -29 -30 -30 -31 -31 -32 -32 -33 -33 -34 -34 -35 -35 -36 -36 -37 -37 -38 -38 -39 -39 -40 -40 -41 -41 -42 -42 -43 -43 -44 -44 -45 -45 -46 -46 -47 -47 -48 -48 -49 -49 -50 1"
+          },
+          {
+            "id": "array-3-target-1005",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6 -7 -7 -8 -8 -9 -9 -10 -10 -11 -11 -12 -12 -13 -13 -14 -14 -15 -15 -16 -16 -17 -17 -18 -18 -19 -19 -20 -20 -21 -21 -22 -22 -23 -23 -24 -24 -25 -25 -26 -26 -27 -27 -28 -28 -29 -29 -30 -30 -31 -31 -32 -32 -33 -33 -34 -34 -35 -35 -36 -36 -37 -37 -38 -38 -39 -39 -40 -40 -41 -41 -42 -42 -43 -43 -44 -44 -45 -45 -46 -46 -47 -47 -48 -48 -49 -49 -50 5"
+          },
+          {
+            "id": "array-3-target-1050",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6 -7 -7 -8 -8 -9 -9 -10 -10 -11 -11 -12 -12 -13 -13 -14 -14 -15 -15 -16 -16 -17 -17 -18 -18 -19 -19 -20 -20 -21 -21 -22 -22 -23 -23 -24 -24 -25 -25 -26 -26 -27 -27 -28 -28 -29 -29 -30 -30 -31 -31 -32 -32 -33 -33 -34 -34 -35 -35 -36 -36 -37 -37 -38 -38 -39 -39 -40 -40 -41 -41 -42 -42 -43 -43 -44 -44 -45 -45 -46 -46 -47 -47 -48 -48 -49 -49 -50 50"
+          },
+          {
+            "id": "array-3-target-1099",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6 -7 -7 -8 -8 -9 -9 -10 -10 -11 -11 -12 -12 -13 -13 -14 -14 -15 -15 -16 -16 -17 -17 -18 -18 -19 -19 -20 -20 -21 -21 -22 -22 -23 -23 -24 -24 -25 -25 -26 -26 -27 -27 -28 -28 -29 -29 -30 -30 -31 -31 -32 -32 -33 -33 -34 -34 -35 -35 -36 -36 -37 -37 -38 -38 -39 -39 -40 -40 -41 -41 -42 -42 -43 -43 -44 -44 -45 -45 -46 -46 -47 -47 -48 -48 -49 -49 -50 99"
+          },
+          {
+            "id": "array-3-target-1100",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6 -7 -7 -8 -8 -9 -9 -10 -10 -11 -11 -12 -12 -13 -13 -14 -14 -15 -15 -16 -16 -17 -17 -18 -18 -19 -19 -20 -20 -21 -21 -22 -22 -23 -23 -24 -24 -25 -25 -26 -26 -27 -27 -28 -28 -29 -29 -30 -30 -31 -31 -32 -32 -33 -33 -34 -34 -35 -35 -36 -36 -37 -37 -38 -38 -39 -39 -40 -40 -41 -41 -42 -42 -43 -43 -44 -44 -45 -45 -46 -46 -47 -47 -48 -48 -49 -49 -50 100"
+          },
+          {
+            "id": "array-3-target-2000",
+            "expected": {
+              "stdout": "-1"
+            },
+            "maxSteps": 20000,
+            "stdin": "0 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6 -7 -7 -8 -8 -9 -9 -10 -10 -11 -11 -12 -12 -13 -13 -14 -14 -15 -15 -16 -16 -17 -17 -18 -18 -19 -19 -20 -20 -21 -21 -22 -22 -23 -23 -24 -24 -25 -25 -26 -26 -27 -27 -28 -28 -29 -29 -30 -30 -31 -31 -32 -32 -33 -33 -34 -34 -35 -35 -36 -36 -37 -37 -38 -38 -39 -39 -40 -40 -41 -41 -42 -42 -43 -43 -44 -44 -45 -45 -46 -46 -47 -47 -48 -48 -49 -49 -50 1000"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "int a[100];\nint f(int target) {\n    int l = 0;\n    int r = 100;\n    int m;\n    while (l < r) {\n        m = (l + r) / 2;\n        if ({{L1}})\n            {{L2}};\n        else\n            r = m;\n    }\n    return {{L3}};\n}"
+      }
+    },
+    {
+      "id": "cpp-m",
+      "track": "section-b",
+      "printedRef": "Section B, Question 8, Blank M",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "However, there is a bug in his program, please suggest a valid input such that the program outputs incorrectly."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "M",
+          "maxChars": 4,
+          "allowedChars": "0123456789"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 18,
+        "note": "The hidden grading target adds a 1..30 input guard to enforce the printed valid-input range; the displayed code is the unmodified printed program."
+      },
+      "grading": {
+        "kind": "program-input",
+        "answerBlank": "M",
+        "target": {
+          "language": "cpp",
+          "source": "int x;\nint main() {\n    cin >> x;\n    if (x < 1 || x > 30) return 0;\n    if (x % 2 == 0)\n        if (x % 3 == 0)\n            cout << \"six\";\n        else\n            cout << \"ODD\";\n    return 0;\n}",
+          "harness": {
+            "kind": "program"
+          }
+        },
+        "expected": {
+          "stdout": "ODD"
+        },
+        "maxSteps": 5000
+      },
+      "contextId": "dangling"
+    },
+    {
+      "id": "cpp-n",
+      "track": "section-b",
+      "printedRef": "Section B, Question 8, Blanks N1, N2",
+      "title": "Section B, Question 8",
+      "prompt": {
+        "en": "The input to the following program is an integer between 1 and 30 inclusive.\n\nThe program tries to output according to the followings:\n\n1. If the input is a multiple of 6, output the message six\n2. If the input is an odd number, output the message ODD\n3. Nothing should be outputted if none of the above conditions are met\n\nThe bug can be fixed by adding some characters at the end of one line. Find the line and correct it. Please assume that there are no whitespace characters at the end of each line in the original program."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "N1",
+          "maxChars": 2
+        },
+        {
+          "id": "N2",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2019hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2019hsa.pdf",
+        "page": 18
+      },
+      "grading": {
+        "kind": "cpp-line-repair",
+        "mode": "append",
+        "lineBlank": "N1",
+        "replacementBlank": "N2",
+        "firstLine": 71,
+        "source": "int x;\nint main() {\n    cin >> x;\n    if (x % 2 == 0)\n        if (x % 3 == 0)\n            cout << \"six\";\n        else\n            cout << \"ODD\";\n    return 0;\n}",
+        "cases": [
+          {
+            "id": "input-1",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "1"
+          },
+          {
+            "id": "input-2",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "2"
+          },
+          {
+            "id": "input-3",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "3"
+          },
+          {
+            "id": "input-4",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "4"
+          },
+          {
+            "id": "input-5",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "5"
+          },
+          {
+            "id": "input-6",
+            "expected": {
+              "stdout": "six"
+            },
+            "maxSteps": 10000,
+            "stdin": "6"
+          },
+          {
+            "id": "input-7",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "7"
+          },
+          {
+            "id": "input-8",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "8"
+          },
+          {
+            "id": "input-9",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "9"
+          },
+          {
+            "id": "input-10",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "10"
+          },
+          {
+            "id": "input-11",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "11"
+          },
+          {
+            "id": "input-12",
+            "expected": {
+              "stdout": "six"
+            },
+            "maxSteps": 10000,
+            "stdin": "12"
+          },
+          {
+            "id": "input-13",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "13"
+          },
+          {
+            "id": "input-14",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "14"
+          },
+          {
+            "id": "input-15",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "15"
+          },
+          {
+            "id": "input-16",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "16"
+          },
+          {
+            "id": "input-17",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "17"
+          },
+          {
+            "id": "input-18",
+            "expected": {
+              "stdout": "six"
+            },
+            "maxSteps": 10000,
+            "stdin": "18"
+          },
+          {
+            "id": "input-19",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "19"
+          },
+          {
+            "id": "input-20",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "20"
+          },
+          {
+            "id": "input-21",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "21"
+          },
+          {
+            "id": "input-22",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "22"
+          },
+          {
+            "id": "input-23",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "23"
+          },
+          {
+            "id": "input-24",
+            "expected": {
+              "stdout": "six"
+            },
+            "maxSteps": 10000,
+            "stdin": "24"
+          },
+          {
+            "id": "input-25",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "25"
+          },
+          {
+            "id": "input-26",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "26"
+          },
+          {
+            "id": "input-27",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "27"
+          },
+          {
+            "id": "input-28",
+            "expected": {
+              "stdout": ""
+            },
+            "maxSteps": 10000,
+            "stdin": "28"
+          },
+          {
+            "id": "input-29",
+            "expected": {
+              "stdout": "ODD"
+            },
+            "maxSteps": 10000,
+            "stdin": "29"
+          },
+          {
+            "id": "input-30",
+            "expected": {
+              "stdout": "six"
+            },
+            "maxSteps": 10000,
+            "stdin": "30"
+          }
+        ]
+      },
+      "contextId": "dangling",
+      "displayCode": {
+        "cpp": "71 int x;\n72 int main() {\n73     cin >> x;\n74     if (x % 2 == 0)\n75         if (x % 3 == 0)\n76             cout << \"six\";\n77         else\n78             cout << \"ODD\";\n79     return 0;\n80 }"
+      }
+    }
+  ]
+}

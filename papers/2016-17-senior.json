@@ -1,0 +1,1662 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2016-17-senior",
+    "season": "2016/17",
+    "division": "senior",
+    "title": "HKOI 2016/17 Heat Event — Senior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+      "page": 1,
+      "note": "Official solution: https://assets.hkoi.org/ref/2017hs_sol.pdf. Section B is on paper pp. 12–16. C++ is used wherever C and C++ are printed."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "rpn",
+      "track": "section-b",
+      "markdown": "Reverse Polish notation is a kind of postfix notation, i.e. the operator is put on the right of the numbers. For instance, “1 + 2” will be written as “1 2 +” in reverse Polish notation. The algorithm of reverse Polish notation is fairly straightforward. Whenever there are n consecutive numbers before an operator (where n is the number of operands needed for the operator; for example, n = 2 for the operators “+”, “-”, “×” and “÷”), we will replace the operator and the n operands with the calculated result.\n\nFor example: “5 1 2 + 4 × + 3 −” ⇒ “5 3 4 × + 3 -” ⇒ “5 12 + 3 -” ⇒ “17 3 -” ⇒ “14”\n\nThe above example is equivalent to “5 + (1 + 2) × 4 - 3” in infix notation (i.e. the common notation we use). Furthermore, parentheses are not needed for reverse Polish notation as long as each operator has a fixed number of operands."
+    },
+    {
+      "id": "seats",
+      "track": "section-b",
+      "markdown": "There is a row of 18 seats, numbered 1 to 18. Three people are already seated with seat numbers 4, 13, and 18 (each marked by a cross in the following diagram).\n\nNow, three more people come. Where should they sit so that the minimum distance between any pair of people is maximal? Write down their seat numbers (in any order), as well as the maximal distance.\n\nThe distance between seat A and seat B (A < B) is B − A."
+    },
+    {
+      "id": "palindrome",
+      "track": "section-b",
+      "markdown": "A string is a palindrome if and only if it reads the same backward or forward. For example, abcba and adda are palindromes while abcab and abc are not. A substring of a string is a continuous segment of characters appearing in the given string. For example, a, ab, bc and abc are substrings of abc while ac is not.\n\nThe function f(st, ed) verifies if the substring s[st..ed] is a palindrome. It should return true if s[st..ed] is a palindrome and returns false otherwise. Please complete the following function so that it can verify if a substring is a palindrome correctly. Assume that st and ed are valid positions of the string and st <= ed."
+    },
+    {
+      "id": "inversions",
+      "track": "section-b",
+      "markdown": "Consider the following program:\n\n```cpp\nint a[8] =\n{5, 7, 4, 3, 2, 6, 1, 8};\nint dinv() {\n    int i, j, r;\n    r = 0;\n    for (i = 0; i <= 7; i++)\n        for (j = 0; j <= i - 1; j++)\n            if (a[j] > a[i])\n                r = r + 1;\n    return r;\n}\nint tinv() {\n    int i, j, k, r;\n    r = 0;\n    for (i = 0; i <= 7; i++)\n        for (j = 0; j <= i - 1; j++)\n            for (k = 0; k <= j - 1; k++)\n                if ((a[k] > a[j]) &&\n                    (a[j] > a[i]))\n                    r = r + 1;\n    return r;\n}\nint main() {\n    cout << dinv() << endl;\n    cout << tinv() << endl;\n    return 0;\n}\n```"
+    },
+    {
+      "id": "palindrome-recursive",
+      "track": "section-b",
+      "title": "Question 4 · Recursive C++ function",
+      "markdown": "Implement another approach to verify if s[st..ed] is a palindrome. Complete the following function.",
+      "displayCode": {
+        "cpp": "string s;\nbool f(int st, int ed) {\n    if (ed - st == 0)\n        return {{G}};\n    else if (ed - st == 1)\n        return {{H}};\n    else if (ed - st >= 2)\n        return {{I}};\n}"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "cpp-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blanks A1, A2",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Suppose array int a[10] (Pascal: a: array[0..9] of longint) contains 10 distinct integers. The program segment below tries to implement insertion sort to sort the array in ascending order. However, the program contains an error that can be fixed by changing exactly one line. Find the line and correct it. You may assume variables i, j, and t are declared as int (Pascal: longint)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A1",
+          "maxChars": 2
+        },
+        {
+          "id": "A2",
+          "maxChars": 18
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "cpp-line-repair",
+        "lineBlank": "A1",
+        "replacementBlank": "A2",
+        "firstLine": 48,
+        "source": "int a[10];\nint i, j, t;\nvoid insertion_sort() {\nfor (i = 1; i <= 9; i++)\n{\n    j = i - 1;\n    t = a[i];\n    while (j >= 0)\n    {\n        if (t > a[j])\n            break;\n        a[j + 1] = a[j];\n        j = j - 1;\n    }\n    a[j] = t;\n}\n}\nint main() {\n    for (int k = 0; k < 10; k++) cin >> a[k];\n    insertion_sort();\n    for (int k = 0; k < 10; k++) cout << a[k] << ' ';\n}",
+        "cases": [
+          {
+            "id": "array-0",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 10 "
+            },
+            "maxSteps": 20000,
+            "stdin": "5 2 9 1 6 3 8 4 10 7"
+          },
+          {
+            "id": "array-1",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 10 "
+            },
+            "maxSteps": 20000,
+            "stdin": "10 9 8 7 6 5 4 3 2 1"
+          },
+          {
+            "id": "array-2",
+            "expected": {
+              "stdout": "1 2 3 4 5 6 7 8 9 10 "
+            },
+            "maxSteps": 20000,
+            "stdin": "1 2 3 4 5 6 7 8 9 10"
+          },
+          {
+            "id": "array-3",
+            "expected": {
+              "stdout": "-5 -2 1 3 4 6 7 8 9 10 "
+            },
+            "maxSteps": 20000,
+            "stdin": "-5 -2 9 1 6 3 8 4 10 7"
+          }
+        ]
+      },
+      "displayCode": {
+        "cpp": "51 for (i = 1; i <= 9; i++)\n52 {\n53     j = i - 1;\n54     t = a[i];\n55     while (j >= 0)\n56     {\n57         if (t > a[j])\n58             break;\n59         a[j + 1] = a[j];\n60         j = j - 1;\n61     }\n62     a[j] = t;\n63 }"
+      }
+    },
+    {
+      "id": "cpp-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Evaluate the reverse Polish expression “7 5 + 3 × 8 - 4 ÷”."
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "7"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "rpn"
+    },
+    {
+      "id": "cpp-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank C",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "Rewrite the infix expression “7 + 5 × 3 - 8 ÷ 4” in reverse Polish notation where the ordering of numbers is the same as the original expression. Spaces between operators and operands are optional. (Hint: The above two expressions are not equivalent)"
+      },
+      "points": 1.5,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 18
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "rpn-expression",
+        "answerBlank": "C",
+        "forms": [
+          "753*+84/-",
+          "753*84/-+"
+        ]
+      },
+      "contextId": "rpn"
+    },
+    {
+      "id": "cpp-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blanks D1, D2, D3",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "There is a row of 18 seats, numbered 1 to 18. Three people are already seated with seat numbers 4, 13, and 18 (each marked by a cross in the following diagram).\n\nNow, three more people come. Where should they sit so that the minimum distance between any pair of people is maximal? Write down their seat numbers (in any order), as well as the maximal distance.\nThe distance between seat A and seat B (A < B) is B − A."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "D1",
+          "maxChars": 4
+        },
+        {
+          "id": "D2",
+          "maxChars": 4
+        },
+        {
+          "id": "D3",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "integer-list",
+        "answerBlanks": [
+          "D1",
+          "D2",
+          "D3"
+        ],
+        "count": 3,
+        "minimum": 1,
+        "maximum": 18,
+        "distinct": true,
+        "minimumSpacing": {
+          "anchors": [
+            4,
+            13,
+            18
+          ],
+          "required": 3
+        }
+      },
+      "contextId": "seats",
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2016-17-senior-q3.png",
+        "alt": "Printed row of 18 seats with seats 4, 13, and 18 occupied"
+      }
+    },
+    {
+      "id": "cpp-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank E",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "There is a row of 18 seats, numbered 1 to 18. Three people are already seated with seat numbers 4, 13, and 18 (each marked by a cross in the following diagram).\n\nNow, three more people come. Where should they sit so that the minimum distance between any pair of people is maximal? Write down their seat numbers (in any order), as well as the maximal distance.\nThe distance between seat A and seat B (A < B) is B − A."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 13
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "E": [
+            "3"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "seats"
+    },
+    {
+      "id": "cpp-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank F",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "A string is a palindrome if and only if it reads the same backward or forward. For example, abcba and adda are palindromes while abcab and abc are not. A substring of a string is a continuous segment of characters appearing in the given string. For example, a, ab, bc and abc are substrings of abc while ac is not.\n\nThe function f(st, ed) verifies if the substring s[st..ed] is a palindrome. It should return true if s[st..ed] is a palindrome and returns false otherwise. Please complete the following function so that it can verify if a substring is a palindrome correctly. Assume that st and ed are valid positions of the string and st <= ed."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 12
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string s;\nbool f(int st, int ed) {\n    int i;\n    for (i = st; i <= ed; i++)\n        if (s[i] != s[{{F}}])\n            return false;\n    return true;\n}\nint main() {\n    cin >> s;\n    int st, ed;\n    cin >> st >> ed;\n    cout << f(st, ed);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "single",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "a 0 0"
+          },
+          {
+            "id": "whole-odd",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "abcba 0 4"
+          },
+          {
+            "id": "whole-even",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "abba 0 3"
+          },
+          {
+            "id": "nonpal",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "abcab 0 4"
+          },
+          {
+            "id": "middle",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "qabbax 1 4"
+          },
+          {
+            "id": "middle-fail",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "qabcax 1 4"
+          },
+          {
+            "id": "two",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "ab 0 1"
+          },
+          {
+            "id": "same-two",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "aa 0 1"
+          }
+        ]
+      },
+      "contextId": "palindrome",
+      "displayCode": {
+        "cpp": "string s;\nbool f(int st, int ed) {\n    int i;\n    for (i = st; i <= ed; i++)\n        if (s[i] != s[{{F}}])\n            return false;\n    return true;\n}"
+      }
+    },
+    {
+      "id": "cpp-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank G",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Implement another approach to verify if s[st..ed] is a palindrome. Complete the following function."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 10
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string s;\nbool f(int st, int ed) {\n    if (ed - st == 0)\n        return {{G}};\n    else if (ed - st == 1)\n        return s[st]==s[ed];\n    else if (ed - st >= 2)\n        return s[st]==s[ed]&&f(st+1,ed-1);\n}\nint main() {\n    cin >> s;\n    int st, ed;\n    cin >> st >> ed;\n    cout << f(st, ed);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "single",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "a 0 0"
+          }
+        ]
+      },
+      "contextId": "palindrome-recursive"
+    },
+    {
+      "id": "cpp-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank H",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Implement another approach to verify if s[st..ed] is a palindrome. Complete the following function."
+      },
+      "points": 1,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 25
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string s;\nbool f(int st, int ed) {\n    if (ed - st == 0)\n        return true;\n    else if (ed - st == 1)\n        return {{H}};\n    else if (ed - st >= 2)\n        return s[st]==s[ed]&&f(st+1,ed-1);\n}\nint main() {\n    cin >> s;\n    int st, ed;\n    cin >> st >> ed;\n    cout << f(st, ed);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "two",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "ab 0 1"
+          },
+          {
+            "id": "same-two",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "aa 0 1"
+          }
+        ]
+      },
+      "contextId": "palindrome-recursive"
+    },
+    {
+      "id": "cpp-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank I",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "Implement another approach to verify if s[st..ed] is a palindrome. Complete the following function."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I",
+          "maxChars": 40
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 14
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "string s;\nbool f(int st, int ed) {\n    if (ed - st == 0)\n        return true;\n    else if (ed - st == 1)\n        return s[st]==s[ed];\n    else if (ed - st >= 2)\n        return {{I}};\n}\nint main() {\n    cin >> s;\n    int st, ed;\n    cin >> st >> ed;\n    cout << f(st, ed);\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "single",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "a 0 0"
+          },
+          {
+            "id": "whole-odd",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "abcba 0 4"
+          },
+          {
+            "id": "whole-even",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "abba 0 3"
+          },
+          {
+            "id": "nonpal",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "abcab 0 4"
+          },
+          {
+            "id": "middle",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "qabbax 1 4"
+          },
+          {
+            "id": "middle-fail",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "qabcax 1 4"
+          },
+          {
+            "id": "two",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "ab 0 1"
+          },
+          {
+            "id": "same-two",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "aa 0 1"
+          },
+          {
+            "id": "long-pal",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000,
+            "stdin": "abcdedcba 0 8"
+          },
+          {
+            "id": "long-nonpal",
+            "expected": {
+              "stdout": "0"
+            },
+            "maxSteps": 10000,
+            "stdin": "abccdxba 0 7"
+          }
+        ]
+      },
+      "contextId": "palindrome-recursive"
+    },
+    {
+      "id": "cpp-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank J",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Complete the function so that f(x, y) returns true if x and y have the same set of prime factors and false if otherwise. You may assume that x and y are integers in the range [1, 30]. The table on the right shows some examples."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J",
+          "maxChars": 50
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "bool f(int x, int y) {\n    return {{J}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "f"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "1-2",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              1,
+              2
+            ]
+          },
+          {
+            "id": "1-5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              1,
+              5
+            ]
+          },
+          {
+            "id": "1-8",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              1,
+              8
+            ]
+          },
+          {
+            "id": "1-20",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              1,
+              20
+            ]
+          },
+          {
+            "id": "2-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              2,
+              1
+            ]
+          },
+          {
+            "id": "2-7",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              2,
+              7
+            ]
+          },
+          {
+            "id": "2-16",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              2,
+              16
+            ]
+          },
+          {
+            "id": "2-28",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              2,
+              28
+            ]
+          },
+          {
+            "id": "3-3",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              3,
+              3
+            ]
+          },
+          {
+            "id": "3-6",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              3,
+              6
+            ]
+          },
+          {
+            "id": "3-12",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              3,
+              12
+            ]
+          },
+          {
+            "id": "3-18",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              3,
+              18
+            ]
+          },
+          {
+            "id": "3-30",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              3,
+              30
+            ]
+          },
+          {
+            "id": "6-3",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              6,
+              3
+            ]
+          },
+          {
+            "id": "6-6",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              6,
+              6
+            ]
+          },
+          {
+            "id": "6-12",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              6,
+              12
+            ]
+          },
+          {
+            "id": "6-18",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              6,
+              18
+            ]
+          },
+          {
+            "id": "6-30",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              6,
+              30
+            ]
+          },
+          {
+            "id": "10-2",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              10,
+              2
+            ]
+          },
+          {
+            "id": "10-5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              10,
+              5
+            ]
+          },
+          {
+            "id": "10-8",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              10,
+              8
+            ]
+          },
+          {
+            "id": "10-20",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              10,
+              20
+            ]
+          },
+          {
+            "id": "12-3",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              12,
+              3
+            ]
+          },
+          {
+            "id": "12-6",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              12,
+              6
+            ]
+          },
+          {
+            "id": "12-12",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              12,
+              12
+            ]
+          },
+          {
+            "id": "12-18",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              12,
+              18
+            ]
+          },
+          {
+            "id": "12-30",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              12,
+              30
+            ]
+          },
+          {
+            "id": "18-3",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              18,
+              3
+            ]
+          },
+          {
+            "id": "18-6",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              18,
+              6
+            ]
+          },
+          {
+            "id": "18-12",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              18,
+              12
+            ]
+          },
+          {
+            "id": "18-18",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              18,
+              18
+            ]
+          },
+          {
+            "id": "18-30",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              18,
+              30
+            ]
+          },
+          {
+            "id": "20-1",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              20,
+              1
+            ]
+          },
+          {
+            "id": "20-7",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              20,
+              7
+            ]
+          },
+          {
+            "id": "20-16",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              20,
+              16
+            ]
+          },
+          {
+            "id": "20-28",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              20,
+              28
+            ]
+          },
+          {
+            "id": "28-2",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              28,
+              2
+            ]
+          },
+          {
+            "id": "28-5",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              28,
+              5
+            ]
+          },
+          {
+            "id": "28-8",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              28,
+              8
+            ]
+          },
+          {
+            "id": "28-20",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              28,
+              20
+            ]
+          },
+          {
+            "id": "30-3",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              30,
+              3
+            ]
+          },
+          {
+            "id": "30-6",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              30,
+              6
+            ]
+          },
+          {
+            "id": "30-12",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              30,
+              12
+            ]
+          },
+          {
+            "id": "30-18",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              30,
+              18
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-k",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank K",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Complete function g(a, b) so that for any -4 ≤ a, b ≤ 4, f(a,b) equals g(a,b). In your answer you may make use of the function min and max, but not the function f or any of the following relational operators: <, >, <=, >=, == (Pascal: =), != (Pascal: <>)."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K",
+          "maxChars": 50,
+          "forbiddenChars": "<>!="
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 15
+      },
+      "grading": {
+        "kind": "program",
+        "targetPolicy": "any",
+        "targets": [
+          {
+            "language": "cpp",
+            "source": "int min(int a, int b) {\n    if (a < b)\n        return a;\n    else\n        return b;\n}\nint max(int a, int b) {\n    if (a > b)\n        return a;\n    else\n        return b;\n}\nint f(int a, int b) {\n    if (max(a, -a) < max(b, -b))\n        return a;\n    else if (max(a, -a) > max(b, -b))\n        return b;\n    else\n        return min(a, b);\n}\nint g(int a, int b) {\n    return {{K}};\n}",
+            "harness": {
+              "kind": "call",
+              "function": "g"
+            }
+          }
+        ],
+        "cases": [
+          {
+            "id": "pair-0-0",
+            "expected": {
+              "returnValue": -4
+            },
+            "maxSteps": 10000,
+            "args": [
+              -4,
+              -4
+            ]
+          },
+          {
+            "id": "pair-0-2",
+            "expected": {
+              "returnValue": -2
+            },
+            "maxSteps": 10000,
+            "args": [
+              -4,
+              -2
+            ]
+          },
+          {
+            "id": "pair-0-4",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              -4,
+              0
+            ]
+          },
+          {
+            "id": "pair-0-6",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 10000,
+            "args": [
+              -4,
+              2
+            ]
+          },
+          {
+            "id": "pair-0-8",
+            "expected": {
+              "returnValue": -4
+            },
+            "maxSteps": 10000,
+            "args": [
+              -4,
+              4
+            ]
+          },
+          {
+            "id": "pair-1-1",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 10000,
+            "args": [
+              -3,
+              -3
+            ]
+          },
+          {
+            "id": "pair-1-3",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 10000,
+            "args": [
+              -3,
+              -1
+            ]
+          },
+          {
+            "id": "pair-1-5",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              -3,
+              1
+            ]
+          },
+          {
+            "id": "pair-1-7",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 10000,
+            "args": [
+              -3,
+              3
+            ]
+          },
+          {
+            "id": "pair-2-0",
+            "expected": {
+              "returnValue": -2
+            },
+            "maxSteps": 10000,
+            "args": [
+              -2,
+              -4
+            ]
+          },
+          {
+            "id": "pair-2-2",
+            "expected": {
+              "returnValue": -2
+            },
+            "maxSteps": 10000,
+            "args": [
+              -2,
+              -2
+            ]
+          },
+          {
+            "id": "pair-2-4",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              -2,
+              0
+            ]
+          },
+          {
+            "id": "pair-2-6",
+            "expected": {
+              "returnValue": -2
+            },
+            "maxSteps": 10000,
+            "args": [
+              -2,
+              2
+            ]
+          },
+          {
+            "id": "pair-2-8",
+            "expected": {
+              "returnValue": -2
+            },
+            "maxSteps": 10000,
+            "args": [
+              -2,
+              4
+            ]
+          },
+          {
+            "id": "pair-3-1",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 10000,
+            "args": [
+              -1,
+              -3
+            ]
+          },
+          {
+            "id": "pair-3-3",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 10000,
+            "args": [
+              -1,
+              -1
+            ]
+          },
+          {
+            "id": "pair-3-5",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 10000,
+            "args": [
+              -1,
+              1
+            ]
+          },
+          {
+            "id": "pair-3-7",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 10000,
+            "args": [
+              -1,
+              3
+            ]
+          },
+          {
+            "id": "pair-4-0",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              0,
+              -4
+            ]
+          },
+          {
+            "id": "pair-4-2",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              0,
+              -2
+            ]
+          },
+          {
+            "id": "pair-4-4",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              0,
+              0
+            ]
+          },
+          {
+            "id": "pair-4-6",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              0,
+              2
+            ]
+          },
+          {
+            "id": "pair-4-8",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              0,
+              4
+            ]
+          },
+          {
+            "id": "pair-5-1",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              1,
+              -3
+            ]
+          },
+          {
+            "id": "pair-5-3",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 10000,
+            "args": [
+              1,
+              -1
+            ]
+          },
+          {
+            "id": "pair-5-5",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              1,
+              1
+            ]
+          },
+          {
+            "id": "pair-5-7",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              1,
+              3
+            ]
+          },
+          {
+            "id": "pair-6-0",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 10000,
+            "args": [
+              2,
+              -4
+            ]
+          },
+          {
+            "id": "pair-6-2",
+            "expected": {
+              "returnValue": -2
+            },
+            "maxSteps": 10000,
+            "args": [
+              2,
+              -2
+            ]
+          },
+          {
+            "id": "pair-6-4",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              2,
+              0
+            ]
+          },
+          {
+            "id": "pair-6-6",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 10000,
+            "args": [
+              2,
+              2
+            ]
+          },
+          {
+            "id": "pair-6-8",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 10000,
+            "args": [
+              2,
+              4
+            ]
+          },
+          {
+            "id": "pair-7-1",
+            "expected": {
+              "returnValue": -3
+            },
+            "maxSteps": 10000,
+            "args": [
+              3,
+              -3
+            ]
+          },
+          {
+            "id": "pair-7-3",
+            "expected": {
+              "returnValue": -1
+            },
+            "maxSteps": 10000,
+            "args": [
+              3,
+              -1
+            ]
+          },
+          {
+            "id": "pair-7-5",
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 10000,
+            "args": [
+              3,
+              1
+            ]
+          },
+          {
+            "id": "pair-7-7",
+            "expected": {
+              "returnValue": 3
+            },
+            "maxSteps": 10000,
+            "args": [
+              3,
+              3
+            ]
+          },
+          {
+            "id": "pair-8-0",
+            "expected": {
+              "returnValue": -4
+            },
+            "maxSteps": 10000,
+            "args": [
+              4,
+              -4
+            ]
+          },
+          {
+            "id": "pair-8-2",
+            "expected": {
+              "returnValue": -2
+            },
+            "maxSteps": 10000,
+            "args": [
+              4,
+              -2
+            ]
+          },
+          {
+            "id": "pair-8-4",
+            "expected": {
+              "returnValue": 0
+            },
+            "maxSteps": 10000,
+            "args": [
+              4,
+              0
+            ]
+          },
+          {
+            "id": "pair-8-6",
+            "expected": {
+              "returnValue": 2
+            },
+            "maxSteps": 10000,
+            "args": [
+              4,
+              2
+            ]
+          },
+          {
+            "id": "pair-8-8",
+            "expected": {
+              "returnValue": 4
+            },
+            "maxSteps": 10000,
+            "args": [
+              4,
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cpp-l",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank L",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "What is the first output number?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "L",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "L": [
+            "16"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "inversions"
+    },
+    {
+      "id": "cpp-m",
+      "track": "section-b",
+      "printedRef": "Section B, Question 7, Blank M",
+      "title": "Section B, Question 7",
+      "prompt": {
+        "en": "What is the second output number?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "M",
+          "maxChars": 4
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2017hs.pdf",
+        "answerSheetUrl": "https://assets.hkoi.org/ref/2017hsa.pdf",
+        "page": 16
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "M": [
+            "17"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "inversions"
+    }
+  ]
+}

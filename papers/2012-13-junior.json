@@ -1,0 +1,638 @@
+{
+  "schemaVersion": 1,
+  "paper": {
+    "id": "2012-13-junior",
+    "season": "2012/13",
+    "division": "junior",
+    "title": "HKOI 2012/13 Heat Event — Junior Group FITB",
+    "source": {
+      "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+      "answerSheetUrl": "https://assets.hkoi.org/ref/2013hja.pdf",
+      "page": 1,
+      "note": "English question paper with the printed C version; Section B only."
+    }
+  },
+  "tracks": [
+    {
+      "id": "section-b",
+      "label": "Section B",
+      "selection": "required"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q4-code",
+      "track": "section-b",
+      "title": "Question 4 · Numbered C program",
+      "markdown": "```c\n50 #include <stdio.h>\n51 #include <math.h>\n52 int x1,y1,x2,y2;\n53 int dist(int x1, int y1, int x2, int y2) {\n54     return floor(sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)));\n55 }\n56 int main() {\n57     scanf(\"%d %d %d %d\",&x1,&y1,&x2,&y2);\n58     if (dist(x1,y1,x2,y2)<1)\n59         printf(\"The distance is less than 1\\n\");\n60     else if (dist(x1,y1,x2,y2)==1)\n61         printf(\"The distance is 1\\n\");\n62     else\n63         printf(\"The distance is greater than 1\\n\");\n64     return 0;\n65 }\n```"
+    },
+    {
+      "id": "q5-code",
+      "track": "section-b",
+      "title": "Question 5 · C program segment",
+      "markdown": "",
+      "displayCode": {
+        "c": "maximum = max(0, n-1);\nfor (i=0; i<n; i++)\n  if ({{F}})\n    {{G}};\na[i] = -a[i];\nsecondmaximum = {{H}};\na[i] = -a[i];"
+      }
+    },
+    {
+      "id": "q2",
+      "track": "section-b",
+      "title": "Section B q2",
+      "markdown": "The above figure shows a map of a village with 4 houses. Houses and roads may be visited/used zero or more times. Examples of paths of length 3 are H→K→O→I and K→I→O→I. Please note that H→K→O→I, H→O→K→I and I→O→K→H are considered different."
+    }
+  ],
+  "questions": [
+    {
+      "id": "section-b-a",
+      "track": "section-b",
+      "printedRef": "Section B, Question 1, Blank A",
+      "title": "Section B, Question 1",
+      "prompt": {
+        "en": "Let x be the minimum positive multiple of 17 that contains only digit '1'. How many digits does x have?"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "A",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "A": [
+            "16"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-b",
+      "track": "section-b",
+      "printedRef": "Section B, Question 2, Blank B",
+      "title": "Section B, Question 2",
+      "prompt": {
+        "en": "The total number of different paths of length 3 is"
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "B",
+          "maxChars": 5
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 10
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2012-13-junior-map.png",
+        "alt": "The printed village map: houses H, K, O and I, with a road between each pair."
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "B": [
+            "108"
+          ]
+        },
+        "normalize": "trim"
+      },
+      "contextId": "q2"
+    },
+    {
+      "id": "section-b-c",
+      "track": "section-b",
+      "printedRef": "Section B, Question 3, Blank C",
+      "title": "Section B, Question 3",
+      "prompt": {
+        "en": "A rotation of a string is formed by removing zero or more consecutive characters from the left and append them to its right.\n\nFor example, cdeab is a rotation of abcde.\n\nLet s = \"hkoi2013\", write a string q such that every rotation of s is a substring of q."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "C",
+          "maxChars": 15
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 10
+      },
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "C": [
+            "hkoi2013hkoi201",
+            "koi2013hkoi2013",
+            "oi2013hkoi2013h",
+            "i2013hkoi2013hk",
+            "2013hkoi2013hko",
+            "013hkoi2013hkoi",
+            "13hkoi2013hkoi2",
+            "3hkoi2013hkoi20"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-d",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank D",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The program checks if the distance between two coordinates (x1,y1), (x2,y2) is less than, equal to, or greater than 1. You may assume that x1,y1,x2 and y2 are integers in [-10000,10000]. Unfortunately, this program contains a logic error but it can be fixed by changing a single line. Identify the line and rewrite it.\n\nNote for C Version: y1 is defined as double y1(double) in <math.h>. In this question please assume that there is no such definition. Disregard if you do not understand this note."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "D",
+          "maxChars": 2
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 11
+      },
+      "contextId": "q4-code",
+      "grading": {
+        "kind": "literal",
+        "accepted": {
+          "D": [
+            "54"
+          ]
+        },
+        "normalize": "trim"
+      }
+    },
+    {
+      "id": "section-b-e",
+      "track": "section-b",
+      "printedRef": "Section B, Question 4, Blank E",
+      "title": "Section B, Question 4",
+      "prompt": {
+        "en": "The program checks if the distance between two coordinates (x1,y1), (x2,y2) is less than, equal to, or greater than 1. You may assume that x1,y1,x2 and y2 are integers in [-10000,10000]. Unfortunately, this program contains a logic error but it can be fixed by changing a single line. Identify the line and rewrite it.\n\nNote for C Version: y1 is defined as double y1(double) in <math.h>. In this question please assume that there is no such definition. Disregard if you do not understand this note."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "E",
+          "maxChars": 42
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 11
+      },
+      "contextId": "q4-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "#include <stdio.h>\nint x1,y1,x2,y2;\nint dist(int x1, int y1, int x2, int y2) {\n    {{E}}\n}\nint main() {\n    scanf(\"%d %d %d %d\",&x1,&y1,&x2,&y2);\n    if (dist(x1,y1,x2,y2)<1)\n        printf(\"The distance is less than 1\\n\");\n    else if (dist(x1,y1,x2,y2)==1)\n        printf(\"The distance is 1\\n\");\n    else\n        printf(\"The distance is greater than 1\\n\");\n    return 0;\n}",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "The distance is less than 1\n"
+            },
+            "stdin": "0 0 0 0\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "The distance is 1\n"
+            },
+            "stdin": "0 0 1 0\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "The distance is 1\n"
+            },
+            "stdin": "0 0 0 -1\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "The distance is greater than 1\n"
+            },
+            "stdin": "0 0 1 1\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "The distance is greater than 1\n"
+            },
+            "stdin": "0 0 -1 -1\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "The distance is greater than 1\n"
+            },
+            "stdin": "3 4 3 6\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "The distance is greater than 1\n"
+            },
+            "stdin": "-10000 -10000 10000 10000\n"
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "The distance is less than 1\n"
+            },
+            "stdin": "7 -8 7 -8\n"
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "The distance is 1\n"
+            },
+            "stdin": "100 100 99 100\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-f",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank F",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume array a (Pascal: a[0..n-1], C: a[n]) consists of distinct positive integers and max(i,j) returns the maximum value between a[i] to a[j] inclusive.\n\nComplete the program such that it finds the second maximum value of array a."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "F",
+          "maxChars": 21
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 12
+      },
+      "contextId": "q5-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int a[100], n, i, maximum, secondmaximum;\nint max(int l,int r) { int v=a[l]; for(int k=l+1;k<=r;k++) if(a[k]>v) v=a[k]; return v; }\nint f() {\nmaximum = max(0, n-1);\nfor (i=0; i<n; i++)\n  if ({{F}})\n    break;\na[i] = -a[i];\nsecondmaximum = max(0,n-1);\na[i] = -a[i];\nreturn secondmaximum;\n}\nint main() { scanf(\"%d\",&n); for(int k=0;k<n;k++) scanf(\"%d\",&a[k]); printf(\"%d\",f()); }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "2\n9 1\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "2\n1 9\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "3"
+            },
+            "stdin": "4\n3 1 4 2\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "4"
+            },
+            "stdin": "5\n5 4 3 2 1\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "4"
+            },
+            "stdin": "5\n1 2 3 4 5\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "7"
+            },
+            "stdin": "8\n8 2 6 1 7 3 5 4\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "9"
+            },
+            "stdin": "10\n2 10 1 9 3 8 4 7 5 6\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-g",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank G",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume array a (Pascal: a[0..n-1], C: a[n]) consists of distinct positive integers and max(i,j) returns the maximum value between a[i] to a[j] inclusive.\n\nComplete the program such that it finds the second maximum value of array a."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "G",
+          "maxChars": 21
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 12
+      },
+      "contextId": "q5-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int a[100], n, i, maximum, secondmaximum;\nint max(int l,int r) { int v=a[l]; for(int k=l+1;k<=r;k++) if(a[k]>v) v=a[k]; return v; }\nint f() {\nmaximum = max(0, n-1);\nfor (i=0; i<n; i++)\n  if (a[i]==maximum)\n    {{G}};\na[i] = -a[i];\nsecondmaximum = max(0,n-1);\na[i] = -a[i];\nreturn secondmaximum;\n}\nint main() { scanf(\"%d\",&n); for(int k=0;k<n;k++) scanf(\"%d\",&a[k]); printf(\"%d\",f()); }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "2\n9 1\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "2\n1 9\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "3"
+            },
+            "stdin": "4\n3 1 4 2\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "4"
+            },
+            "stdin": "5\n5 4 3 2 1\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "4"
+            },
+            "stdin": "5\n1 2 3 4 5\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "7"
+            },
+            "stdin": "8\n8 2 6 1 7 3 5 4\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "9"
+            },
+            "stdin": "10\n2 10 1 9 3 8 4 7 5 6\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-h",
+      "track": "section-b",
+      "printedRef": "Section B, Question 5, Blank H",
+      "title": "Section B, Question 5",
+      "prompt": {
+        "en": "Assume array a (Pascal: a[0..n-1], C: a[n]) consists of distinct positive integers and max(i,j) returns the maximum value between a[i] to a[j] inclusive.\n\nComplete the program such that it finds the second maximum value of array a."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "H",
+          "maxChars": 21
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 12
+      },
+      "contextId": "q5-code",
+      "grading": {
+        "kind": "program",
+        "targets": [
+          {
+            "language": "c",
+            "source": "int a[100], n, i, maximum, secondmaximum;\nint max(int l,int r) { int v=a[l]; for(int k=l+1;k<=r;k++) if(a[k]>v) v=a[k]; return v; }\nint f() {\nmaximum = max(0, n-1);\nfor (i=0; i<n; i++)\n  if (a[i]==maximum)\n    break;\na[i] = -a[i];\nsecondmaximum = {{H}};\na[i] = -a[i];\nreturn secondmaximum;\n}\nint main() { scanf(\"%d\",&n); for(int k=0;k<n;k++) scanf(\"%d\",&a[k]); printf(\"%d\",f()); }",
+            "harness": {
+              "kind": "program"
+            }
+          }
+        ],
+        "targetPolicy": "all",
+        "cases": [
+          {
+            "id": "case-1",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "2\n9 1\n"
+          },
+          {
+            "id": "case-2",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "1"
+            },
+            "stdin": "2\n1 9\n"
+          },
+          {
+            "id": "case-3",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "3"
+            },
+            "stdin": "4\n3 1 4 2\n"
+          },
+          {
+            "id": "case-4",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "4"
+            },
+            "stdin": "5\n5 4 3 2 1\n"
+          },
+          {
+            "id": "case-5",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "4"
+            },
+            "stdin": "5\n1 2 3 4 5\n"
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "7"
+            },
+            "stdin": "8\n8 2 6 1 7 3 5 4\n"
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 50000,
+            "expected": {
+              "stdout": "9"
+            },
+            "stdin": "10\n2 10 1 9 3 8 4 7 5 6\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-b-i",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank I",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Observe the following non-standard die.\n\nNow, complete its net on the answer sheet.\n\n1 mark for each correct value. 2 marks for each correct value and orientation."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "I"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "die-face",
+        "answerBlank": "I",
+        "expected": "ooo/.../ooo"
+      },
+      "figure": {
+        "kind": "paper-image",
+        "path": "papers/2012-13-junior-die.png",
+        "alt": "Three printed views of the non-standard die and its net: fixed five, four and one pip faces, with empty faces I, J and K."
+      }
+    },
+    {
+      "id": "section-b-j",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank J",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Observe the following non-standard die.\n\nNow, complete its net on the answer sheet.\n\n1 mark for each correct value. 2 marks for each correct value and orientation."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "J"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "die-face",
+        "answerBlank": "J",
+        "expected": "o../.o./..o"
+      }
+    },
+    {
+      "id": "section-b-k",
+      "track": "section-b",
+      "printedRef": "Section B, Question 6, Blank K",
+      "title": "Section B, Question 6",
+      "prompt": {
+        "en": "Observe the following non-standard die.\n\nNow, complete its net on the answer sheet.\n\n1 mark for each correct value. 2 marks for each correct value and orientation."
+      },
+      "points": 2,
+      "blanks": [
+        {
+          "id": "K"
+        }
+      ],
+      "source": {
+        "paperUrl": "https://assets.hkoi.org/ref/2013hje.pdf",
+        "page": 12
+      },
+      "grading": {
+        "kind": "die-face",
+        "answerBlank": "K",
+        "expected": "..o/.../o.."
+      }
+    }
+  ]
+}
