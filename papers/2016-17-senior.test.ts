@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import source from './2016-17-senior.json';
-import { gradePaper } from '../src/core/grader';
+import { gradePaper, gradeQuestion } from '../src/core/grader';
 import { validatePaper } from '../src/core/validate';
 import type { PaperAnswers } from '../src/core/types';
 
@@ -28,3 +28,9 @@ it('grades official 2016/17 Senior Section B answers', async () => {
   expect(result.scoredPoints).toBe(20);
   expect(result.complete).toBe(true);
 }, 60_000);
+
+it('rejects calling the prohibited f function in Blank K', async () => {
+  const question = paper.questions.find(item => item.id === 'cpp-k')!;
+  const result = await gradeQuestion(question, { K: 'f(a,b)' }, 'cpp');
+  expect(result.status).toBe('fail');
+});

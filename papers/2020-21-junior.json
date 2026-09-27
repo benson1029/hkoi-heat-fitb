@@ -201,7 +201,7 @@
         "targets": [
           {
             "language": "cpp",
-            "source": "char q[11]={'h','k','o','i','2','0','n','o','v','2','1'};int a,b;int main(){a=0;b=0;while(b<11){a=a+1;b={{E}};}cout<<q[a];}",
+            "source": "char q[11] =\n    {'h', 'k', 'o', 'i',\n     '2', '0', 'n', 'o',\n     'v', '2', '1'};\nint a, b;\nint main() {\n    a = 0;\n    b = 0;\n    while (b < 11) {\n        a = a + 1;\n        b = {{E}};\n    }\n    cout << q[a];\n}",
             "harness": {
               "kind": "program"
             }
@@ -219,7 +219,7 @@
         ]
       },
       "displayCode": {
-        "cpp": "char q[11]={'h','k','o','i','2','0','n','o','v','2','1'};int a,b;int main(){a=0;b=0;while(b<11){a=a+1;b={{E}};}cout<<q[a];}"
+        "cpp": "char q[11] =\n    {'h', 'k', 'o', 'i',\n     '2', '0', 'n', 'o',\n     'v', '2', '1'};\nint a, b;\nint main() {\n    a = 0;\n    b = 0;\n    while (b < 11) {\n        a = a + 1;\n        b = {{E}};\n    }\n    cout << q[a];\n}"
       }
     },
     {
@@ -264,7 +264,7 @@
       "printedRef": "Section B, Question 5, Blank G",
       "title": "Section B, Question 5",
       "prompt": {
-        "en": "SwapInt(x, y) and SwapChar(x, y) are procedures that swap the values of x and y. Consider the following program. If the input is ABBBAB, what is the output?"
+        "en": "If the input is ABBBAB, what is the output?"
       },
       "points": 1.5,
       "blanks": [
@@ -287,9 +287,7 @@
         },
         "normalize": "trim"
       },
-      "displayCode": {
-        "cpp": "string s;int a[50],n,i,j;void SwapInt(int& x,int& y){int t;t=x;x=y;y=t;}void SwapChar(char& x,char& y){char t;t=x;x=y;y=t;}int main(){cin>>s;n=s.length();for(i=0;i<=n-1;i++)a[i]=i+1;for(i=0;i<=n-1;i++)for(j=i;j<=n-2;j++)if(s[j]>s[j+1]){SwapInt(a[j],a[j+1]);SwapChar(s[j],s[j+1]);}for(i=0;i<=n-1;i++)cout<<a[i];return 0;}"
-      }
+      "contextId": "q5-swap-code"
     },
     {
       "id": "section-b-h",
@@ -328,9 +326,7 @@
         },
         "maxSteps": 5000
       },
-      "displayCode": {
-        "cpp": "string s;int a[50],n,i,j;void SwapInt(int& x,int& y){int t;t=x;x=y;y=t;}void SwapChar(char& x,char& y){char t;t=x;x=y;y=t;}int main(){cin>>s;n=s.length();for(i=0;i<=n-1;i++)a[i]=i+1;for(i=0;i<=n-1;i++)for(j=i;j<=n-2;j++)if(s[j]>s[j+1]){SwapInt(a[j],a[j+1]);SwapChar(s[j],s[j+1]);}for(i=0;i<=n-1;i++)cout<<a[i];return 0;}"
-      }
+      "contextId": "q5-swap-code"
     },
     {
       "id": "section-b-i",
@@ -338,7 +334,7 @@
       "printedRef": "Section B, Question 6, Blank I",
       "title": "Section B, Question 6",
       "prompt": {
-        "en": "The above IsPrime function tries to check whether x is a prime. A prime is any integer greater than 1 that is only divisible by 1 and itself. However, there is a bug in the function. For how many x where 1 ≤ x ≤ 100 does the function return a wrong answer?"
+        "en": "The above IsPrime function tries to check whether x is a prime. A prime is any integer greater than 1 that is only divisible by 1 and itself. However, there is a bug in the function. For how many x where 1 ≤ x ≤ 100, the function returns a wrong answer?"
       },
       "points": 1,
       "blanks": [
@@ -360,9 +356,7 @@
         },
         "normalize": "trim"
       },
-      "displayCode": {
-        "cpp": "41 bool IsPrime (int x) {\n42 int i;\n43 bool a;\n44 a = true;\n45 if (x == 1)\n46 a = false;\n47 i = 2;\n48 while (i * i < x)\n49 {\n50 if (x % i == 0)\n51 a = false;\n52 i++;\n53 }\n54 return a;\n55 }\n56 \n57 "
-      }
+      "contextId": "q6-prime-code"
     },
     {
       "id": "section-b-j",
@@ -370,7 +364,7 @@
       "printedRef": "Section B, Question 6, Blank J",
       "title": "Section B, Question 6",
       "prompt": {
-        "en": "The bug can be fixed by changing exactly one line. Find the line and correct it so that the function correctly determines whether x is a prime for all 1 ≤ x ≤ 10⁹. Enter the line number and correction."
+        "en": "The bug can be fixed by changing exactly one line. Find the line and correct it so that the function correctly determine whether x is a prime for all 1 ≤ x ≤ 10⁹."
       },
       "points": 1.5,
       "blanks": [
@@ -393,7 +387,7 @@
         "lineBlank": "J1",
         "replacementBlank": "J2",
         "firstLine": 41,
-        "source": "bool IsPrime (int x) {\nint i;\nbool a;\na = true;\nif (x == 1)\na = false;\ni = 2;\nwhile (i * i < x)\n{\nif (x % i == 0)\na = false;\ni++;\n}\nreturn a;\n}\n\n",
+        "source": "bool IsPrime(int x) {\n    int i;\n    bool a;\n    a = true;\n    if (x == 1)\n        a = false;\n    i = 2;\n    while (i * i < x)\n    {\n        if (x % i == 0)\n            a = false;\n        i++;\n    }\n    return a;\n}\n\n",
         "harness": {
           "kind": "call",
           "function": "IsPrime"
@@ -601,9 +595,7 @@
           }
         ]
       },
-      "displayCode": {
-        "cpp": "41 bool IsPrime (int x) {\n42 int i;\n43 bool a;\n44 a = true;\n45 if (x == 1)\n46 a = false;\n47 i = 2;\n48 while (i * i < x)\n49 {\n50 if (x % i == 0)\n51 a = false;\n52 i++;\n53 }\n54 return a;\n55 }\n56 \n57 "
-      }
+      "contextId": "q6-prime-code"
     },
     {
       "id": "section-b-k",
@@ -611,7 +603,7 @@
       "printedRef": "Section B, Question 7, Blank K",
       "title": "Section B, Question 7",
       "prompt": {
-        "en": "Complete the program so it outputs this 9×9 pattern:\n\n```text\n##.......\n###......\n.###.....\n..###....\n...###...\n....###..\n.....###.\n......###\n.......##\n```"
+        "en": "Complete the program so that it outputs the following:\n\n```text\n##.......\n###......\n.###.....\n..###....\n...###...\n....###..\n.....###.\n......###\n.......##\n```"
       },
       "points": 1.5,
       "blanks": [
@@ -630,7 +622,7 @@
         "targets": [
           {
             "language": "cpp",
-            "source": "int n,i,j;int main(){n=9;for(i=1;i<=n;i++){for(j=1;j<=n;j++)if({{K}})cout<<'#';else cout<<'.';cout<<endl;}return 0;}",
+            "source": "int n, i, j;\nint main() {\n    n = 9;\n    for (i = 1; i <= n; i++) {\n        for (j = 1; j <= n; j++)\n            if ({{K}})\n                cout << '#';\n            else\n                cout << '.';\n        cout << endl;\n    }\n    return 0;\n}",
             "harness": {
               "kind": "program"
             }
@@ -647,9 +639,7 @@
           }
         ]
       },
-      "displayCode": {
-        "cpp": "int n,i,j;int main(){n=9;for(i=1;i<=n;i++){for(j=1;j<=n;j++)if({{K}})cout<<'#';else cout<<'.';cout<<endl;}return 0;}"
-      }
+      "contextId": "q7-pattern-code"
     },
     {
       "id": "section-b-l",
@@ -657,7 +647,7 @@
       "printedRef": "Section B, Question 7, Blank L",
       "title": "Section B, Question 7",
       "prompt": {
-        "en": "Complete the program so it outputs this 9×9 pattern:\n\n```text\n.......##\n......###\n.....###.\n....###..\n...###...\n..###....\n.###.....\n###......\n##.......\n```"
+        "en": "Complete the program so that it outputs the following:\n\n```text\n.......##\n......###\n.....###.\n....###..\n...###...\n..###....\n.###.....\n###......\n##.......\n```"
       },
       "points": 1.5,
       "blanks": [
@@ -676,7 +666,7 @@
         "targets": [
           {
             "language": "cpp",
-            "source": "int n,i,j;int main(){n=9;for(i=1;i<=n;i++){for(j=1;j<=n;j++)if({{L}})cout<<'#';else cout<<'.';cout<<endl;}return 0;}",
+            "source": "int n, i, j;\nint main() {\n    n = 9;\n    for (i = 1; i <= n; i++) {\n        for (j = 1; j <= n; j++)\n            if ({{L}})\n                cout << '#';\n            else\n                cout << '.';\n        cout << endl;\n    }\n    return 0;\n}",
             "harness": {
               "kind": "program"
             }
@@ -693,9 +683,7 @@
           }
         ]
       },
-      "displayCode": {
-        "cpp": "int n,i,j;int main(){n=9;for(i=1;i<=n;i++){for(j=1;j<=n;j++)if({{L}})cout<<'#';else cout<<'.';cout<<endl;}return 0;}"
-      }
+      "contextId": "q7-pattern-code"
     },
     {
       "id": "section-b-m",
@@ -889,6 +877,45 @@
           }
         ]
       }
+    }
+  ],
+  "contexts": [
+    {
+      "id": "q5-swap-code",
+      "track": "section-b",
+      "title": "Section B, Question 5",
+      "markdown": "Consider the following program:\n\n```cpp\nstring s;\nint a[50];\nint n, i, j;\nvoid SwapInt(int& x, int& y) {\n    int t;\n    t = x; x = y; y = t;\n}\nvoid SwapChar(char& x,\n              char& y) {\n    char t;\n    t = x; x = y; y = t;\n}\nint main() {\n    cin >> s;\n    n = s.length();\n    for (i = 0; i <= n - 1; i++)\n        a[i] = i + 1;\n    for (i = 0; i <= n - 1; i++)\n        for (j = i; j <= n - 2; j++)\n            if (s[j] > s[j + 1]) {\n                SwapInt(a[j], a[j + 1]);\n                SwapChar(s[j],\n                         s[j + 1]);\n            }\n    for (i = 0; i <= n - 1; i++)\n        cout << a[i];\n    return 0;\n}\n```"
+    },
+    {
+      "id": "q6-prime-code",
+      "track": "section-b",
+      "title": "Section B, Question 6",
+      "markdown": "Consider the following function:\n\n```cpp\n41 bool IsPrime(int x) {\n42     int i;\n43     bool a;\n44     a = true;\n45     if (x == 1)\n46         a = false;\n47     i = 2;\n48     while (i * i < x)\n49     {\n50         if (x % i == 0)\n51             a = false;\n52         i++;\n53     }\n54     return a;\n55 }\n56 \n57 \n```"
+    },
+    {
+      "id": "q7-pattern-code",
+      "track": "section-b",
+      "title": "Section B, Question 7",
+      "markdown": "Consider the following program:",
+      "displayCode": {
+        "cpp": "int n, i, j;\nint main() {\n    n = 9;\n    for (i = 1; i <= n; i++) {\n        for (j = 1; j <= n; j++)\n            if ({{pattern}})\n                cout << '#';\n            else\n                cout << '.';\n        cout << endl;\n    }\n    return 0;\n}"
+      },
+      "answerSets": [
+        {
+          "questionId": "section-b-k",
+          "label": "K",
+          "bindings": {
+            "pattern": "K"
+          }
+        },
+        {
+          "questionId": "section-b-l",
+          "label": "L",
+          "bindings": {
+            "pattern": "L"
+          }
+        }
+      ]
     }
   ]
 }

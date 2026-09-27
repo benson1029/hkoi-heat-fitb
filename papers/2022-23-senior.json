@@ -43,7 +43,10 @@
     {
       "id": "adjacent",
       "track": "section-b",
-      "markdown": "Alice is asked to write a program to calculate the sum of differences of adjacent elements in an array. The program should first read an integer n, indicating the number of elements in the array, then n integers, which are the elements in the array. The program should output only one integer, which is the required sum. For example, when the input is 3 1 3 4, the program should calculate |1 − 3| + |3 − 4|, and output 3.\n\nAlice tries to write the following program to solve the problem:"
+      "markdown": "Alice is asked to write a program to calculate the sum of differences of adjacent elements in an array. The program should first read an integer n, indicating the number of elements in the array, then n integers, which are the elements in the array. The program should output only one integer, which is the required sum. For example, when the input is 3 1 3 4, the program should calculate |1 − 3| + |3 − 4|, and output 3.\n\nAlice tries to write the following program to solve the problem:",
+      "displayCode": {
+        "cpp": "int main() {\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    for (int i = 0;\n         i < a.size();\n         ++i)\n        cin >> a[i];\n    int sum = 0;\n    for (int i = 0;\n         i < a.size() - 1;\n         ++i)\n        sum += abs(a[i] - a[i + 1]);\n    cout << sum;\n}"
+      }
     }
   ],
   "questions": [
@@ -1026,9 +1029,6 @@
         "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
         "page": 17
       },
-      "displayCode": {
-        "cpp": "int main() {\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    for (int i = 0;\n         i < a.size();\n         ++i)\n        cin >> a[i];\n    int sum = 0;\n    for (int i = 0;\n         i < a.size() - 1;\n         ++i)\n        sum += abs(a[i] - a[i + 1]);\n    cout << sum;\n}"
-      },
       "contextId": "adjacent",
       "grading": {
         "kind": "literal",
@@ -1062,9 +1062,6 @@
         "paperUrl": "https://assets.hkoi.org/ref/2023hs.pdf",
         "answerSheetUrl": "https://assets.hkoi.org/ref/2023hsa.pdf",
         "page": 17
-      },
-      "displayCode": {
-        "cpp": "int main() {\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    for (int i = 0;\n         i < a.size();\n         ++i)\n        cin >> a[i];\n    int sum = 0;\n    for (int i = 0;\n         i < a.size() - 1;\n         ++i)\n        sum += abs(a[i] - a[i + 1]);\n    cout << sum;\n}"
       },
       "contextId": "adjacent",
       "grading": {

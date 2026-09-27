@@ -34,11 +34,53 @@ it.each(groups)('%s %s presents all graded blanks in one shared code block', (fi
   expect(context?.markdown).not.toContain('```c');
 });
 
-it('keeps shared printed code identical across the 2011/12 prime and 2015/16 cross papers', () => {
+it('retains printed division-specific headers and shared code where the papers agree', () => {
   const contextCode = (file: string, id: string) => {
     const paper = validatePaper(JSON.parse(readFileSync(join(__dirname, `${file}.json`), 'utf8')));
     return paper.contexts?.find((item) => item.id === id)?.displayCode?.c;
   };
-  expect(contextCode('2011-12-junior', 'q2-code')).toBe(contextCode('2011-12-senior', 'section-b-q2'));
+  expect(contextCode('2011-12-junior', 'q2-code')).toBe(`#include <stdio.h>\n${contextCode('2011-12-senior', 'section-b-q2')}`);
   expect(contextCode('2015-16-junior', 'crosses')).toBe(contextCode('2015-16-senior', 'crosses'));
+});
+
+it.each([
+  ['2014-15-junior', 'D', 'E'],
+  ['2014-15-senior', 'c-c', 'c-d'],
+])('%s grid question shares its printed C program across two answer sets', (file, first, second) => {
+  const paper = validatePaper(JSON.parse(readFileSync(join(__dirname, `${file}.json`), 'utf8')));
+  const context = paper.contexts?.find((item) => item.id === 'grid');
+  expect(context?.displayCode?.c).toContain('if ({{condition}})');
+  expect(context?.answerSets).toEqual([
+    { questionId: first, label: file.endsWith('junior') ? 'D' : 'C', bindings: { condition: file.endsWith('junior') ? 'D' : 'C' } },
+    { questionId: second, label: file.endsWith('junior') ? 'E' : 'D', bindings: { condition: file.endsWith('junior') ? 'E' : 'D' } },
+  ]);
+  expect(paper.questions.filter((q) => q.contextId === 'grid').every((q) => !q.displayCode)).toBe(true);
+});
+
+it.each([
+  ['2013-14-junior', 'q5-code'],
+  ['2013-14-senior', 'q5'],
+])('%s preserves the printed C sorting block indentation', (file, contextId) => {
+  const paper = validatePaper(JSON.parse(readFileSync(join(__dirname, `${file}.json`), 'utf8')));
+  const code = paper.contexts?.find((item) => item.id === contextId)?.displayCode?.c || '';
+  expect(code).toMatch(/\n    if \(a\[p\] > a\[p\+1\]\) \{\n        \{\{/);
+  expect(code).toMatch(/;\n        if \(\{\{/);
+  expect(code).toMatch(/\)\n            \{\{/);
+  expect(code).toMatch(/\n    \} else \{\n        \{\{/);
+});
+
+it('uses the printed 2013/14 Senior C block as the editor, without repeating it in the context', () => {
+  const paper = validatePaper(JSON.parse(readFileSync(join(__dirname, '2013-14-senior.json'), 'utf8')));
+  const context = paper.contexts?.find((item) => item.id === 'q2');
+  expect(context?.displayCode?.c).toContain('printf("%d", {{C}});');
+  expect(context?.displayCode?.c).toContain('    if (x > 0)\n        printf');
+  expect(context?.markdown).not.toContain('```c');
+});
+
+it('shows bare answer inputs for expression questions without printed code', () => {
+  const load = (file: string) => validatePaper(JSON.parse(readFileSync(join(__dirname, `${file}.json`), 'utf8')));
+  const senior = load('2011-12-senior');
+  const junior = load('2014-15-junior');
+  expect(senior.questions.filter((q) => ['A', 'B'].includes(q.id)).every((q) => q.answerOnly)).toBe(true);
+  expect(junior.questions.find((q) => q.id === 'F')?.answerOnly).toBe(true);
 });

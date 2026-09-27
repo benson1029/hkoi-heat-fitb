@@ -31,6 +31,32 @@
       "choiceGroup": "paper2"
     }
   ],
+  "contexts": [
+    {
+      "id": "python-q2-f",
+      "track": "python",
+      "markdown": "Consider the following program:",
+      "displayCode": {
+        "python": "def f(x: str) -> any:\n    return {{expression}}\ns, t = input().split()\nif f(s) == f(t):\n    print(\"Yes\")\nelse:\n    print(\"No\")"
+      },
+      "answerSets": [
+        {
+          "questionId": "python-j",
+          "label": "(a) · J",
+          "bindings": {
+            "expression": "J"
+          }
+        },
+        {
+          "questionId": "python-k",
+          "label": "(b) · K",
+          "bindings": {
+            "expression": "K"
+          }
+        }
+      ]
+    }
+  ],
   "questions": [
     {
       "id": "paper1-a",
@@ -1436,6 +1462,7 @@
     {
       "id": "python-j",
       "track": "python",
+      "contextId": "python-q2-f",
       "printedRef": "Paper 2 (Python), Section C, Question 2(a), Blank J",
       "title": "Paper 2 (Python), Section C, Question 2(a)",
       "prompt": {
@@ -1543,6 +1570,7 @@
     {
       "id": "python-k",
       "track": "python",
+      "contextId": "python-q2-f",
       "printedRef": "Paper 2 (Python), Section C, Question 2(b), Blank K",
       "title": "Paper 2 (Python), Section C, Question 2(b)",
       "prompt": {

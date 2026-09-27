@@ -31,7 +31,7 @@ export interface PaperContext {
   title?: string;
   /** Safe Markdown shown once before its grouped questions. */
   markdown: string;
-  /** Printed code shared by separately scored questions. Markers name blank IDs or answer-set slots. */
+  /** Printed code shared by separately scored questions. Markers, when present, name blank IDs or answer-set slots. */
   displayCode?: Partial<Record<Language, string>>;
   /** For alternative subparts that fill the same printed code slots differently. */
   answerSets?: { questionId: string; label: string; bindings: Record<string, string> }[];
@@ -70,6 +70,7 @@ export interface Blank {
   label?: string;
   maxChars?: number;
   forbiddenChars?: string;
+  forbiddenIdentifiers?: string[];
   allowedChars?: string;
   multiline?: boolean;
   placeholder?: string;
@@ -85,6 +86,8 @@ export interface Question {
   prompt: { en: string; zh?: string };
   /** Optional language-specific printed code for display; not executable grading source. */
   displayCode?: Partial<Record<Language, string>>;
+  /** Show only an answer field when the paper prints no code for this program blank. */
+  answerOnly?: boolean;
   figure?: PaperFigure;
   points: number;
   blanks: Blank[];

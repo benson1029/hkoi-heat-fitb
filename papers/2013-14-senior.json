@@ -23,7 +23,10 @@
       "id": "q2",
       "track": "section-b",
       "title": "Section B q2",
-      "markdown": "\"Nonopus card\" is a form of electronic money. By inputting the amount of its deposit into the following program, it automatically detects if the deposit is positive. If not, $200 is (repeatedly) added until the deposit becomes positive. Then it outputs the final deposit. You may assume that the input x must be an integer in [-2000, 2000]. Complete the program.\n\n```c\n#include <stdio.h>\nint x;\nint main(){\n  scanf(\"%d\", &x);\n  if (x > 0) printf(\"%d\", x);\n  else printf(\"%d\", {{C}});\n  return 0;\n}\n```"
+      "markdown": "\"Nonopus card\" is a form of electronic money. By inputting the amount of its deposit into the following program, it automatically detects if the deposit is positive. If not, \\$200 is (repeatedly) added until the deposit becomes positive. Then it outputs the final deposit. You may assume that the input x must be an integer in [-2000, 2000]. Complete the program.",
+      "displayCode": {
+        "c": "#include <stdio.h>\nint x;\nint main(){\n    scanf(\"%d\", &x);\n    if (x > 0)\n        printf(\"%d\", x);\n    else\n        printf(\"%d\", {{C}});\n    return 0;\n}"
+      }
     },
     {
       "id": "q3",
@@ -43,7 +46,7 @@
       "title": "Section B q5",
       "markdown": "",
       "displayCode": {
-        "c": "p = 0;\nwhile (p < 8) {\n    if (a[p] > a[p+1]) {\n          {{J}};\n   if ({{K1}})\n              {{K2}};\n    } else {\n          {{L}};\n    }\n}"
+        "c": "p = 0;\nwhile (p < 8) {\n    if (a[p] > a[p+1]) {\n        {{J}};\n        if ({{K1}})\n            {{K2}};\n    } else {\n        {{L}};\n    }\n}"
       }
     },
     {

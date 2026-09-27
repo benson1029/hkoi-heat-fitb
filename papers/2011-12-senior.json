@@ -27,6 +27,7 @@
       "prompt": {
         "en": "A. Write an expression which gives the maximum of two non-negative integers x and y."
       },
+      "answerOnly": true,
       "points": 2,
       "blanks": [
         {
@@ -134,6 +135,7 @@
       "prompt": {
         "en": "B. Write an expression which gives the maximum of two integers x and y"
       },
+      "answerOnly": true,
       "points": 2,
       "blanks": [
         {

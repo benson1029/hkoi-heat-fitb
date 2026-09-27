@@ -853,9 +853,6 @@
           }
         ]
       },
-      "displayCode": {
-        "c": "#include <stdio.h>\nint main() {\n  int n, i, j;\n  scanf(\"%d\", &n);\n  for (i = 0; i <= 2*n; i++) {\n    for (j = 0; j <= 2*n; j++) {\n      if ({{D}})\n        printf(\"*\");\n      else\n        printf(\" \");\n    }\n    printf(\"\\n\");\n  }\n  return 0;\n}"
-      },
       "contextId": "grid"
     },
     {
@@ -902,9 +899,6 @@
           }
         ]
       },
-      "displayCode": {
-        "c": "#include <stdio.h>\nint main() {\n  int n, i, j;\n  scanf(\"%d\", &n);\n  for (i = 0; i <= 2*n; i++) {\n    for (j = 0; j <= 2*n; j++) {\n      if ({{E}})\n        printf(\"*\");\n      else\n        printf(\" \");\n    }\n    printf(\"\\n\");\n  }\n  return 0;\n}"
-      },
       "contextId": "grid"
     },
     {
@@ -915,6 +909,7 @@
       "prompt": {
         "en": "Write an expression which gives the maximum of three positive integers x, y and z."
       },
+      "answerOnly": true,
       "points": 1,
       "blanks": [
         {
@@ -1551,7 +1546,14 @@
     {
       "id": "grid",
       "track": "section-b",
-      "markdown": "The following program reads an integer n and outputs a (2n+1) x (2n+1) grid."
+      "markdown": "The following program reads an integer n and outputs a (2n+1) x (2n+1) grid.",
+      "displayCode": {
+        "c": "#include <stdio.h>\nint main() {\n  int n, i, j;\n  scanf(\"%d\", &n);\n  for (i = 0; i <= 2*n; i++) {\n    for (j = 0; j <= 2*n; j++) {\n      if ({{condition}})\n        printf(\"*\");\n      else\n        printf(\" \");\n    }\n    printf(\"\\n\");\n  }\n  return 0;\n}"
+      },
+      "answerSets": [
+        { "questionId": "D", "label": "D", "bindings": { "condition": "D" } },
+        { "questionId": "E", "label": "E", "bindings": { "condition": "E" } }
+      ]
     }
   ]
 }

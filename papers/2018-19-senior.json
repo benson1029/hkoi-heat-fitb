@@ -161,6 +161,9 @@
             "stdin": "9 10 9 9 8 8 7 7 6 6 5 5 4 4 3 3 2 2 1 1"
           }
         ]
+      },
+      "displayCode": {
+        "cpp": "int n, x, ans, i;\nint main() {\n    cin >> n;\n    ans = 0;\n    for (i = 0; i <= 2 * n; i++) {\n        cin >> x;\n        {{B}};\n    }\n    cout << ans;\n    return 0;\n}"
       }
     },
     {
@@ -428,6 +431,9 @@
             ]
           }
         ]
+      },
+      "displayCode": {
+        "cpp": "bool is_power_of_two(int x) {\n    if (x <= 0)\n        return false;\n    else if ({{C}})\n        return true;\n    else\n        return false;\n}"
       }
     },
     {
@@ -1079,10 +1085,7 @@
         },
         "normalize": "trim"
       },
-      "contextId": "bubble",
-      "displayCode": {
-        "cpp": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}"
-      }
+      "contextId": "bubble"
     },
     {
       "id": "cpp-i",
@@ -1113,10 +1116,7 @@
         },
         "normalize": "trim"
       },
-      "contextId": "bubble",
-      "displayCode": {
-        "cpp": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}"
-      }
+      "contextId": "bubble"
     },
     {
       "id": "cpp-j",
@@ -1153,10 +1153,7 @@
         },
         "maxSteps": 15000
       },
-      "contextId": "bubble",
-      "displayCode": {
-        "cpp": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}"
-      }
+      "contextId": "bubble"
     },
     {
       "id": "cpp-k",
@@ -1837,10 +1834,7 @@
           }
         ]
       },
-      "contextId": "dangling",
-      "displayCode": {
-        "cpp": "71 int x;\n72 int main() {\n73     cin >> x;\n74     if (x % 2 == 0)\n75         if (x % 3 == 0)\n76             cout << \"six\";\n77         else\n78             cout << \"ODD\";\n79     return 0;\n80 }"
-      }
+      "contextId": "dangling"
     }
   ]
 }

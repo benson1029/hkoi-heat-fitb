@@ -25,7 +25,7 @@
       "track": "section-b",
       "markdown": "Complete the following program so that it outputs \"place\".",
       "displayCode": {
-        "c": "#include <stdio.h>\nchar s[256] = \"pace\";\nint i;\nint main() {\nfor ({{A}})\ns[i] = {{B}};\ns[i] = 'l';\ns[5] = 0;\nprintf(\"%s\", s);\nreturn 0;\n}"
+        "c": "#include <stdio.h>\nchar s[256] = \"pace\";\nint i;\nint main() {\n    for ({{A}})\n        s[i] = {{B}};\n    s[i] = 'l';\n    s[5] = 0;\n    printf(\"%s\", s);\n    return 0;\n}"
       }
     },
     {
@@ -33,20 +33,20 @@
       "track": "section-b",
       "markdown": "Consider the following program segment. Complete the above program segment, such that for any integers a, b between -100 and 100 (inclusive), equals(a, b) returns 1 if a == b (Pascal: a = b) and returns 0 otherwise, and greater(a, b) returns 1 if a > b and returns 0 otherwise.\n\nYou can only use a, b, numerical constants, comma \",\", spaces, brackets \"()\" and the following operators: +, -, *, / (Pascal: div), % (Pascal: mod).",
       "displayCode": {
-        "c": "int sq_cmp(int a, int b) {\nif (a * a > b * b)\nreturn 1;\nelse\nreturn 0;\n}\nint equals(int a, int b) {\nreturn sq_cmp({{C}});\n}\nint greater(int a, int b) {\nreturn sq_cmp({{D}});\n}"
+        "c": "int sq_cmp(int a, int b) {\n    if (a * a > b * b)\n        return 1;\n    else\n        return 0;\n}\nint equals(int a, int b) {\n    return sq_cmp({{C}});\n}\nint greater(int a, int b) {\n    return sq_cmp({{D}});\n}"
       }
     },
     {
       "id": "bits",
       "track": "section-b",
-      "markdown": "Consider the following program:\n\n```c\n#include <stdio.h>\nint n, ans;\nvoid f(int a, int b, int n) {\nif (n == 0)\nans = b - a;\nelse if (n % 2 == 0)\nf(a + 1, b, n / 2);\nelse\nf(a, b + 1, n / 2);\n}\nint main() {\nscanf(\"%d\", &n);\nans = 0;\nif ((n >= 0) && (n <= 2016))\nf(0, 0, n);\nprintf(\"%d\", ans);\nreturn 0;\n}\n```"
+      "markdown": "Consider the following program:\n\n```c\n#include <stdio.h>\nint n, ans;\nvoid f(int a, int b, int n) {\n    if (n == 0)\n        ans = b - a;\n    else if (n % 2 == 0)\n        f(a + 1, b, n / 2);\n    else\n        f(a, b + 1, n / 2);\n}\n\nint main() {\n    scanf(\"%d\", &n);\n    ans = 0;\n    if ((n >= 0) && (n <= 2016))\n        f(0, 0, n);\n    printf(\"%d\", ans);\n    return 0;\n}\n```"
     },
     {
       "id": "crosses",
       "track": "section-b",
       "markdown": "A “cross shape” is shown below.\n\n```text\n * \n***\n * \n```\n\nConsider the following grid. There are 2 cross shapes center at (2, 2) and (4, 4) respectively. (\".\" denotes an empty grid cell, (x, y) denotes the grid in row x and column y)\n\n```text\n.*...\n***..\n.*.*.\n..***\n...*.\n```\n\nWe call 2 cross shapes touch each other if they share the same corner but no edge. We call 2 cross shapes connected if they share the same edge. Therefore, the above cross shapes touch each other.\n\nConsider the following program segment, (a, b) stored the coordinate of the center of a cross shape, (x, y) stored the coordinate of center of another cross shape.",
       "displayCode": {
-        "c": "scanf(\"%d%d%d%d\", &a, &b, &x, &y);\nif ({{J}})\nprintf(\"They are connected\");\nif ({{K}})\nprintf(\"They touch each other\");"
+        "c": "scanf(\"%d%d%d%d\", &a, &b, &x, &y);\nif ({{J}})\n    printf(\"They are connected\");\nif ({{K}})\n    printf(\"They touch each other\");"
       }
     }
   ],
@@ -1123,7 +1123,7 @@
         "normalize": "trim"
       },
       "displayCode": {
-        "c": "51 l = 0;\n52 r = n - 1;\n53 while (l <= r)\n54 {\n55 mid = (l + r) / 2;\n56 if (a[mid] < x)\n57 l = mid + 1;\n58 else\n59 r = mid - 1;\n60 }\n61 if (a[mid] == x)\n62 printf(\"Found\");\n63 else\n64 printf(\"Not found\");"
+        "c": "51 l = 0;\n52 r = n - 1;\n53 while (l <= r)\n54 {\n55     mid = (l + r) / 2;\n56     if (a[mid] < x)\n57         l = mid + 1;\n58     else\n59         r = mid - 1;\n60 }\n61 if (a[mid] == x)\n62     printf(\"Found\");\n63 else\n64     printf(\"Not found\");"
       }
     },
     {
@@ -1259,7 +1259,7 @@
         ]
       },
       "displayCode": {
-        "c": "51 l = 0;\n52 r = n - 1;\n53 while (l <= r)\n54 {\n55 mid = (l + r) / 2;\n56 if (a[mid] < x)\n57 l = mid + 1;\n58 else\n59 r = mid - 1;\n60 }\n61 if (a[mid] == x)\n62 printf(\"Found\");\n63 else\n64 printf(\"Not found\");"
+        "c": "51 l = 0;\n52 r = n - 1;\n53 while (l <= r)\n54 {\n55     mid = (l + r) / 2;\n56     if (a[mid] < x)\n57         l = mid + 1;\n58     else\n59         r = mid - 1;\n60 }\n61 if (a[mid] == x)\n62     printf(\"Found\");\n63 else\n64     printf(\"Not found\");"
       }
     },
     {
@@ -1294,7 +1294,7 @@
         "maximum": 99999
       },
       "displayCode": {
-        "c": "#include <stdio.h>\nint i, k, t, x;\nint main() {\nscanf(\"%d\", &x);\nk = x;\nprintf(\"1\\n\");\nif (x > 1) {\nfor (i = 2; i <= x; i++) {\nt = 1;\nwhile (k % i == 0) {\nk = k / i;\nt = t * i;\nprintf(\"%d\\n\", t);\n}\n}\n}\nreturn 0;\n}"
+        "c": "#include <stdio.h>\nint i, k, t, x;\nint main() {\n    scanf(\"%d\", &x);\n    k = x;\n    printf(\"1\\n\");\n    if (x > 1) {\n        for (i = 2; i <= x; i++) {\n            t = 1;\n            while (k % i == 0) {\n                k = k / i;\n                t = t * i;\n                printf(\"%d\\n\", t);\n            }\n        }\n    }\n    return 0;\n}"
       }
     },
     {
@@ -2315,7 +2315,7 @@
       "printedRef": "Section B, Question 7, Blank L",
       "title": "Section B, Question 7",
       "prompt": {
-        "en": "The “Logo” programming language can be used to draw shapes. Initially there is a “turtle” on the screen pointing upwards. Then you can issue commands to move it around so its path would be left on the screen. For example, consider the following program:\n\n```text\nto sq :size\nif :size = 0 [ stop ]\nrepeat 4 [ fd :size rt 90 ]\nsq :size - 50\nend\nsq 250\n```\n\nThe result image would be:\n\nNow draw, on the answer sheet, the result image of the following program. Scale (size) does not matter and minor inaccuracies are acceptable.\n\nHint: repeat means repeat, fd means forward, lt means left turn and rt means right turn.\n\n```text\nto shape :size\nif :size = 30 [ stop ]\nrepeat 3 [ fd :size / 3 lt 60 shape :size / 3 rt 60 fd :size * 2 / 3 rt 120 ]\nend\nshape 270\n```"
+        "en": "The “Logo” programming language can be used to draw shapes. Initially there is a “turtle” on the screen pointing upwards. Then you can issue commands to move it around so its path would be left on the screen. For example, consider the following program:\n\n```text\nto sq :size\n    if :size = 0 [ stop ]\n    repeat 4 [ fd :size rt 90 ]\n    sq :size - 50\nend\nsq 250\n```\n\nThe result image would be:\n\nNow draw, on the answer sheet, the result image of the following program. Scale (size) does not matter and minor inaccuracies are acceptable.\n\nHint: repeat means repeat, fd means forward, lt means left turn and rt means right turn.\n\n```text\nto shape :size\n    if :size = 30 [ stop ]\n    repeat 3 [ fd :size / 3 lt 60 shape :size / 3 rt 60 fd :size * 2 / 3 rt 120 ]\nend\nshape 270\n```"
       },
       "points": 2,
       "blanks": [

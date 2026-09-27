@@ -345,7 +345,9 @@ function ContextBlock({ context, questions, answers, selectedLanguage, activeQue
       {context.answerSets.map((item, index) => <button key={item.questionId} type="button" role="tab" aria-selected={index === activeSet}
         className={index === activeSet ? 'active' : ''} onClick={() => onSelectAnswerSet(item.questionId)}>{item.label}</button>)}
     </div>}
-    {code && <SharedCodeTemplate language={code.language} source={code.source} owners={owners} answers={answers} onAnswer={onAnswer} />}
+    {code && (/\{\{[A-Za-z0-9][A-Za-z0-9._-]*\}\}/.test(code.source)
+      ? <SharedCodeTemplate language={code.language} source={code.source} owners={owners} answers={answers} onAnswer={onAnswer} />
+      : <DisplayCode language={code.language} source={code.source} />)}
   </details>;
 }
 
@@ -644,6 +646,7 @@ function QuestionCard({
   question,
   selectedLanguage,
   sharedCode,
+  contextShowsCode,
   onEditShared,
   paperSource,
   values,
@@ -655,6 +658,7 @@ function QuestionCard({
   question: Question;
   selectedLanguage?: Language;
   sharedCode: boolean;
+  contextShowsCode: boolean;
   onEditShared?: () => void;
   paperSource?: SourceRef;
   values: Record<string, string>;
@@ -670,6 +674,7 @@ function QuestionCard({
   const displayLanguage = (selectedLanguage && question.displayCode?.[selectedLanguage] ? selectedLanguage : Object.keys(question.displayCode ?? {})[0]) as Language | undefined;
   const displaySource = !sharedCode && displayLanguage ? question.displayCode?.[displayLanguage] : undefined;
   const displayHasBlanks = !!displaySource && /\{\{[A-Za-z][A-Za-z0-9_-]*\}\}/.test(displaySource);
+  const plainAnswer = contextShowsCode || question.answerOnly === true;
   const source = question.source?.paperUrl ? question.source : paperSource;
   const sourceUrl = officialPaperLink(source);
   return (
@@ -682,7 +687,7 @@ function QuestionCard({
       {displaySource && displayLanguage && grading.kind !== 'cancelled' && (displayHasBlanks
         ? <CodeTemplate target={{ language: displayLanguage, source: displaySource, harness: { kind: 'call', function: 'display' } }} question={question} values={values} onAnswer={onAnswer} />
         : <DisplayCode language={displayLanguage} source={displaySource} />)}
-      {grading.kind === 'program' && !displaySource && !sharedCode && (
+      {grading.kind === 'program' && !displaySource && !sharedCode && !plainAnswer && (
         <>
           {grading.targets.length > 1 && !selectedTarget && <div className="language-tabs" role="tablist" aria-label={`${question.title} source language`}>{grading.targets.map((item, current) => <button type="button" key={`${item.language}-${current}`} role="tab" aria-selected={current === targetIndex} className={current === targetIndex ? 'active' : ''} onClick={() => setTargetIndex(current)}>{item.language.toUpperCase()}</button>)}</div>}
           {target && <CodeTemplate target={target} question={question} values={values} onAnswer={onAnswer} />}
@@ -692,7 +697,7 @@ function QuestionCard({
       {grading.kind === 'robot-grid' && <RobotAnswer question={question} grading={grading} values={values} onAnswer={onAnswer} />}
       {grading.kind === 'die-face' && <DieFaceAnswer question={question} answerBlank={grading.answerBlank} value={values[grading.answerBlank] || ''} onAnswer={onAnswer} />}
       {grading.kind === 'logo-drawing' && <LogoDrawingAnswer question={question} answerBlank={grading.answerBlank} value={values[grading.answerBlank] || ''} onAnswer={onAnswer} />}
-      {!sharedCode && (grading.kind !== 'program' || (!!displaySource && !displayHasBlanks)) && grading.kind !== 'graph' && grading.kind !== 'robot-grid' && grading.kind !== 'die-face' && grading.kind !== 'logo-drawing' && grading.kind !== 'cancelled' && !displayHasBlanks && <div className="answer-fields">{question.blanks.map((blank) => <AnswerInput key={blank.id} blank={blank} value={values[blank.id] || ''} onChange={(value) => onAnswer(blank.id, value)} showLabel={question.blanks.length > 1} questionTitle={question.printedRef} />)}</div>}
+      {!sharedCode && (grading.kind !== 'program' || plainAnswer || (!!displaySource && !displayHasBlanks)) && grading.kind !== 'graph' && grading.kind !== 'robot-grid' && grading.kind !== 'die-face' && grading.kind !== 'logo-drawing' && grading.kind !== 'cancelled' && !displayHasBlanks && <div className="answer-fields">{question.blanks.map((blank) => <AnswerInput key={blank.id} blank={blank} value={values[blank.id] || ''} onChange={(value) => onAnswer(blank.id, value)} showLabel={question.blanks.length > 1} questionTitle={question.printedRef} />)}</div>}
       {grading.kind === 'pending' && <p className="pending-note">Grader pending: {grading.reason}</p>}
       {grading.kind === 'cancelled' && <p className="cancelled-note">{grading.reason}</p>}
       {grading.kind !== 'cancelled' && <div className="question-actions"><button type="button" className="check-button" onClick={onCheck} disabled={busy || grading.kind === 'pending'}>{busy ? 'Checking…' : 'Check'}</button></div>}
@@ -850,7 +855,8 @@ export default function App() {
                 selectedLanguage={selectedLanguage} activeQuestionId={activeContextQuestions[`${paper.paper.id}:${start.id}`]}
                 onSelectAnswerSet={(questionId) => setActiveContextQuestions((all) => ({ ...all, [`${paper.paper.id}:${start.id}`]: questionId }))}
                 onAnswer={changeAnswer} />}
-              <QuestionCard question={question} selectedLanguage={selectedLanguage} sharedCode={sharedCode} paperSource={paper.paper.source}
+              <QuestionCard question={question} selectedLanguage={selectedLanguage} sharedCode={sharedCode}
+                contextShowsCode={(!!context?.markdown && /```(?:c|cpp|c\+\+|python)(?:\s|$)/i.test(context.markdown)) || (!!shared && markers.size === 0)} paperSource={paper.paper.source}
                 values={answers[question.id] || {}} result={results[question.id]} busy={busyAll || !!busyQuestion}
                 onEditShared={sharedCode && context ? () => {
                   if (answerSet) setActiveContextQuestions((all) => ({ ...all, [`${paper.paper.id}:${context.id}`]: question.id }));

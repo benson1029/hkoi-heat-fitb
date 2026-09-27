@@ -31,3 +31,16 @@ it('rejects missing sides and unrelated shapes', () => {
   expect(matchesLogoDrawing(target.slice(0, 3), target, .14)).toBe(false);
   expect(matchesLogoDrawing([...target, [[0, 0], [1, 1]], [[0, 1], [1, 0]]], target, .14)).toBe(false);
 });
+
+it('rejects triangles facing vertically or both facing right', () => {
+  const vertical: DrawingSegment[] = [
+    [[.5, 0], [1, .75]], [[1, .75], [0, .75]], [[0, .75], [.5, 0]],
+    [[.5, 1], [0, .25]], [[0, .25], [1, .25]], [[1, .25], [.5, 1]]
+  ];
+  const sameDirection: DrawingSegment[] = [
+    [[.25, 0], [.75, .5]], [[.75, .5], [.25, 1]], [[.25, 1], [.25, 0]],
+    [[.75, 0], [1, .5]], [[1, .5], [.75, 1]], [[.75, 1], [.75, 0]]
+  ];
+  expect(matchesLogoDrawing(vertical, target, .14)).toBe(false);
+  expect(matchesLogoDrawing(sameDirection, target, .14)).toBe(false);
+});

@@ -3,6 +3,14 @@ import { expect, it } from 'vitest';
 import { gradePaper } from '../src/core/grader';
 import { validatePaper } from '../src/core/validate';
 
+it('preserves indentation in the Junior C programs shared with Senior', () => {
+  const paper = validatePaper(JSON.parse(readFileSync(new URL('./2015-16-junior.json', import.meta.url), 'utf8')));
+  const crosses = paper.contexts?.find(item => item.id === 'crosses')?.displayCode?.c;
+  expect(crosses).toContain('\n    printf("They are connected");');
+  expect(paper.questions.find(item => item.id === 'GH')?.displayCode?.c).toContain('\n57         l = mid + 1;');
+  expect(paper.questions.find(item => item.id === 'I')?.displayCode?.c).toContain('\n            while (k % i == 0) {');
+});
+
 it('grades the 2015/16 Junior printed Section B answers', async () => {
   const paper = validatePaper(JSON.parse(readFileSync(new URL('./2015-16-junior.json', import.meta.url), 'utf8')));
   const result = await gradePaper(paper, {

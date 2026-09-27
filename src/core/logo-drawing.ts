@@ -13,6 +13,13 @@ function along([a, b]: DrawingSegment, t: number): Point {
   return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 }
 
+function aligned([a, b]: DrawingSegment, [c, d]: DrawingSegment): boolean {
+  const ux = b[0] - a[0], uy = b[1] - a[1];
+  const vx = d[0] - c[0], vy = d[1] - c[1];
+  const lengths = Math.hypot(ux, uy) * Math.hypot(vx, vy);
+  return lengths > 1e-10 && Math.abs(ux * vx + uy * vy) / lengths >= 0.9;
+}
+
 /** Compare the recognizable strokes, rather than requiring an accurate tracing. */
 export function matchesLogoDrawing(drawing: DrawingSegment[], target: DrawingSegment[], tolerance: number): boolean {
   const substantial = drawing.filter(([a, b]) => Math.hypot(a[0] - b[0], a[1] - b[1]) >= 0.04);
@@ -30,11 +37,11 @@ export function matchesLogoDrawing(drawing: DrawingSegment[], target: DrawingSeg
   ]);
 
   // Each intended edge needs most of its length, but endpoints and joins may be rough.
-  const nearby = (point: Point, segments: DrawingSegment[], radius: number) =>
-    segments.some(segment => distanceToSegment(point, segment) <= radius);
+  const nearby = (point: Point, segments: DrawingSegment[], radius: number, direction: DrawingSegment) =>
+    segments.some(segment => aligned(segment, direction) && distanceToSegment(point, segment) <= radius);
   for (const edge of target) {
     let covered = 0;
-    for (let i = 0; i < 15; i++) if (nearby(along(edge, (i + 0.5) / 15), lines, tolerance)) covered++;
+    for (let i = 0; i < 15; i++) if (nearby(along(edge, (i + 0.5) / 15), lines, tolerance, edge)) covered++;
     if (covered < 10) return false;
   }
 
@@ -44,7 +51,7 @@ export function matchesLogoDrawing(drawing: DrawingSegment[], target: DrawingSeg
     const length = Math.hypot(line[0][0] - line[1][0], line[0][1] - line[1][1]);
     totalLength += length;
     let unrelated = 0;
-    for (let i = 0; i < 12; i++) if (!nearby(along(line, (i + 0.5) / 12), target, tolerance * 1.3)) unrelated++;
+    for (let i = 0; i < 12; i++) if (!nearby(along(line, (i + 0.5) / 12), target, tolerance * 1.3, line)) unrelated++;
     if (length >= 0.6 && unrelated >= 4) return false;
     unrelatedLength += length * unrelated / 12;
   }

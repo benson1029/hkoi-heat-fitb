@@ -47,7 +47,7 @@
       "title": "Question 5 · C sorting segment",
       "markdown": "",
       "displayCode": {
-        "c": "p = 0;\nwhile (p < 8) {\n    if (a[p] > a[p+1]) {\n          {{I}};\n   if ({{J1}})\n              {{J2}};\n    } else {\n          {{K}};\n    }\n}"
+        "c": "p = 0;\nwhile (p < 8) {\n    if (a[p] > a[p+1]) {\n        {{I}};\n        if ({{J1}})\n            {{J2}};\n    } else {\n        {{K}};\n    }\n}"
       }
     }
   ],
@@ -58,7 +58,7 @@
       "printedRef": "Section B, Question 1, Blank A",
       "title": "Section B, Question 1",
       "prompt": {
-        "en": "You want to carry some items from one city to another. There are two types of goods that you can choose:\nRice - each bag weighs 2 kg and can be sold for $6.\nCabbage - each pack weighs 3 kg and can be sold for $10.\nWhat is the maximum dollar amount you can get after selling the goods, assuming that you can only carry not more than 16 kg of goods?"
+        "en": "You want to carry some items from one city to another. There are two types of goods that you can choose:\nRice - each bag weighs 2 kg and can be sold for \\$6.\nCabbage - each pack weighs 3 kg and can be sold for \\$10.\nWhat is the maximum dollar amount you can get after selling the goods, assuming that you can only carry not more than 16 kg of goods?"
       },
       "points": 2,
       "blanks": [

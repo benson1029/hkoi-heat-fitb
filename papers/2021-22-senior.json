@@ -38,7 +38,10 @@
     {
       "id": "multiply",
       "track": "section-b",
-      "markdown": "Consider the following function:"
+      "markdown": "Consider the following function:",
+      "displayCode": {
+        "cpp": "int multiply(int x, int y) {\n    int ans = 0;\n    while (x > 0)\n    {\n        if (x % 2 == 1)\n            ans = ans + y;\n        x = x / 2;\n    }\n    return ans;\n}"
+      }
     },
     {
       "id": "digit",
@@ -625,9 +628,6 @@
         "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
         "page": 17
       },
-      "displayCode": {
-        "cpp": "int multiply(int x, int y) {\n    int ans = 0;\n    while (x > 0)\n    {\n        if (x % 2 == 1)\n            ans = ans + y;\n        x = x / 2;\n    }\n    return ans;\n}"
-      },
       "contextId": "multiply",
       "grading": {
         "kind": "literal",
@@ -662,9 +662,6 @@
         "paperUrl": "https://assets.hkoi.org/ref/2022hs.pdf",
         "answerSheetUrl": "https://assets.hkoi.org/ref/2022hsa.pdf",
         "page": 17
-      },
-      "displayCode": {
-        "cpp": "int multiply(int x, int y) {\n    int ans = 0;\n    while (x > 0)\n    {\n        if (x % 2 == 1)\n            ans = ans + y;\n        x = x / 2;\n    }\n    return ans;\n}"
       },
       "contextId": "multiply",
       "grading": {

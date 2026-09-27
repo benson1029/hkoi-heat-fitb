@@ -26,7 +26,7 @@
       "title": "Question 2 · C program segment",
       "markdown": "",
       "displayCode": {
-        "c": "int is_prime[6];\nint prime;\n......\nis_prime[2]=1;\nis_prime[3]=1;\nis_prime[4]=0;\nis_prime[5]= {{C}};\nfor (i={{D}}; i<=25; i++) {\n   prime=1;\n   for (j=2; j<=5; j++)\n      if ({{E}})\n         prime=0;\n   if (prime==1) printf(\"%d\\n\",i);\n}"
+        "c": "#include <stdio.h>\nint is_prime[6];\nint prime;\n......\nis_prime[2]=1;\nis_prime[3]=1;\nis_prime[4]=0;\nis_prime[5]= {{C}};\nfor (i={{D}}; i<=25; i++) {\n   prime=1;\n   for (j=2; j<=5; j++)\n      if ({{E}})\n         prime=0;\n   if (prime==1) printf(\"%d\\n\",i);\n}"
       }
     },
     {

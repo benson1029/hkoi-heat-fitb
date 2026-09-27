@@ -33,7 +33,7 @@
     {
       "id": "coins",
       "track": "section-b",
-      "markdown": "In Heung Shing, there are only four denominations of coins, $1, $2, $5 and $10. This results in multiple ways to pay the same amount without change. For example, there are 6 ways to pay $7 without change:\n\n| Way | Coins used |\n|---:|---|\n| 1 | $1 + $1 + $1 + $2 + $2 |\n| 2 | $2 + $5 |\n| 3 | $1 + $1 + $1 + $1 + $1 + $1 + $1 |\n| 4 | $1 + $1 + $5 |\n| 5 | $1 + $2 + $2 + $2 |\n| 6 | $1 + $1 + $1 + $1 + $1 + $2 |\n\nAlice has already completed a function CountNo1(n) that calculates the number of ways to pay $n without change, using $2, $5 and $10 coins only. The function signature is as follows.\n\n```cpp\nint CountNo1 (int n);\n```"
+      "markdown": "In Heung Shing, there are only four denominations of coins, \\$1, \\$2, \\$5 and \\$10. This results in multiple ways to pay the same amount without change. For example, there are 6 ways to pay \\$7 without change:\n\n| Way | Coins used |\n|---:|---|\n| 1 | \\$1 + \\$1 + \\$1 + \\$2 + \\$2 |\n| 2 | \\$2 + \\$5 |\n| 3 | \\$1 + \\$1 + \\$1 + \\$1 + \\$1 + \\$1 + \\$1 |\n| 4 | \\$1 + \\$1 + \\$5 |\n| 5 | \\$1 + \\$2 + \\$2 + \\$2 |\n| 6 | \\$1 + \\$1 + \\$1 + \\$1 + \\$1 + \\$2 |\n\nAlice has already completed a function CountNo1(n) that calculates the number of ways to pay \\$n without change, using \\$2, \\$5 and \\$10 coins only. The function signature is as follows.\n\n```cpp\nint CountNo1 (int n);\n```"
     },
     {
       "id": "bitshift",
@@ -993,7 +993,7 @@
       "printedRef": "Section B, Question 5(a), Blank H",
       "title": "Section B, Question 5(a)",
       "prompt": {
-        "en": "Complete the following function Count(n) that calculates the number of ways to pay $n without change, using $1, $2, $5 and $10 coins. You can make calls to CountNo1 and Count inside your subprogram. Assume that −10⁴ ≤ n ≤ 10⁴."
+        "en": "Complete the following function Count(n) that calculates the number of ways to pay \\$n without change, using \\$1, \\$2, \\$5 and \\$10 coins. You can make calls to CountNo1 and Count inside your subprogram. Assume that −10⁴ ≤ n ≤ 10⁴."
       },
       "points": 2,
       "blanks": [
@@ -1153,7 +1153,7 @@
       "printedRef": "Section B, Question 5(b), Blank I",
       "title": "Section B, Question 5(b)",
       "prompt": {
-        "en": "Alice does not wish to use too many $2 coins because they are not round. Complete the following function CountRestrict2(n, limit) that calculates the number of ways to pay $n without change, using $1, $2, $5 and $10 coins but with no more than limit $2 coins. You can make calls to Count inside your program. Assume that 0 ≤ n, limit ≤ 10³ and Count has been correctly implemented."
+        "en": "Alice does not wish to use too many \\$2 coins because they are not round. Complete the following function CountRestrict2(n, limit) that calculates the number of ways to pay \\$n without change, using \\$1, \\$2, \\$5 and \\$10 coins but with no more than limit \\$2 coins. You can make calls to Count inside your program. Assume that 0 ≤ n, limit ≤ 10³ and Count has been correctly implemented."
       },
       "points": 2,
       "blanks": [

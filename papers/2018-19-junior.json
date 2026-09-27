@@ -848,9 +848,6 @@
           ]
         },
         "normalize": "trim"
-      },
-      "displayCode": {
-        "cpp": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}"
       }
     },
     {
@@ -880,9 +877,6 @@
           ]
         },
         "normalize": "trim"
-      },
-      "displayCode": {
-        "cpp": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}"
       }
     },
     {
@@ -914,9 +908,6 @@
         "minimum": -9,
         "maximum": 99,
         "inversionCount": 42
-      },
-      "displayCode": {
-        "cpp": "int a[10];\nint i, j, t, ans;\nint main() {\n    for (i = 0; i <= 9; i++)\n        cin >> a[i];\n    ans = 0;\n    for (i = 8; i >= 0; i--)\n        for (j = 0; j <= i; j++)\n            if (a[j] > a[j + 1]) {\n                t = a[j];\n                a[j] = a[j + 1];\n                a[j + 1] = t;\n                ans++;\n            }\n    cout << ans;\n    return 0;\n}"
       }
     },
     {

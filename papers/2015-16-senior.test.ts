@@ -23,6 +23,17 @@ const answers: PaperAnswers = {
   ]) }
 };
 
+it('preserves the printed indentation in the C and Logo programs', () => {
+  const context = (id: string) => paper.contexts?.find(item => item.id === id);
+  const question = (id: string) => paper.questions.find(item => item.id === id);
+  expect(context('place')?.displayCode?.c).toContain('\n    for ({{A}})\n        s[i] = {{B}};');
+  expect(context('sqcmp')?.displayCode?.c).toContain('\n    if (a * a > b * b)\n        return 1;');
+  expect(context('bits')?.markdown).toContain('\n    if (n == 0)\n        ans = b - a;');
+  expect(question('c-g')?.displayCode?.c).toContain('\n57         l = mid + 1;');
+  expect(question('c-i')?.displayCode?.c).toContain('\n            while (k % i == 0) {');
+  expect(question('c-l')?.prompt.en).toContain('\n    repeat 3 [ fd :size / 3');
+});
+
 it('grades the official 2015/16 Senior Section B answers and drawing', async () => {
   const result = await gradePaper(paper, answers, ['section-b']);
   expect(result.questions.filter(item => item.status !== 'pass')).toEqual([]);
@@ -41,5 +52,14 @@ it('rejects a different Logo drawing', async () => {
     [[0, 0], [1, 0]], [[1, 0], [1, 1]], [[1, 1], [0, 1]], [[0, 1], [0, 0]]
   ]);
   const result = await gradePaper(paper, { 'c-l': { L: square } }, ['section-b']);
+  expect(result.questions.find(item => item.questionId === 'c-l')?.status).toBe('fail');
+}, 60_000);
+
+it('rejects vertically oriented triangles for the Logo drawing', async () => {
+  const vertical = JSON.stringify([
+    [[.5, 0], [1, .75]], [[1, .75], [0, .75]], [[0, .75], [.5, 0]],
+    [[.5, 1], [0, .25]], [[0, .25], [1, .25]], [[1, .25], [.5, 1]]
+  ]);
+  const result = await gradePaper(paper, { 'c-l': { L: vertical } }, ['section-b']);
   expect(result.questions.find(item => item.questionId === 'c-l')?.status).toBe('fail');
 }, 60_000);

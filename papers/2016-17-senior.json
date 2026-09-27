@@ -1105,6 +1105,9 @@
             ]
           }
         ]
+      },
+      "displayCode": {
+        "cpp": "bool f(int x, int y) {\n    return {{J}};\n}"
       }
     },
     {
@@ -1120,7 +1123,10 @@
         {
           "id": "K",
           "maxChars": 50,
-          "forbiddenChars": "<>!="
+          "forbiddenChars": "<>!=",
+          "forbiddenIdentifiers": [
+            "f"
+          ]
         }
       ],
       "source": {
@@ -1594,6 +1600,9 @@
             ]
           }
         ]
+      },
+      "displayCode": {
+        "cpp": "int min(int a, int b) {\n    if (a < b)\n        return a;\n    else\n        return b;\n}\nint max(int a, int b) {\n    if (a > b)\n        return a;\n    else\n        return b;\n}\nint f(int a, int b) {\n    if (max(a, -a) < max(b, -b))\n        return a;\n    else if (max(a, -a) > max(b, -b))\n        return b;\n    else\n        return min(a, b);\n}\nint g(int a, int b) {\n    return {{K}};\n}"
       }
     },
     {

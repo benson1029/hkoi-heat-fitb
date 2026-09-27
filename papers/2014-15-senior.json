@@ -28,7 +28,14 @@
     {
       "id": "grid",
       "track": "section-b",
-      "markdown": "The following program reads an integer n and outputs a (2n+1) x (2n+1) grid."
+      "markdown": "The following program reads an integer n and outputs a (2n+1) x (2n+1) grid.",
+      "displayCode": {
+        "c": "#include <stdio.h>\nint main() {\n  int n, i, j;\n  scanf(\"%d\", &n);\n  for (i = 0; i <= 2*n; i++) {\n    for (j = 0; j <= 2*n; j++) {\n      if ({{condition}})\n        printf(\"*\");\n      else\n        printf(\" \");\n    }\n    printf(\"\\n\");\n  }\n  return 0;\n}"
+      },
+      "answerSets": [
+        { "questionId": "c-c", "label": "C", "bindings": { "condition": "C" } },
+        { "questionId": "c-d", "label": "D", "bindings": { "condition": "D" } }
+      ]
     },
     {
       "id": "linked",
@@ -147,10 +154,7 @@
           }
         ]
       },
-      "contextId": "grid",
-      "displayCode": {
-        "c": "#include <stdio.h>\nint main() {\n  int n, i, j;\n  scanf(\"%d\", &n);\n  for (i = 0; i <= 2*n; i++) {\n    for (j = 0; j <= 2*n; j++) {\n      if ({{C}})\n        printf(\"*\");\n      else\n        printf(\" \");\n    }\n    printf(\"\\n\");\n  }\n  return 0;\n}"
-      }
+      "contextId": "grid"
     },
     {
       "id": "c-d",
@@ -195,10 +199,7 @@
           }
         ]
       },
-      "contextId": "grid",
-      "displayCode": {
-        "c": "#include <stdio.h>\nint main() {\n  int n, i, j;\n  scanf(\"%d\", &n);\n  for (i = 0; i <= 2*n; i++) {\n    for (j = 0; j <= 2*n; j++) {\n      if ({{D}})\n        printf(\"*\");\n      else\n        printf(\" \");\n    }\n    printf(\"\\n\");\n  }\n  return 0;\n}"
-      }
+      "contextId": "grid"
     },
     {
       "id": "c-e",
@@ -263,6 +264,9 @@
         "paperUrl": "https://assets.hkoi.org/ref/2015hse.pdf",
         "answerSheetUrl": "https://assets.hkoi.org/ref/2015hsa.pdf",
         "page": 14
+      },
+      "displayCode": {
+        "c": "int check(int r1, int c1, int r2, int c2){\n  return {{F}};\n}"
       },
       "grading": {
         "kind": "program",

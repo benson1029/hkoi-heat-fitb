@@ -19,6 +19,48 @@
       "selection": "required"
     }
   ],
+  "contexts": [
+    {
+      "id": "q6-grid",
+      "track": "section-b",
+      "markdown": "Consider the following program:",
+      "displayCode": {
+        "cpp": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{expression}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}"
+      },
+      "answerSets": [
+        {
+          "questionId": "junior-i",
+          "label": "I",
+          "bindings": {
+            "expression": "I"
+          }
+        },
+        {
+          "questionId": "junior-j",
+          "label": "J",
+          "bindings": {
+            "expression": "J"
+          }
+        },
+        {
+          "questionId": "junior-k",
+          "label": "K",
+          "bindings": {
+            "expression": "K"
+          }
+        }
+      ]
+    },
+    {
+      "id": "q4-program",
+      "track": "section-b",
+      "title": "Section B, Question 4",
+      "markdown": "",
+      "displayCode": {
+        "cpp": "int main() {\n    string a[8];\n    for (int i = 0; i < 8; ++i) {\n        cin >> a[i];\n    }\n    int count = 0;\n    for (int i = 0; i < 8; ++i) {\n        for (int j = i + 1; j < 8; ++j) {\n            for (int k = 0; k < 5; ++k) {\n                if (a[i].length() > k && a[j].length() > k\n                    && a[i][k] == a[j][k]) {\n                    ++count;\n                }\n            }\n        }\n    }\n    cout << count;\n}"
+      }
+    }
+  ],
   "questions": [
     {
       "id": "junior-a",
@@ -424,9 +466,7 @@
         },
         "normalize": "trim"
       },
-      "displayCode": {
-        "cpp": "int main() {\n    string a[8];\n    for (int i = 0; i < 8; ++i) {\n        cin >> a[i];\n    }\n    int count = 0;\n    for (int i = 0; i < 8; ++i) {\n        for (int j = i + 1; j < 8; ++j) {\n            for (int k = 0; k < 5; ++k) {\n                if (a[i].length() > k && a[j].length() > k\n                    && a[i][k] == a[j][k]) {\n                    ++count;\n                }\n            }\n        }\n    }\n    cout << count;\n}"
-      }
+      "contextId": "q4-program"
     },
     {
       "id": "junior-f",
@@ -465,9 +505,7 @@
         },
         "maxSteps": 20000
       },
-      "displayCode": {
-        "cpp": "int main() {\n    string a[8];\n    for (int i = 0; i < 8; ++i) {\n        cin >> a[i];\n    }\n    int count = 0;\n    for (int i = 0; i < 8; ++i) {\n        for (int j = i + 1; j < 8; ++j) {\n            for (int k = 0; k < 5; ++k) {\n                if (a[i].length() > k && a[j].length() > k\n                    && a[i][k] == a[j][k]) {\n                    ++count;\n                }\n            }\n        }\n    }\n    cout << count;\n}"
-      }
+      "contextId": "q4-program"
     },
     {
       "id": "junior-g",
@@ -544,6 +582,7 @@
     {
       "id": "junior-i",
       "track": "section-b",
+      "contextId": "q6-grid",
       "printedRef": "Section B, Question 6, Blank I",
       "title": "Section B, Question 6",
       "prompt": {
@@ -583,14 +622,12 @@
             "maxSteps": 5000
           }
         ]
-      },
-      "displayCode": {
-        "cpp": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{I}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}"
       }
     },
     {
       "id": "junior-j",
       "track": "section-b",
+      "contextId": "q6-grid",
       "printedRef": "Section B, Question 6, Blank J",
       "title": "Section B, Question 6",
       "prompt": {
@@ -630,14 +667,12 @@
             "maxSteps": 5000
           }
         ]
-      },
-      "displayCode": {
-        "cpp": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{J}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}"
       }
     },
     {
       "id": "junior-k",
       "track": "section-b",
+      "contextId": "q6-grid",
       "printedRef": "Section B, Question 6, Blank K",
       "title": "Section B, Question 6",
       "prompt": {
@@ -677,9 +712,6 @@
             "maxSteps": 5000
           }
         ]
-      },
-      "displayCode": {
-        "cpp": "int main() {\n    for (int x = 0; x < 9; ++x) {\n        for (int y = 0; y < 9; ++y) {\n            cout << ({{K}} ? '.' : '#');\n        }\n        cout << endl;\n    }\n}"
       }
     },
     {

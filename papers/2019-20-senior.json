@@ -2222,7 +2222,7 @@
         "lineBlank": "L1",
         "replacementBlank": "L2",
         "firstLine": 71,
-        "source": "string s;\nint sum,temp,len,i,x;\nint main(){\ncin >> s;\nsum = 0;\ntemp = 0;\nlen = s.length();\ni = 0;\nwhile (i < len)\n{\nif (s[i] == '+')\n{\nsum = sum + temp;\ntemp = 0;\n}\nx = int(s[i]) - int('0');\ntemp = temp * 10 + x;\ni++;\n}\ncout << sum + temp;\nreturn 0;\n}",
+        "source": "string s;\nint sum, temp, len, i, x;\nint main() {\n    cin >> s;\n    sum = 0;\n    temp = 0;\n    len = s.length();\n    i = 0;\n    while (i < len)\n    {\n        if (s[i] == '+')\n        {\n            sum = sum + temp;\n            temp = 0;\n        }\n        x = int(s[i]) - int('0');\n        temp = temp * 10 + x;\n        i++;\n    }\n    cout << sum + temp;\n    return 0;\n}",
         "cases": [
           {
             "id": "expr-0",

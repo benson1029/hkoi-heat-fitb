@@ -372,7 +372,7 @@
           {
             "language": "cpp",
             "dialect": "c++98",
-            "source": "int a[401];\nint i, j, temp, minSum, x;\nint main() {\n    cin >> a[0] >> i >> temp;\n    j = 0;\n    cout << ({{F1}}) << \" \";\n    minSum = {{F2}};\n    x = {{F3}};\n    cout << minSum << \" \" << x;\n}",
+            "source": "int a[401];\nint i, j, temp, minSum, x;\nint main() {\n    cin >> a[0] >> a[1] >> i >> temp >> j;\n    cout << ({{F1}}) << \" \";\n    minSum = {{F2}};\n    x = {{F3}};\n    cout << minSum << \" \" << x;\n}",
             "harness": {
               "kind": "program"
             }
@@ -382,7 +382,7 @@
         "cases": [
           {
             "id": "equal",
-            "stdin": "1 1 0",
+            "stdin": "1 2 1 0 0",
             "expected": {
               "stdout": "0 0 1"
             },
@@ -390,15 +390,15 @@
           },
           {
             "id": "below",
-            "stdin": "2 9 401",
+            "stdin": "2 4 9 401 1",
             "expected": {
-              "stdout": "7 401 9"
+              "stdout": "5 401 9"
             },
             "maxSteps": 5000
           },
           {
             "id": "above",
-            "stdin": "1000 1 300000",
+            "stdin": "1000 400 1 300000 0",
             "expected": {
               "stdout": "999 300000 1"
             },
@@ -406,15 +406,15 @@
           },
           {
             "id": "middle",
-            "stdin": "431 500 12345",
+            "stdin": "431 777 500 12345 1",
             "expected": {
-              "stdout": "69 12345 500"
+              "stdout": "277 12345 500"
             },
             "maxSteps": 5000
           },
           {
             "id": "high",
-            "stdin": "901 999 999999",
+            "stdin": "901 200 999 999999 0",
             "expected": {
               "stdout": "98 999999 999"
             },

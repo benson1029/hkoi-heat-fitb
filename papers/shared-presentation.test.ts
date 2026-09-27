@@ -15,7 +15,6 @@ function contextSource(season: string, division: 'junior' | 'senior', contextId:
 }
 
 it.each([
-  ['2011-12', 'q2-code', 'section-b-q2'],
   ['2013-14', 'q5-code', 'q5'],
   ['2015-16', 'crosses', 'crosses'],
   ['2016-17', 'q4-recursive', 'palindrome-recursive'],
@@ -24,4 +23,9 @@ it.each([
   ['2018-19', 'q2d-code', 'factor-classification']
 ])('shows the same printed code in both divisions for %s', (season, juniorId, seniorId) => {
   expect(contextSource(season, 'junior', juniorId)).toBe(contextSource(season, 'senior', seniorId));
+});
+
+it('preserves the header printed only in the 2011/12 Junior version', () => {
+  expect(contextSource('2011-12', 'junior', 'q2-code'))
+    .toBe(`#include<stdio.h>${contextSource('2011-12', 'senior', 'section-b-q2')}`);
 });

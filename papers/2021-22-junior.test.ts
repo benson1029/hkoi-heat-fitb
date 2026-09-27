@@ -36,3 +36,10 @@ it('checks the coin counterexample as a pair and rejects a non-counterexample', 
   }
   expect((await gradeQuestion(question, { C1: '3', C2: '6' })).status).toBe('fail');
 });
+
+it('checks the indexed element in the median program rather than only a[0]', async () => {
+  const question = validatePaper(source).questions.find(item => item.id === 'F');
+  if (!question) throw new Error('Question F is missing');
+  expect((await gradeQuestion(question, { F1: 'abs(a[j]-i)', F2: 'temp', F3: 'i' })).status).toBe('pass');
+  expect((await gradeQuestion(question, { F1: 'abs(a[0]-i)', F2: 'temp', F3: 'i' })).status).toBe('fail');
+});

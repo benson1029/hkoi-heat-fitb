@@ -66,6 +66,10 @@ function invalidAnswer(question: Question, answers: Record<string, string>): str
     if (blank.forbiddenChars && [...answer].some(char => blank.forbiddenChars!.includes(char))) {
       return `Blank ${blank.id} uses a prohibited character.`;
     }
+    const identifiers: string[] = answer.match(/[A-Za-z_][A-Za-z0-9_]*/g) ?? [];
+    if (blank.forbiddenIdentifiers?.some(identifier => identifiers.includes(identifier))) {
+      return `Blank ${blank.id} uses a prohibited identifier.`;
+    }
     if (blank.allowedChars && [...answer].some(char => !blank.allowedChars!.includes(char))) {
       return `Blank ${blank.id} uses a character outside the permitted set.`;
     }

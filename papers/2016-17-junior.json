@@ -1624,7 +1624,26 @@
       "id": "q5-code",
       "track": "section-b",
       "title": "Question 5 · C++ program",
-      "markdown": "```cpp\nint a, val, i, j;\nint main() {\n    cin >> a;\n    for (i = 1; i <= a; i++)\n        for (j = 1; j <= a; j++) {\n            val = 　J/K　;\n            cout << val;\n            if (j != a)\n                cout << \" \";\n            else\n                cout << endl;\n        }\n}\n```"
+      "markdown": "",
+      "displayCode": {
+        "cpp": "int a, val, i, j;\nint main() {\n    cin >> a;\n    for (i = 1; i <= a; i++)\n        for (j = 1; j <= a; j++) {\n            val = {{value}};\n            cout << val;\n            if (j != a)\n                cout << \" \";\n            else\n                cout << endl;\n        }\n}"
+      },
+      "answerSets": [
+        {
+          "questionId": "section-b-j",
+          "label": "J",
+          "bindings": {
+            "value": "J"
+          }
+        },
+        {
+          "questionId": "section-b-k",
+          "label": "K",
+          "bindings": {
+            "value": "K"
+          }
+        }
+      ]
     }
   ]
 }

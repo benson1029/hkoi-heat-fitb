@@ -28,6 +28,7 @@ const blank = z.object({
   label: z.string().max(200).optional(),
   maxChars: z.number().int().positive().max(5_000).optional(),
   forbiddenChars: z.string().min(1).max(100).optional(),
+  forbiddenIdentifiers: z.array(z.string().min(1).max(80).regex(/^[A-Za-z_][A-Za-z0-9_]*$/)).min(1).max(30).optional(),
   allowedChars: z.string().min(1).max(200).optional(),
   multiline: z.boolean().optional(),
   placeholder: z.string().max(200).optional()
@@ -277,6 +278,7 @@ const question = z.object({
     cpp: z.string().max(200_000).optional(),
     c: z.string().max(200_000).optional()
   }).strict().optional(),
+  answerOnly: z.boolean().optional(),
   figure: z.union([graphFigure, paperImageFigure]).optional(),
   points: z.number().nonnegative().finite().max(100),
   blanks: z.array(blank).min(1).max(30),
@@ -320,6 +322,8 @@ function unique(values: string[], label: string): void {
 }
 
 function checkQuestion(q: Question): void {
+  if (q.answerOnly && q.grading.kind !== 'program') throw new Error(`Question ${q.id}: answerOnly requires program grading`);
+  if (q.answerOnly && q.displayCode) throw new Error(`Question ${q.id}: answerOnly cannot have displayCode`);
   const blankIds = q.blanks.map(blank => blank.id);
   unique(blankIds, `blank in ${q.id}`);
   for (const code of Object.values(q.displayCode ?? {})) {
@@ -528,7 +532,7 @@ export function validatePaper(input: unknown): PaperConfig {
         markers.add(match[1]);
       }
     }
-    if (!markers.size) throw new Error(`Context ${context.id}: displayCode needs an editable blank`);
+    if (!markers.size && context.answerSets) throw new Error(`Context ${context.id}: answerSets need an editable blank`);
     if (context.answerSets) {
       unique(context.answerSets.map(set => set.questionId), `answer set question in ${context.id}`);
       for (const set of context.answerSets) {

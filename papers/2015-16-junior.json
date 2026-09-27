@@ -33,7 +33,7 @@
       "title": "Question 6",
       "markdown": "A “cross shape” is shown below.\n\n```text\n * \n***\n * \n```\n\nConsider the following grid. There are 2 cross shapes center at (2, 2) and (4, 4) respectively. (\".\" denotes an empty grid cell, (x, y) denotes the grid in row x and column y)\n\n```text\n.*...\n***..\n.*.*.\n..***\n...*.\n```\n\nWe call 2 cross shapes touch each other if they share the same corner but no edge. We call 2 cross shapes connected if they share the same edge. Therefore, the above cross shapes touch each other.\n\nConsider the following program segment, (a, b) stored the coordinate of the center of a cross shape, (x, y) stored the coordinate of center of another cross shape.",
       "displayCode": {
-        "c": "scanf(\"%d%d%d%d\", &a, &b, &x, &y);\nif ({{J}})\nprintf(\"They are connected\");\nif ({{K}})\nprintf(\"They touch each other\");"
+        "c": "scanf(\"%d%d%d%d\", &a, &b, &x, &y);\nif ({{J}})\n    printf(\"They are connected\");\nif ({{K}})\n    printf(\"They touch each other\");"
       }
     }
   ],
@@ -459,7 +459,7 @@
         ]
       },
       "displayCode": {
-        "c": "51 l = 0;\n52 r = n - 1;\n53 while (l <= r)\n54 {\n55 mid = (l + r) / 2;\n56 if (a[mid] < x)\n57 l = mid + 1;\n58 else\n59 r = mid - 1;\n60 }\n61 if (a[mid] == x)\n62 printf(\"Found\");\n63 else\n64 printf(\"Not found\");"
+        "c": "51 l = 0;\n52 r = n - 1;\n53 while (l <= r)\n54 {\n55     mid = (l + r) / 2;\n56     if (a[mid] < x)\n57         l = mid + 1;\n58     else\n59         r = mid - 1;\n60 }\n61 if (a[mid] == x)\n62     printf(\"Found\");\n63 else\n64     printf(\"Not found\");"
       }
     },
     {
@@ -492,7 +492,7 @@
         "maximum": 99999
       },
       "displayCode": {
-        "c": "#include <stdio.h>\nint i, k, t, x;\nint main() {\nscanf(\"%d\", &x);\nk = x;\nprintf(\"1\\n\");\nif (x > 1) {\nfor (i = 2; i <= x; i++) {\nt = 1;\nwhile (k % i == 0) {\nk = k / i;\nt = t * i;\nprintf(\"%d\\n\", t);\n}\n}\n}\nreturn 0;\n}"
+        "c": "#include <stdio.h>\nint i, k, t, x;\nint main() {\n    scanf(\"%d\", &x);\n    k = x;\n    printf(\"1\\n\");\n    if (x > 1) {\n        for (i = 2; i <= x; i++) {\n            t = 1;\n            while (k % i == 0) {\n                k = k / i;\n                t = t * i;\n                printf(\"%d\\n\", t);\n            }\n        }\n    }\n    return 0;\n}"
       }
     },
     {
