@@ -38,6 +38,11 @@ export interface FunctionDef { name: string; result: TypeName; params: Decl[]; b
 export interface TranslationUnit { functions: Map<string, FunctionDef>; globals: Decl[] }
 
 const operators = ['>>=', '<<=', '++', '--', '==', '!=', '<=', '>=', '&&', '||', '<<', '>>', '+=', '-=', '*=', '/=', '%=', '&=', '|=', '^=', '::', '->'];
+const cppAlternativeOperators: Record<string, string> = {
+  and: '&&', or: '||', not: '!', not_eq: '!=',
+  bitand: '&', bitor: '|', xor: '^', compl: '~',
+  and_eq: '&=', or_eq: '|=', xor_eq: '^='
+};
 const punct = '{}[]();,?:+-*/%<>=!~&|^.';
 const MAX_SOURCE = 128 * 1024;
 const MAX_TOKENS = 30000;
@@ -86,7 +91,8 @@ export function lex(source: string, language: 'cpp' | 'c' = 'cpp'): Token[] {
       else if (punct.includes(c)) i++;
       else throw new CppFault('unsupported', `Unsupported token ${JSON.stringify(c)} at ${i}`);
     }
-    result.push({ text: source.slice(start, i), at: start });
+    const text = source.slice(start, i);
+    result.push({ text: language === 'cpp' ? cppAlternativeOperators[text] ?? text : text, at: start });
     if (result.length > MAX_TOKENS) throw new CppFault('unsupported', 'Token limit exceeded');
   }
   result.push({ text: '<eof>', at: source.length });

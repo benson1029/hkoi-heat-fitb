@@ -81,6 +81,23 @@ describe('checked C/C++ subset', () => {
     expect(runCpp(input, { language: 'c', source: input, harness: { kind: 'program' } }, { id: 'c', stdin: '20 22', expected: {}, maxSteps: 1000 }))
       .toMatchObject({ kind: 'ok', observation: { stdout: '42\n' } });
   });
+  it('supports C++ spelled-out logical operators with normal precedence and short-circuiting', () => {
+    expect(call('int f(int a,int b,int c){return not a or b and c;}', 'f', [0, 1, 0]))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 1 } });
+    expect(call('int f(int a,int b,int c){return not a or b and c;}', 'f', [1, 1, 0]))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 0 } });
+    expect(call('int f(int a){return a or (1/0);}', 'f', [1]))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 1 } });
+    expect(call('int f(int a){return a and (1/0);}', 'f', [0]))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 0 } });
+    expect(call('int f(int candy){return candy not_eq 0;}', 'f', [3]))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 1 } });
+    expect(program('int main(){cout << "and or not";}'))
+      .toMatchObject({ kind: 'ok', observation: { stdout: 'and or not' } });
+    const cSource = 'int and(int x){return x;}';
+    expect(runCpp(cSource, { language: 'c', source: cSource, harness: { kind: 'call', function: 'and' } }, { id: 'c', args: [7], expected: {}, maxSteps: 1000 }))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 7 } });
+  });
   it('runs all official Paper 1 D C++ string answers', () => {
     for (const answer of ['aaabbabb', 'aabaabbb', 'aaaababb', 'aababbbb']) {
       const source = `int main(){string s="${answer}";int a=0,b=0;for(int i=0;i<8;++i){if(s[i]=='a')a=a+1;else if(s[i]=='b')b=b+a;}cout<<b;}`;
