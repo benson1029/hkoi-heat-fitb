@@ -2,14 +2,16 @@ import type { JsonValue, Observation, ProgramCase, ProgramTarget } from '../../c
 import { CppFault, type Decl, type Expr, type FunctionDef, type Initializer, type Stmt, type TranslationUnit, type TypeName } from './syntax';
 
 type VectorType = 'vector<int>' | 'vector<vector<int>>';
-type ScalarType = Exclude<TypeName, 'void' | 'string' | 'double' | VectorType>;
+type ScalarType = 'int' | 'long long' | 'bool' | 'char' | 'size_t';
 interface ScalarSlot { kind: 'scalar'; type: ScalarType; value: bigint; initialized: boolean; alive: boolean; stringChar?: boolean }
 interface FloatSlot { kind: 'float'; value: number; initialized: boolean; alive: boolean }
 interface ArraySlot { kind: 'array'; type: ScalarType | 'string'; cells: (ScalarSlot | StringSlot)[]; alive: boolean; owner: boolean }
 interface StringSlot { kind: 'string'; cells: ScalarSlot[]; initialized: boolean; alive: boolean }
 interface VectorSlot { kind: 'vector'; type: VectorType; cells: (ScalarSlot | VectorSlot)[]; alive: boolean; owner: boolean }
-type Slot = ScalarSlot | FloatSlot | ArraySlot | StringSlot | VectorSlot;
-type Value = { kind: 'integer'; value: bigint; type: ScalarType } | { kind: 'floating'; value: number } | { kind: 'string'; value: string } | { kind: 'array'; slot: ArraySlot } | { kind: 'vector'; slot: VectorSlot } | { kind: 'iterator'; slot: VectorSlot; position: number } | { kind: 'stream'; direction: 'in' | 'out' } | { kind: 'void' } | { kind: 'address'; slot: ScalarSlot };
+interface PointerSlot { kind: 'pointer'; type: string; target: StructSlot | null; initialized: boolean; alive: boolean }
+interface StructSlot { kind: 'struct'; type: string; fields: Map<string, ScalarSlot | PointerSlot>; alive: boolean }
+type Slot = ScalarSlot | FloatSlot | ArraySlot | StringSlot | VectorSlot | PointerSlot | StructSlot;
+type Value = { kind: 'integer'; value: bigint; type: ScalarType } | { kind: 'floating'; value: number } | { kind: 'string'; value: string } | { kind: 'array'; slot: ArraySlot } | { kind: 'vector'; slot: VectorSlot } | { kind: 'iterator'; slot: VectorSlot; position: number } | { kind: 'stream'; direction: 'in' | 'out' } | { kind: 'void' } | { kind: 'address'; slot: ScalarSlot } | { kind: 'pointer'; type: string; target: StructSlot | null } | { kind: 'struct'; slot: StructSlot };
 type Flow = { kind: 'normal' | 'break' | 'continue' } | { kind: 'return'; value: Value };
 const normal: Flow = { kind: 'normal' };
 const INT_MIN = -(1n << 31n), INT_MAX = (1n << 31n) - 1n;
@@ -30,7 +32,7 @@ function narrow(value: bigint, type: ScalarType): bigint {
   return value;
 }
 function promoted(t: ScalarType): ScalarType { return t === 'long long' || t === 'size_t' ? t : 'int'; }
-function truth(v: Value): boolean { return v.kind === 'floating' ? v.value !== 0 : asInt(v).value !== 0n; }
+function truth(v: Value): boolean { return v.kind === 'pointer' ? v.target !== null : v.kind === 'floating' ? v.value !== 0 : asInt(v).value !== 0n; }
 function asDouble(v: Value): number {
   if (v.kind === 'floating') return v.value;
   if (v.kind === 'integer') return Number(v.value);
@@ -50,6 +52,7 @@ function effects(expr: Expr): Effects {
     case 'call': e.calls = true; for (const a of expr.args) merge(effects(a)); break;
     case 'method-call': e.calls = true; merge(effects(expr.base)); for (const a of expr.args) merge(effects(a)); break;
     case 'member': merge(effects(expr.base)); break;
+    case 'field': merge(effects(expr.base)); break;
     case 'cast': merge(effects(expr.arg)); break;
     case 'unary': merge(effects(expr.arg)); if ((expr.op === '++' || expr.op === '--') && expr.arg.kind === 'name') e.writes.add(expr.arg.name); break;
     case 'binary': merge(effects(expr.left)); merge(effects(expr.right)); break;
@@ -96,6 +99,7 @@ export class CheckedRuntime {
   }
   private expire(slot: Slot): void {
     slot.alive = false;
+    if (slot.kind === 'struct') for (const field of slot.fields.values()) this.expire(field);
     if (slot.kind === 'string' || slot.kind === 'array' && slot.owner || slot.kind === 'vector' && slot.owner)
       for (const cell of slot.cells) this.expire(cell);
   }
@@ -115,6 +119,23 @@ export class CheckedRuntime {
     if (!slot.alive) throw new CppFault('runtime-error', 'Read after object lifetime');
     if (!slot.initialized) throw new CppFault('runtime-error', 'Read of uninitialized variable or array element');
     return int(slot.value, slot.type);
+  }
+  private readPointer(slot: PointerSlot): Value {
+    if (!slot.alive) throw new CppFault('runtime-error', 'Read after pointer lifetime');
+    if (!slot.initialized) throw new CppFault('runtime-error', 'Read of uninitialized pointer');
+    if (slot.target && !slot.target.alive) throw new CppFault('runtime-error', 'Use of pointer to expired struct');
+    return { kind: 'pointer', type: slot.type, target: slot.target };
+  }
+  private writePointer(slot: PointerSlot, value: Value): Value {
+    if (!slot.alive) throw new CppFault('runtime-error', 'Write after pointer lifetime');
+    if (value.kind === 'pointer') {
+      if (value.type !== slot.type) throw new CppFault('compile-error', 'Incompatible struct pointer types');
+      if (value.target && !value.target.alive) throw new CppFault('runtime-error', 'Use of pointer to expired struct');
+      slot.target = value.target;
+    } else if (value.kind === 'integer' && value.value === 0n) slot.target = null;
+    else throw new CppFault('compile-error', 'Struct pointer requires a compatible pointer or NULL');
+    slot.initialized = true;
+    return this.readPointer(slot);
   }
   private readFloat(slot: FloatSlot): Value {
     if (!slot.alive) throw new CppFault('runtime-error', 'Read after object lifetime');
@@ -200,11 +221,28 @@ export class CheckedRuntime {
     }
     throw new CppFault('unsupported', 'Indexing requires a modeled array or vector');
   }
-  private addressable(expr: Expr): ScalarSlot | FloatSlot | StringSlot | VectorSlot | ArraySlot {
+  private fieldSlot(expr: Extract<Expr, { kind: 'field' }>): ScalarSlot | PointerSlot {
+    const base = this.evaluate(expr.base);
+    let object: StructSlot;
+    if (expr.viaPointer) {
+      if (base.kind !== 'pointer') throw new CppFault('compile-error', 'Arrow requires a struct pointer');
+      if (base.target === null) throw new CppFault('runtime-error', 'Null struct pointer dereference');
+      object = base.target;
+    } else {
+      if (base.kind !== 'struct') throw new CppFault('compile-error', 'Dot requires a struct object');
+      object = base.slot;
+    }
+    if (!object.alive) throw new CppFault('runtime-error', 'Struct access after object lifetime');
+    const field = object.fields.get(expr.name);
+    if (!field) throw new CppFault('compile-error', `Unknown field ${expr.name}`);
+    return field;
+  }
+  private addressable(expr: Expr): Slot {
     if (expr.kind === 'name') {
       return this.find(expr.name);
     }
     if (expr.kind === 'index') return this.indexedSlot(expr);
+    if (expr.kind === 'field') return this.fieldSlot(expr);
     throw new CppFault('compile-error', 'Expression is not assignable');
   }
   private lvalue(expr: Expr): ScalarSlot {
@@ -245,6 +283,29 @@ export class CheckedRuntime {
     this.tick();
     if (decl.type === 'void') throw new CppFault('compile-error', 'Void variable');
     const type = decl.type;
+    if (type.startsWith('pointer:')) {
+      if (decl.array || decl.arrayParameter || decl.constructArgs) throw new CppFault('unsupported', 'Arrays of struct pointers are not modeled');
+      const slot: PointerSlot = { kind: 'pointer', type: type.slice('pointer:'.length), target: null, initialized: global, alive: true };
+      this.bind(decl.name, slot);
+      if (decl.init !== undefined) this.writePointer(slot, this.scalarInit(decl.init));
+      return;
+    }
+    if (type.startsWith('struct ')) {
+      if (decl.array || decl.arrayParameter || decl.constructArgs || decl.init !== undefined) throw new CppFault('unsupported', 'Only plain local struct objects are modeled');
+      const name = type.slice('struct '.length);
+      const definition = this.unit.structs.get(name);
+      if (!definition) throw new CppFault('compile-error', `Unknown struct ${name}`);
+      const fields = new Map<string, ScalarSlot | PointerSlot>();
+      for (const field of definition) {
+        if (field.type.startsWith('pointer:'))
+          fields.set(field.name, { kind: 'pointer', type: field.type.slice('pointer:'.length), target: null, initialized: global, alive: true });
+        else if (['int', 'long long', 'bool', 'char', 'size_t'].includes(field.type))
+          fields.set(field.name, { kind: 'scalar', type: field.type as ScalarType, value: 0n, initialized: global, alive: true });
+        else throw new CppFault('unsupported', `Struct field type ${field.type} is not modeled`);
+      }
+      this.bind(decl.name, { kind: 'struct', type: name, fields, alive: true });
+      return;
+    }
     if (type === 'double') {
       if (decl.array || decl.arrayParameter) throw new CppFault('unsupported', 'Arrays of double are not modeled');
       const slot: FloatSlot = { kind: 'float', value: 0, initialized: global, alive: true };
@@ -298,17 +359,18 @@ export class CheckedRuntime {
       }
       return;
     }
+    const scalarType = type as ScalarType;
     if (decl.array) {
       const size = asInt(this.evaluate(decl.array)).value;
       if (size < 0n || size > BigInt(MAX_ARRAY)) throw new CppFault('unsupported', 'Array size is outside the modeled limit');
       this.charge(Number(size));
-      const cells = Array.from({ length: Number(size) }, () => ({ kind: 'scalar', type, value: 0n, initialized: global, alive: true } as ScalarSlot));
-      const slot: ArraySlot = { kind: 'array', type, cells, alive: true, owner: true };
+      const cells = Array.from({ length: Number(size) }, () => ({ kind: 'scalar', type: scalarType, value: 0n, initialized: global, alive: true } as ScalarSlot));
+      const slot: ArraySlot = { kind: 'array', type: scalarType, cells, alive: true, owner: true };
       this.bind(decl.name, slot);
       if (decl.init !== undefined) {
         if (!Array.isArray(decl.init)) {
           const value = this.scalarInit(decl.init);
-          if (type !== 'char' || value.kind !== 'string') throw new CppFault('unsupported', 'Array initializer must be a brace list');
+          if (scalarType !== 'char' || value.kind !== 'string') throw new CppFault('unsupported', 'Array initializer must be a brace list');
           if (value.value.length + 1 > cells.length) throw new CppFault('compile-error', 'String initializer is too long for char array');
           for (let i = 0; i < cells.length; i++) this.write(cells[i], int(BigInt(i < value.value.length ? value.value.charCodeAt(i) : 0)));
         } else {
@@ -317,7 +379,7 @@ export class CheckedRuntime {
         }
       }
     } else {
-      const slot: ScalarSlot = { kind: 'scalar', type, value: 0n, initialized: global, alive: true };
+      const slot: ScalarSlot = { kind: 'scalar', type: scalarType, value: 0n, initialized: global, alive: true };
       this.bind(decl.name, slot);
       if (decl.init !== undefined) {
         if (Array.isArray(decl.init)) {
@@ -554,6 +616,7 @@ export class CheckedRuntime {
       case 'char': return int(expr.value, 'char');
       case 'string': return { kind: 'string', value: this.checkedString({ kind: 'string', value: expr.value }) };
       case 'name': {
+        if (expr.name === 'NULL' && this.target.language === 'c') return int(0n);
         if (['cout', 'std::cout', 'cin', 'std::cin'].includes(expr.name) && this.target.language === 'c')
           throw new CppFault('compile-error', `C program cannot use ${expr.name}`);
         if (['cout', 'std::cout'].includes(expr.name)) return { kind: 'stream', direction: 'out' };
@@ -561,7 +624,8 @@ export class CheckedRuntime {
         const slot = this.find(expr.name);
         return slot.kind === 'scalar' ? this.read(slot) : slot.kind === 'float' ? this.readFloat(slot)
           : slot.kind === 'string' ? { kind: 'string', value: this.stringValue(slot) }
-          : slot.kind === 'array' ? { kind: 'array', slot } : { kind: 'vector', slot };
+          : slot.kind === 'array' ? { kind: 'array', slot } : slot.kind === 'vector' ? { kind: 'vector', slot }
+          : slot.kind === 'pointer' ? this.readPointer(slot) : { kind: 'struct', slot };
       }
       case 'index': {
         const slot = this.indexedSlot(expr);
@@ -569,6 +633,10 @@ export class CheckedRuntime {
           ? { kind: 'string', value: this.stringValue(slot) } : { kind: 'vector', slot };
       }
       case 'member': throw new CppFault('unsupported', `Member ${expr.name} requires a call`);
+      case 'field': {
+        const field = this.fieldSlot(expr);
+        return field.kind === 'scalar' ? this.read(field) : this.readPointer(field);
+      }
       case 'method-call': {
         if (expr.args.length !== 0) throw new CppFault('compile-error', `${expr.name} takes no arguments`);
         const base = this.evaluate(expr.base);
@@ -579,7 +647,8 @@ export class CheckedRuntime {
       case 'cast': {
         const value = this.evaluate(expr.arg);
         if (expr.type === 'double') return { kind: 'floating', value: asDouble(value) };
-        if (expr.type === 'string' || expr.type === 'void' || expr.type === 'vector<int>' || expr.type === 'vector<vector<int>>')
+        if (expr.type === 'string' || expr.type === 'void' || expr.type === 'vector<int>' || expr.type === 'vector<vector<int>>' ||
+            expr.type.startsWith('pointer:') || expr.type.startsWith('struct '))
           throw new CppFault('unsupported', `Cast to ${expr.type} is not modeled`);
         if (expr.type === 'bool') return int(truth(value) ? 1n : 0n, 'bool');
         const number = value.kind === 'floating' ? value.value : Number(asInt(value).value);
@@ -587,7 +656,7 @@ export class CheckedRuntime {
         if (value.kind === 'floating' && (number < Number(LONG_MIN) || number >= Number(UINT_MOD)))
           throw new CppFault('runtime-error', 'Out-of-range floating-to-integer conversion');
         const integer = value.kind === 'floating' ? BigInt(Math.trunc(number)) : asInt(value).value;
-        return int(narrow(integer, expr.type), expr.type);
+        return int(narrow(integer, expr.type as ScalarType), expr.type as ScalarType);
       }
       case 'call': {
         for (let i = 0; i < expr.args.length; i++) for (let j = i + 1; j < expr.args.length; j++)
@@ -599,8 +668,19 @@ export class CheckedRuntime {
       }
       case 'conditional': return truth(this.evaluate(expr.condition)) ? this.evaluate(expr.yes) : this.evaluate(expr.no);
       case 'unary': {
-        if (expr.op === '&') return { kind: 'address', slot: this.lvalue(expr.arg) };
-        if (expr.op === '*' ) throw new CppFault('unsupported', 'Pointer dereference is not modeled');
+        if (expr.op === '&') {
+          const slot = this.addressable(expr.arg);
+          if (slot.kind === 'struct') return { kind: 'pointer', type: slot.type, target: slot };
+          if (slot.kind === 'scalar') return { kind: 'address', slot };
+          throw new CppFault('unsupported', 'Only scalar and struct addresses are modeled');
+        }
+        if (expr.op === '*') {
+          const value = this.evaluate(expr.arg);
+          if (value.kind !== 'pointer') throw new CppFault('compile-error', 'Dereference requires a struct pointer');
+          if (value.target === null) throw new CppFault('runtime-error', 'Null struct pointer dereference');
+          if (!value.target.alive) throw new CppFault('runtime-error', 'Struct access after object lifetime');
+          return { kind: 'struct', slot: value.target };
+        }
         if (expr.op === '++' || expr.op === '--') {
           const slot = this.lvalue(expr.arg), old = asInt(this.read(slot));
           const next = this.arithmetic(expr.op === '++' ? '+' : '-', old as Value, int(1n));
@@ -630,6 +710,16 @@ export class CheckedRuntime {
         if (expr.op === '&&') return int(truth(left) && truth(this.evaluate(expr.right)) ? 1n : 0n, 'bool');
         if (expr.op === '||') return int(truth(left) || truth(this.evaluate(expr.right)) ? 1n : 0n, 'bool');
         const right = this.evaluate(expr.right);
+        if (left.kind === 'pointer' || right.kind === 'pointer') {
+          if (expr.op !== '==' && expr.op !== '!=') throw new CppFault('compile-error', `Invalid struct pointer operator ${expr.op}`);
+          const nullInteger = (value: Value) => value.kind === 'integer' && value.value === 0n;
+          if (left.kind !== 'pointer' && !nullInteger(left) || right.kind !== 'pointer' && !nullInteger(right))
+            throw new CppFault('compile-error', 'Struct pointer comparison requires a compatible pointer or NULL');
+          if (left.kind === 'pointer' && right.kind === 'pointer' && left.type !== right.type)
+            throw new CppFault('compile-error', 'Incompatible struct pointer comparison');
+          const same = (left.kind === 'pointer' ? left.target : null) === (right.kind === 'pointer' ? right.target : null);
+          return int((expr.op === '==' ? same : !same) ? 1n : 0n, 'bool');
+        }
         if (left.kind === 'string' && right.kind === 'string') {
           const cmp = left.value < right.value ? -1 : left.value > right.value ? 1 : 0;
           if (expr.op === '==') return int(cmp === 0 ? 1n : 0n, 'bool');
@@ -646,6 +736,10 @@ export class CheckedRuntime {
         if (expr.left.kind === 'name' && effects(expr.right).writes.has(expr.left.name))
           throw new CppFault('unsupported', 'Assignment sequencing for a modified operand depends on the C++ dialect');
         const object = this.addressable(expr.left);
+        if (object.kind === 'pointer') {
+          if (expr.op !== '=') throw new CppFault('compile-error', 'Only plain struct-pointer assignment is modeled');
+          return this.writePointer(object, this.evaluate(expr.right));
+        }
         if (object.kind === 'string') {
           const rhs = this.evaluate(expr.right);
           if (expr.op === '=') return this.writeString(object, rhs);
@@ -754,7 +848,13 @@ export class CheckedRuntime {
             } else this.bind(param.name, this.cloneVector(param.type, v));
             continue;
           }
-          const slot: ScalarSlot = { kind: 'scalar', type: param.type, value: 0n, initialized: false, alive: true };
+          if (param.type.startsWith('pointer:')) {
+            const slot: PointerSlot = { kind: 'pointer', type: param.type.slice('pointer:'.length), target: null, initialized: false, alive: true };
+            this.bind(param.name, slot); this.writePointer(slot, v);
+            continue;
+          }
+          if (param.type.startsWith('struct ')) throw new CppFault('unsupported', 'Struct-by-value parameters are not modeled');
+          const slot: ScalarSlot = { kind: 'scalar', type: param.type as ScalarType, value: 0n, initialized: false, alive: true };
           this.bind(param.name, slot); this.write(slot, v);
         }
       }
@@ -766,7 +866,15 @@ export class CheckedRuntime {
         if (fn.result === 'double') return { kind: 'floating', value: asDouble(flow.value) };
         if (fn.result === 'vector<int>' || fn.result === 'vector<vector<int>>')
           return { kind: 'vector', slot: this.cloneVector(fn.result, flow.value) };
-        return int(narrow(asInt(flow.value).value, fn.result), fn.result);
+        if (fn.result.startsWith('pointer:')) {
+          const pointerType = fn.result.slice('pointer:'.length);
+          if (flow.value.kind === 'integer' && flow.value.value === 0n) return { kind: 'pointer', type: pointerType, target: null };
+          if (flow.value.kind !== 'pointer' || flow.value.type !== pointerType) throw new CppFault('compile-error', 'Struct pointer return type mismatch');
+          if (flow.value.target && !flow.value.target.alive) throw new CppFault('runtime-error', 'Returning pointer to expired struct');
+          return flow.value;
+        }
+        if (fn.result.startsWith('struct ')) throw new CppFault('unsupported', 'Struct-by-value returns are not modeled');
+        return int(narrow(asInt(flow.value).value, fn.result as ScalarType), fn.result as ScalarType);
       }
       if (fn.result !== 'void' && name !== 'main') throw new CppFault('runtime-error', `Non-void function ${name} fell off end`);
       return fn.result === 'void' ? { kind: 'void' } : fn.result === 'double' ? { kind: 'floating', value: 0 } : int(0n);

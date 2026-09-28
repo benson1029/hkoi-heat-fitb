@@ -6,7 +6,7 @@ export class CppFault extends Error {
 }
 
 export interface Token { text: string; at: number }
-export type TypeName = 'int' | 'long long' | 'bool' | 'char' | 'string' | 'double' | 'void' | 'size_t' | 'vector<int>' | 'vector<vector<int>>';
+export type TypeName = 'int' | 'long long' | 'bool' | 'char' | 'string' | 'double' | 'void' | 'size_t' | 'vector<int>' | 'vector<vector<int>>' | `struct ${string}` | `pointer:${string}`;
 export type Initializer = Expr | Initializer[];
 export interface Decl { name: string; type: TypeName; array?: Expr; arrayParameter?: boolean; reference?: boolean; init?: Initializer; constructArgs?: Expr[] }
 export type Expr =
@@ -19,6 +19,7 @@ export type Expr =
   | { kind: 'call'; name: string; args: Expr[] }
   | { kind: 'method-call'; base: Expr; name: string; args: Expr[] }
   | { kind: 'member'; base: Expr; name: string }
+  | { kind: 'field'; base: Expr; name: string; viaPointer: boolean }
   | { kind: 'cast'; type: TypeName; arg: Expr }
   | { kind: 'unary'; op: string; arg: Expr; postfix?: boolean }
   | { kind: 'binary'; op: string; left: Expr; right: Expr }
@@ -35,7 +36,7 @@ export type Stmt =
   | { kind: 'return'; value?: Expr }
   | { kind: 'break' | 'continue' };
 export interface FunctionDef { name: string; result: TypeName; params: Decl[]; body: Stmt }
-export interface TranslationUnit { functions: Map<string, FunctionDef>; globals: Decl[] }
+export interface TranslationUnit { functions: Map<string, FunctionDef>; globals: Decl[]; structs: Map<string, Decl[]> }
 
 const operators = ['>>=', '<<=', '++', '--', '==', '!=', '<=', '>=', '&&', '||', '<<', '>>', '+=', '-=', '*=', '/=', '%=', '&=', '|=', '^=', '::', '->'];
 const cppAlternativeOperators: Record<string, string> = {
@@ -109,6 +110,8 @@ const assignments = new Set(['=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '&
 export class Parser {
   private pos = 0;
   private depth = 0;
+  private readonly aliases = new Map<string, TypeName>();
+  private readonly structs = new Map<string, Decl[]>();
   constructor(private readonly tokens: Token[], private readonly language: 'cpp' | 'c') {}
   private peek(n = 0): string { return this.tokens[this.pos + n]?.text ?? '<eof>'; }
   private take(): string { return this.tokens[this.pos++].text; }
@@ -124,6 +127,9 @@ export class Parser {
   private type(): TypeName {
     if (this.eat('const')) throw new CppFault('unsupported', 'Const qualification is not modeled');
     let t = this.take();
+    if (t === 'struct') return `struct ${this.identifier()}`;
+    const alias = this.aliases.get(t);
+    if (alias) return alias;
     if (t === 'std' && this.eat('::')) t = this.take();
     if (t === 'vector') {
       if (this.language === 'c') throw new CppFault('compile-error', 'std::vector is not a C type');
@@ -142,10 +148,14 @@ export class Parser {
     if (t === 'string' && this.language === 'c') throw new CppFault('compile-error', 'std::string is not a C type');
     return t;
   }
-  private isType(): boolean { return ['int', 'long', 'bool', 'char', 'double', 'void', 'const', 'string', 'vector', 'size_t'].includes(this.peek()) ||
+  private isType(): boolean { return this.aliases.has(this.peek()) || ['int', 'long', 'bool', 'char', 'double', 'void', 'const', 'string', 'vector', 'size_t', 'struct'].includes(this.peek()) ||
     this.peek() === 'std' && this.peek(1) === '::' && ['string', 'vector'].includes(this.peek(2)); }
+  private pointerType(type: TypeName): TypeName {
+    if (!type.startsWith('struct ')) throw new CppFault('unsupported', 'Only pointers to structs are modeled');
+    return `pointer:${type.slice('struct '.length)}`;
+  }
   private declarator(type: TypeName, parameter = false): Decl {
-    if (this.peek() === '*') throw new CppFault('unsupported', 'Pointers are not modeled');
+    if (this.eat('*')) type = this.pointerType(type);
     const reference = this.eat('&');
     if (reference && (!parameter || type !== 'vector<int>'))
       throw new CppFault('unsupported', 'Only vector<int>& function parameters are modeled');
@@ -187,11 +197,40 @@ export class Parser {
     const functions = new Map<string, FunctionDef>();
     const globals: Decl[] = [];
     while (this.peek() !== '<eof>') {
+      if (this.eat('typedef')) {
+        const base = this.type();
+        this.need('*');
+        const alias = this.identifier();
+        this.need(';');
+        if (this.aliases.has(alias)) throw new CppFault('compile-error', `Duplicate typedef ${alias}`);
+        this.aliases.set(alias, this.pointerType(base));
+        continue;
+      }
+      if (this.peek() === 'struct' && this.peek(2) === '{') {
+        this.take();
+        const name = this.identifier();
+        this.need('{');
+        if (this.structs.has(name)) throw new CppFault('compile-error', `Duplicate struct ${name}`);
+        const fields: Decl[] = [];
+        while (!this.eat('}')) {
+          if (this.peek() === '<eof>') this.need('}');
+          fields.push(...this.declarations(this.type()));
+          if (fields.length > 64) throw new CppFault('unsupported', 'Struct has too many fields');
+        }
+        this.need(';');
+        if (fields.some(field => field.array || field.init || field.constructArgs || field.type.startsWith('struct ')))
+          throw new CppFault('unsupported', 'Only scalar and struct-pointer fields are modeled');
+        if (new Set(fields.map(field => field.name)).size !== fields.length)
+          throw new CppFault('compile-error', `Duplicate field in struct ${name}`);
+        this.structs.set(name, fields);
+        continue;
+      }
       if (this.eat('using')) {
         if (this.language === 'c') throw new CppFault('compile-error', 'using namespace is not C syntax');
         this.need('namespace'); this.need('std'); this.need(';'); continue;
       }
-      const result = this.type();
+      let result = this.type();
+      if (this.eat('*')) result = this.pointerType(result);
       const name = this.identifier();
       if (this.eat('(')) {
         const params = this.list(')', () => {
@@ -209,7 +248,7 @@ export class Parser {
         globals.push(...this.declarations(result, this.finishNamedDeclarator(result, name)));
       }
     }
-    return { functions, globals };
+    return { functions, globals, structs: this.structs };
   }
   private finishNamedDeclarator(type: TypeName, name: string): Decl {
     let array: Expr | undefined;
@@ -225,7 +264,7 @@ export class Parser {
     this.enter();
     try {
       if (this.eat('{')) { const statements: Stmt[] = []; while (!this.eat('}')) { if (this.peek() === '<eof>') this.need('}'); statements.push(this.statement()); } return { kind: 'block', statements }; }
-      if (['auto', 'unsigned', 'signed', 'struct', 'class', 'double', 'float', 'template', 'typedef', 'enum', 'static', 'do', 'switch', 'goto', 'try', 'throw', 'namespace', 'new', 'delete'].includes(this.peek()))
+      if (['auto', 'unsigned', 'signed', 'class', 'double', 'float', 'template', 'typedef', 'enum', 'static', 'do', 'switch', 'goto', 'try', 'throw', 'namespace', 'new', 'delete'].includes(this.peek()))
         throw new CppFault('unsupported', `Declaration or construct ${this.peek()} is not modeled`);
       if (this.isType()) { const t = this.type(); return { kind: 'declaration', declarations: this.declarations(t) }; }
       if (this.eat('if')) { this.need('('); const condition = this.expression(); this.need(')'); const yes = this.statement(); const no = this.eat('else') ? this.statement() : undefined; return { kind: 'if', condition, yes, no }; }
@@ -268,11 +307,12 @@ export class Parser {
           else throw new CppFault('unsupported', 'Indirect calls are not modeled');
           continue;
         }
-        if (this.peek() === '.' && 13 >= min) {
-          this.take();
+        if ((this.peek() === '.' || this.peek() === '->') && 13 >= min) {
+          const viaPointer = this.take() === '->';
           const member = this.identifier();
-          if (!['length', 'size', 'begin', 'end'].includes(member)) throw new CppFault('unsupported', `Member ${member} is not modeled`);
-          left = left.kind === 'name' ? { kind: 'name', name: `${left.name}.${member}` } : { kind: 'member', base: left, name: member };
+          if (!viaPointer && ['length', 'size', 'begin', 'end'].includes(member))
+            left = left.kind === 'name' ? { kind: 'name', name: `${left.name}.${member}` } : { kind: 'member', base: left, name: member };
+          else left = { kind: 'field', base: left, name: member, viaPointer };
           continue;
         }
         if (['++', '--'].includes(this.peek()) && 13 >= min) { left = { kind: 'unary', op: this.take(), arg: left, postfix: true }; continue; }
@@ -359,6 +399,7 @@ function verifyAst(unit: TranslationUnit): void {
       case 'call': for (const arg of node.args) addExpr(arg, next); break;
       case 'method-call': addExpr(node.base, next); for (const arg of node.args) addExpr(arg, next); break;
       case 'member': addExpr(node.base, next); break;
+      case 'field': addExpr(node.base, next); break;
       case 'cast': addExpr(node.arg, next); break;
       case 'unary': addExpr(node.arg, next); break;
       case 'binary': addExpr(node.left, next); addExpr(node.right, next); break;

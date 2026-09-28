@@ -1813,69 +1813,61 @@
         "targets": [
           {
             "language": "c",
-            "source": "int f(int src,int dst){return {{K}};}",
+            "source": "typedef struct Node *pNode;\nstruct Node {\n  int data;\n  pNode next;\n};\n\npNode reverse(pNode src) {\n  pNode dst,temp;\n\n  dst=NULL;\n  while (src!=NULL) {\n    temp=src->next;\n    src->next={{K}};\n    dst=src;\n    src=temp;\n  }\n  return dst;\n}\n\nint main() {\n  int n,x0,x1,x2,x3;\n  scanf(\"%d%d%d%d%d\",&n,&x0,&x1,&x2,&x3);\n  struct Node a,b,c,d;\n  a.data=x0; b.data=x1; c.data=x2; d.data=x3;\n  pNode head=NULL;\n  if(n>=1){head=&a;a.next=NULL;}\n  if(n>=2){a.next=&b;b.next=NULL;}\n  if(n>=3){b.next=&c;c.next=NULL;}\n  if(n>=4){c.next=&d;d.next=NULL;}\n  pNode out=reverse(head);\n  for(int i=0;i<n;i++){\n    if(out==NULL){printf(\"SHORT\");return 0;}\n    printf(\"%d,\",out->data);\n    out=out->next;\n  }\n  if(out==NULL)printf(\"END\");else printf(\"EXTRA\");\n  return 0;\n}",
             "harness": {
-              "kind": "call",
-              "function": "f"
+              "kind": "program"
             }
           }
         ],
         "targetPolicy": "all",
         "cases": [
           {
-            "id": "case-1",
-            "args": [
-              1,
-              0
-            ],
+            "id": "empty",
+            "stdin": "0 7 4 9 2",
             "expected": {
-              "returnValue": 0
+              "stdout": "END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
           },
           {
-            "id": "case-2",
-            "args": [
-              2,
-              1
-            ],
+            "id": "one",
+            "stdin": "1 7 4 9 2",
             "expected": {
-              "returnValue": 1
+              "stdout": "7,END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
           },
           {
-            "id": "case-3",
-            "args": [
-              3,
-              2
-            ],
+            "id": "two",
+            "stdin": "2 7 4 9 2",
             "expected": {
-              "returnValue": 2
+              "stdout": "4,7,END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
           },
           {
-            "id": "case-4",
-            "args": [
-              10,
-              5
-            ],
+            "id": "three",
+            "stdin": "3 7 4 9 2",
             "expected": {
-              "returnValue": 5
+              "stdout": "9,4,7,END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
           },
           {
-            "id": "case-5",
-            "args": [
-              999,
-              52
-            ],
+            "id": "four",
+            "stdin": "4 7 4 9 2",
             "expected": {
-              "returnValue": 52
+              "stdout": "2,9,4,7,END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
+          },
+          {
+            "id": "duplicates",
+            "stdin": "4 5 5 5 5",
+            "expected": {
+              "stdout": "5,5,5,5,END"
+            },
+            "maxSteps": 10000
           }
         ]
       },
@@ -1904,69 +1896,61 @@
         "targets": [
           {
             "language": "c",
-            "source": "int f(int src,int dst){return {{L}};}",
+            "source": "typedef struct Node *pNode;\nstruct Node {\n  int data;\n  pNode next;\n};\n\npNode reverse(pNode src) {\n  pNode dst,temp;\n\n  dst=NULL;\n  while (src!=NULL) {\n    temp=src->next;\n    src->next=dst;\n    dst={{L}};\n    src=temp;\n  }\n  return dst;\n}\n\nint main() {\n  int n,x0,x1,x2,x3;\n  scanf(\"%d%d%d%d%d\",&n,&x0,&x1,&x2,&x3);\n  struct Node a,b,c,d;\n  a.data=x0; b.data=x1; c.data=x2; d.data=x3;\n  pNode head=NULL;\n  if(n>=1){head=&a;a.next=NULL;}\n  if(n>=2){a.next=&b;b.next=NULL;}\n  if(n>=3){b.next=&c;c.next=NULL;}\n  if(n>=4){c.next=&d;d.next=NULL;}\n  pNode out=reverse(head);\n  for(int i=0;i<n;i++){\n    if(out==NULL){printf(\"SHORT\");return 0;}\n    printf(\"%d,\",out->data);\n    out=out->next;\n  }\n  if(out==NULL)printf(\"END\");else printf(\"EXTRA\");\n  return 0;\n}",
             "harness": {
-              "kind": "call",
-              "function": "f"
+              "kind": "program"
             }
           }
         ],
         "targetPolicy": "all",
         "cases": [
           {
-            "id": "case-1",
-            "args": [
-              1,
-              0
-            ],
+            "id": "empty",
+            "stdin": "0 7 4 9 2",
             "expected": {
-              "returnValue": 1
+              "stdout": "END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
           },
           {
-            "id": "case-2",
-            "args": [
-              2,
-              1
-            ],
+            "id": "one",
+            "stdin": "1 7 4 9 2",
             "expected": {
-              "returnValue": 2
+              "stdout": "7,END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
           },
           {
-            "id": "case-3",
-            "args": [
-              3,
-              2
-            ],
+            "id": "two",
+            "stdin": "2 7 4 9 2",
             "expected": {
-              "returnValue": 3
+              "stdout": "4,7,END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
           },
           {
-            "id": "case-4",
-            "args": [
-              10,
-              5
-            ],
+            "id": "three",
+            "stdin": "3 7 4 9 2",
             "expected": {
-              "returnValue": 10
+              "stdout": "9,4,7,END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
           },
           {
-            "id": "case-5",
-            "args": [
-              999,
-              52
-            ],
+            "id": "four",
+            "stdin": "4 7 4 9 2",
             "expected": {
-              "returnValue": 999
+              "stdout": "2,9,4,7,END"
             },
-            "maxSteps": 20000
+            "maxSteps": 10000
+          },
+          {
+            "id": "duplicates",
+            "stdin": "4 5 5 5 5",
+            "expected": {
+              "stdout": "5,5,5,5,END"
+            },
+            "maxSteps": 10000
           }
         ]
       },

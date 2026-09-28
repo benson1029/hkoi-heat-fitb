@@ -63,3 +63,18 @@ it('2004 string reversal allows one harmless middle-character swap', async () =>
   expect((await gradeQuestion(q, { A:'/2+len%2' }, 'c')).status).toBe('pass');
   expect((await gradeQuestion(q, { A:'' }, 'c')).status).toBe('fail');
 });
+
+it('2004 Senior K and L run the printed linked-list function rather than node IDs', async () => {
+  const printed = senior.contexts?.find(context => context.id === 'q8-code')?.displayCode?.c;
+  expect(printed).toBeDefined();
+  for (const [blank, accepted, rejected] of [['K', '(dst)', 'NULL'], ['L', '(src)', 'dst']] as const) {
+    const question = senior.questions.find(q => q.blanks[0].id === blank)!;
+    if (question.grading.kind !== 'program') throw new Error('Expected program grader');
+    const executablePrintedCode = printed!.replace('{{K}}', blank === 'K' ? '{{K}}' : 'dst').replace('{{L}}', blank === 'L' ? '{{L}}' : 'src');
+    expect(question.grading.targets[0].source.startsWith(executablePrintedCode)).toBe(true);
+    expect(question.grading.targets[0].source).toContain(`{{${blank}}}`);
+    expect(question.grading.targets[0].harness.kind).toBe('program');
+    expect((await gradeQuestion(question, { [blank]: accepted }, 'c')).status).toBe('pass');
+    expect((await gradeQuestion(question, { [blank]: rejected }, 'c')).status).toBe('fail');
+  }
+});
