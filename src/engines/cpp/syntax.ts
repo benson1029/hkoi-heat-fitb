@@ -6,7 +6,7 @@ export class CppFault extends Error {
 }
 
 export interface Token { text: string; at: number }
-export type TypeName = 'int' | 'long long' | 'bool' | 'char' | 'string' | 'double' | 'void' | 'size_t' | 'vector<int>' | 'vector<vector<int>>' | `struct ${string}` | `pointer:${string}`;
+export type TypeName = 'int' | 'long long' | 'bool' | 'char' | 'string' | 'double' | 'void' | 'size_t' | 'vector<int>' | 'vector<vector<int>>' | `array<int,${number}>` | `struct ${string}` | `pointer:${string}`;
 export type Initializer = Expr | Initializer[];
 export interface Decl { name: string; type: TypeName; array?: Expr; arrayParameter?: boolean; reference?: boolean; init?: Initializer; constructArgs?: Expr[] }
 export type Expr =
@@ -53,9 +53,11 @@ export function lex(source: string, language: 'cpp' | 'c' = 'cpp'): Token[] {
   if (new TextEncoder().encode(source).length > MAX_SOURCE) throw new CppFault('unsupported', 'Source exceeds 128 KiB');
   // Only header declarations are accepted. Macros and conditional compilation alter semantics.
   source = source.replace(/^\s*#\s*include\s*[<"]([^>"]+)[>"]\s*$/gm, (_whole, header: string) => {
-    if (!['iostream', 'cstdio', 'stdio.h', 'algorithm', 'vector', 'bits/stdc++.h', 'climits', 'cstdint', 'stdlib.h', 'limits.h'].includes(header))
+    if (!['algorithm', 'array', 'cmath', 'cstdlib', 'deque', 'forward_list', 'iostream', 'list', 'queue', 'stack', 'string', 'utility', 'vector',
+      'cstdio', 'stdio.h', 'math.h', 'bits/stdc++.h', 'climits', 'cstdint', 'stdlib.h', 'limits.h'].includes(header))
       throw new CppFault('unsupported', `Header ${header} is not modeled`);
-    if (language === 'c' && ['iostream', 'cstdio', 'algorithm', 'vector', 'bits/stdc++.h', 'climits', 'cstdint'].includes(header))
+    if (language === 'c' && ['algorithm', 'array', 'cmath', 'cstdlib', 'deque', 'forward_list', 'iostream', 'list', 'queue', 'stack', 'string', 'utility', 'vector',
+      'cstdio', 'bits/stdc++.h', 'climits', 'cstdint'].includes(header))
       throw new CppFault('compile-error', `C program cannot include C++ header ${header}`);
     return ' ';
   });
@@ -142,14 +144,22 @@ export class Parser {
       }
       throw new CppFault('unsupported', 'Only vector<int> and vector<vector<int>> are modeled');
     }
+    if (t === 'array') {
+      if (this.language === 'c') throw new CppFault('compile-error', 'std::array is not a C type');
+      this.need('<'); this.need('int'); this.need(',');
+      const size = this.take();
+      if (!/^\d+$/.test(size) || Number(size) > 16384) throw new CppFault('unsupported', 'Only bounded array<int,N> sizes are modeled');
+      this.need('>');
+      return `array<int,${Number(size)}>`;
+    }
     if (t === 'long') { if (!this.eat('long')) throw new CppFault('unsupported', 'Plain long width is target-dependent'); t = 'long long'; }
     if (t !== 'int' && t !== 'long long' && t !== 'bool' && t !== 'char' && t !== 'string' && t !== 'double' && t !== 'void' && t !== 'size_t')
       throw new CppFault('unsupported', `Type ${t} is not modeled`);
     if (t === 'string' && this.language === 'c') throw new CppFault('compile-error', 'std::string is not a C type');
     return t;
   }
-  private isType(): boolean { return this.aliases.has(this.peek()) || ['int', 'long', 'bool', 'char', 'double', 'void', 'const', 'string', 'vector', 'size_t', 'struct'].includes(this.peek()) ||
-    this.peek() === 'std' && this.peek(1) === '::' && ['string', 'vector'].includes(this.peek(2)); }
+  private isType(): boolean { return this.aliases.has(this.peek()) || ['int', 'long', 'bool', 'char', 'double', 'void', 'const', 'string', 'vector', 'array', 'size_t', 'struct'].includes(this.peek()) ||
+    this.peek() === 'std' && this.peek(1) === '::' && ['string', 'vector', 'array'].includes(this.peek(2)); }
   private pointerType(type: TypeName): TypeName {
     if (!type.startsWith('struct ')) throw new CppFault('unsupported', 'Only pointers to structs are modeled');
     return `pointer:${type.slice('struct '.length)}`;
@@ -157,8 +167,8 @@ export class Parser {
   private declarator(type: TypeName, parameter = false): Decl {
     if (this.eat('*')) type = this.pointerType(type);
     const reference = this.eat('&');
-    if (reference && (!parameter || type !== 'vector<int>'))
-      throw new CppFault('unsupported', 'Only vector<int>& function parameters are modeled');
+    if (reference && (!parameter || type !== 'vector<int>' && !type.startsWith('array<int,')))
+      throw new CppFault('unsupported', 'Only vector<int>& and array<int,N>& function parameters are modeled');
     const name = this.identifier();
     let array: Expr | undefined;
     let arrayParameter = false;
@@ -310,7 +320,7 @@ export class Parser {
         if ((this.peek() === '.' || this.peek() === '->') && 13 >= min) {
           const viaPointer = this.take() === '->';
           const member = this.identifier();
-          if (!viaPointer && ['length', 'size', 'begin', 'end'].includes(member))
+          if (!viaPointer && ['length', 'size', 'begin', 'end', 'empty', 'front', 'back', 'push_back', 'pop_back', 'clear', 'fill', 'at', 'substr', 'find'].includes(member))
             left = left.kind === 'name' ? { kind: 'name', name: `${left.name}.${member}` } : { kind: 'member', base: left, name: member };
           else left = { kind: 'field', base: left, name: member, viaPointer };
           continue;

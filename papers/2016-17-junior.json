@@ -761,6 +761,14 @@
               "stdout": "1"
             },
             "stdin": "abcdefghij 0 0\n"
+          },
+          {
+            "id": "inner-single",
+            "stdin": "aba 1 1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 50000
           }
         ]
       }

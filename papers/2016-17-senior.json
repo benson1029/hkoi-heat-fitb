@@ -411,6 +411,14 @@
             },
             "maxSteps": 10000,
             "stdin": "a 0 0"
+          },
+          {
+            "id": "inner-single",
+            "stdin": "aba 1 1",
+            "expected": {
+              "stdout": "1"
+            },
+            "maxSteps": 10000
           }
         ]
       },

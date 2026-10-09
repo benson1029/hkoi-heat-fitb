@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { ChangeEvent, PointerEvent as ReactPointerEvent, ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -24,6 +24,8 @@ import type {
 import { validatePaper } from '../core/validate';
 import { bundledPapers } from '../data';
 import { deleteBeforeCursor, insertRobotToken } from './robot-edit';
+import { startSolver, type SolverJob } from '../solver/client';
+import type { SolveProgress, SolveResult } from '../solver/types';
 
 type PaperItem = { key: string; config: PaperConfig; private: boolean; fileName?: string };
 type GradeMap = Record<string, QuestionGrade>;
@@ -695,6 +697,102 @@ function LogoDrawingAnswer({ question, answerBlank, value, onAnswer }: {
   </div>;
 }
 
+function SolverPanel({ question, language, values, allAnswers, onAnswer }: {
+  question: Question;
+  language?: Language;
+  values: Record<string, string>;
+  allAnswers: PaperAnswers;
+  onAnswer: (blankId: string, value: string) => void;
+}) {
+  const [blankId, setBlankId] = useState(question.blanks.length > 1 ? '__all__' : question.blanks[0]?.id ?? '');
+  const [searchMode, setSearchMode] = useState<'quick' | 'broad' | 'deep' | 'exhaustive'>(question.grading.kind === 'program' ? 'broad' : 'exhaustive');
+  const [progress, setProgress] = useState<SolveProgress | null>(null);
+  const [result, setResult] = useState<SolveResult | null>(null);
+  const [solving, setSolving] = useState(false);
+  const jobRef = useRef<SolverJob | null>(null);
+  const reference = question.grading.kind === 'weighted-route' ? question.grading.reference : undefined;
+  const inputKey = JSON.stringify([language, values, reference ? allAnswers[reference.questionId]?.[reference.blankId] : null]);
+  const previousInputKey = useRef(inputKey);
+  useEffect(() => () => { jobRef.current?.cancel(); jobRef.current = null; }, []);
+  useEffect(() => {
+    if (previousInputKey.current === inputKey) return;
+    previousInputKey.current = inputKey;
+    jobRef.current?.cancel();
+    jobRef.current = null;
+    setSolving(false);
+    setProgress(null);
+    setResult(null);
+  }, [inputKey]);
+
+  if (question.blanks.length === 0 || question.grading.kind === 'cancelled' || question.grading.kind === 'pending') return null;
+  const target = question.grading.kind === 'program'
+    ? question.grading.targets.find(item => item.language === language) ?? question.grading.targets[0] : undefined;
+  const joint = blankId === '__all__';
+  const missing = joint ? [] : question.blanks.filter(blank => blank.id !== blankId && !values[blank.id]?.length);
+
+  function begin() {
+    if ((!target && question.grading.kind === 'program') || !blankId || missing.length || solving) return;
+    const limits = searchMode === 'quick' ? { maxCandidates: 5_000, maxMs: 10_000, strategy: 'templates' as const }
+      : searchMode === 'broad' ? { maxCandidates: 50_000, maxMs: 60_000, strategy: 'hybrid' as const }
+        : searchMode === 'deep' ? { maxCandidates: 250_000, maxMs: 300_000, strategy: 'deep' as const }
+          : { maxCandidates: 0, maxMs: 0, strategy: 'exhaustive' as const };
+    const job = startSolver({ question, ...(joint ? { blankIds: question.blanks.map(blank => blank.id) } : { blankId }),
+      language: target?.language ?? language, knownAnswers: values, allAnswers,
+      ...limits, maxResults: searchMode === 'exhaustive' ? 0 : 8 }, next => {
+      if (jobRef.current === job) setProgress(next);
+    });
+    jobRef.current = job;
+    setProgress(null);
+    setResult(null);
+    setSolving(true);
+    void job.done.then(next => {
+      if (jobRef.current !== job) return;
+      jobRef.current = null;
+      setResult(next);
+      setProgress(next);
+      setSolving(false);
+    });
+  }
+
+  function cancel() {
+    jobRef.current?.cancel();
+    setSolving(false);
+  }
+
+  const visibleResults = result ?? progress;
+  const hasFindings = Boolean(visibleResults?.found.length || visibleResults?.assignments?.length);
+
+  return <details className="solver-panel">
+    <summary>Find an answer</summary>
+    <div className="solver-controls">
+      {question.blanks.length > 1 && <label>Blanks <select value={blankId} onChange={event => { cancel(); setBlankId(event.target.value); setProgress(null); setResult(null); }}>
+        <option value="__all__">All blanks</option>
+        {question.blanks.map(blank => <option key={blank.id} value={blank.id}>{blank.label || blank.id}</option>)}
+      </select></label>}
+      <label>Search <select value={searchMode} onChange={event => setSearchMode(event.target.value as 'quick' | 'broad' | 'deep' | 'exhaustive')}>
+        {question.grading.kind === 'program' && <>
+        <option value="quick">Quick · 10 s</option><option value="broad">Broad · 1 min</option><option value="deep">Deep · 5 min</option><option value="exhaustive">Exhaustive · until stopped</option>
+        </>}
+        {question.grading.kind !== 'program' && <option value="exhaustive">Exhaustive · until stopped</option>}
+      </select></label>
+      {solving ? <button type="button" onClick={cancel}>Stop</button>
+        : <button type="button" onClick={begin} disabled={missing.length > 0}>Search</button>}
+    </div>
+    {missing.length > 0 && <p className="solver-note">Fill {missing.map(blank => blank.label || blank.id).join(', ')} first.</p>}
+    {solving && <p className="solver-note" role="status">Tested {progress?.tested ?? 0} of {progress?.generated ?? 0} generated in {((progress?.elapsedMs ?? 0) / 1_000).toFixed(1)} s…</p>}
+    {visibleResults && (result || hasFindings) && <div className="solver-results" aria-live="polite">
+      {joint && visibleResults.assignments?.length ? <><p>{visibleResults.assignments.length} {visibleResults.assignments.length === 1 ? 'combination' : 'combinations'} passed the configured tests.</p>
+        <ul>{visibleResults.assignments.map((assignment, index) => <li key={index}><code>{question.blanks.map(blank => `${blank.label || blank.id}=${assignment[blank.id] ?? ''}`).join(' · ')}</code>
+          <button type="button" onClick={() => { for (const blank of question.blanks) if (assignment[blank.id] !== undefined) onAnswer(blank.id, assignment[blank.id]); }}>Use</button></li>)}</ul></>
+        : visibleResults.found.length > 0 ? <><p>{visibleResults.found.length} {visibleResults.found.length === 1 ? 'candidate' : 'candidates'} passed the configured tests.</p>
+        <ul>{visibleResults.found.map(candidate => <li key={candidate}><code>{candidate}</code><button type="button" onClick={() => onAnswer(blankId, candidate)}>Use</button></li>)}</ul></>
+        : result && <p>{result.status === 'unsupported' || result.status === 'error' ? (result.message || 'Search could not run for this blank.')
+          : result.status === 'complete' ? 'No matching candidate in this search.' : 'No matching candidate before the search limit.'}</p>}
+      <small>Tested {visibleResults.tested} candidates in {(visibleResults.elapsedMs / 1_000).toFixed(1)} s.</small>
+    </div>}
+  </details>;
+}
+
 function QuestionCard({
   question,
   selectedLanguage,
@@ -703,6 +801,7 @@ function QuestionCard({
   onEditShared,
   paperSource,
   values,
+  allAnswers,
   result,
   busy,
   onAnswer,
@@ -715,6 +814,7 @@ function QuestionCard({
   onEditShared?: () => void;
   paperSource?: SourceRef;
   values: Record<string, string>;
+  allAnswers: PaperAnswers;
   result?: QuestionGrade;
   busy: boolean;
   onAnswer: (blankId: string, value: string) => void;
@@ -756,6 +856,7 @@ function QuestionCard({
       {!sharedCode && (grading.kind !== 'program' || plainAnswer || (!!displaySource && !displayHasBlanks)) && grading.kind !== 'graph' && grading.kind !== 'robot-grid' && grading.kind !== 'drawing-robot' && grading.kind !== 'box-stack-robot' && grading.kind !== 'river-route' && grading.kind !== 'die-face' && grading.kind !== 'logo-drawing' && grading.kind !== 'cancelled' && !displayHasBlanks && <div className="answer-fields">{question.blanks.map((blank) => <AnswerInput key={blank.id} blank={blank} value={values[blank.id] || ''} onChange={(value) => onAnswer(blank.id, value)} showLabel={question.blanks.length > 1} questionTitle={question.printedRef} />)}</div>}
       {grading.kind === 'pending' && <p className="pending-note">Grader pending: {grading.reason}</p>}
       {grading.kind === 'cancelled' && <p className="cancelled-note">{grading.reason}</p>}
+      {grading.kind !== 'cancelled' && grading.kind !== 'pending' && <SolverPanel question={question} language={target?.language ?? selectedLanguage} values={values} allAnswers={allAnswers} onAnswer={onAnswer} />}
       {grading.kind !== 'cancelled' && <div className="question-actions"><button type="button" className="check-button" onClick={onCheck} disabled={busy || grading.kind === 'pending'}>{busy ? 'Checking…' : 'Check'}</button></div>}
       {result && <QuestionResult result={result} />}
     </article>
@@ -913,7 +1014,7 @@ export default function App() {
                 onAnswer={changeAnswer} />}
               <QuestionCard question={question} selectedLanguage={selectedLanguage} sharedCode={sharedCode}
                 contextShowsCode={(!!context?.markdown && /```(?:c|cpp|c\+\+|python)(?:\s|$)/i.test(context.markdown)) || (!!shared && markers.size === 0)} paperSource={paper.paper.source}
-                values={answers[question.id] || {}} result={results[question.id]} busy={busyAll || !!busyQuestion}
+                values={answers[question.id] || {}} allAnswers={answers} result={results[question.id]} busy={busyAll || !!busyQuestion}
                 onEditShared={sharedCode && context ? () => {
                   if (answerSet) setActiveContextQuestions((all) => ({ ...all, [`${paper.paper.id}:${context.id}`]: question.id }));
                   const element = document.getElementById(`context-${context.id}`);

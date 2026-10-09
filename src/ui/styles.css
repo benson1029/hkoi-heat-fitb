@@ -175,6 +175,20 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .drawing-tools span { margin-right: auto; }
 .drawing-tools button { border: 1px solid #c5d3dc; border-radius: 4px; padding: 4px 9px; background: #f7fafc; color: #36556b; }
 .drawing-tools button:disabled { opacity: .45; }
+.solver-panel { margin-top: 12px; border: 1px solid #dbe4eb; border-radius: 5px; background: #fafcfd; color: #435e71; font-size: 11px; }
+.solver-panel summary { padding: 8px 10px; cursor: pointer; font-weight: 650; }
+.solver-panel[open] summary { border-bottom: 1px solid #e5ecf0; }
+.solver-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 8px 12px; padding: 10px; }
+.solver-controls label { display: flex; flex-direction: column; gap: 3px; color: #60778a; }
+.solver-controls select, .solver-controls button, .solver-results button { min-height: 29px; padding: 4px 8px; border: 1px solid #c4d5e0; border-radius: 4px; background: #fff; color: #285c86; font: inherit; }
+.solver-controls button, .solver-results button { cursor: pointer; }
+.solver-controls button:disabled { opacity: .5; cursor: default; }
+.solver-note, .solver-results { margin: 0; padding: 0 10px 10px; }
+.solver-results p { margin: 0 0 7px; }
+.solver-results ul { display: grid; gap: 5px; margin: 0 0 8px; padding: 0; list-style: none; }
+.solver-results li { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.solver-results li code { overflow-wrap: anywhere; padding: 4px 6px; border-radius: 3px; background: #eef3f6; color: #243f51; font-size: 12px; }
+.solver-results small { color: #718698; }
 .question-actions { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
 .check-button { min-height: 30px; padding: 5px 13px; border: 1px solid #aec9dd; border-radius: 4px; background: #eff6fb; color: #285c86; font-size: 11px; font-weight: 680; }
 .check-button:hover:not(:disabled) { background: #e0effa; }

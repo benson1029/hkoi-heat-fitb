@@ -211,6 +211,61 @@ describe('checked C/C++ subset', () => {
       .toMatchObject({ kind: 'ok', observation: { returnValue: 2, argsAfter: [[9,2,3]] } });
     expect(call('int f(char c){return c;}', 'f', ['0'])).toMatchObject({ kind: 'ok', observation: { returnValue: 48 } });
   });
+  it('accepts the headers printed on the first page', () => {
+    const headers = ['algorithm', 'array', 'cmath', 'cstdlib', 'deque', 'forward_list', 'iostream', 'list', 'queue', 'stack', 'string', 'utility', 'vector'];
+    const source = `${headers.map(header => `#include <${header}>`).join('\n')}\nusing namespace std; int f(){return min(3,max(1,2));}`;
+    expect(call(source)).toMatchObject({ kind: 'ok', observation: { returnValue: 2 } });
+  });
+  it('models common algorithm operations with checked vector ranges', () => {
+    expect(call('int f(){vector<int>a={1,2,2,3};reverse(a.begin(),a.end());return count(a.begin(),a.end(),2)*10+a.front();}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 23 } });
+    expect(call('int f(){vector<int>a={1,2};reverse(a.end(),a.begin());return 0;}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('range') });
+    expect(call('int f(){int a[2]={3,5};swap(a[0],a[1]);return a[0]*10+a[1];}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 53 } });
+    expect(call('int f(){vector<int>a={1,2,2,4};return binary_search(a.begin(),a.end(),2)*10+(upper_bound(a.begin(),a.end(),2)!=a.end());}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 11 } });
+    expect(call('int f(){vector<int>a={2,1};return binary_search(a.begin(),a.end(),1);}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('sorted') });
+  });
+  it('models vector growth and checked element methods', () => {
+    expect(call('int f(){vector<int>a;a.push_back(4);a.push_back(7);a.pop_back();return a.size()*10+a.at(0);}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 14 } });
+    expect(call('int f(){vector<int>a;return a.back();}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('bounds') });
+    expect(call('int f(){vector<int>a;a.pop_back();return 0;}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('empty') });
+  });
+  it('models fixed-size std::array<int,N> with aggregate initialization and bounds checks', () => {
+    expect(call('int f(){std::array<int,3>a={3,1};sort(a.begin(),a.end());int sum=0;for(int x:a)sum+=x;return sum*10+a.back();}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 43 } });
+    expect(call('int f(){array<int,2>a;a.fill(7);return a.size()*10+a.at(1);}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 27 } });
+    expect(call('int f(){array<int,2>a;return a[0];}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('uninitialized') });
+    expect(call('int f(){array<int,2>a={1,2};return a[2];}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('bounds') });
+    expect(call('int f(){array<int,2>a={1,2};a.push_back(3);return 0;}'))
+      .toMatchObject({ kind: 'unsupported' });
+  });
+  it('models string queries and checked substring bounds', () => {
+    expect(call('int f(){string s="abcde";return s.substr(1,2).length();}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 2 } });
+    expect(call('int f(){string s="abcde";return s.find("cd");}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 2 } });
+    expect(call('int f(){string s="abc";return s.at(3);}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('bounds') });
+  });
+  it('models cmath rounding with C++ tie behavior', () => {
+    expect(call('int f(){return int(round(-2.5))+int(floor(3.9))+int(ceil(1.1));}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 2 } });
+    expect(call('int f(){return int(pow(2,5));}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 32 } });
+    const cSource = '#include <math.h>\nint f(){return floor(sqrt(15));}';
+    expect(runCpp(cSource, { language: 'c', source: cSource, harness: { kind: 'call', function: 'f' } },
+      { id: 'c-math', args: [], expected: {}, maxSteps: 1000 }))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 3 } });
+  });
   it('reads arrays of strings and evaluates indexed length, characters, and comparisons', () => {
     const source = 'int main(){string a[3];for(int i=0;i<3;++i)cin>>a[i];cout<<a[0].length()<<":"<<(a[1]<a[2])<<":"<<a[2][1];}';
     expect(program(source, 'cat apple banana')).toMatchObject({ kind: 'ok', observation: { stdout: '3:1:a' } });

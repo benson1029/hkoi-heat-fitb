@@ -995,6 +995,22 @@
               "returnValue": 0
             },
             "maxSteps": 5000
+          },
+          {
+            "id": "overlap-from-left",
+            "args": [0, 4, 2, 6, 2, 0, 4],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
+          },
+          {
+            "id": "segment-contains-rectangle-width",
+            "args": [0, 4, 2, 6, 2, 0, 8],
+            "expected": {
+              "returnValue": 1
+            },
+            "maxSteps": 5000
           }
         ]
       },

@@ -1272,6 +1272,32 @@
                 1
               ]
             ]
+          },
+          {
+            "id": "different-large-values",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                5,
+                6
+              ]
+            ]
+          },
+          {
+            "id": "equal-large-values",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                5,
+                5
+              ]
+            ]
           }
         ]
       }
@@ -1373,6 +1399,26 @@
               14,
               0,
               2
+            ]
+          },
+          {
+            "id": "indexed-box-too-heavy",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [1, 2, 8], 9, 1, 2
+            ]
+          },
+          {
+            "id": "indexed-boxes-fit",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [3, 1, 2], 3, 1, 2
             ]
           }
         ]

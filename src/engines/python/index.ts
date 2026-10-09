@@ -1,6 +1,7 @@
 import type { EngineResult, ProgramCase, ProgramEngine, ProgramTarget } from '../../core/types';
 import { preparePythonPayload } from './runner';
 import { PYTHON_HARNESS } from './harness';
+import { tryRunFastPythonFunction } from './fast-function';
 
 type WorkerResponse =
   | { type: 'ready' }
@@ -40,7 +41,7 @@ class BrowserPythonEngine implements ProgramEngine {
         this.reset();
         reject(new Error(event.message || 'Python worker failed to load'));
       };
-      const indexURL = new URL(`${import.meta.env.BASE_URL}pyodide/`, window.location.href).href;
+      const indexURL = new URL(`${import.meta.env.BASE_URL}pyodide/`, globalThis.location.href).href;
       worker.postMessage({ type: 'init', indexURL });
     });
     return this.ready;
@@ -82,6 +83,10 @@ class BrowserPythonEngine implements ProgramEngine {
   }
 
   run(source: string, target: ProgramTarget, testCase: ProgramCase): Promise<EngineResult> {
+    const prepared = preparePythonPayload(source, target, testCase);
+    if ('error' in prepared) return Promise.resolve(prepared.error);
+    const fast = tryRunFastPythonFunction(source, target, testCase);
+    if (fast?.kind === 'ok') return Promise.resolve(fast);
     const task = this.queue.then(() => this.runOne(source, target, testCase));
     this.queue = task.then(() => undefined, () => undefined);
     return task;
@@ -178,6 +183,10 @@ class NodePythonEngine implements ProgramEngine {
   }
 
   run(source: string, target: ProgramTarget, testCase: ProgramCase): Promise<EngineResult> {
+    const prepared = preparePythonPayload(source, target, testCase);
+    if ('error' in prepared) return Promise.resolve(prepared.error);
+    const fast = tryRunFastPythonFunction(source, target, testCase);
+    if (fast?.kind === 'ok') return Promise.resolve(fast);
     const task = this.queue.then(() => this.runOne(source, target, testCase));
     this.queue = task.then(() => undefined, () => undefined);
     return task;
@@ -185,7 +194,7 @@ class NodePythonEngine implements ProgramEngine {
 }
 
 export function createPythonEngine(): ProgramEngine {
-  return typeof window !== 'undefined' && typeof Worker !== 'undefined'
+  return typeof Worker !== 'undefined' && typeof globalThis.location !== 'undefined'
     ? new BrowserPythonEngine()
     : new NodePythonEngine();
 }

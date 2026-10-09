@@ -1247,6 +1247,34 @@
                 5
               ]
             ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                10,
+                11,
+                12
+              ]
+            ]
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                1,
+                3,
+                4
+              ]
+            ]
           }
         ]
       }
@@ -1349,6 +1377,34 @@
                 4,
                 5,
                 5
+              ]
+            ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                10,
+                11,
+                12
+              ]
+            ]
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                1,
+                3,
+                4
               ]
             ]
           }
@@ -2633,6 +2689,16 @@
             },
             "args": [
               "123456"
+            ]
+          },
+          {
+            "id": "repeated-prefix-class",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 55
+            },
+            "args": [
+              "0000000000"
             ]
           }
         ]

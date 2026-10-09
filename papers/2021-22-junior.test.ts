@@ -43,3 +43,10 @@ it('checks the indexed element in the median program rather than only a[0]', asy
   expect((await gradeQuestion(question, { F1: 'abs(a[j]-i)', F2: 'temp', F3: 'i' })).status).toBe('pass');
   expect((await gradeQuestion(question, { F1: 'abs(a[0]-i)', F2: 'temp', F3: 'i' })).status).toBe('fail');
 });
+
+it('accepts rectangle intersections from either horizontal direction', async () => {
+  const question = validatePaper(source).questions.find(item => item.id === 'K');
+  if (!question) throw new Error('Question K is missing');
+  expect((await gradeQuestion(question, { K: 'f(by,ax1,ax2,by,bx1,bx2)' })).status).toBe('pass');
+  expect((await gradeQuestion(question, { K: 'bx1>=ax1&&bx1<=ax2' })).status).toBe('fail');
+});
