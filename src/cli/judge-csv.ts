@@ -30,6 +30,10 @@ function defaultTracks(paper: PaperConfig): string[] {
 }
 
 const args = options(process.argv.slice(2));
+if (args['python-fallback'] && !['true', 'false'].includes(args['python-fallback'])) {
+  throw new Error('--python-fallback must be true or false');
+}
+const pythonFallback = args['python-fallback'] === 'true';
 const paper = validatePaper(JSON.parse(await readFile(resolve(args.paper), 'utf8')));
 const input = parseCsv(await readFile(resolve(args.input), 'utf8'));
 if (input.length < 2) throw new Error('Input CSV needs a header and at least one submission');
@@ -53,7 +57,7 @@ for (let rowIndex = 1; rowIndex < input.length; rowIndex++) {
     for (const blank of question.blanks) answers[question.id][blank.id] = record[`${question.id}.${blank.id}`] ?? '';
   }
   const tracks = (record.tracks || args.tracks)?.split(',').map(value => value.trim()).filter(Boolean) ?? defaultTracks(paper);
-  const grade = await gradePaper(paper, answers, tracks);
+  const grade = await gradePaper(paper, answers, tracks, { pythonFallback });
   const byId = new Map(grade.questions.map(question => [question.questionId, question]));
   output.push([
     ...row,

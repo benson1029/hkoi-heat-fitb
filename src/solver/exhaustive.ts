@@ -3,6 +3,8 @@ import { gradeQuestion } from '../core/grader';
 import { parse as parseCpp } from '../engines/cpp/syntax';
 import { parsePrefixRepeatCommands } from '../core/command-language';
 import { generateCandidates } from './candidates';
+import { semanticCandidates } from './semantic';
+import { generateLiteralCandidates } from './literal';
 import type { SolveProgress, SolveRequest, SolveResult } from './types';
 
 /**
@@ -275,11 +277,18 @@ export async function solveExhaustive(
       for (const value of generateCandidates(question, blanks[0].id, language ?? program!.targets[0].language, 'deep'))
         yield { [blanks[0].id]: value };
     })()
+    : question.grading.kind === 'literal' && blanks.length === 1
+      ? (function* () {
+        for (const value of generateLiteralCandidates(question, blanks[0].id))
+          yield { [blanks[0].id]: value };
+      })()
     : question.grading.kind === 'weighted-route'
       ? weightedRouteCandidates(question.grading)
-    : numericSearchAlphabet(request)
-      ? enumerateAnswerTuples(blanks, { alphabet: numericSearchAlphabet(request) })
-      : undefined;
+    : (function* () {
+      yield* semanticCandidates(question);
+      const alphabet = numericSearchAlphabet(request);
+      if (alphabet) yield* enumerateAnswerTuples(blanks, { alphabet });
+    })();
   let heuristicDone = false;
 
   async function tryCandidate(tuple: Record<string, string>): Promise<boolean> {

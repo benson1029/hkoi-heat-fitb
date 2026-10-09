@@ -10,8 +10,10 @@ type WorkerResponse =
 
 const CASE_TIMEOUT_MS = 5_000;
 const INIT_TIMEOUT_MS = 45_000;
+const CUSTOM_ONLY_MESSAGE = 'This Python feature is outside the built-in runtime. Enable Pyodide fallback to check it.';
 
 class BrowserPythonEngine implements ProgramEngine {
+  constructor(private readonly allowFallback: boolean) {}
   private worker: Worker | null = null;
   private ready: Promise<void> | null = null;
   private nextId = 0;
@@ -87,6 +89,7 @@ class BrowserPythonEngine implements ProgramEngine {
     if ('error' in prepared) return Promise.resolve(prepared.error);
     const fast = tryRunFastPythonFunction(source, target, testCase);
     if (fast?.kind === 'ok') return Promise.resolve(fast);
+    if (!this.allowFallback) return Promise.resolve(fast ?? { kind: 'unsupported', message: CUSTOM_ONLY_MESSAGE });
     const task = this.queue.then(() => this.runOne(source, target, testCase));
     this.queue = task.then(() => undefined, () => undefined);
     return task;
@@ -94,6 +97,7 @@ class BrowserPythonEngine implements ProgramEngine {
 }
 
 class NodePythonEngine implements ProgramEngine {
+  constructor(private readonly allowFallback: boolean) {}
   private worker: import('node:worker_threads').Worker | null = null;
   private ready: Promise<void> | null = null;
   private nextId = 0;
@@ -187,16 +191,18 @@ class NodePythonEngine implements ProgramEngine {
     if ('error' in prepared) return Promise.resolve(prepared.error);
     const fast = tryRunFastPythonFunction(source, target, testCase);
     if (fast?.kind === 'ok') return Promise.resolve(fast);
+    if (!this.allowFallback) return Promise.resolve(fast ?? { kind: 'unsupported', message: CUSTOM_ONLY_MESSAGE });
     const task = this.queue.then(() => this.runOne(source, target, testCase));
     this.queue = task.then(() => undefined, () => undefined);
     return task;
   }
 }
 
-export function createPythonEngine(): ProgramEngine {
+export function createPythonEngine(allowFallback = false): ProgramEngine {
   return typeof Worker !== 'undefined' && typeof globalThis.location !== 'undefined'
-    ? new BrowserPythonEngine()
-    : new NodePythonEngine();
+    ? new BrowserPythonEngine(allowFallback)
+    : new NodePythonEngine(allowFallback);
 }
 
 export const pythonEngine = createPythonEngine();
+export const pythonEngineWithFallback = createPythonEngine(true);

@@ -369,6 +369,14 @@
               "stdout": "9"
             },
             "stdin": "10\n2 10 1 9 3 8 4 7 5 6\n"
+          },
+          {
+            "id": "values-above-n",
+            "stdin": "4\n10 11 12 13\n",
+            "expected": {
+              "stdout": "12"
+            },
+            "maxSteps": 50000
           }
         ]
       }
@@ -461,6 +469,14 @@
               "stdout": "9"
             },
             "stdin": "10\n2 10 1 9 3 8 4 7 5 6\n"
+          },
+          {
+            "id": "values-above-n",
+            "stdin": "4\n10 11 12 13\n",
+            "expected": {
+              "stdout": "12"
+            },
+            "maxSteps": 50000
           }
         ]
       }
@@ -553,6 +569,14 @@
               "stdout": "9"
             },
             "stdin": "10\n2 10 1 9 3 8 4 7 5 6\n"
+          },
+          {
+            "id": "values-above-n",
+            "stdin": "4\n10 11 12 13\n",
+            "expected": {
+              "stdout": "12"
+            },
+            "maxSteps": 50000
           }
         ]
       }

@@ -31,6 +31,17 @@ describe('bounded Python expression subset', () => {
     expect(value('True != False')).toBe(true);
   });
 
+  it('recognizes Python numeric literals and conservative identity comparisons', () => {
+    expect(value('0b_1010 + 0xF + 1_000 + 1.e2')).toBe(1125);
+    expect(value('None is None')).toBe(true);
+    expect(value('True is not 1')).toBe(true);
+    expect(evaluatePythonExpression('01').kind).toBe('unsupported');
+    expect(evaluatePythonExpression('1 is 1').kind).toBe('unsupported');
+    expect(value('len({True: 1, 1: 2})')).toBe(1);
+    expect(value('True in {1, 2}')).toBe(true);
+    expect(evaluatePythonExpression('[1] in {1, 2}').kind).toBe('unsupported');
+  });
+
   it('returns unsupported for syntax or values that need Pyodide', () => {
     expect(evaluatePythonExpression('[x for x in a]', { a: [1] }).kind).toBe('unsupported');
     expect(evaluatePythonExpression('2 ** 60').kind).toBe('unsupported');

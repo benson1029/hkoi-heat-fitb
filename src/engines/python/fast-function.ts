@@ -1,14 +1,32 @@
 import type { EngineResult, JsonValue, ProgramCase, ProgramTarget } from '../../core/types';
-import { evaluatePythonExpression, PythonTuple } from './expression';
+import { evaluatePythonExpression, PythonDict, PythonSet, PythonTuple } from './expression';
 import { tryRunPythonProgram } from './program';
 
 function isJsonValue(value: unknown): value is JsonValue {
   if (value instanceof PythonTuple) return false;
+  if (value instanceof PythonDict || value instanceof PythonSet) return false;
   if (value === null || typeof value === 'boolean' || typeof value === 'string') return true;
   if (typeof value === 'number') return Number.isFinite(value);
   if (Array.isArray(value)) return value.every(isJsonValue);
   if (typeof value === 'object' && value && !('builtin' in value)) return Object.values(value).every(isJsonValue);
   return false;
+}
+
+function normalizeTuple(value: unknown): unknown {
+  if (value instanceof PythonTuple) return value.values.map(normalizeTuple);
+  if (value instanceof PythonSet) return value;
+  if (value instanceof PythonDict) {
+    const entries = value.keys().map((key) => {
+      if (key instanceof PythonTuple) throw new Error('JSON cannot encode tuple dictionary keys');
+      const label = key === null ? 'null' : key === true ? 'true' : key === false ? 'false' : String(key);
+      return [label, normalizeTuple(value.get(key).value)] as const;
+    });
+    return Object.fromEntries(entries);
+  }
+  if (Array.isArray(value)) return value.map(normalizeTuple);
+  if (value && typeof value === 'object' && !('builtin' in value))
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, normalizeTuple(item)]));
+  return value;
 }
 
 /** Returns undefined whenever the full Python runtime should decide the case. */
@@ -25,12 +43,16 @@ export function tryRunFastPythonFunction(source: string, target: ProgramTarget, 
     names.push(param[1]);
   }
   const args = testCase.args ?? [];
+  const hasObjectArg = (value: unknown): boolean => Array.isArray(value) ? value.some(hasObjectArg) : value !== null && typeof value === 'object';
+  if (args.some(hasObjectArg)) return tryRunPythonProgram(source, target, testCase);
   if (args.length !== names.length) return tryRunPythonProgram(source, target, testCase);
   const variables = Object.fromEntries(names.map((name, index) => [name, args[index]]));
   const result = evaluatePythonExpression(match[3], variables, Math.min(testCase.maxSteps, 10_000));
-  if (result.kind !== 'ok' || result.steps * 10 > testCase.maxSteps || !isJsonValue(result.value)) return tryRunPythonProgram(source, target, testCase);
+  if (result.kind !== 'ok' || result.steps * 10 > testCase.maxSteps) return tryRunPythonProgram(source, target, testCase);
   try {
-    const observation = { returnValue: result.value, argsAfter: args, stdout: '' };
+    const returned = normalizeTuple(result.value);
+    if (!isJsonValue(returned)) return tryRunPythonProgram(source, target, testCase);
+    const observation = { returnValue: returned, argsAfter: args, stdout: '' };
     JSON.stringify(observation);
     return { kind: 'ok', observation, steps: result.steps * 10 };
   } catch {

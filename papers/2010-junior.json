@@ -160,6 +160,14 @@
             },
             "maxSteps": 20000,
             "stdin": "7\n1 1 2 3 4 5 6\n7\n"
+          },
+          {
+            "id": "teacher-has-higher-id",
+            "expected": {
+              "stdout": "2\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "2\n2 2\n1\n"
           }
         ]
       },
@@ -219,6 +227,14 @@
             },
             "maxSteps": 20000,
             "stdin": "7\n1 1 2 3 4 5 6\n7\n"
+          },
+          {
+            "id": "teacher-has-higher-id",
+            "expected": {
+              "stdout": "2\n"
+            },
+            "maxSteps": 20000,
+            "stdin": "2\n2 2\n1\n"
           }
         ]
       },

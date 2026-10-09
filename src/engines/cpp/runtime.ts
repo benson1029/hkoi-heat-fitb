@@ -1,17 +1,17 @@
 import type { JsonValue, Observation, ProgramCase, ProgramTarget } from '../../core/types';
 import { CppFault, type Decl, type Expr, type FunctionDef, type Initializer, type Stmt, type TranslationUnit, type TypeName } from './syntax';
 
-type VectorType = 'vector<int>' | 'vector<vector<int>>' | `array<int,${number}>`;
+type VectorType = 'vector<int>' | 'vector<vector<int>>' | 'deque<int>' | 'stack<int>' | 'queue<int>' | 'priority_queue<int>' | `array<int,${number}>`;
 type ScalarType = 'int' | 'long long' | 'bool' | 'char' | 'size_t';
 interface ScalarSlot { kind: 'scalar'; type: ScalarType; value: bigint; initialized: boolean; alive: boolean; stringChar?: boolean }
 interface FloatSlot { kind: 'float'; value: number; initialized: boolean; alive: boolean }
 interface ArraySlot { kind: 'array'; type: ScalarType | 'string'; cells: (ScalarSlot | StringSlot)[]; alive: boolean; owner: boolean }
 interface StringSlot { kind: 'string'; cells: ScalarSlot[]; initialized: boolean; alive: boolean }
-interface VectorSlot { kind: 'vector'; type: VectorType; cells: (ScalarSlot | VectorSlot)[]; alive: boolean; owner: boolean }
+interface VectorSlot { kind: 'vector'; type: VectorType; cells: (ScalarSlot | VectorSlot)[]; alive: boolean; owner: boolean; version?: number }
 interface PointerSlot { kind: 'pointer'; type: string; target: StructSlot | null; initialized: boolean; alive: boolean }
 interface StructSlot { kind: 'struct'; type: string; fields: Map<string, ScalarSlot | PointerSlot>; alive: boolean }
 type Slot = ScalarSlot | FloatSlot | ArraySlot | StringSlot | VectorSlot | PointerSlot | StructSlot;
-type Value = { kind: 'integer'; value: bigint; type: ScalarType } | { kind: 'floating'; value: number } | { kind: 'string'; value: string } | { kind: 'array'; slot: ArraySlot } | { kind: 'vector'; slot: VectorSlot } | { kind: 'iterator'; slot: VectorSlot; position: number } | { kind: 'stream'; direction: 'in' | 'out' } | { kind: 'void' } | { kind: 'address'; slot: ScalarSlot } | { kind: 'pointer'; type: string; target: StructSlot | null } | { kind: 'struct'; slot: StructSlot };
+type Value = { kind: 'integer'; value: bigint; type: ScalarType } | { kind: 'floating'; value: number } | { kind: 'string'; value: string } | { kind: 'array'; slot: ArraySlot } | { kind: 'vector'; slot: VectorSlot } | { kind: 'iterator'; slot: VectorSlot; position: number; version: number } | { kind: 'stream'; direction: 'in' | 'out' } | { kind: 'void' } | { kind: 'address'; slot: ScalarSlot } | { kind: 'pointer'; type: string; target: StructSlot | null } | { kind: 'struct'; slot: StructSlot };
 type Flow = { kind: 'normal' | 'break' | 'continue' } | { kind: 'return'; value: Value };
 const normal: Flow = { kind: 'normal' };
 const INT_MIN = -(1n << 31n), INT_MAX = (1n << 31n) - 1n;
@@ -91,6 +91,14 @@ export class CheckedRuntime {
   }
   get stepCount(): number { return this.steps; }
   private tick(): void { if (++this.steps > this.maxSteps) throw new CppFault('step-limit', `Step limit ${this.maxSteps} exceeded`); }
+  private iterator(slot: VectorSlot, position: number): Extract<Value, { kind: 'iterator' }> {
+    return { kind: 'iterator', slot, position, version: slot.version ?? 0 };
+  }
+  private validIterator(value: Extract<Value, { kind: 'iterator' }>): void {
+    if (!value.slot.alive || value.version !== (value.slot.version ?? 0))
+      throw new CppFault('runtime-error', 'Use of invalidated iterator');
+  }
+  private invalidateIterators(slot: VectorSlot): void { slot.version = (slot.version ?? 0) + 1; }
   private charge(operations: number): void {
     this.steps += operations;
     if (this.steps > this.maxSteps) throw new CppFault('step-limit', `Step limit ${this.maxSteps} exceeded`);
@@ -223,6 +231,8 @@ export class CheckedRuntime {
     }
     if (base.kind === 'vector') {
       if (!base.slot.alive) throw new CppFault('runtime-error', 'Vector use after lifetime');
+      if (base.slot.type === 'stack<int>' || base.slot.type === 'queue<int>' || base.slot.type === 'priority_queue<int>')
+        throw new CppFault('compile-error', `${base.slot.type} has no indexing operator`);
       if (i < 0n || i >= BigInt(base.slot.cells.length)) throw new CppFault('runtime-error', `Vector index out of bounds: ${i}`);
       return base.slot.cells[Number(i)];
     }
@@ -250,6 +260,14 @@ export class CheckedRuntime {
     }
     if (expr.kind === 'index') return this.indexedSlot(expr);
     if (expr.kind === 'field') return this.fieldSlot(expr);
+    if (expr.kind === 'unary' && expr.op === '*') {
+      const value = this.evaluate(expr.arg);
+      if (value.kind !== 'iterator') throw new CppFault('compile-error', 'Iterator dereference requires an iterator');
+      this.validIterator(value);
+      if (!value.slot.alive || value.position < 0 || value.position >= value.slot.cells.length)
+        throw new CppFault('runtime-error', 'Iterator dereference out of bounds');
+      return value.slot.cells[value.position];
+    }
     throw new CppFault('compile-error', 'Expression is not assignable');
   }
   private lvalue(expr: Expr): ScalarSlot {
@@ -268,7 +286,7 @@ export class CheckedRuntime {
     if (!Array.isArray(init)) throw new CppFault('unsupported', 'Vector initializer must be a brace list');
     if (init.length > MAX_ARRAY) throw new CppFault('unsupported', 'Vector size is outside the modeled limit');
     this.charge(init.length);
-    const cells: (ScalarSlot | VectorSlot)[] = type === 'vector<int>' || type.startsWith('array<int,')
+    const cells: (ScalarSlot | VectorSlot)[] = type === 'vector<int>' || type === 'deque<int>' || type.startsWith('array<int,')
       ? init.map(item => ({ kind: 'scalar', type: 'int', value: narrow(asInt(this.scalarInit(item)).value, 'int'), initialized: true, alive: true }))
       : init.map(item => this.vectorFromInit('vector<int>', item));
     return { kind: 'vector', type, cells, alive: true, owner: true };
@@ -320,11 +338,15 @@ export class CheckedRuntime {
       if (decl.init !== undefined) this.writeFloat(slot, this.scalarInit(decl.init));
       return;
     }
-    if (type === 'vector<int>' || type === 'vector<vector<int>>' || type.startsWith('array<int,')) {
+    if (type === 'vector<int>' || type === 'vector<vector<int>>' || type === 'deque<int>' || type === 'stack<int>' || type === 'queue<int>' || type === 'priority_queue<int>' || type.startsWith('array<int,')) {
       if (decl.array || decl.arrayParameter) throw new CppFault('unsupported', 'Arrays of vectors are not modeled');
       const sequenceType = type as VectorType;
       let slot: VectorSlot;
-      if (type.startsWith('array<int,')) {
+      if (type === 'stack<int>' || type === 'queue<int>' || type === 'priority_queue<int>') {
+        if (decl.constructArgs || decl.init !== undefined)
+          throw new CppFault('unsupported', `${type} constructors and initializers are not modeled`);
+        slot = { kind: 'vector', type: sequenceType, cells: [], alive: true, owner: true };
+      } else if (type.startsWith('array<int,')) {
         if (decl.constructArgs) throw new CppFault('compile-error', 'std::array is an aggregate and has no size constructor');
         const capacity = Number(type.slice('array<int,'.length, -1));
         let values: Value[] = [];
@@ -347,10 +369,10 @@ export class CheckedRuntime {
         const size = asInt(this.evaluate(decl.constructArgs[0])).value;
         if (size < 0n || size > BigInt(MAX_ARRAY)) throw new CppFault('unsupported', 'Vector size is outside the modeled limit');
         const fill = decl.constructArgs[1] ? asInt(this.evaluate(decl.constructArgs[1])).value : 0n;
-        if (type !== 'vector<int>' && decl.constructArgs.length === 2) throw new CppFault('unsupported', 'Nested vector fill constructor is not modeled');
+        if (type !== 'vector<int>' && type !== 'deque<int>' && decl.constructArgs.length === 2) throw new CppFault('unsupported', 'Nested vector fill constructor is not modeled');
         this.charge(Number(size));
         slot = { kind: 'vector', type: sequenceType, alive: true, owner: true, cells: Array.from({ length: Number(size) }, () =>
-          type === 'vector<int>'
+          type === 'vector<int>' || type === 'deque<int>'
             ? ({ kind: 'scalar', type: 'int', value: narrow(fill, 'int'), initialized: true, alive: true } as ScalarSlot)
             : ({ kind: 'vector', type: 'vector<int>', cells: [], alive: true, owner: true } as VectorSlot)) };
       } else slot = { kind: 'vector', type: sequenceType, cells: [], alive: true, owner: true };
@@ -500,9 +522,25 @@ export class CheckedRuntime {
     throw new CppFault('unsupported', `Stream operator ${op} is not modeled`);
   }
   private builtin(name: string, args: Expr[]): Value | undefined {
-    if (['max', 'std::max', 'min', 'std::min'].includes(name)) {
+    if (['max', 'std::max', 'min', 'std::min', 'clamp', 'std::clamp'].includes(name)) {
+      if (name.endsWith('clamp')) {
+        if (args.length !== 3) throw new CppFault('compile-error', `${name} expects three arguments`);
+        const values = args.map(arg => this.evaluate(arg));
+        if (values.every(value => value.kind === 'floating')) {
+          const [value, lo, hi] = values as Extract<Value, { kind: 'floating' }>[];
+          if (lo.value > hi.value) throw new CppFault('runtime-error', 'clamp lower bound exceeds upper bound');
+          return { kind: 'floating', value: Math.min(Math.max(value.value, lo.value), hi.value) };
+        }
+        const [value, lo, hi] = values.map(asInt);
+        if (value.type !== lo.type || value.type !== hi.type) throw new CppFault('compile-error', 'Mixed-type clamp template deduction');
+        if (lo.value > hi.value) throw new CppFault('runtime-error', 'clamp lower bound exceeds upper bound');
+        return int(value.value < lo.value ? lo.value : value.value > hi.value ? hi.value : value.value, value.type);
+      }
       if (args.length !== 2) throw new CppFault('compile-error', `${name} expects two arguments`);
-      const a = asInt(this.evaluate(args[0])), b = asInt(this.evaluate(args[1]));
+      const left = this.evaluate(args[0]), right = this.evaluate(args[1]);
+      if (left.kind === 'floating' && right.kind === 'floating')
+        return { kind: 'floating', value: (name.endsWith('min') ? right.value < left.value : left.value < right.value) ? right.value : left.value };
+      const a = asInt(left), b = asInt(right);
       if (a.type !== b.type) throw new CppFault('unsupported', 'Mixed-type min/max template deduction is not modeled');
       return int((name.endsWith('min') ? a.value <= b.value : a.value >= b.value) ? a.value : b.value, a.type);
     }
@@ -514,29 +552,69 @@ export class CheckedRuntime {
       this.write(a, second); this.write(b, first);
       return { kind: 'void' };
     }
-    if (['sort', 'std::sort', 'reverse', 'std::reverse', 'count', 'std::count', 'find', 'std::find',
-      'lower_bound', 'std::lower_bound', 'upper_bound', 'std::upper_bound', 'binary_search', 'std::binary_search'].includes(name)) {
+    if (['sort', 'reverse', 'count', 'find', 'lower_bound', 'upper_bound', 'binary_search',
+      'fill', 'replace', 'min_element', 'max_element', 'is_sorted', 'rotate'].includes(name.replace(/^std::/, ''))) {
       const algorithm = name.replace(/^std::/, '');
-      const needsValue = !['sort', 'reverse'].includes(algorithm);
-      if (args.length !== (needsValue ? 3 : 2))
-        throw new CppFault('compile-error', `${algorithm} expects ${needsValue ? 'three' : 'two'} arguments`);
-      const first = this.evaluate(args[0]), last = this.evaluate(args[1]);
+      const arity = algorithm === 'replace' ? 4 : algorithm === 'rotate' ? 3
+        : ['sort', 'reverse', 'min_element', 'max_element', 'is_sorted'].includes(algorithm) ? 2 : 3;
+      if (args.length !== arity)
+        throw new CppFault('compile-error', `${algorithm} expects ${arity} arguments`);
+      const first = this.evaluate(args[0]), last = this.evaluate(args[algorithm === 'rotate' ? 2 : 1]);
       if (first.kind !== 'iterator' || last.kind !== 'iterator' || first.slot.cells !== last.slot.cells)
         throw new CppFault('compile-error', `${algorithm} requires iterators into the same vector`);
+      this.validIterator(first); this.validIterator(last);
       const cells = first.slot.cells;
       if (first.position < 0 || last.position < first.position || last.position > cells.length)
         throw new CppFault('runtime-error', `Invalid vector ${algorithm} range`);
-      if (first.slot.type !== 'vector<int>' && !first.slot.type.startsWith('array<int,'))
+      if (first.slot.type !== 'vector<int>' && first.slot.type !== 'deque<int>' && !first.slot.type.startsWith('array<int,'))
         throw new CppFault('unsupported', `Only ${algorithm}(vector<int> or array<int,N>) is modeled`);
       const selected = cells.slice(first.position, last.position) as ScalarSlot[];
       for (const cell of selected) this.read(cell);
+      if (algorithm === 'fill' || algorithm === 'replace') {
+        const replacement = algorithm === 'fill' ? this.evaluate(args[2]) : this.evaluate(args[3]);
+        const old = algorithm === 'replace' ? integralConversion(this.evaluate(args[2]), 'int') : undefined;
+        for (const cell of selected) {
+          this.tick();
+          if (old === undefined || cell.value === old) this.write(cell, replacement);
+        }
+        return { kind: 'void' };
+      }
+      if (algorithm === 'min_element' || algorithm === 'max_element') {
+        if (selected.length === 0) return last;
+        let position = 0;
+        for (let i = 1; i < selected.length; i++) {
+          this.tick();
+          if (algorithm === 'min_element' ? selected[i].value < selected[position].value
+            : selected[i].value > selected[position].value) position = i;
+        }
+        return this.iterator(first.slot, first.position + position);
+      }
+      if (algorithm === 'is_sorted') {
+        for (let i = 1; i < selected.length; i++) {
+          this.tick();
+          if (selected[i - 1].value > selected[i].value) return int(0n, 'bool');
+        }
+        return int(1n, 'bool');
+      }
+      if (algorithm === 'rotate') {
+        const middle = this.evaluate(args[1]);
+        if (middle.kind !== 'iterator' || middle.slot !== first.slot ||
+          middle.position < first.position || middle.position > last.position)
+          throw new CppFault('runtime-error', 'Invalid vector rotate middle');
+        this.validIterator(middle);
+        const split = middle.position - first.position;
+        const values = selected.map(cell => cell.value);
+        const rotated = [...values.slice(split), ...values.slice(0, split)];
+        for (let i = 0; i < selected.length; i++) { this.tick(); this.write(selected[i], int(rotated[i])); }
+        return this.iterator(first.slot, first.position + selected.length - split);
+      }
       if (algorithm === 'count' || algorithm === 'find') {
         const wanted = asInt(this.evaluate(args[2])).value;
         let found = 0;
         for (let i = 0; i < selected.length; i++) {
           this.tick();
           if (selected[i].value === wanted) {
-            if (algorithm === 'find') return { kind: 'iterator', slot: first.slot, position: first.position + i };
+            if (algorithm === 'find') return this.iterator(first.slot, first.position + i);
             found++;
           }
         }
@@ -557,14 +635,15 @@ export class CheckedRuntime {
           else hi = mid;
         }
         if (algorithm === 'binary_search') return int(lo < selected.length && selected[lo].value === wanted ? 1n : 0n, 'bool');
-        return { kind: 'iterator', slot: first.slot, position: first.position + lo };
+        return this.iterator(first.slot, first.position + lo);
       }
       if (algorithm === 'reverse') {
-        this.charge(selected.length);
-        cells.splice(first.position, selected.length, ...selected.reverse());
+        const values = selected.map(cell => cell.value).reverse();
+        for (let i = 0; i < selected.length; i++) { this.tick(); this.write(selected[i], int(values[i])); }
       } else {
-        selected.sort((a, b) => { this.tick(); return a.value < b.value ? -1 : a.value > b.value ? 1 : 0; });
-        cells.splice(first.position, selected.length, ...selected);
+        const values = selected.map(cell => cell.value);
+        values.sort((a, b) => { this.tick(); return a < b ? -1 : a > b ? 1 : 0; });
+        for (let i = 0; i < selected.length; i++) { this.tick(); this.write(selected[i], int(values[i])); }
       }
       return { kind: 'void' };
     }
@@ -581,10 +660,27 @@ export class CheckedRuntime {
     }
     if (name === 'abs' || name === 'std::abs') {
       if (args.length !== 1) throw new CppFault('compile-error', 'abs expects one argument');
-      const value = asInt(this.evaluate(args[0]));
+      const evaluated = this.evaluate(args[0]);
+      if (evaluated.kind === 'floating') return { kind: 'floating', value: Math.abs(evaluated.value) };
+      const value = asInt(evaluated);
       if (value.type === 'size_t') throw new CppFault('compile-error', 'abs of unsigned size_t is ambiguous');
       const resultType = promoted(value.type);
       return int(narrow(value.value < 0n ? -value.value : value.value, resultType), resultType);
+    }
+    if (['fabs', 'fmod', 'log', 'log2', 'log10', 'exp', 'sin', 'cos', 'tan', 'trunc', 'hypot']
+      .includes(name.replace(/^std::/, ''))) {
+      const operation = name.replace(/^std::/, '');
+      const arity = operation === 'fmod' || operation === 'hypot' ? 2 : 1;
+      if (args.length !== arity) throw new CppFault('compile-error', `${operation} expects ${arity} arguments`);
+      const a = asDouble(this.evaluate(args[0]));
+      const b = arity === 2 ? asDouble(this.evaluate(args[1])) : 0;
+      const result = operation === 'fabs' ? Math.abs(a) : operation === 'fmod' ? a % b
+        : operation === 'log' ? Math.log(a) : operation === 'log2' ? Math.log2(a)
+          : operation === 'log10' ? Math.log10(a) : operation === 'exp' ? Math.exp(a)
+            : operation === 'sin' ? Math.sin(a) : operation === 'cos' ? Math.cos(a)
+              : operation === 'tan' ? Math.tan(a) : operation === 'trunc' ? Math.trunc(a) : Math.hypot(a, b);
+      if (!Number.isFinite(result)) throw new CppFault('runtime-error', `Non-finite ${operation} result`);
+      return { kind: 'floating', value: result };
     }
     if (name === 'sqrt' || name === 'std::sqrt') {
       if (args.length !== 1) throw new CppFault('compile-error', 'sqrt expects one argument');
@@ -603,10 +699,10 @@ export class CheckedRuntime {
       if (!Number.isFinite(result)) throw new CppFault('runtime-error', `Non-finite ${operation} result`);
       return { kind: 'floating', value: result };
     }
-    if (/^[A-Za-z_]\w*\.(?:length|size|begin|end|empty|front|back|push_back|pop_back|clear|fill|at|substr|find)$/.test(name)) {
+    if (/^[A-Za-z_]\w*\.(?:length|size|begin|end|empty|front|back|top|push|pop|push_back|pop_back|push_front|pop_front|clear|fill|at|substr|find|rfind|resize|assign|append)$/.test(name)) {
       const method = name.slice(name.indexOf('.') + 1);
       const slot = this.find(name.slice(0, name.indexOf('.')));
-      if (['length', 'size', 'begin', 'end', 'empty', 'front', 'back', 'pop_back', 'clear'].includes(method) && args.length !== 0)
+      if (['length', 'size', 'begin', 'end', 'empty', 'front', 'back', 'top', 'pop', 'pop_back', 'pop_front', 'clear'].includes(method) && args.length !== 0)
         throw new CppFault('compile-error', `${name} takes no arguments`);
       if (slot.kind === 'string') {
         const value = this.stringValue(slot);
@@ -624,27 +720,82 @@ export class CheckedRuntime {
         }
         if (method === 'substr') {
           if (args.length < 1 || args.length > 2) throw new CppFault('compile-error', 'string.substr expects one or two arguments');
-          const start = asInt(this.evaluate(args[0])).value;
-          if (start < 0n || start > BigInt(value.length)) throw new CppFault('runtime-error', 'String substr position out of bounds');
-          const count = args[1] === undefined ? BigInt(value.length) : asInt(this.evaluate(args[1])).value;
-          if (count < 0n) throw new CppFault('runtime-error', 'Negative string substr length');
+          const start = integralConversion(this.evaluate(args[0]), 'size_t');
+          if (start > BigInt(value.length)) throw new CppFault('runtime-error', 'String substr position out of bounds');
+          const count = args[1] === undefined ? BigInt(value.length) : integralConversion(this.evaluate(args[1]), 'size_t');
           return { kind: 'string', value: value.slice(Number(start), Number(start + count > BigInt(value.length) ? BigInt(value.length) : start + count)) };
         }
-        if (method === 'find') {
-          if (args.length !== 1) throw new CppFault('compile-error', 'string.find expects one argument');
+        if (method === 'find' || method === 'rfind') {
+          if (args.length < 1 || args.length > 2) throw new CppFault('compile-error', `string.${method} expects one or two arguments`);
           const needle = this.evaluate(args[0]);
           const searched = needle.kind === 'string' ? needle.value : String.fromCharCode(Number(asInt(needle).value));
-          const index = value.indexOf(searched);
+          const position = args[1] === undefined ? method === 'find' ? 0n : UINT_MOD - 1n
+            : integralConversion(this.evaluate(args[1]), 'size_t');
+          const index = method === 'find' ? position > BigInt(value.length) ? -1 : value.indexOf(searched, Number(position))
+            : value.lastIndexOf(searched, Number(position > BigInt(value.length) ? BigInt(value.length) : position));
           return int(index < 0 ? BigInt.asUintN(64, -1n) : BigInt(index), 'size_t');
+        }
+        if (method === 'push_back' || method === 'append') {
+          if (args.length !== 1) throw new CppFault('compile-error', `string.${method} expects one argument`);
+          const value = this.evaluate(args[0]);
+          if (method === 'append' && value.kind !== 'string' || method === 'push_back' && value.kind !== 'integer')
+            throw new CppFault('compile-error', `Invalid string.${method} argument`);
+          this.appendString(slot, value);
+          return method === 'append' ? { kind: 'string', value: this.stringValue(slot) } : { kind: 'void' };
+        }
+        if (method === 'pop_back') {
+          if (value.length === 0) throw new CppFault('runtime-error', 'pop_back on empty string');
+          const removed = slot.cells.pop();
+          if (removed) this.expire(removed);
+          return { kind: 'void' };
         }
         if (method === 'clear') { this.writeString(slot, { kind: 'string', value: '' }); return { kind: 'void' }; }
       }
       if (slot.kind === 'vector') {
+        if (slot.type === 'stack<int>' || slot.type === 'queue<int>' || slot.type === 'priority_queue<int>') {
+          if (!slot.alive) throw new CppFault('runtime-error', 'Container use after lifetime');
+          if (method === 'size') return int(BigInt(slot.cells.length), 'size_t');
+          if (method === 'empty') return int(slot.cells.length === 0 ? 1n : 0n, 'bool');
+          if (method === 'push') {
+            if (args.length !== 1) throw new CppFault('compile-error', `${slot.type}.push expects one argument`);
+            if (slot.cells.length >= MAX_ARRAY) throw new CppFault('unsupported', 'Container size is outside the modeled limit');
+            const value = integralConversion(this.evaluate(args[0]), 'int');
+            this.tick();
+            slot.cells.push({ kind: 'scalar', type: 'int', value, initialized: true, alive: true });
+            this.invalidateIterators(slot);
+            return { kind: 'void' };
+          }
+          const access = slot.type === 'queue<int>' ? method === 'front' || method === 'back' : method === 'top';
+          if (access || method === 'pop') {
+            if (!slot.cells.length) throw new CppFault('runtime-error', `${method} on empty ${slot.type}`);
+            let top = slot.type === 'priority_queue<int>' ? 0 : slot.cells.length - 1;
+            if (slot.type === 'priority_queue<int>') {
+              for (let i = 1; i < slot.cells.length; i++) {
+                this.tick();
+                const candidate = slot.cells[i], best = slot.cells[top];
+                if (candidate.kind !== 'scalar' || best.kind !== 'scalar') throw new Error('Invalid priority queue cell');
+                if (candidate.value > best.value) top = i;
+              }
+            }
+            if (method === 'pop') {
+              const removed = slot.type === 'stack<int>' ? slot.cells.pop()
+                : slot.type === 'queue<int>' ? slot.cells.shift() : slot.cells.splice(top, 1)[0];
+              if (removed) this.expire(removed);
+              this.tick();
+              this.invalidateIterators(slot);
+              return { kind: 'void' };
+            }
+            const cell = slot.type === 'queue<int>' && method === 'front' ? slot.cells[0] : slot.cells[top];
+            if (cell.kind !== 'scalar') throw new Error('Invalid container cell');
+            return this.read(cell);
+          }
+          throw new CppFault('compile-error', `${slot.type} has no ${method} method`);
+        }
         const fixed = slot.type.startsWith('array<int,');
         if (method === 'size') return int(BigInt(slot.cells.length), 'size_t');
         if (method === 'empty') return int(slot.cells.length === 0 ? 1n : 0n, 'bool');
-        if (method === 'begin') return { kind: 'iterator', slot, position: 0 };
-        if (method === 'end') return { kind: 'iterator', slot, position: slot.cells.length };
+        if (method === 'begin') return this.iterator(slot, 0);
+        if (method === 'end') return this.iterator(slot, slot.cells.length);
         if (method === 'front' || method === 'back' || method === 'at') {
           if (method === 'at' && args.length !== 1) throw new CppFault('compile-error', 'vector.at expects one argument');
           const index = method === 'at' ? asInt(this.evaluate(args[0])).value : BigInt(method === 'front' ? 0 : slot.cells.length - 1);
@@ -652,20 +803,54 @@ export class CheckedRuntime {
           const cell = slot.cells[Number(index)];
           return cell.kind === 'scalar' ? this.read(cell) : { kind: 'vector', slot: cell };
         }
-        if (method === 'clear' || method === 'pop_back') {
+        if (method === 'clear' || method === 'pop_back' || method === 'pop_front') {
           if (fixed) throw new CppFault('compile-error', `std::array has no ${method} method`);
-          if (method === 'pop_back' && slot.cells.length === 0) throw new CppFault('runtime-error', 'pop_back on empty vector');
-          const removed = method === 'clear' ? slot.cells.splice(0) : slot.cells.splice(-1);
+          if (method === 'pop_front' && slot.type !== 'deque<int>') throw new CppFault('compile-error', 'Only deque has pop_front');
+          if (method !== 'clear' && slot.cells.length === 0) throw new CppFault('runtime-error', `${method} on empty container`);
+          const removed = method === 'clear' ? slot.cells.splice(0) : method === 'pop_front' ? slot.cells.splice(0, 1) : slot.cells.splice(-1);
           for (const cell of removed) this.expire(cell);
           this.charge(removed.length);
+          this.invalidateIterators(slot);
           return { kind: 'void' };
         }
         if (method === 'push_back') {
           if (args.length !== 1) throw new CppFault('compile-error', 'vector.push_back expects one argument');
           if (slot.cells.length >= MAX_ARRAY) throw new CppFault('unsupported', 'Vector size is outside the modeled limit');
-          if (slot.type !== 'vector<int>') throw new CppFault('unsupported', 'Nested vector push_back is not modeled');
+          if (slot.type !== 'vector<int>' && slot.type !== 'deque<int>') throw new CppFault('unsupported', 'Nested vector push_back is not modeled');
           const value = narrow(asInt(this.evaluate(args[0])).value, 'int');
           this.tick(); slot.cells.push({ kind: 'scalar', type: 'int', value, initialized: true, alive: true });
+          this.invalidateIterators(slot);
+          return { kind: 'void' };
+        }
+        if (method === 'push_front') {
+          if (slot.type !== 'deque<int>') throw new CppFault('compile-error', 'Only deque has push_front');
+          if (args.length !== 1) throw new CppFault('compile-error', 'deque.push_front expects one argument');
+          if (slot.cells.length >= MAX_ARRAY) throw new CppFault('unsupported', 'Deque size is outside the modeled limit');
+          const value = integralConversion(this.evaluate(args[0]), 'int');
+          this.tick(); slot.cells.unshift({ kind: 'scalar', type: 'int', value, initialized: true, alive: true });
+          this.invalidateIterators(slot);
+          return { kind: 'void' };
+        }
+        if (method === 'resize' || method === 'assign') {
+          if (fixed) throw new CppFault('compile-error', `std::array has no ${method} method`);
+          if (slot.type !== 'vector<int>' && slot.type !== 'deque<int>') throw new CppFault('unsupported', `Nested vector ${method} is not modeled`);
+          if (args.length < 1 || args.length > 2 || method === 'assign' && args.length !== 2)
+            throw new CppFault('compile-error', `vector.${method} expects ${method === 'assign' ? 'two' : 'one or two'} arguments`);
+          const size = asInt(this.evaluate(args[0])).value;
+          if (size < 0n || size > BigInt(MAX_ARRAY)) throw new CppFault('unsupported', 'Vector size is outside the modeled limit');
+          const fill = args[1] ? integralConversion(this.evaluate(args[1]), 'int') : 0n;
+          const length = Number(size);
+          if (method === 'assign') {
+            for (const cell of slot.cells) this.expire(cell);
+            slot.cells = [];
+          } else if (length < slot.cells.length) {
+            for (const cell of slot.cells.splice(length)) this.expire(cell);
+          }
+          while (slot.cells.length < length) {
+            this.tick();
+            slot.cells.push({ kind: 'scalar', type: 'int', value: fill, initialized: true, alive: true });
+          }
+          this.invalidateIterators(slot);
           return { kind: 'void' };
         }
         if (method === 'fill' && fixed) {
@@ -762,6 +947,7 @@ export class CheckedRuntime {
       case 'char': return int(expr.value, 'char');
       case 'string': return { kind: 'string', value: this.checkedString({ kind: 'string', value: expr.value }) };
       case 'name': {
+        if (expr.name === 'string::npos' || expr.name === 'std::string::npos') return int(UINT_MOD - 1n, 'size_t');
         if (expr.name === 'NULL' && this.target.language === 'c') return int(0n);
         if (['cout', 'std::cout', 'cin', 'std::cin'].includes(expr.name) && this.target.language === 'c')
           throw new CppFault('compile-error', `C program cannot use ${expr.name}`);
@@ -822,6 +1008,14 @@ export class CheckedRuntime {
         }
         if (expr.op === '*') {
           const value = this.evaluate(expr.arg);
+          if (value.kind === 'iterator') {
+            this.validIterator(value);
+            if (!value.slot.alive || value.position < 0 || value.position >= value.slot.cells.length)
+              throw new CppFault('runtime-error', 'Iterator dereference out of bounds');
+            const cell = value.slot.cells[value.position];
+            if (cell.kind !== 'scalar') throw new CppFault('unsupported', 'Nested vector iterator dereference is not modeled');
+            return this.read(cell);
+          }
           if (value.kind !== 'pointer') throw new CppFault('compile-error', 'Dereference requires a struct pointer');
           if (value.target === null) throw new CppFault('runtime-error', 'Null struct pointer dereference');
           if (!value.target.alive) throw new CppFault('runtime-error', 'Struct access after object lifetime');
@@ -857,10 +1051,29 @@ export class CheckedRuntime {
         if (expr.op === '||') return int(truth(left) || truth(this.evaluate(expr.right)) ? 1n : 0n, 'bool');
         const right = this.evaluate(expr.right);
         if (left.kind === 'iterator' || right.kind === 'iterator') {
+          if (left.kind === 'iterator') this.validIterator(left);
+          if (right.kind === 'iterator') this.validIterator(right);
+          if (expr.op === '+' || expr.op === '-') {
+            const iterator = left.kind === 'iterator' ? left : right.kind === 'iterator' ? right : undefined;
+            const offset = left.kind === 'integer' ? left : right.kind === 'integer' ? right : undefined;
+            if (iterator && offset && (left.kind === 'iterator' || expr.op === '+')) {
+              if (!iterator.slot.alive) throw new CppFault('runtime-error', 'Iterator use after vector lifetime');
+              const position = iterator.position + Number(offset.value) * (expr.op === '-' ? -1 : 1);
+              if (!Number.isSafeInteger(position) || position < 0 || position > iterator.slot.cells.length)
+                throw new CppFault('runtime-error', 'Iterator arithmetic out of bounds');
+              return this.iterator(iterator.slot, position);
+            }
+            if (expr.op === '-' && left.kind === 'iterator' && right.kind === 'iterator' && left.slot === right.slot)
+              return int(BigInt(left.position - right.position), 'long long');
+          }
           if (left.kind !== 'iterator' || right.kind !== 'iterator' || left.slot !== right.slot)
             throw new CppFault('compile-error', 'Iterator comparison requires iterators from the same vector');
           if (expr.op === '==') return int(left.position === right.position ? 1n : 0n, 'bool');
           if (expr.op === '!=') return int(left.position !== right.position ? 1n : 0n, 'bool');
+          if (expr.op === '<') return int(left.position < right.position ? 1n : 0n, 'bool');
+          if (expr.op === '<=') return int(left.position <= right.position ? 1n : 0n, 'bool');
+          if (expr.op === '>') return int(left.position > right.position ? 1n : 0n, 'bool');
+          if (expr.op === '>=') return int(left.position >= right.position ? 1n : 0n, 'bool');
           throw new CppFault('unsupported', `Iterator operator ${expr.op} is not modeled`);
         }
         if (left.kind === 'pointer' || right.kind === 'pointer') {
@@ -933,6 +1146,14 @@ export class CheckedRuntime {
         }
         return normal;
       }
+      case 'do-while': {
+        do {
+          const f = this.statement(stmt.body);
+          if (f.kind === 'break') break;
+          if (f.kind === 'return') return f;
+        } while (truth(this.evaluate(stmt.condition)));
+        return normal;
+      }
       case 'for': {
         this.push();
         try {
@@ -953,7 +1174,7 @@ export class CheckedRuntime {
         if (stmt.variable.type === 'char' && value.kind === 'string')
           elements = [...this.checkedString(value)].map(ch => int(BigInt(ch.charCodeAt(0)), 'char'));
         else if (stmt.variable.type === 'int' && value.kind === 'vector' &&
-          (value.slot.type === 'vector<int>' || value.slot.type.startsWith('array<int,')))
+          (value.slot.type === 'vector<int>' || value.slot.type === 'deque<int>' || value.slot.type.startsWith('array<int,')))
           elements = value.slot.cells.map(cell => cell.kind === 'scalar' ? this.read(cell) : (() => { throw new CppFault('unsupported', 'Nested range-for elements are not modeled'); })());
         else throw new CppFault('unsupported', 'This range-for element and container combination is not modeled');
         for (const element of elements) {
@@ -1001,11 +1222,15 @@ export class CheckedRuntime {
             this.bind(param.name, slot); this.writeFloat(slot, v);
             continue;
           }
-          if (param.type === 'vector<int>' || param.type === 'vector<vector<int>>' || param.type.startsWith('array<int,')) {
+          if (param.type === 'vector<int>' || param.type === 'vector<vector<int>>' || param.type === 'deque<int>' || param.type === 'stack<int>' || param.type === 'queue<int>' || param.type === 'priority_queue<int>' || param.type.startsWith('array<int,')) {
             if (param.reference) {
               if (v.kind !== 'vector' || v.slot.type !== param.type)
                 throw new CppFault('compile-error', 'Vector reference requires a matching vector lvalue');
-              this.bind(param.name, { kind: 'vector', type: param.type as VectorType, cells: v.slot.cells, alive: true, owner: false });
+              const original = v.slot;
+              this.bind(param.name, { kind: 'vector', type: param.type as VectorType,
+                get cells() { return original.cells; }, set cells(next) { original.cells = next; },
+                get version() { return original.version; }, set version(next) { original.version = next; },
+                alive: true, owner: false });
             } else this.bind(param.name, this.cloneVector(param.type as VectorType, v));
             continue;
           }
@@ -1025,7 +1250,7 @@ export class CheckedRuntime {
         if (flow.value.kind === 'void') throw new CppFault('runtime-error', `Non-void function ${name} returned without value`);
         if (fn.result === 'string') return { kind: 'string', value: this.checkedString(flow.value) };
         if (fn.result === 'double') return { kind: 'floating', value: asDouble(flow.value) };
-        if (fn.result === 'vector<int>' || fn.result === 'vector<vector<int>>' || fn.result.startsWith('array<int,'))
+        if (fn.result === 'vector<int>' || fn.result === 'vector<vector<int>>' || fn.result === 'deque<int>' || fn.result === 'stack<int>' || fn.result === 'queue<int>' || fn.result === 'priority_queue<int>' || fn.result.startsWith('array<int,'))
           return { kind: 'vector', slot: this.cloneVector(fn.result as VectorType, flow.value) };
         if (fn.result.startsWith('pointer:')) {
           const pointerType = fn.result.slice('pointer:'.length);

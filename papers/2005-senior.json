@@ -2056,6 +2056,18 @@
               "returnValue": 1
             },
             "maxSteps": 20000
+          },
+          {
+            "id": "different-middle-pair",
+            "args": [1, [0, 1, 2]],
+            "expected": { "returnValue": 1 },
+            "maxSteps": 20000
+          },
+          {
+            "id": "same-middle-pair",
+            "args": [1, [0, 1, 1]],
+            "expected": { "returnValue": 0 },
+            "maxSteps": 20000
           }
         ]
       },

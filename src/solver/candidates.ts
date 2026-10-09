@@ -1,5 +1,9 @@
 import type { Language, Question } from '../core/types';
 import { generateDeepCandidates } from './deep';
+import { generateExampleCandidates } from './synthesis';
+import { generateStructuralCandidates } from './structural';
+import { generatePythonStructuralCandidates } from './python-structural';
+import { generateLibraryCandidates } from './libraries';
 
 const KEYWORDS = new Set(('auto bool break case char class const continue def do double elif else false False float for if in int long None null return short static string struct switch true True typedef using void while vector array list deque queue stack std size begin end namespace include').split(' '));
 const OPERATORS = ['!=', '==', '<', '<=', '>', '>=', '+', '-', '*', '/', '%', '&&', '||'];
@@ -80,6 +84,12 @@ function declaredNames(source: string, language: Language): string[] {
     for (const match of source.matchAll(/(?:^|\n)\s*([A-Za-z_]\w*)\s*(?::\s*[^=\n]+)?=(?!=)|\bfor\s+([A-Za-z_]\w*)\s+in\b/g)) names.push(match[1] ?? match[2]);
   } else {
     for (const match of source.matchAll(/\b(?:int|bool|double|float|char|string|long|vector\s*<[^>]+>|array\s*<[^>]+>)\s*(?:[&*]\s*)?([A-Za-z_]\w*)\s*(?=[,)=;\[])/g)) names.push(match[1]);
+    for (const declaration of source.matchAll(/\b(?:int|bool|double|float|char|long)\s+([^;(){}]+);/g)) {
+      for (const part of declaration[1].split(',')) {
+        const name = /^\s*(?:[&*]\s*)?([A-Za-z_]\w*)/.exec(part)?.[1];
+        if (name) names.push(name);
+      }
+    }
   }
   return [...new Set(names)];
 }
@@ -142,8 +152,97 @@ export function* generateCandidates(question: Question, blankId: string, languag
   function* emit(value: string): Generator<string> {
     if (value.length <= cap && !emitted.has(value)) { emitted.add(value); yield value; }
   }
+  if (strategy === 'hybrid' && language !== 'python' && blank?.forbiddenChars?.includes('-')) {
+    for (const variable of simple.filter(value => /^[A-Za-z_]\w*$/.test(value)).slice(0, 6))
+      yield* emit(`~${variable}+1`);
+  }
+  if (strategy === 'hybrid') for (const candidate of generateExampleCandidates(question, blankId, language)) yield* emit(candidate);
+  if (strategy === 'hybrid' && language === 'python')
+    for (const candidate of generatePythonStructuralCandidates(question, blankId)) yield* emit(candidate);
+  if (strategy === 'hybrid' && language === 'python')
+    for (const candidate of generateLibraryCandidates(question, blankId, language, context)) yield* emit(candidate);
+  if (strategy === 'hybrid' && context !== 'statement')
+    for (const candidate of generateStructuralCandidates(question, blankId, language)) yield* emit(candidate);
   const markerIndex = target.source.indexOf(`{{${blankId}}}`);
   const beforeBlank = markerIndex < 0 ? '' : target.source.slice(0, markerIndex);
+  const afterBlank = markerIndex < 0 ? '' : target.source.slice(markerIndex + `{{${blankId}}}`.length);
+  if (strategy === 'hybrid' && language !== 'python' && /^\s*\(/.test(afterBlank)
+    && /(?:^|\n)\s*$/.test(beforeBlank)) {
+    yield* emit('else if');
+    yield* emit('if');
+  }
+  if (strategy === 'hybrid' && cap <= 4 && /\(\s*$/.test(beforeBlank) && /^\s*\)/.test(afterBlank)) {
+    const variables = declaredNames(target.source, language).slice(0, 4);
+    for (const a of variables) for (const b of variables) {
+      if (a === b) continue;
+      for (const op of ['>', '<', '==', '!=', '>=', '<=']) yield* emit(`${a}${op}${b}`);
+    }
+  }
+  if (strategy === 'hybrid' && language !== 'python'
+    && /\bfor\s*\(\s*int\s*$/.test(beforeBlank) && /^\s*\)/.test(afterBlank)) {
+    const index = /\b([A-Za-z_]\w*)\s*-\s*1\s*\]/.exec(afterBlank.slice(0, 100))?.[1] ?? 'i';
+    const bounds = declaredNames(target.source, language).filter(name => name !== index
+      && new RegExp(`\\b${name}\\s*=\\s*[^;]*(?:size\\s*\\(|length\\s*\\()`).test(target.source));
+    for (const bound of [...new Set([...bounds, 'n', 'len', 'size'])]) {
+      if (!new RegExp(`\\b${bound}\\b`).test(target.source)) continue;
+      for (const start of [1, 0]) {
+        yield* emit(`${index}=${start};${index}<${bound};${index}++`);
+        yield* emit(`${index}=${start};${index}<=${bound};${index}++`);
+      }
+    }
+  }
+  if (strategy === 'hybrid' && language !== 'python' && cap <= 4
+    && /(?:\breturn\s+|[=(+*\/%^&|]\s*)[A-Za-z_]\w*\s*$/.test(beforeBlank)
+    && /^\s*[;)]/.test(afterBlank)) {
+    const printed = (target.source.match(/(?<![\w.])\d+(?![\w.])/g) ?? []).map(Number)
+      .filter(value => value >= 0 && value <= 99);
+    const numbers = [...new Set([...printed, ...Array.from({ length: 13 }, (_, i) => i)])].filter(number => number !== 0);
+    for (const op of ['%', '/', '*', '+', '-', '&', '^', '|'])
+      for (const number of numbers) yield* emit(`${op}${number}`);
+  }
+  if (strategy === 'hybrid' && language !== 'python' && (context === 'expression' || context === 'condition')) {
+    const declared = declaredNames(target.source, language).filter(name => !functionNames(target.source, language).includes(name)
+      && !new RegExp(`\\b${name}\\s*\\[`).test(target.source));
+    const focus = [...new Set(declared)].sort((a, b) => beforeBlank.lastIndexOf(b) - beforeBlank.lastIndexOf(a)).slice(0, 6);
+    const ordered = [...focus, '0', '1', '2'];
+    const paramOrder = declaredNames(target.source, language).filter(name => focus.includes(name));
+    for (const helper of helpers.filter(item => !item.returnsVoid && item.arity === 3)) {
+      if (paramOrder.length >= 3) {
+        const args = paramOrder.slice(0, 3);
+        yield* emit(`-${helper.name}(${args.map(name => `-${name}`).join(',')})`);
+        yield* emit(`${helper.name}(${args.join(',')})`);
+      }
+    }
+    if (paramOrder.length >= 3) {
+      const args = paramOrder.slice(0, 3);
+      const ternaryHelpers = helpers.filter(item => !item.returnsVoid && item.arity === 3);
+      for (let i = 0; i < ternaryHelpers.length; i++) for (let j = i + 1; j < ternaryHelpers.length; j++) {
+        yield* emit(`${args.join('+')}-${ternaryHelpers[i].name}(${args.join(',')})-${ternaryHelpers[j].name}(${args.join(',')})`);
+      }
+    }
+    for (const array of target.source.matchAll(/\b[A-Za-z_]\w*\[(\d+)\]/g)) {
+      const length = Number(array[1]);
+      if (!Number.isSafeInteger(length) || length < 2 || length > 100_000) continue;
+      for (const index of focus.slice(0, 4)) yield* emit(`${length - 1}-${index}`);
+    }
+    for (const a of focus) for (const b of ordered) {
+      for (const op of ['*', '%', '/', '+', '-']) {
+        if ((op === '/' || op === '%') && b === '0') continue;
+        yield* emit(`${a}${op}${b}`);
+      }
+    }
+    for (const a of focus.slice(0, 4)) for (const b of focus.slice(0, 4)) {
+      if (a === b) continue;
+      yield* emit(`(${a}%${b}+${b})%${b}`);
+      yield* emit(`${a}%${b}==0`);
+    }
+    for (const a of focus.slice(0, 4)) for (const b of focus.slice(0, 4)) {
+      for (const c of ['0', '1', '2']) {
+        yield* emit(`${a}*${b}+${c}`);
+        yield* emit(`${a}*${b}-${c}`);
+      }
+    }
+  }
   if (context === 'statement') {
     const marker = `{{${blankId}}}`;
     const lineStart = target.source.lastIndexOf('\n', markerIndex - 1) + 1;
@@ -151,6 +250,8 @@ export function* generateCandidates(question: Question, blankId: string, languag
     const line = target.source.slice(lineStart, lineEnd < 0 ? target.source.length : lineEnd).trim();
     const terminate = (statement: string) => language === 'python' || line === `${marker};` ? statement : `${statement};`;
     for (const statement of language === 'python' ? ['break', 'continue', 'pass'] : ['break', 'continue']) yield* emit(terminate(statement));
+    if (language !== 'python' && new RegExp(`\\bvoid\\s+${activeFunction}\\s*\\(`).test(target.source)) yield* emit(terminate('return'));
+    if (strategy === 'hybrid') for (const candidate of generateStructuralCandidates(question, blankId, language)) yield* emit(candidate);
     const variables = simple.filter(atom => /^[A-Za-z_]\w*$/.test(atom)).slice(0, 8);
     const returnAtoms = [...new Set(['0', '1', ...atoms.slice(0, 18)])];
     for (const atom of returnAtoms) yield* emit(terminate(`return ${atom}`));
@@ -179,6 +280,8 @@ export function* generateCandidates(question: Question, blankId: string, languag
       if (helper.arity === 1) for (const a of variables) yield* emit(terminate(`${helper.name}(${a})`));
       if (helper.arity === 2) for (const a of variables.slice(0, 5)) for (const b of variables.slice(0, 5)) yield* emit(terminate(`${helper.name}(${a},${b})`));
     }
+    if (strategy === 'hybrid' && language !== 'python')
+      for (const candidate of generateLibraryCandidates(question, blankId, language, context)) yield* emit(candidate);
     return;
   }
   if (context === 'arguments') {
@@ -207,6 +310,7 @@ export function* generateCandidates(question: Question, blankId: string, languag
     }
   }
   for (const atom of atoms) yield* emit(atom);
+  if (strategy === 'hybrid') for (const atom of simple.filter(value => /^[A-Za-z_]\w*$/.test(value)).slice(0, 8)) yield* emit(`-${atom}`);
   // A short blank often asks for a literal; try those before
   // expanding expressions. Longer blanks retain the original expression order.
   if (cap <= 3) for (const literal of extraLiterals) yield* emit(literal);
@@ -216,7 +320,6 @@ export function* generateCandidates(question: Question, blankId: string, languag
       yield* emit(`${variable}-1`);
       yield* emit(`${variable}+1`);
     }
-    const afterBlank = markerIndex < 0 ? '' : target.source.slice(markerIndex + `{{${blankId}}}`.length);
     if (/\[\s*$/.test(beforeBlank) && /^\s*\]/.test(afterBlank)) {
       for (const a of scalars) for (const b of scalars) if (a !== b) {
         yield* emit(`${a}-${b}+1`);
@@ -242,6 +345,15 @@ export function* generateCandidates(question: Question, blankId: string, languag
       if (helper.arity === 2) for (const a of argsFor(helper, 0)) for (const b of argsFor(helper, 1)) addCall(helper.name, [a, b]);
       if (helper.arity === 3) for (const a of argsFor(helper, 0).slice(0, 4)) for (const b of argsFor(helper, 1).slice(0, 4)) for (const c of argsFor(helper, 2).slice(0, 4)) addCall(helper.name, [a, b, c]);
     }
+    if (strategy === 'hybrid') for (const helper of helpers.filter(item => item.arity === 1 && item.params[0] === 'scalar' && !item.returnsVoid)) {
+      const variables = variableArgs.filter(name => !collections.has(name)).slice(0, 4);
+      for (const a of variables) for (const b of variables) {
+        if (a === b) continue;
+        yield* emit(`${helper.name}(${a}-${b}*${b})`);
+        yield* emit(`${helper.name}(${a}+${b}*${b})`);
+        yield* emit(`${helper.name}(${a}*${a}-${b})`);
+      }
+    }
     for (const call of calls) yield* emit(call);
     // A helper can take a computed argument, including a reordered or repeated input.
     for (const helper of helpers.filter(item => item.arity === 3 && item.params.every(kind => kind === 'scalar'))) for (const a of variableArgs.filter(name => !collections.has(name)).slice(0, 4)) for (const b of variableArgs.filter(name => !collections.has(name)).slice(0, 4)) {
@@ -266,6 +378,8 @@ export function* generateCandidates(question: Question, blankId: string, languag
       yield* emit(`${helper.name}(${a}*${scale}${offset})`);
     }
   }
+  if (strategy === 'hybrid' && language !== 'python')
+    for (const candidate of generateLibraryCandidates(question, blankId, language, context)) yield* emit(candidate);
   if (strategy !== 'templates') {
     const indexed = atoms.filter(atom => atom.includes('[')).slice(0, 8);
     for (const a of indexed) for (const b of indexed) {
@@ -294,20 +408,19 @@ export function* generateCandidates(question: Question, blankId: string, languag
   }
   if (strategy !== 'grammar') {
     for (const a of simple) {
-      yield* emit(`!${a}`);
-      if (language === 'python') yield* emit(`not ${a}`);
+      yield* emit(language === 'python' ? `not ${a}` : `!${a}`);
       yield* emit(`-${a}`);
     }
     // Common contest answers: one comparison or one arithmetic operation.
     for (const op of OPERATORS) {
-      const printedOp = language === 'python' ? op === '&&' ? 'and' : op === '||' ? 'or' : op : op;
+      const printedOp = language === 'python' ? op === '&&' ? ' and ' : op === '||' ? ' or ' : op : op;
       for (const a of simple) for (const b of simple) if (a !== b) yield* emit(`${a}${printedOp}${b}`);
     }
   }
   if (strategy !== 'templates') {
     const terms = atoms.slice(0, 12);
     for (const op of OPERATORS) {
-      const printedOp = language === 'python' ? op === '&&' ? 'and' : op === '||' ? 'or' : op : op;
+      const printedOp = language === 'python' ? op === '&&' ? ' and ' : op === '||' ? ' or ' : op : op;
       for (const a of terms) for (const b of terms) if (a !== b) yield* emit(`${a}${printedOp}${b}`);
     }
     // One nested expression is enough for many conditions and loop bounds.

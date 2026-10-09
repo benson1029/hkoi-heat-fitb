@@ -535,7 +535,7 @@
         "targets": [
           {
             "language": "c",
-            "source": "double solve(double average,int i,int x){int A[10000];A[i]=x;return {{F}};}",
+            "source": "double average;int i,A[10000];double evaluate(){return {{F}};}double solve(double prior,int index,int value){average=prior;i=index;A[i]=value;return evaluate();}",
             "harness": {
               "kind": "call",
               "function": "solve"
@@ -601,6 +601,18 @@
             ],
             "expected": {
               "returnValue": 4
+            },
+            "maxSteps": 20000
+          },
+          {
+            "id": "nonlinear-update",
+            "args": [
+              1,
+              1,
+              9
+            ],
+            "expected": {
+              "returnValue": 5
             },
             "maxSteps": 20000
           }

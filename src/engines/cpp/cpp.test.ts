@@ -31,6 +31,81 @@ describe('checked C/C++ subset', () => {
     expect(call('int f(int n) { if (n <= 1) return 1; return n * f(n-1); }', 'f', [5])).toMatchObject({ kind: 'ok', observation: { returnValue: 120 } });
     expect(call('int f(int n) { return f(n); }', 'f', [1], 100)).toMatchObject({ kind: 'step-limit' });
   });
+  it('runs do-while at least once and evaluates the condition after continue', () => {
+    expect(call('int f(){int i=0,s=0;do {++i;if(i==2)continue;s+=i;} while(i<3);return s;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 4 } });
+    expect(call('int f(){int i=0;do {} while(++i<3);return i;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 3 } });
+  });
+  it('supports bounded iterator arithmetic and common algorithm alternatives', () => {
+    expect(call('int f(){vector<int> v={5,2,7,2};fill(v.begin()+1,v.end()-1,4);replace(v.begin(),v.end(),4,3);return *min_element(v.begin(),v.end())+*max_element(v.begin(),v.end());}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 7 } });
+    expect(call('int f(){vector<int>v={2,3,1};rotate(v.begin(),v.begin()+2,v.end());return is_sorted(v.begin(),v.end())*100+v[0]*10+v[2];}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 113 } });
+    expect(call('int f(){vector<int>v={1};return *v.end();}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('dereference out of bounds') });
+    expect(call('int f(){vector<int>v={1};return *(v.begin()-1);}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('arithmetic out of bounds') });
+    expect(call('int f(){vector<int>v={9,2};*v.begin()=4;reverse(v.begin(),v.end());return v[0]*10+v[1];}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 24 } });
+  });
+  it('supports common vector and string mutators with checked bounds', () => {
+    expect(call('int f(){vector<int>v;v.resize(3,7);v.resize(5);v.assign(2,4);return v[0]+v[1];}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 8 } });
+    expect(call('string f(){string s="a";s.push_back(\'b\');s.append("cd");s.pop_back();return s;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 'abc' } });
+    expect(call('int f(){string s; s.pop_back(); return 1;}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('empty string') });
+  });
+  it('models further algorithm and cmath function alternatives', () => {
+    expect(call('int f(){return clamp(12,0,10)+int(max(1.5,2.5))+int(fabs(-3.0));}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 15 } });
+    expect(call('int f(){return int(log2(8.0)+hypot(3.0,4.0)+fmod(7.0,4.0));}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 11 } });
+    expect(call('int f(){return clamp(1,5,2);}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('lower bound') });
+  });
+  it('runs the printed 2024/25 junior stack program', () => {
+    const source = junior2025.questions.find(question => question.id === 'cpp-n')?.displayCode?.cpp;
+    expect(source).toBeTruthy();
+    expect(program(source!)).toMatchObject({ kind: 'ok', observation: { stdout: '1213121' } });
+  });
+  it('models queue and stack access, copies, and empty-container faults', () => {
+    expect(call('int g(queue<int> q){q.pop();return q.front()+q.back();}int f(){queue<int>q;q.push(2);q.push(3);q.push(4);return g(q)*10+q.front();}', 'f'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 72 } });
+    expect(call('int f(){stack<int>s;s.push(5);s.push(9);s.pop();return s.top();}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 5 } });
+    expect(call('int f(){queue<int>q;return q.front();}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('empty') });
+    expect(call('int f(){stack<int>s;s.pop();return 1;}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('empty') });
+    expect(call('int f(){stack<int>s;s.push(1);return s[0];}'))
+      .toMatchObject({ kind: 'compile-error', message: expect.stringContaining('indexing') });
+  });
+  it('models priority_queue maximum order and deque random access', () => {
+    expect(call('int f(){priority_queue<int> q;q.push(2);q.push(8);q.push(5);int a=q.top();q.pop();int b=q.top();return 10*a+b;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 85 } });
+    expect(call('int f(){deque<int>d={2,3};d.push_front(1);d.push_back(4);d.pop_front();sort(d.begin(),d.end());return d.front()*10+d.back();}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 24 } });
+    expect(call('int f(){priority_queue<int>q;return q.top();}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('empty') });
+    expect(call('int f(){deque<int>d;d.pop_front();return 1;}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('empty') });
+  });
+  it('propagates vector reference mutation and invalidates stale iterators', () => {
+    expect(call('void g(vector<int>& v){v.assign(2,9);}int f(){vector<int>v={1};g(v);return v[1];}', 'f'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 9 } });
+    expect(call('int grow(vector<int>& v){v.push_back(7);return 0;}int f(){vector<int>v={1};return *(v.begin()+grow(v));}', 'f'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('invalidated iterator') });
+  });
+  it('handles string npos, positioned searches, and size_t substring counts', () => {
+    expect(call('int f(){string s="ababa";return int(s.find("ba",2))+int(s.rfind("ba",3));}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 6 } });
+    expect(call('int f(){string s="ab";return s.find("x")==string::npos;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 1 } });
+    expect(call('string f(){string s="abc";return s.substr(1,-1);}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 'bc' } });
+  });
   it('traps out-of-bounds and uninitialized reads', () => {
     expect(call('int f() { int a[2]={1,2}; return a[2]; }')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('bounds') });
     expect(call('int f() { int x; return x; }')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('uninitialized') });

@@ -6,7 +6,14 @@ const target: ProgramTarget = { language: 'python', source: '', harness: { kind:
 const testCase: ProgramCase = { id: 'basic', args: [4], expected: { returnValue: 8 }, maxSteps: 1_000 };
 
 describe('Python engine', () => {
-  const engine = createPythonEngine();
+  const engine = createPythonEngine(true);
+
+  it('keeps the Pyodide fallback off until selected', async () => {
+    const customOnly = createPythonEngine();
+    const result = await customOnly.run('import math\ndef double(n):\n    return math.floor(n * 2)', target, testCase);
+    expect(result.kind).toBe('unsupported');
+    if (result.kind === 'unsupported') expect(result.message).toContain('Enable Pyodide fallback');
+  });
 
   it('runs a function with a fresh namespace and captures the return value', async () => {
     const result = await engine.run('def double(n):\n    return n * 2', target, testCase);

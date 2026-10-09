@@ -45,6 +45,8 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .page-header h1 { margin: 0; color: #1b314a; font-size: clamp(23px,2.7vw,32px); line-height: 1.2; letter-spacing: -.025em; }
 .private-banner { color: #7d6128; background: #fff4da; border-radius: 4px; padding: 4px 7px; font-size: 11px; }
 .track-picker { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; padding: 10px 13px; border: 1px solid #dce5ec; border-radius: 7px; background: #fff; }
+.python-fallback-option { display: inline-flex; align-items: center; gap: 7px; margin: 10px 0 0; color: #4a6073; font-size: 12px; cursor: pointer; }
+.python-fallback-option input { margin: 0; }
 .track-required { color: #486173; font-size: 12px; font-weight: 700; }
 .track-choice { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .track-choice-label { color: #697b8c; font-size: 12px; }

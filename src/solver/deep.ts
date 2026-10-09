@@ -7,7 +7,7 @@ type Node = { text: string; kind: Kind; precedence: number; depth: number; root?
 const PRECEDENCE: Record<string, number> = {
   '||': 1, or: 1, '&&': 2, and: 2, '|': 3, '^': 4, '&': 5,
   '==': 6, '!=': 6, '<': 7, '<=': 7, '>': 7, '>=': 7,
-  '+': 8, '-': 8, '*': 9, '/': 9, '%': 9
+  '<<': 7, '>>': 7, '+': 8, '-': 8, '*': 9, '/': 9, '//': 9, '%': 9, '**': 11
 };
 const COMMUTATIVE = new Set(['+', '*', '&', '|', '^', '==', '!=']);
 const MAX_POOL = 120_000;
@@ -79,17 +79,21 @@ function compute(op: string, a: unknown, b: unknown, language: Language): unknow
     case '-': result = a - b; break;
     case '*': result = a * b; break;
     case '/': result = b === 0 ? undefined : language === 'python' ? a / b : Math.trunc(a / b); break;
+    case '//': result = b === 0 ? undefined : Math.floor(a / b); break;
+    case '**': result = Math.abs(b) > 32 ? undefined : a ** b; break;
     case '%': result = b === 0 ? undefined : language === 'python' ? ((a % b) + b) % b : a % b; break;
     // JS bitwise operators truncate to 32 bits; do not use them to prune C++/Python expressions.
-    case '&': case '|': case '^': return undefined;
+    case '&': case '|': case '^': case '<<': case '>>': return undefined;
     case '==': result = a === b; break;
     case '!=': result = a !== b; break;
     case '<': result = a < b; break;
     case '<=': result = a <= b; break;
     case '>': result = a > b; break;
     case '>=': result = a >= b; break;
-    case '&&': case 'and': result = Boolean(a) && Boolean(b); break;
-    case '||': case 'or': result = Boolean(a) || Boolean(b); break;
+    case '&&': result = Boolean(a) && Boolean(b); break;
+    case '||': result = Boolean(a) || Boolean(b); break;
+    case 'and': result = a ? b : a; break;
+    case 'or': result = a ? a : b; break;
   }
   return typeof result === 'number' && (!Number.isFinite(result) || !Number.isSafeInteger(result)
     || language !== 'python' && Math.abs(result) > 2_147_483_647) ? undefined : result;
@@ -107,8 +111,10 @@ function binary(op: string, left: Node, right: Node, language: Language): Node |
   if ((op === '+' || op === '-') && right.text === '0' || op === '*' && (right.text === '1' || left.text === '1')) return undefined;
   if (['/', '%'].includes(op) && right.text === '0') return undefined;
   const precedence = PRECEDENCE[op];
-  const text = `${operand(left, precedence, false, op)}${op}${operand(right, precedence, true, op)}`;
-  const kind: Kind = ['==', '!=', '<', '<=', '>', '>=', '&&', '||', 'and', 'or'].includes(op) ? 'boolean' : 'number';
+  const separator = op === 'and' || op === 'or' ? ` ${op} ` : op;
+  const text = `${operand(left, precedence, false, op)}${separator}${operand(right, precedence, true, op)}`;
+  const kind: Kind = ['==', '!=', '<', '<=', '>', '>=', '&&', '||'].includes(op)
+    || (op === 'and' || op === 'or') && left.kind === 'boolean' && right.kind === 'boolean' ? 'boolean' : 'number';
   const values = left.values && right.values ? left.values.map((a, index) => compute(op, a, right.values![index], language)) : undefined;
   return { text, kind, precedence, depth: Math.max(left.depth, right.depth) + 1, root: op, values };
 }
@@ -178,8 +184,8 @@ export function* generateDeepCandidates(question: Question, blankId: string, lan
     }
   }
   const operations = language === 'python'
-    ? ['+', '-', '*', '/', '%', '==', '!=', '<', '<=', '>', '>=', '&', '|', '^', 'and', 'or']
-    : ['+', '-', '*', '/', '%', '==', '!=', '<', '<=', '>', '>=', '&', '|', '^', '&&', '||'];
+    ? ['+', '-', '*', '/', '%', '==', '!=', '<', '<=', '>', '>=', '&', '|', '^', 'and', 'or', '//', '**', '<<', '>>']
+    : ['+', '-', '*', '/', '%', '==', '!=', '<', '<=', '>', '>=', '&', '|', '^', '&&', '||', '<<', '>>'];
   const markerAt = target.source.indexOf(`{{${blankId}}}`);
   const before = markerAt < 0 ? '' : target.source.slice(0, markerAt);
   const callName = /\b([A-Za-z_]\w*)\s*\(\s*$/.exec(before)?.[1];

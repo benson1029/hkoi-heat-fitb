@@ -888,6 +888,7 @@ export default function App() {
   const [importing, setImporting] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
   const [gradeError, setGradeError] = useState<string | null>(null);
+  const [pythonFallback, setPythonFallback] = useState(false);
   const importSequence = useRef(0);
   const visibleQuestions = paper ? displayedQuestions(paper, selectedTracks) : [];
   const answers = selectedKey ? answersByPaper[selectedKey] || {} : {};
@@ -964,7 +965,7 @@ export default function App() {
     setBusyQuestion(question.id);
     setGradeError(null);
     try {
-      const result = await gradeQuestion(question, answersByPaper[key]?.[question.id] || {}, selectedLanguage, answersByPaper[key] || {});
+      const result = await gradeQuestion(question, answersByPaper[key]?.[question.id] || {}, selectedLanguage, answersByPaper[key] || {}, { pythonFallback });
       setResultsByPaper((all) => ({ ...all, [key]: { ...(all[key] || {}), [question.id]: result } }));
       setFullResults((all) => ({ ...all, [key]: null }));
     } catch (error) {
@@ -978,7 +979,7 @@ export default function App() {
     setBusyAll(true);
     setGradeError(null);
     try {
-      const result = await gradePaper(paper, answersByPaper[key] || {}, selectedTracks);
+      const result = await gradePaper(paper, answersByPaper[key] || {}, selectedTracks, { pythonFallback });
       setResultsByPaper((all) => ({ ...all, [key]: Object.fromEntries(result.questions.map((question) => [question.questionId, question])) }));
       setFullResults((all) => ({ ...all, [key]: result }));
     } catch (error) {
@@ -992,6 +993,13 @@ export default function App() {
       {paper ? <>
         <header className="page-header"><h1>{paper.paper.title || `${paper.paper.season} Heat`}</h1>{selectedItem?.private && <span className="private-banner">Imported: {selectedItem.fileName}</span>}</header>
         <TrackPicker paper={paper} selected={selectedTracks} onChange={(tracks) => { setSelectedTracks(tracks); if (selectedKey) setFullResults((all) => ({ ...all, [selectedKey]: null })); }} />
+        {selectedLanguage === 'python' && <label className="python-fallback-option"><input type="checkbox" checked={pythonFallback} disabled={busyAll || !!busyQuestion} onChange={(event) => {
+          setPythonFallback(event.target.checked);
+          if (selectedKey) {
+            setResultsByPaper((all) => ({ ...all, [selectedKey]: {} }));
+            setFullResults((all) => ({ ...all, [selectedKey]: null }));
+          }
+        }} />Use Pyodide for unsupported Python</label>}
         <Summary questions={visibleQuestions} results={results} fullResult={fullResult} busyAll={busyAll} />
         <div className="section-bar"><h2>Questions</h2><button type="button" className="check-all-button" disabled={busyAll || !!busyQuestion || visibleQuestions.length === 0} onClick={checkAll}>{busyAll ? 'Checking…' : 'Check all'}</button></div>
         <nav className="question-nav" aria-label="Jump to question">{sections.map((section) => <div className="question-nav-group" key={section.key}><strong>{section.label}</strong><div>{section.questions.map((question) => <a key={question.id} href={`#question-${question.id}`} className={results[question.id] ? `nav-${results[question.id].status}` : ''}>{jumpName(question)}</a>)}</div></div>)}</nav>

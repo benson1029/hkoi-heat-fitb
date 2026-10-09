@@ -6,7 +6,7 @@ export class CppFault extends Error {
 }
 
 export interface Token { text: string; at: number }
-export type TypeName = 'int' | 'long long' | 'bool' | 'char' | 'string' | 'double' | 'void' | 'size_t' | 'vector<int>' | 'vector<vector<int>>' | `array<int,${number}>` | `struct ${string}` | `pointer:${string}`;
+export type TypeName = 'int' | 'long long' | 'bool' | 'char' | 'string' | 'double' | 'void' | 'size_t' | 'vector<int>' | 'vector<vector<int>>' | 'deque<int>' | 'stack<int>' | 'queue<int>' | 'priority_queue<int>' | `array<int,${number}>` | `struct ${string}` | `pointer:${string}`;
 export type Initializer = Expr | Initializer[];
 export interface Decl { name: string; type: TypeName; array?: Expr; arrayParameter?: boolean; reference?: boolean; init?: Initializer; constructArgs?: Expr[] }
 export type Expr =
@@ -31,6 +31,7 @@ export type Stmt =
   | { kind: 'expression'; expression?: Expr }
   | { kind: 'if'; condition: Expr; yes: Stmt; no?: Stmt }
   | { kind: 'while'; condition: Expr; body: Stmt }
+  | { kind: 'do-while'; condition: Expr; body: Stmt }
   | { kind: 'for'; init?: Stmt; condition?: Expr; increment?: Expr; body: Stmt }
   | { kind: 'range-for'; variable: Decl; iterable: Expr; body: Stmt }
   | { kind: 'return'; value?: Expr }
@@ -133,6 +134,11 @@ export class Parser {
     const alias = this.aliases.get(t);
     if (alias) return alias;
     if (t === 'std' && this.eat('::')) t = this.take();
+    if (t === 'stack' || t === 'queue' || t === 'deque' || t === 'priority_queue') {
+      if (this.language === 'c') throw new CppFault('compile-error', `std::${t} is not a C type`);
+      this.need('<'); this.need('int'); this.need('>');
+      return `${t}<int>`;
+    }
     if (t === 'vector') {
       if (this.language === 'c') throw new CppFault('compile-error', 'std::vector is not a C type');
       this.need('<');
@@ -158,8 +164,8 @@ export class Parser {
     if (t === 'string' && this.language === 'c') throw new CppFault('compile-error', 'std::string is not a C type');
     return t;
   }
-  private isType(): boolean { return this.aliases.has(this.peek()) || ['int', 'long', 'bool', 'char', 'double', 'void', 'const', 'string', 'vector', 'array', 'size_t', 'struct'].includes(this.peek()) ||
-    this.peek() === 'std' && this.peek(1) === '::' && ['string', 'vector', 'array'].includes(this.peek(2)); }
+  private isType(): boolean { return this.aliases.has(this.peek()) || ['int', 'long', 'bool', 'char', 'double', 'void', 'const', 'string', 'vector', 'array', 'deque', 'stack', 'queue', 'priority_queue', 'size_t', 'struct'].includes(this.peek()) ||
+    this.peek() === 'std' && this.peek(1) === '::' && ['string', 'vector', 'array', 'deque', 'stack', 'queue', 'priority_queue'].includes(this.peek(2)); }
   private pointerType(type: TypeName): TypeName {
     if (!type.startsWith('struct ')) throw new CppFault('unsupported', 'Only pointers to structs are modeled');
     return `pointer:${type.slice('struct '.length)}`;
@@ -167,7 +173,7 @@ export class Parser {
   private declarator(type: TypeName, parameter = false): Decl {
     if (this.eat('*')) type = this.pointerType(type);
     const reference = this.eat('&');
-    if (reference && (!parameter || type !== 'vector<int>' && !type.startsWith('array<int,')))
+    if (reference && (!parameter || type !== 'vector<int>' && type !== 'deque<int>' && !type.startsWith('array<int,')))
       throw new CppFault('unsupported', 'Only vector<int>& and array<int,N>& function parameters are modeled');
     const name = this.identifier();
     let array: Expr | undefined;
@@ -182,7 +188,7 @@ export class Parser {
       if (this.eat('{')) { init = this.list('}', () => this.initializer()); }
       else init = this.expression(2);
     } else if (this.eat('{')) init = this.list('}', () => this.initializer());
-    else if (type.startsWith('vector<') && this.eat('(')) constructArgs = this.list(')', () => this.expression(2));
+    else if ((type.startsWith('vector<') || type === 'deque<int>') && this.eat('(')) constructArgs = this.list(')', () => this.expression(2));
     return { name, type, array, arrayParameter, reference, init, constructArgs };
   }
   private initializer(): Initializer {
@@ -267,18 +273,19 @@ export class Parser {
     let constructArgs: Expr[] | undefined;
     if (this.eat('=')) init = this.eat('{') ? this.list('}', () => this.initializer()) : this.expression(2);
     else if (this.eat('{')) init = this.list('}', () => this.initializer());
-    else if (type.startsWith('vector<') && this.eat('(')) constructArgs = this.list(')', () => this.expression(2));
+    else if ((type.startsWith('vector<') || type === 'deque<int>') && this.eat('(')) constructArgs = this.list(')', () => this.expression(2));
     return { name, type, array, init, constructArgs };
   }
   private statement(): Stmt {
     this.enter();
     try {
       if (this.eat('{')) { const statements: Stmt[] = []; while (!this.eat('}')) { if (this.peek() === '<eof>') this.need('}'); statements.push(this.statement()); } return { kind: 'block', statements }; }
-      if (['auto', 'unsigned', 'signed', 'class', 'double', 'float', 'template', 'typedef', 'enum', 'static', 'do', 'switch', 'goto', 'try', 'throw', 'namespace', 'new', 'delete'].includes(this.peek()))
+      if (['auto', 'unsigned', 'signed', 'class', 'double', 'float', 'template', 'typedef', 'enum', 'static', 'switch', 'goto', 'try', 'throw', 'namespace', 'new', 'delete'].includes(this.peek()))
         throw new CppFault('unsupported', `Declaration or construct ${this.peek()} is not modeled`);
       if (this.isType()) { const t = this.type(); return { kind: 'declaration', declarations: this.declarations(t) }; }
       if (this.eat('if')) { this.need('('); const condition = this.expression(); this.need(')'); const yes = this.statement(); const no = this.eat('else') ? this.statement() : undefined; return { kind: 'if', condition, yes, no }; }
       if (this.eat('while')) { this.need('('); const condition = this.expression(); this.need(')'); return { kind: 'while', condition, body: this.statement() }; }
+      if (this.eat('do')) { const body = this.statement(); this.need('while'); this.need('('); const condition = this.expression(); this.need(')'); this.need(';'); return { kind: 'do-while', condition, body }; }
       if (this.eat('for')) {
         this.need('(');
         let init: Stmt | undefined;
@@ -320,7 +327,7 @@ export class Parser {
         if ((this.peek() === '.' || this.peek() === '->') && 13 >= min) {
           const viaPointer = this.take() === '->';
           const member = this.identifier();
-          if (!viaPointer && ['length', 'size', 'begin', 'end', 'empty', 'front', 'back', 'push_back', 'pop_back', 'clear', 'fill', 'at', 'substr', 'find'].includes(member))
+          if (!viaPointer && ['length', 'size', 'begin', 'end', 'empty', 'front', 'back', 'top', 'push', 'pop', 'push_back', 'pop_back', 'push_front', 'pop_front', 'clear', 'fill', 'at', 'substr', 'find', 'rfind', 'resize', 'assign', 'append'].includes(member))
             left = left.kind === 'name' ? { kind: 'name', name: `${left.name}.${member}` } : { kind: 'member', base: left, name: member };
           else left = { kind: 'field', base: left, name: member, viaPointer };
           continue;
@@ -401,6 +408,7 @@ function verifyAst(unit: TranslationUnit): void {
       case 'expression': addExpr(node.expression, next); break;
       case 'if': addExpr(node.condition, next); work.push({ node: node.yes, depth: next }); if (node.no) work.push({ node: node.no, depth: next }); break;
       case 'while': addExpr(node.condition, next); work.push({ node: node.body, depth: next }); break;
+      case 'do-while': addExpr(node.condition, next); work.push({ node: node.body, depth: next }); break;
       case 'for': if (node.init) work.push({ node: node.init, depth: next }); addExpr(node.condition, next); addExpr(node.increment, next); work.push({ node: node.body, depth: next }); break;
       case 'range-for': addExpr(node.iterable, next); work.push({ node: node.body, depth: next }); break;
       case 'return': addExpr(node.value, next); break;

@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import type { PaperConfig } from '../core/types';
 import { gradeQuestion } from '../core/grader';
 import junior2025 from '../../papers/2025-26-junior.json';
+import junior2022 from '../../papers/2022-23-junior.json';
+import senior2022 from '../../papers/2022-23-senior.json';
+import junior2023 from '../../papers/2023-24-junior.json';
+import senior2023 from '../../papers/2023-24-senior.json';
 import junior2024 from '../../papers/2024-25-junior.json';
 import junior2005 from '../../papers/2005-junior.json';
 import senior2009 from '../../papers/2009-senior.json';
@@ -10,6 +14,7 @@ import senior2007 from '../../papers/2007-senior.json';
 import junior2008 from '../../papers/2008-junior.json';
 import sample2024 from '../../papers/2024-25-sample-senior.json';
 import { solveProgramBlank } from './solve';
+import { solveJointBlanks } from './joint';
 import { classifyBlankContext, generateCandidates } from './candidates';
 
 function question(paper: unknown, id: string) {
@@ -87,6 +92,48 @@ describe('bounded syntax-aware solver on published questions', () => {
       language: 'python', strategy: 'grammar', maxCandidates: 500, maxResults: 1, maxMs: 20_000 });
     expect(result.found).toContain('a+b>c');
     expect(result.tested).toBeLessThan(100);
+  }, 45_000);
+
+  it('passes a loop-derived square difference to a supplied Python helper', async () => {
+    const result = await solveProgramBlank({ question: question(junior2025, 'python-d'), blankId: 'D',
+      language: 'python', strategy: 'hybrid', maxCandidates: 200, maxResults: 1, maxMs: 20_000 });
+    expect(result.found).toContain('is_cube(n-i*i)');
+    expect(result.tested).toBeLessThan(50);
+  }, 45_000);
+
+  it('uses a legal two\'s-complement negation when minus is forbidden', async () => {
+    const result = await solveProgramBlank({ question: question(junior2022, 'junior-d'), blankId: 'D',
+      language: 'cpp', strategy: 'hybrid', maxCandidates: 100, maxResults: 1, maxMs: 20_000 });
+    expect(result.found).toContain('~x+1');
+  }, 45_000);
+
+  it('fills a short operator suffix', async () => {
+    const result = await solveProgramBlank({ question: question(senior2022, 'cpp-i'), blankId: 'I',
+      language: 'cpp', strategy: 'hybrid', maxCandidates: 100, maxResults: 1, maxMs: 20_000 });
+    expect(result.found).toContain('%7');
+  }, 45_000);
+
+  it('fills a void function early return and a for header', async () => {
+    for (const [paper, id, blank, expected] of [
+      [junior2023, 'junior-d', 'D', 'return'],
+      [senior2023, 'cpp-b', 'B', 'i=1;i<n;i++']
+    ] as const) {
+      const result = await solveProgramBlank({ question: question(paper, id), blankId: blank,
+        language: 'cpp', strategy: 'hybrid', maxCandidates: 100, maxResults: 1, maxMs: 20_000 });
+      expect(result.found).toContain(expected);
+    }
+  }, 45_000);
+
+  it('pairs comparison and control-flow fragments across blanks', async () => {
+    for (const [id, expected] of [
+      ['junior-b', { B1: 'a>b', B2: 'a<b' }],
+      ['junior-c', { C1: 'else if', C2: 'else if' }]
+    ] as const) {
+      const item = question(junior2023, id);
+      const result = await solveJointBlanks({ question: item, blankIds: item.blanks.map(blank => blank.id),
+        language: 'cpp', strategy: 'hybrid', maxCandidates: 100, maxResults: 1, maxMs: 20_000 });
+      expect(result.assignments).toContainEqual(expected);
+    }
   }, 45_000);
 
   it('searches short literals absent from the printed code', async () => {

@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import source from './2021-22-senior.json';
-import { gradePaper } from '../src/core/grader';
+import { gradePaper, gradeQuestion } from '../src/core/grader';
 import { validatePaper } from '../src/core/validate';
 import type { PaperAnswers } from '../src/core/types';
 
@@ -29,3 +29,9 @@ it('grades the official 2021/22 Senior Section B answers', async () => {
   expect(result.scoredPoints).toBe(20);
   expect(result.complete).toBe(true);
 }, 60_000);
+
+it('rejects asterisk use in the multiplication line repair', async () => {
+  const question = paper.questions.find(item => item.id === 'cpp-i')!;
+  expect((await gradeQuestion(question, { I1: '47', I2: 'y+=y;x/=2;' }, 'cpp')).status).toBe('pass');
+  expect((await gradeQuestion(question, { I1: '47', I2: 'y*=2;x/=2;' }, 'cpp')).status).toBe('fail');
+}, 30_000);

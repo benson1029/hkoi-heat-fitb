@@ -7,7 +7,7 @@ import { checkRobot } from '../engines/robot';
 import { checkTriangleAffine } from '../engines/probability/triangle';
 import { checkUniformCppExpression } from '../engines/probability/uniform-cpp';
 import { cppEngine } from '../engines/cpp';
-import { pythonEngine } from '../engines/python';
+import { pythonEngine, pythonEngineWithFallback } from '../engines/python';
 import { matchesLogoDrawing, type DrawingSegment } from './logo-drawing';
 import { checkWeightedRoute } from './weighted-route';
 import { checkRecordSortComparator } from './record-sort-comparator';
@@ -22,6 +22,10 @@ import {
 
 const MAX_PY_SOURCE_BYTES = 200_000;
 const MAX_C_SOURCE_BYTES = 128 * 1024;
+
+export interface GradingOptions {
+  pythonFallback?: boolean;
+}
 
 function equalJson(left: unknown, right: unknown): boolean {
   if (Object.is(left, right)) return true;
@@ -95,7 +99,7 @@ function singleResult(question: Question, status: QuestionGrade['status'], messa
   };
 }
 
-async function gradeTarget(question: Question, answers: Record<string, string>, target: ProgramTarget): Promise<CaseGrade[]> {
+async function gradeTarget(question: Question, answers: Record<string, string>, target: ProgramTarget, options: GradingOptions): Promise<CaseGrade[]> {
   if (question.grading.kind !== 'program') throw new Error('Expected a program question');
   const body = assemble(question, answers, target.source);
   const source = target.helperSource ? `${target.helperSource}\n${body}` : body;
@@ -103,7 +107,7 @@ async function gradeTarget(question: Question, answers: Record<string, string>, 
   if (new TextEncoder().encode(source).length > maxSourceBytes) {
     return [{ id: 'source-size', status: 'fail', message: 'Composed source byte limit exceeded.' }];
   }
-  const engine = target.language === 'python' ? pythonEngine : cppEngine;
+  const engine = target.language === 'python' ? options.pythonFallback ? pythonEngineWithFallback : pythonEngine : cppEngine;
   const results: CaseGrade[] = [];
   for (const testCase of question.grading.cases) {
     let result: EngineResult;
@@ -116,7 +120,7 @@ async function gradeTarget(question: Question, answers: Record<string, string>, 
   return results;
 }
 
-export async function gradeQuestion(question: Question, answersForQuestion: Record<string, string>, language?: Language, allAnswers?: PaperAnswers): Promise<QuestionGrade> {
+export async function gradeQuestion(question: Question, answersForQuestion: Record<string, string>, language?: Language, allAnswers?: PaperAnswers, options: GradingOptions = {}): Promise<QuestionGrade> {
   if (question.grading.kind === 'cancelled') return { questionId: question.id, status: 'cancelled', score: 0, maxScore: 0, cases: [], message: question.grading.reason };
   if (question.grading.kind === 'pending') return singleResult(question, 'pending', question.grading.reason);
   const answers: Record<string, string> = {};
@@ -405,7 +409,7 @@ export async function gradeQuestion(question: Question, answersForQuestion: Reco
     const source = spec.target.source;
     const maxSourceBytes = spec.target.language === 'python' ? MAX_PY_SOURCE_BYTES : MAX_C_SOURCE_BYTES;
     if (new TextEncoder().encode(source).length > maxSourceBytes) return singleResult(question, 'fail', 'Source byte limit exceeded.');
-    const engine = spec.target.language === 'python' ? pythonEngine : cppEngine;
+    const engine = spec.target.language === 'python' ? options.pythonFallback ? pythonEngineWithFallback : pythonEngine : cppEngine;
     const testCase = { id: 'candidate-input', stdin: answers[spec.answerBlank], expected: spec.expected, maxSteps: spec.maxSteps };
     let result: EngineResult;
     try { result = await engine.run(source, spec.target, testCase); }
@@ -524,7 +528,7 @@ export async function gradeQuestion(question: Question, answersForQuestion: Reco
   const matchingTargets = language && allTargets.length > 1 ? allTargets.filter(target => target.language === language) : [];
   const targets = matchingTargets.length ? matchingTargets : allTargets;
   const targetCases = [];
-  for (const target of targets) targetCases.push(await gradeTarget(question, answers, target));
+  for (const target of targets) targetCases.push(await gradeTarget(question, answers, target, options));
   const targetStatus = targetCases.map(cases => cases.every(item => item.status === 'pass')
     ? 'pass' : cases.some(item => item.status === 'fail') ? 'fail' : 'inconclusive');
   const status = question.grading.targetPolicy === 'any'
@@ -552,7 +556,7 @@ function verifyTracks(paper: PaperConfig, selectedTracks: string[]): Set<string>
   return selected;
 }
 
-export async function gradePaper(paper: PaperConfig, answers: PaperAnswers, selectedTracks: string[]): Promise<PaperGrade> {
+export async function gradePaper(paper: PaperConfig, answers: PaperAnswers, selectedTracks: string[], options: GradingOptions = {}): Promise<PaperGrade> {
   const selected = verifyTracks(paper, selectedTracks);
   const choiceLanguages = paper.tracks.filter(track => track.selection === 'choice' && selected.has(track.id)).map(track => {
     const name = `${track.id} ${track.label}`.toLowerCase();
@@ -563,7 +567,7 @@ export async function gradePaper(paper: PaperConfig, answers: PaperAnswers, sele
   const language = choiceLanguages.length === 1 ? choiceLanguages[0] : undefined;
   const questions: QuestionGrade[] = [];
   for (const question of paper.questions) if (selected.has(question.track)) {
-    questions.push(await gradeQuestion(question, answers[question.id] ?? {}, language, answers));
+    questions.push(await gradeQuestion(question, answers[question.id] ?? {}, language, answers, options));
   }
   const scored = questions.filter(item => item.score !== null);
   return {

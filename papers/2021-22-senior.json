@@ -655,7 +655,8 @@
         },
         {
           "id": "I2",
-          "maxChars": 15
+          "maxChars": 15,
+          "forbiddenChars": "*"
         }
       ],
       "source": {

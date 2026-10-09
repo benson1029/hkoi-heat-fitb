@@ -460,7 +460,7 @@
         "targets": [
           {
             "language": "c",
-            "source": "int F[10001]; int f(int value, int times) { int temp=value; for (int i=0; i<times; i++) F[temp] = {{E}}; return F[value]; }",
+            "source": "int F[10001],i,j,temp; int bump(){F[temp]={{E}};return F[temp];} int f(int value,int times,int initial){temp=value;F[temp]=initial;for(i=1;i<=times;i++)bump();return F[temp];}",
             "harness": {
               "kind": "call",
               "function": "f"
@@ -477,7 +477,8 @@
             },
             "args": [
               17,
-              1
+              1,
+              0
             ]
           },
           {
@@ -488,7 +489,8 @@
             },
             "args": [
               17,
-              2
+              2,
+              0
             ]
           },
           {
@@ -499,7 +501,8 @@
             },
             "args": [
               17,
-              5
+              5,
+              0
             ]
           },
           {
@@ -510,7 +513,20 @@
             },
             "args": [
               17,
-              100
+              100,
+              0
+            ]
+          },
+          {
+            "id": "precounted-value",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 5
+            },
+            "args": [
+              17,
+              3,
+              2
             ]
           }
         ]

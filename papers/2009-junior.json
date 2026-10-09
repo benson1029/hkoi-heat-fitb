@@ -312,6 +312,17 @@
               "returnValue": -2
             },
             "maxSteps": 20000
+          },
+          {
+            "id": "negative-below-sentinel",
+            "args": [
+              -101,
+              100
+            ],
+            "expected": {
+              "returnValue": -101
+            },
+            "maxSteps": 20000
           }
         ]
       },
@@ -955,10 +966,9 @@
         "targets": [
           {
             "language": "c",
-            "source": "int high,low;int solve(int h){high=h;low=h;return {{J}};}",
+            "source": "#include<stdio.h>\nint high,low;int main(){scanf(\"%d\",&high);low=high;printf(\"%d\",{{J}});return 0;}",
             "harness": {
-              "kind": "call",
-              "function": "solve"
+              "kind": "program"
             }
           }
         ],
@@ -966,51 +976,41 @@
         "cases": [
           {
             "id": "1",
-            "args": [
-              0
-            ],
+            "stdin": "0",
             "expected": {
-              "returnValue": 0
+              "stdout": "0"
             },
             "maxSteps": 20000
           },
           {
             "id": "2",
-            "args": [
-              1
-            ],
+            "stdin": "1",
             "expected": {
-              "returnValue": 1
+              "stdout": "1"
             },
             "maxSteps": 20000
           },
           {
             "id": "3",
-            "args": [
-              5
-            ],
+            "stdin": "5",
             "expected": {
-              "returnValue": 5
+              "stdout": "5"
             },
             "maxSteps": 20000
           },
           {
             "id": "4",
-            "args": [
-              20
-            ],
+            "stdin": "20",
             "expected": {
-              "returnValue": 20
+              "stdout": "20"
             },
             "maxSteps": 20000
           },
           {
             "id": "5",
-            "args": [
-              99
-            ],
+            "stdin": "99",
             "expected": {
-              "returnValue": 99
+              "stdout": "99"
             },
             "maxSteps": 20000
           }

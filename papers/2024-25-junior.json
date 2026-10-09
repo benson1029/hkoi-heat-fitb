@@ -2229,6 +2229,17 @@
               ],
               3
             ]
+          },
+          {
+            "id": "long-sliding-window",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": 15
+            },
+            "args": [
+              [1, 2, 3, 4, 5, 6],
+              3
+            ]
           }
         ]
       }

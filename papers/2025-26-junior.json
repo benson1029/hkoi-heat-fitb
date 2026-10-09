@@ -579,6 +579,20 @@
                 "returnValue": 1
               }
             }
+          },
+          {
+            "id": "uneven-valid-sides",
+            "maxSteps": 20000,
+            "expected": { "returnValue": true },
+            "args": [2, 5, 6],
+            "expectedByLanguage": { "cpp": { "returnValue": 1 } }
+          },
+          {
+            "id": "uneven-invalid-sides",
+            "maxSteps": 20000,
+            "expected": { "returnValue": false },
+            "args": [3, 4, 10],
+            "expectedByLanguage": { "cpp": { "returnValue": 0 } }
           }
         ]
       }
@@ -1511,6 +1525,75 @@
                 5
               ]
             ]
+          },
+          {
+            "id": "case-6",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                10,
+                11,
+                12
+              ]
+            ]
+          },
+          {
+            "id": "case-7",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                0,
+                2
+              ]
+            ]
+          },
+          {
+            "id": "case-8",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": true
+            },
+            "args": [
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "id": "case-9",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                1,
+                2,
+                4
+              ]
+            ]
+          },
+          {
+            "id": "case-10",
+            "maxSteps": 20000,
+            "expected": {
+              "returnValue": false
+            },
+            "args": [
+              [
+                0,
+                1,
+                3,
+                4
+              ]
+            ]
           }
         ]
       }
@@ -1962,7 +2045,7 @@
       "printedRef": "Paper 2 (C++), Section B, Question 5, Blank P",
       "title": "Paper 2 (C++), Section B, Question 5",
       "prompt": {
-        "en": "Complete the following function AreAllOnes(a), such that it returns true if and only if all elements in the array are equal to 1."
+        "en": "Let a be an array of integers of length n, where n ≥1. For all 0 ≤i < n, it is guaranteed that 0 ≤a[i] ≤1.\n\nComplete the following function AreAllOnes(a), such that it returns true if and only if all elements in the array are equal to 1."
       },
       "points": 1.5,
       "blanks": [
@@ -2079,6 +2162,13 @@
                 "returnValue": 0
               }
             }
+          },
+          {
+            "id": "two-zero-values",
+            "maxSteps": 20000,
+            "expected": { "returnValue": false },
+            "args": [[0, 0]],
+            "expectedByLanguage": { "cpp": { "returnValue": 0 } }
           }
         ]
       }
@@ -2281,6 +2371,34 @@
                 "returnValue": 1
               }
             }
+          },
+          {
+            "id": "even-odd-after-threshold",
+            "maxSteps": 20000,
+            "expected": { "returnValue": false },
+            "args": [12, 1],
+            "expectedByLanguage": { "cpp": { "returnValue": 0 } }
+          },
+          {
+            "id": "second-value-odd",
+            "maxSteps": 20000,
+            "expected": { "returnValue": false },
+            "args": [8, 13],
+            "expectedByLanguage": { "cpp": { "returnValue": 0 } }
+          },
+          {
+            "id": "both-even-middle",
+            "maxSteps": 20000,
+            "expected": { "returnValue": true },
+            "args": [14, 16],
+            "expectedByLanguage": { "cpp": { "returnValue": 1 } }
+          },
+          {
+            "id": "large-odd-first",
+            "maxSteps": 20000,
+            "expected": { "returnValue": false },
+            "args": [999999999, 1000000000],
+            "expectedByLanguage": { "cpp": { "returnValue": 0 } }
           }
         ]
       }
