@@ -1,4 +1,5 @@
 import type { JsonValue, Observation, ProgramCase, ProgramTarget } from '../../core/types';
+import { PROBE_PREFIX, type ProbeHandler, type ProbeValue } from '../../core/probe';
 import { CppFault, type Decl, type Expr, type FunctionDef, type Initializer, type Stmt, type TranslationUnit, type TypeName } from './syntax';
 
 type VectorType = 'vector<int>' | 'vector<vector<int>>' | 'deque<int>' | 'stack<int>' | 'queue<int>' | 'priority_queue<int>' | `array<int,${number}>`;
@@ -8,10 +9,10 @@ interface FloatSlot { kind: 'float'; value: number; initialized: boolean; alive:
 interface ArraySlot { kind: 'array'; type: ScalarType | 'string'; cells: (ScalarSlot | StringSlot)[]; alive: boolean; owner: boolean }
 interface StringSlot { kind: 'string'; cells: ScalarSlot[]; initialized: boolean; alive: boolean }
 interface VectorSlot { kind: 'vector'; type: VectorType; cells: (ScalarSlot | VectorSlot)[]; alive: boolean; owner: boolean; version?: number }
-interface PointerSlot { kind: 'pointer'; type: string; target: StructSlot | null; initialized: boolean; alive: boolean }
+interface PointerSlot { kind: 'pointer'; type: string; target: StructSlot | ScalarSlot | null; initialized: boolean; alive: boolean }
 interface StructSlot { kind: 'struct'; type: string; fields: Map<string, ScalarSlot | PointerSlot>; alive: boolean }
 type Slot = ScalarSlot | FloatSlot | ArraySlot | StringSlot | VectorSlot | PointerSlot | StructSlot;
-type Value = { kind: 'integer'; value: bigint; type: ScalarType } | { kind: 'floating'; value: number } | { kind: 'string'; value: string } | { kind: 'array'; slot: ArraySlot } | { kind: 'vector'; slot: VectorSlot } | { kind: 'iterator'; slot: VectorSlot; position: number; version: number } | { kind: 'stream'; direction: 'in' | 'out' } | { kind: 'void' } | { kind: 'address'; slot: ScalarSlot } | { kind: 'pointer'; type: string; target: StructSlot | null } | { kind: 'struct'; slot: StructSlot };
+type Value = { kind: 'integer'; value: bigint; type: ScalarType } | { kind: 'floating'; value: number } | { kind: 'string'; value: string } | { kind: 'array'; slot: ArraySlot } | { kind: 'vector'; slot: VectorSlot } | { kind: 'iterator'; slot: VectorSlot; position: number; version: number } | { kind: 'stream'; direction: 'in' | 'out' } | { kind: 'void' } | { kind: 'address'; slot: ScalarSlot } | { kind: 'pointer'; type: string; target: StructSlot | ScalarSlot | null } | { kind: 'struct'; slot: StructSlot };
 type Flow = { kind: 'normal' | 'break' | 'continue' } | { kind: 'return'; value: Value };
 const normal: Flow = { kind: 'normal' };
 const INT_MIN = -(1n << 31n), INT_MAX = (1n << 31n) - 1n;
@@ -39,7 +40,7 @@ function narrow(value: bigint, type: ScalarType): bigint {
   return value;
 }
 function promoted(t: ScalarType): ScalarType { return t === 'long long' || t === 'size_t' ? t : 'int'; }
-function truth(v: Value): boolean { return v.kind === 'pointer' ? v.target !== null : v.kind === 'floating' ? v.value !== 0 : asInt(v).value !== 0n; }
+function truth(v: Value): boolean { return v.kind === 'pointer' ? v.target !== null : v.kind === 'address' ? true : v.kind === 'floating' ? v.value !== 0 : asInt(v).value !== 0n; }
 function asDouble(v: Value): number {
   if (v.kind === 'floating') return v.value;
   if (v.kind === 'integer') return Number(v.value);
@@ -79,13 +80,15 @@ function unsequenced(a: Expr, b: Expr): boolean {
 export class CheckedRuntime {
   private globals = new Map<string, Slot>();
   private scopes: Map<string, Slot>[] = [];
+  private borrowedScopes: Set<string>[] = [];
   private callDepth = 0;
   private steps = 0;
   private stdout = '';
   private input: string[];
   private inputPos = 0;
   private readonly maxSteps: number;
-  constructor(private readonly unit: TranslationUnit, private readonly target: ProgramTarget, private readonly testCase: ProgramCase) {
+  constructor(private readonly unit: TranslationUnit, private readonly target: ProgramTarget, private readonly testCase: ProgramCase,
+    private readonly probe?: ProbeHandler) {
     this.maxSteps = Math.min(Math.max(1, testCase.maxSteps), 250000);
     this.input = (testCase.stdin ?? '').trim().split(/\s+/).filter(Boolean);
   }
@@ -104,12 +107,13 @@ export class CheckedRuntime {
     if (this.steps > this.maxSteps) throw new CppFault('step-limit', `Step limit ${this.maxSteps} exceeded`);
   }
   private scope(): Map<string, Slot> { return this.scopes[this.scopes.length - 1] ?? this.globals; }
-  private push(): void { this.scopes.push(new Map()); }
+  private push(): void { this.scopes.push(new Map()); this.borrowedScopes.push(new Set()); }
   private pop(): void {
     const scope = this.scopes.pop();
+    const borrowed = this.borrowedScopes.pop();
     if (!scope) throw new Error('Scope underflow');
-    for (const slot of scope.values()) {
-      this.expire(slot);
+    for (const [name, slot] of scope) {
+      if (!borrowed?.has(name)) this.expire(slot);
     }
   }
   private expire(slot: Slot): void {
@@ -123,12 +127,31 @@ export class CheckedRuntime {
     if (scope.has(name)) throw new CppFault('compile-error', `Duplicate declaration ${name}`);
     scope.set(name, slot);
   }
+  private bindReference(name: string, slot: Slot): void {
+    this.bind(name, slot);
+    this.borrowedScopes[this.borrowedScopes.length - 1].add(name);
+  }
   private find(name: string): Slot {
     for (let i = this.scopes.length - 1; i >= 0; i--) { const v = this.scopes[i].get(name); if (v) return v; }
     const v = this.globals.get(name);
     if (!v) throw new CppFault('compile-error', `Unknown identifier ${name}`);
     if (!v.alive) throw new CppFault('runtime-error', `Object ${name} is out of scope`);
     return v;
+  }
+  private probeVariables(): Record<string, ProbeValue> {
+    const variables: Record<string, ProbeValue> = Object.create(null);
+    for (const scope of [this.globals, ...this.scopes]) for (const [name, slot] of scope) {
+      delete variables[name];
+      if (!slot.alive) continue;
+      if (slot.kind === 'scalar' && slot.initialized && Number.isSafeInteger(Number(slot.value)))
+        variables[name] = slot.type === 'bool' ? slot.value !== 0n : Number(slot.value);
+      else if (slot.kind === 'float' && slot.initialized && Number.isFinite(slot.value)) variables[name] = slot.value;
+      else if ((slot.kind === 'array' || slot.kind === 'vector') && slot.cells.length <= 256) {
+        variables[name] = slot.cells.map(cell => cell.kind === 'scalar' && cell.alive && cell.initialized
+          && Number.isSafeInteger(Number(cell.value)) ? Number(cell.value) : undefined);
+      }
+    }
+    return variables;
   }
   private read(slot: ScalarSlot): Value {
     if (!slot.alive) throw new CppFault('runtime-error', 'Read after object lifetime');
@@ -144,11 +167,15 @@ export class CheckedRuntime {
   private writePointer(slot: PointerSlot, value: Value): Value {
     if (!slot.alive) throw new CppFault('runtime-error', 'Write after pointer lifetime');
     if (value.kind === 'pointer') {
-      if (value.type !== slot.type) throw new CppFault('compile-error', 'Incompatible struct pointer types');
+      if (value.type !== slot.type && !(value.type === 'nullptr' && value.target === null))
+        throw new CppFault('compile-error', 'Incompatible pointer types');
       if (value.target && !value.target.alive) throw new CppFault('runtime-error', 'Use of pointer to expired struct');
       slot.target = value.target;
+    } else if (value.kind === 'address' && slot.type === `scalar:${value.slot.type}`) {
+      if (!value.slot.alive) throw new CppFault('runtime-error', 'Address of expired object');
+      slot.target = value.slot;
     } else if (value.kind === 'integer' && value.value === 0n) slot.target = null;
-    else throw new CppFault('compile-error', 'Struct pointer requires a compatible pointer or NULL');
+    else throw new CppFault('compile-error', 'Pointer requires a compatible address or null pointer');
     slot.initialized = true;
     return this.readPointer(slot);
   }
@@ -244,6 +271,7 @@ export class CheckedRuntime {
     if (expr.viaPointer) {
       if (base.kind !== 'pointer') throw new CppFault('compile-error', 'Arrow requires a struct pointer');
       if (base.target === null) throw new CppFault('runtime-error', 'Null struct pointer dereference');
+      if (base.target.kind !== 'struct') throw new CppFault('compile-error', 'Arrow requires a struct pointer');
       object = base.target;
     } else {
       if (base.kind !== 'struct') throw new CppFault('compile-error', 'Dot requires a struct object');
@@ -262,11 +290,19 @@ export class CheckedRuntime {
     if (expr.kind === 'field') return this.fieldSlot(expr);
     if (expr.kind === 'unary' && expr.op === '*') {
       const value = this.evaluate(expr.arg);
-      if (value.kind !== 'iterator') throw new CppFault('compile-error', 'Iterator dereference requires an iterator');
-      this.validIterator(value);
-      if (!value.slot.alive || value.position < 0 || value.position >= value.slot.cells.length)
-        throw new CppFault('runtime-error', 'Iterator dereference out of bounds');
-      return value.slot.cells[value.position];
+      if (value.kind === 'address') return value.slot;
+      if (value.kind === 'pointer') {
+        if (value.target === null) throw new CppFault('runtime-error', 'Null pointer dereference');
+        if (!value.target.alive) throw new CppFault('runtime-error', 'Pointer dereference after object lifetime');
+        return value.target;
+      }
+      if (value.kind === 'iterator') {
+        this.validIterator(value);
+        if (!value.slot.alive || value.position < 0 || value.position >= value.slot.cells.length)
+          throw new CppFault('runtime-error', 'Iterator dereference out of bounds');
+        return value.slot.cells[value.position];
+      }
+      throw new CppFault('compile-error', 'Dereference requires a pointer or iterator');
     }
     throw new CppFault('compile-error', 'Expression is not assignable');
   }
@@ -308,6 +344,15 @@ export class CheckedRuntime {
     this.tick();
     if (decl.type === 'void') throw new CppFault('compile-error', 'Void variable');
     const type = decl.type;
+    if (decl.reference) {
+      if (global || decl.array || decl.constructArgs || decl.init === undefined || Array.isArray(decl.init))
+        throw new CppFault('unsupported', 'Reference requires a local lvalue initializer');
+      const slot = this.addressable(decl.init);
+      if (slot.kind !== 'scalar' || slot.type !== type)
+        throw new CppFault('compile-error', 'Reference requires a matching scalar lvalue');
+      this.bindReference(decl.name, slot);
+      return;
+    }
     if (type.startsWith('pointer:')) {
       if (decl.array || decl.arrayParameter || decl.constructArgs) throw new CppFault('unsupported', 'Arrays of struct pointers are not modeled');
       const slot: PointerSlot = { kind: 'pointer', type: type.slice('pointer:'.length), target: null, initialized: global, alive: true };
@@ -948,7 +993,8 @@ export class CheckedRuntime {
       case 'string': return { kind: 'string', value: this.checkedString({ kind: 'string', value: expr.value }) };
       case 'name': {
         if (expr.name === 'string::npos' || expr.name === 'std::string::npos') return int(UINT_MOD - 1n, 'size_t');
-        if (expr.name === 'NULL' && this.target.language === 'c') return int(0n);
+        if (expr.name === 'NULL') return int(0n);
+        if (expr.name === 'nullptr' && this.target.language === 'cpp') return { kind: 'pointer', type: 'nullptr', target: null };
         if (['cout', 'std::cout', 'cin', 'std::cin'].includes(expr.name) && this.target.language === 'c')
           throw new CppFault('compile-error', `C program cannot use ${expr.name}`);
         if (['cout', 'std::cout'].includes(expr.name)) return { kind: 'stream', direction: 'out' };
@@ -991,9 +1037,30 @@ export class CheckedRuntime {
         return int(narrow(integer, expr.type as ScalarType), expr.type as ScalarType);
       }
       case 'call': {
+        if (this.probe && expr.name.startsWith(PROBE_PREFIX) && expr.args.length === 0) {
+          const value = this.probe({ blankId: expr.name.slice(PROBE_PREFIX.length), variables: this.probeVariables() });
+          if (typeof value !== 'boolean' && !Number.isSafeInteger(value))
+            throw new CppFault('unsupported', 'Solver probe requires an integral value');
+          return int(BigInt(typeof value === 'boolean' ? Number(value) : value), typeof value === 'boolean' ? 'bool' : 'int');
+        }
         for (let i = 0; i < expr.args.length; i++) for (let j = i + 1; j < expr.args.length; j++)
           if (unsequenced(expr.args[i], expr.args[j])) throw new CppFault('runtime-error', 'Unsequenced modification across function arguments');
-        if (this.unit.functions.has(expr.name)) return this.call(expr.name, expr.args.map(a => this.evaluate(a)));
+        if (this.unit.functions.has(expr.name)) {
+          const fn = this.unit.functions.get(expr.name)!;
+          const references: (ScalarSlot | undefined)[] = [];
+          const values = expr.args.map((arg, i) => {
+            const param = fn.params[i];
+            if (param?.reference && ['int', 'long long', 'bool', 'char', 'size_t'].includes(param.type)) {
+              const slot = this.addressable(arg);
+              if (slot.kind !== 'scalar' || slot.type !== param.type)
+                throw new CppFault('compile-error', 'Reference requires a matching scalar lvalue');
+              references[i] = slot;
+              return this.read(slot);
+            }
+            return this.evaluate(arg);
+          });
+          return this.call(expr.name, values, references);
+        }
         const built = this.builtin(expr.name, expr.args);
         if (built) return built;
         return this.call(expr.name, expr.args.map(a => this.evaluate(a)));
@@ -1016,10 +1083,11 @@ export class CheckedRuntime {
             if (cell.kind !== 'scalar') throw new CppFault('unsupported', 'Nested vector iterator dereference is not modeled');
             return this.read(cell);
           }
-          if (value.kind !== 'pointer') throw new CppFault('compile-error', 'Dereference requires a struct pointer');
-          if (value.target === null) throw new CppFault('runtime-error', 'Null struct pointer dereference');
-          if (!value.target.alive) throw new CppFault('runtime-error', 'Struct access after object lifetime');
-          return { kind: 'struct', slot: value.target };
+          if (value.kind === 'address') return this.read(value.slot);
+          if (value.kind !== 'pointer') throw new CppFault('compile-error', 'Dereference requires a pointer or iterator');
+          if (value.target === null) throw new CppFault('runtime-error', 'Null pointer dereference');
+          if (!value.target.alive) throw new CppFault('runtime-error', 'Pointer dereference after object lifetime');
+          return value.target.kind === 'scalar' ? this.read(value.target) : { kind: 'struct', slot: value.target };
         }
         if (expr.op === '++' || expr.op === '--') {
           const slot = this.lvalue(expr.arg), old = asInt(this.read(slot));
@@ -1076,14 +1144,19 @@ export class CheckedRuntime {
           if (expr.op === '>=') return int(left.position >= right.position ? 1n : 0n, 'bool');
           throw new CppFault('unsupported', `Iterator operator ${expr.op} is not modeled`);
         }
-        if (left.kind === 'pointer' || right.kind === 'pointer') {
+        if (left.kind === 'pointer' || right.kind === 'pointer' || left.kind === 'address' || right.kind === 'address') {
           if (expr.op !== '==' && expr.op !== '!=') throw new CppFault('compile-error', `Invalid struct pointer operator ${expr.op}`);
           const nullInteger = (value: Value) => value.kind === 'integer' && value.value === 0n;
-          if (left.kind !== 'pointer' && !nullInteger(left) || right.kind !== 'pointer' && !nullInteger(right))
+          if (left.kind !== 'pointer' && left.kind !== 'address' && !nullInteger(left) || right.kind !== 'pointer' && right.kind !== 'address' && !nullInteger(right))
             throw new CppFault('compile-error', 'Struct pointer comparison requires a compatible pointer or NULL');
-          if (left.kind === 'pointer' && right.kind === 'pointer' && left.type !== right.type)
+          if (left.kind === 'pointer' && right.kind === 'pointer' && left.type !== right.type && left.type !== 'nullptr' && right.type !== 'nullptr')
             throw new CppFault('compile-error', 'Incompatible struct pointer comparison');
-          const same = (left.kind === 'pointer' ? left.target : null) === (right.kind === 'pointer' ? right.target : null);
+          if (left.kind === 'pointer' && right.kind === 'address' && left.type !== `scalar:${right.slot.type}` ||
+              right.kind === 'pointer' && left.kind === 'address' && right.type !== `scalar:${left.slot.type}` ||
+              left.kind === 'address' && right.kind === 'address' && left.slot.type !== right.slot.type)
+            throw new CppFault('compile-error', 'Incompatible pointer comparison');
+          const same = (left.kind === 'pointer' ? left.target : left.kind === 'address' ? left.slot : null) ===
+            (right.kind === 'pointer' ? right.target : right.kind === 'address' ? right.slot : null);
           return int((expr.op === '==' ? same : !same) ? 1n : 0n, 'bool');
         }
         if (left.kind === 'string' && right.kind === 'string') {
@@ -1194,14 +1267,16 @@ export class CheckedRuntime {
       case 'break': case 'continue': return { kind: stmt.kind };
     }
   }
-  private call(name: string, values: Value[]): Value {
+  private call(name: string, values: Value[], references: (ScalarSlot | undefined)[] = []): Value {
     this.tick();
     const fn: FunctionDef | undefined = this.unit.functions.get(name);
     if (!fn) throw new CppFault('unsupported', `Function ${name} is not modeled or declared`);
     if (values.length !== fn.params.length) throw new CppFault('compile-error', `Function ${name} expects ${fn.params.length} arguments`);
     if (++this.callDepth > MAX_CALL_DEPTH) { this.callDepth--; throw new CppFault('step-limit', 'Call depth exceeded'); }
     const saved = this.scopes;
+    const savedBorrowed = this.borrowedScopes;
     this.scopes = [];
+    this.borrowedScopes = [];
     this.push();
     try {
       for (let i = 0; i < values.length; i++) {
@@ -1240,11 +1315,21 @@ export class CheckedRuntime {
             continue;
           }
           if (param.type.startsWith('struct ')) throw new CppFault('unsupported', 'Struct-by-value parameters are not modeled');
+          const referenced = references[i];
+          if (param.reference && referenced) {
+            this.bindReference(param.name, referenced);
+            continue;
+          }
           const slot: ScalarSlot = { kind: 'scalar', type: param.type as ScalarType, value: 0n, initialized: false, alive: true };
           this.bind(param.name, slot); this.write(slot, v);
         }
       }
       const flow = this.statement(fn.body);
+      for (let i = 0; i < values.length; i++) {
+        if (!fn.params[i].reference || references[i]) continue;
+        const slot = this.find(fn.params[i].name);
+        if (slot.kind === 'scalar') values[i] = this.read(slot);
+      }
       if (flow.kind === 'return') {
         if (fn.result === 'void') { if (flow.value.kind !== 'void') throw new CppFault('compile-error', 'Void function returning value'); return { kind: 'void' }; }
         if (flow.value.kind === 'void') throw new CppFault('runtime-error', `Non-void function ${name} returned without value`);
@@ -1255,6 +1340,12 @@ export class CheckedRuntime {
         if (fn.result.startsWith('pointer:')) {
           const pointerType = fn.result.slice('pointer:'.length);
           if (flow.value.kind === 'integer' && flow.value.value === 0n) return { kind: 'pointer', type: pointerType, target: null };
+          if (flow.value.kind === 'pointer' && flow.value.type === 'nullptr' && flow.value.target === null)
+            return { kind: 'pointer', type: pointerType, target: null };
+          if (flow.value.kind === 'address' && pointerType === `scalar:${flow.value.slot.type}`) {
+            if (!flow.value.slot.alive) throw new CppFault('runtime-error', 'Returning pointer to expired object');
+            return { kind: 'pointer', type: pointerType, target: flow.value.slot };
+          }
           if (flow.value.kind !== 'pointer' || flow.value.type !== pointerType) throw new CppFault('compile-error', 'Struct pointer return type mismatch');
           if (flow.value.target && !flow.value.target.alive) throw new CppFault('runtime-error', 'Returning pointer to expired struct');
           return flow.value;
@@ -1264,7 +1355,7 @@ export class CheckedRuntime {
       }
       if (fn.result !== 'void' && name !== 'main') throw new CppFault('runtime-error', `Non-void function ${name} fell off end`);
       return fn.result === 'void' ? { kind: 'void' } : fn.result === 'double' ? { kind: 'floating', value: 0 } : int(0n);
-    } finally { this.pop(); this.scopes = saved; this.callDepth--; }
+    } finally { this.pop(); this.scopes = saved; this.borrowedScopes = savedBorrowed; this.callDepth--; }
   }
   private fromJson(value: JsonValue, expectedType?: TypeName): Value {
     if (typeof value === 'string') {

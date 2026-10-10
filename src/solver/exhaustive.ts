@@ -5,6 +5,7 @@ import { parsePrefixRepeatCommands } from '../core/command-language';
 import { generateCandidates } from './candidates';
 import { semanticCandidates } from './semantic';
 import { generateLiteralCandidates } from './literal';
+import { stateAwareAssignments } from './state-aware';
 import type { SolveProgress, SolveRequest, SolveResult } from './types';
 
 /**
@@ -272,7 +273,13 @@ export async function solveExhaustive(
   const seenHeuristic = new Set<string>();
   const program = question.grading.kind === 'program' ? question.grading : undefined;
   const singleProgram = Boolean(program && blanks.length === 1);
-  const heuristic: Generator<Record<string, string>> | undefined = singleProgram
+  const guided = program && request.pythonRuntime !== 'pyodide' && maxMs >= 5_000 && maxCandidates >= 500
+    ? (await stateAwareAssignments(question, language ?? program.targets[0].language, blanks.map(blank => blank.id), answers, {
+      maxRuns: 160, deadline: started + Math.min(maxMs * 0.5, 6_000), isCancelled
+    })).filter(assignment => blanks.every(blank => typeof assignment[blank.id] === 'string'))
+      .map(assignment => Object.fromEntries(blanks.map(blank => [blank.id, assignment[blank.id]]))) : [];
+  if (isCancelled()) return done('cancelled');
+  const baseHeuristic: Generator<Record<string, string>> | undefined = singleProgram
     ? (function* () {
       for (const value of generateCandidates(question, blanks[0].id, language ?? program!.targets[0].language, 'deep'))
         yield { [blanks[0].id]: value };
@@ -289,6 +296,10 @@ export async function solveExhaustive(
       const alphabet = numericSearchAlphabet(request);
       if (alphabet) yield* enumerateAnswerTuples(blanks, { alphabet });
     })();
+  const heuristic = (function* (): Generator<Record<string, string>> {
+    yield* guided;
+    if (baseHeuristic) yield* baseHeuristic;
+  })();
   let heuristicDone = false;
 
   async function tryCandidate(tuple: Record<string, string>): Promise<boolean> {
@@ -297,7 +308,8 @@ export async function solveExhaustive(
     if (performance.now() - started >= maxMs || generated > maxCandidates) return false;
     Object.assign(answers, tuple);
     if (!syntacticallyValid(request, answers)) return true;
-    const result = await gradeQuestion(question, answers, language, request.allAnswers);
+    const result = await gradeQuestion(question, answers, language, request.allAnswers,
+      { pythonRuntime: request.pythonRuntime });
     tested++;
     if (result.status === 'pass') {
       assignments.push({ ...tuple });

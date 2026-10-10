@@ -9,6 +9,26 @@ import { generateExampleCandidates } from './synthesis';
 const questions = paper.questions as Question[];
 
 describe('example-guided scalar synthesis', () => {
+  it('synthesizes expressions inside Boolean return wrappers', () => {
+    for (const [wrapper, expected, expression] of [
+      ['bool({{X}})', [false, true, false, true], 'a+b'],
+      ['bool({{X}} == 0)', [true, false, true, false], 'a+b']
+    ] as const) {
+      const question = {
+        blanks: [{ id: 'X', maxChars: 8 }],
+        grading: {
+          kind: 'program',
+          targets: [{ language: 'python', harness: { kind: 'call', function: 'f' },
+            source: `def f(a: int, b: int) -> bool:\n    return ${wrapper}` }],
+          cases: [[-1, 1], [1, 2], [3, -3], [3, 4]].map((args, index) => ({
+            args, expected: { returnValue: expected[index] }
+          }))
+        }
+      } as unknown as Question;
+      expect([...generateExampleCandidates(question, 'X', 'python')]).toContain(expression);
+    }
+  });
+
   for (const [id, expression] of [
     ['section-b-b', 'len-i-1'],
     ['section-b-d', '(n+m-1)/m'],

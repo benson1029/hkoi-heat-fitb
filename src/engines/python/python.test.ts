@@ -8,11 +8,11 @@ const testCase: ProgramCase = { id: 'basic', args: [4], expected: { returnValue:
 describe('Python engine', () => {
   const engine = createPythonEngine(true);
 
-  it('keeps the Pyodide fallback off until selected', async () => {
+  it('uses the custom runtime by default', async () => {
     const customOnly = createPythonEngine();
     const result = await customOnly.run('import math\ndef double(n):\n    return math.floor(n * 2)', target, testCase);
     expect(result.kind).toBe('unsupported');
-    if (result.kind === 'unsupported') expect(result.message).toContain('Enable Pyodide fallback');
+    if (result.kind === 'unsupported') expect(result.message).toContain('Select Pyodide');
   });
 
   it('runs a function with a fresh namespace and captures the return value', async () => {

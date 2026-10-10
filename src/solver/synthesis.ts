@@ -2,12 +2,13 @@ import type { Language, ProgramCase, ProgramTarget, Question } from '../core/typ
 
 type Examples = { inputs: number[][]; expected: number[] };
 type Atom = { text: string; values: number[]; variable: boolean };
+type ReturnShape = { names: string[]; wrapper: 'plain' | 'truthy' | 'zero' };
 
-function pureReturn(target: ProgramTarget, blankId: string): string[] | undefined {
+function pureReturn(target: ProgramTarget, blankId: string): ReturnShape | undefined {
   if (target.helperSource || target.harness.kind !== 'call') return undefined;
   const source = target.source.trim();
-  const c = /^(?:int|long|short|bool|double|float)\s+([A-Za-z_]\w*)\s*\(([^()]*)\)\s*\{\s*return\s+\{\{[^{}]+\}\}\s*;\s*\}/.exec(source);
-  const py = /^def\s+([A-Za-z_]\w*)\s*\(([^()]*)\)(?:\s*->\s*[A-Za-z_]\w*)?\s*:\s*\n\s*return\s+\{\{[^{}]+\}\}/.exec(source);
+  const c = /^(?:int|long|short|bool|double|float)\s+([A-Za-z_]\w*)\s*\(([^()]*)\)\s*\{\s*return\s+(bool\s*\()?\{\{[^{}]+\}\}(\s*==\s*0)?\s*\)?\s*;\s*\}/.exec(source);
+  const py = /^def\s+([A-Za-z_]\w*)\s*\(([^()]*)\)(?:\s*->\s*[A-Za-z_]\w*)?\s*:\s*\n\s*return\s+(bool\s*\()?\{\{[^{}]+\}\}(\s*==\s*0)?\s*\)?/.exec(source);
   if (!source.includes(`{{${blankId}}}`) || (target.language === 'python' ? !py : !c)) return undefined;
   const declarationMatch = target.language === 'python' ? py! : c!;
   if (declarationMatch[1] !== target.harness.function) return undefined;
@@ -21,7 +22,9 @@ function pureReturn(target: ProgramTarget, blankId: string): string[] | undefine
     if (!name || names.includes(name)) return undefined;
     names.push(name);
   }
-  return names.length >= 1 && names.length <= 4 ? names : undefined;
+  if (names.length < 1 || names.length > 4) return undefined;
+  const wrapper = declarationMatch[4] ? 'zero' : declarationMatch[3] ? 'truthy' : 'plain';
+  return { names, wrapper };
 }
 
 function numericCases(cases: ProgramCase[], language: Language, names: string[]): Examples | undefined {
@@ -81,14 +84,16 @@ export function* generateExampleCandidates(question: Question, blankId: string, 
   if (question.grading.kind !== 'program') return;
   const target = question.grading.targets.find(item => item.language === language);
   if (!target) return;
-  const names = pureReturn(target, blankId);
-  if (!names) return;
+  const shape = pureReturn(target, blankId);
+  if (!shape) return;
+  const { names, wrapper } = shape;
   const examples = numericCases(question.grading.cases, language, names);
   if (!examples) return;
   const maxChars = Math.min(question.blanks.find(item => item.id === blankId)?.maxChars ?? 20, 24);
   const matches = new Set<string>();
   const equalsTarget = (values: (number | undefined)[]) => values.length === examples.expected.length
-    && values.every((value, i) => value === examples.expected[i]);
+    && values.every((value, i) => value !== undefined && (wrapper === 'plain' ? value
+      : wrapper === 'zero' ? Number(value === 0) : Number(Boolean(value))) === examples.expected[i]);
   const add = (text: string, values: (number | undefined)[]) => {
     if (text.length <= maxChars && equalsTarget(values)) matches.add(text);
   };
@@ -105,7 +110,7 @@ export function* generateExampleCandidates(question: Question, blankId: string, 
   const targetBoolean = examples.expected.every(value => value === 0 || value === 1);
   // A handful of truth-table rows can be matched by accidental predicates.
   // Keep Boolean synthesis for cases with enough observations to constrain it.
-  if (targetBoolean && examples.inputs.length < 9) return;
+  if (wrapper === 'plain' && targetBoolean && examples.inputs.length < 9) return;
   const operators = targetBoolean
     ? ['+', '-', '*', '/', '%', '==', '!=', '<', '<=', '>', '>=']
     : ['+', '-', '*', '/', '%', '^', '&', '|'];
@@ -185,7 +190,7 @@ export function* generateExampleCandidates(question: Question, blankId: string, 
       }
     }
   }
-  if (targetBoolean && names.length <= 2) {
+  if (wrapper === 'plain' && targetBoolean && names.length <= 2) {
     const positives = examples.expected.map(value => value === 1);
     const predicates = new Map<string, { text: string; values: boolean[] }>();
     const predicate = (text: string, values: (number | undefined)[]) => {

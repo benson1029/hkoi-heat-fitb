@@ -24,7 +24,7 @@ Judge submissions from a CSV file:
 
 ```sh
 npm run judge:csv -- papers/2024-25-senior.json submissions.csv scores.csv paper1 python
-npx tsx src/cli/judge-csv.ts --paper papers/2024-25-senior.json --input submissions.csv --output scores.csv --tracks paper1,python --python-fallback true
+npx tsx src/cli/judge-csv.ts --paper papers/2024-25-senior.json --input submissions.csv --output scores.csv --tracks paper1,python --python-runtime pyodide
 ```
 
 Use one input column per answer, named `<question-id>.<blank-id>`. For example:
@@ -36,7 +36,7 @@ id,paper1-a.A
 
 The optional track arguments select which parts to score (`paper1 python` or `paper1 cpp` for recent papers). A `tracks` column can override them per row, with comma-separated track IDs such as `"paper1,cpp"`. Without either, the command uses required tracks and the first language choice. The output CSV retains the input columns and adds each question's score and status, plus totals.
 
-The custom Python runner is used by default. Pass `--python-fallback true` in the named-argument form to use Pyodide when it cannot run a case. The browser has the same option as a checkbox for Python papers.
+The custom Python runner is used by default. Pass `--python-runtime pyodide` in the named-argument form to run every Python case with Pyodide. The browser has the same choice as a checkbox for Python papers.
 
 Run the test suite with `npm test`.
 

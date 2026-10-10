@@ -144,4 +144,33 @@ def f(a):
     });
     expect(tryRunFastPythonFunction('def f(arg):\n    return {1, 2}', target, testCase)).toBeUndefined();
   });
+
+  it('handles sequence search and mutation with Python indexing', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'methods', args: [[2, 4, 2]], expected: {}, maxSteps: 10_000 };
+    const source = `def f(a):
+    i = a.index(2, 1)
+    a.insert(-1, 9)
+    a.remove(4)
+    return [i, a, "🐱a🐱".find("🐱", 1), "🐱a🐱".rfind("🐱"), "abc".find("", 10), "abc".rfind("", 1, 2)]`;
+    expect(tryRunFastPythonFunction(source, target, testCase)).toMatchObject({
+      kind: 'ok', observation: { returnValue: [2, [2, 9, 2], 2, 2, -1, 2], argsAfter: [[2, 9, 2]] },
+    });
+  });
+
+  it('keeps the first item when min or max keys tie', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'ties', args: [], expected: {}, maxSteps: 10_000 };
+    expect(tryRunFastPythonFunction('def f():\n    return [max(["ab", "cd"], key=len), min(["ab", "cd"], key=len)]', target, testCase)).toMatchObject({
+      kind: 'ok', observation: { returnValue: ['ab', 'ab'] },
+    });
+  });
+
+  it('parses integer strings with explicit bases and supplies zero argument conversions', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'integer-bases', args: [], expected: {}, maxSteps: 10_000 };
+    expect(tryRunFastPythonFunction('def f():\n    return [int("101", 2), int("0x_FF", 0), int("z", 36), int(), float(), bool(), str()]', target, testCase)).toMatchObject({
+      kind: 'ok', observation: { returnValue: [5, 255, 35, 0, 0, false, ''] },
+    });
+  });
 });

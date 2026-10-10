@@ -5,7 +5,7 @@ import { generateStructuralCandidates } from './structural';
 import { generatePythonStructuralCandidates } from './python-structural';
 import { generateLibraryCandidates } from './libraries';
 
-const KEYWORDS = new Set(('auto bool break case char class const continue def do double elif else false False float for if in int long None null return short static string struct switch true True typedef using void while vector array list deque queue stack std size begin end namespace include').split(' '));
+const KEYWORDS = new Set(('auto bool break case char class const continue def do double elif else false False float for if in int long None null return short static string struct switch true True typedef using void while vector array list deque queue stack std size begin end namespace include cin cout cerr endl printf scanf min max sort reverse abs len range enumerate zip sum all any').split(' '));
 const OPERATORS = ['!=', '==', '<', '<=', '>', '>=', '+', '-', '*', '/', '%', '&&', '||'];
 
 export type BlankContext = 'statement' | 'arguments' | 'condition' | 'expression';
@@ -94,16 +94,31 @@ function declaredNames(source: string, language: Language): string[] {
   return [...new Set(names)];
 }
 
-function sourceAtoms(source: string, language: Language, prioritySource: string): string[] {
+function sourceAtoms(source: string, language: Language, prioritySource: string, markerAt: number, rankNearby: boolean): string[] {
   const functions = functionNames(source, language);
-  const names = [...new Set([...declaredNames(prioritySource, language), ...visibleNames(prioritySource),
-    ...declaredNames(source, language), ...visibleNames(source)])]
-    .filter(name => !functions.includes(name) && !KEYWORDS.has(name)).slice(0, 14);
+  const declared = new Set([...declaredNames(prioritySource, language), ...declaredNames(source, language)]);
+  const names = [...new Set([...declared, ...visibleNames(prioritySource), ...visibleNames(source)])]
+    .filter(name => !functions.includes(name) && (!KEYWORDS.has(name) || declared.has(name)))
+    .map((name, order) => {
+      const locations = [...prioritySource.matchAll(new RegExp(`\\b${name}\\b`, 'g'))].map(match => match.index!);
+      const nearest = locations.length ? Math.min(...locations.map(at => Math.abs(at - markerAt))) : Infinity;
+      const nearMentions = locations.filter(at => Math.abs(at - markerAt) <= 160).length;
+      // A name printed near the hole is more likely to be in scope and useful
+      // than a global/helper name appearing first in the source file.
+      const score = (declared.has(name) ? 20 : 0) + nearMentions * 12
+        + (Number.isFinite(nearest) ? 50 / (1 + nearest / 40) : 0);
+      return { name, order, score };
+    })
+    .sort((a, b) => rankNearby ? b.score - a.score || a.order - b.order : a.order - b.order)
+    .slice(0, 18).map(item => item.name);
   const constants = [...new Set((source.match(/(?<![\w.])-?\d+(?![\w.])/g) ?? []).filter(x => Number(x) >= -9 && Number(x) <= 9))].slice(0, 6);
   const atoms = [...names];
   const indexed = names.filter(name => new RegExp(`\\b${name}\\s*\\[|\\b(?:vector|array)\\s*<[^>]+>\\s*&?\\s*${name}\\b|\\b${name}\\s*:\\s*list\\s*\\[`).test(source));
   const indexOrder = ['i', 'j', 'k', 'idx', 'index', 'n', 'x', 'y'];
-  const indices = names.filter(name => indexOrder.includes(name)).sort((a, b) => indexOrder.indexOf(a) - indexOrder.indexOf(b)).slice(0, 4);
+  const printedIndices = [...source.matchAll(/\b[A-Za-z_]\w*\s*\[\s*([A-Za-z_]\w*)\s*\]/g)]
+    .map(match => match[1]);
+  const indices = [...new Set([...printedIndices.filter(name => names.includes(name)),
+    ...names.filter(name => indexOrder.includes(name)).sort((a, b) => indexOrder.indexOf(a) - indexOrder.indexOf(b))])].slice(0, 4);
   for (const array of indexed.slice(0, 3)) for (const index of indices) {
     atoms.push(`${array}[${index}]`);
     atoms.push(`${array}[${index}-1]`, `${array}[${index}+1]`);
@@ -134,9 +149,10 @@ export function* generateCandidates(question: Question, blankId: string, languag
   const target = question.grading.targets.find(item => item.language === language);
   if (!target) return;
   const source = `${target.helperSource ?? ''}\n${target.source}`.replace(/\{\{[^{}]+\}\}/g, ' ');
-  const atoms = sourceAtoms(source, language, target.source.replace(/\{\{[^{}]+\}\}/g, ' '));
-  const simple = atoms.filter(atom => /^[A-Za-z_]\w*$|^-?\d+$/.test(atom)).slice(0, 12);
   const markerAt = target.source.indexOf(`{{${blankId}}}`);
+  const atoms = sourceAtoms(source, language, target.source.replace(/\{\{[^{}]+\}\}/g, ' '), markerAt,
+    strategy === 'hybrid');
+  const simple = atoms.filter(atom => /^[A-Za-z_]\w*$|^-?\d+$/.test(atom)).slice(0, 12);
   const localFunctions = markerAt < 0 ? [] : functionNames(target.source.slice(0, markerAt), language);
   const activeFunction = localFunctions.at(-1) ?? (target.harness.kind === 'call' ? target.harness.function : 'main');
   const helpers = helperSignatures(`${target.helperSource ?? ''}\n${target.source}`, language, activeFunction);
@@ -200,6 +216,21 @@ export function* generateCandidates(question: Question, blankId: string, languag
     for (const op of ['%', '/', '*', '+', '-', '&', '^', '|'])
       for (const number of numbers) yield* emit(`${op}${number}`);
   }
+  if (strategy === 'hybrid' && language !== 'python' && context === 'expression'
+    && /^\s*[;),\]}]/.test(afterBlank)) {
+    const trailing = /([A-Za-z_]\w*|\d+)\s*$/.exec(beforeBlank)?.[1];
+    if (trailing && (!KEYWORDS.has(trailing) || declaredNames(target.source, language).includes(trailing))) {
+      // The blank may finish an expression already printed to its left, such
+      // as a loop bound. The parser later rejects suffixes at other sites.
+      for (const suffix of ['/2', '/3', '/4', '%2', '-1', '+1', '*2']) yield* emit(suffix);
+    }
+  }
+  if (context !== 'statement' && helpers.length === 0) {
+    // Standalone names are useful for assignments, pointer links, and calls.
+    // Try them before broad arithmetic closure, which can otherwise bury a
+    // short completion behind hundreds of irrelevant combinations.
+    for (const atom of atoms) yield* emit(atom);
+  }
   if (strategy === 'hybrid' && language !== 'python' && (context === 'expression' || context === 'condition')) {
     const declared = declaredNames(target.source, language).filter(name => !functionNames(target.source, language).includes(name)
       && !new RegExp(`\\b${name}\\s*\\[`).test(target.source));
@@ -253,6 +284,14 @@ export function* generateCandidates(question: Question, blankId: string, languag
     if (language !== 'python' && new RegExp(`\\bvoid\\s+${activeFunction}\\s*\\(`).test(target.source)) yield* emit(terminate('return'));
     if (strategy === 'hybrid') for (const candidate of generateStructuralCandidates(question, blankId, language)) yield* emit(candidate);
     const variables = simple.filter(atom => /^[A-Za-z_]\w*$/.test(atom)).slice(0, 8);
+    // A hole inside a loop commonly updates existing state. Try these before
+    // the much larger family of return expressions.
+    for (const name of variables) {
+      const statements = language === 'python'
+        ? [`${name}+=1`, `${name}-=1`, `${name}=0`, `${name}=1`]
+        : [`${name}++`, `++${name}`, `${name}--`, `--${name}`, `${name}+=1`, `${name}-=1`, `${name}=0`, `${name}=1`];
+      for (const statement of statements) yield* emit(terminate(statement));
+    }
     const returnAtoms = [...new Set(['0', '1', ...atoms.slice(0, 18)])];
     for (const atom of returnAtoms) yield* emit(terminate(`return ${atom}`));
     const scalarTerms = [...new Set([...variables, '1', '2'])].slice(0, 9);
@@ -265,12 +304,6 @@ export function* generateCandidates(question: Question, blankId: string, languag
       for (const a of variables) for (const b of scalarTerms) if (b !== '0') {
         yield* emit(terminate(`return ${activeFunction}(${a}/${b})`));
       }
-    }
-    for (const name of variables) {
-      const statements = language === 'python'
-        ? [`${name}+=1`, `${name}-=1`, `${name}=0`, `${name}=1`]
-        : [`${name}++`, `++${name}`, `${name}--`, `--${name}`, `${name}+=1`, `${name}-=1`, `${name}=0`, `${name}=1`];
-      for (const statement of statements) yield* emit(terminate(statement));
     }
     for (const indexed of atoms.filter(atom => /^[A-Za-z_]\w*\[[^\]]+\]$/.test(atom)).slice(0, 12)) {
       for (const statement of [`${indexed}++`, `++${indexed}`, `${indexed}+=1`, `${indexed}=${indexed}+1`])

@@ -8,6 +8,8 @@ export interface SolveRequest {
   /** Joint search when two or more IDs are supplied. */
   blankIds?: string[];
   language?: Language;
+  /** Python execution mode for validating candidates. */
+  pythonRuntime?: 'custom' | 'pyodide';
   knownAnswers?: Record<string, string>;
   /** Answers elsewhere in the paper, for graders with cross-question references. */
   allAnswers?: PaperAnswers;

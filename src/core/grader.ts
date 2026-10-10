@@ -7,7 +7,7 @@ import { checkRobot } from '../engines/robot';
 import { checkTriangleAffine } from '../engines/probability/triangle';
 import { checkUniformCppExpression } from '../engines/probability/uniform-cpp';
 import { cppEngine } from '../engines/cpp';
-import { pythonEngine, pythonEngineWithFallback } from '../engines/python';
+import { pythonEngine, pythonEnginePyodide } from '../engines/python';
 import { matchesLogoDrawing, type DrawingSegment } from './logo-drawing';
 import { checkWeightedRoute } from './weighted-route';
 import { checkRecordSortComparator } from './record-sort-comparator';
@@ -24,7 +24,7 @@ const MAX_PY_SOURCE_BYTES = 200_000;
 const MAX_C_SOURCE_BYTES = 128 * 1024;
 
 export interface GradingOptions {
-  pythonFallback?: boolean;
+  pythonRuntime?: 'custom' | 'pyodide';
 }
 
 function equalJson(left: unknown, right: unknown): boolean {
@@ -107,7 +107,7 @@ async function gradeTarget(question: Question, answers: Record<string, string>, 
   if (new TextEncoder().encode(source).length > maxSourceBytes) {
     return [{ id: 'source-size', status: 'fail', message: 'Composed source byte limit exceeded.' }];
   }
-  const engine = target.language === 'python' ? options.pythonFallback ? pythonEngineWithFallback : pythonEngine : cppEngine;
+  const engine = target.language === 'python' ? options.pythonRuntime === 'pyodide' ? pythonEnginePyodide : pythonEngine : cppEngine;
   const results: CaseGrade[] = [];
   for (const testCase of question.grading.cases) {
     let result: EngineResult;
@@ -409,7 +409,7 @@ export async function gradeQuestion(question: Question, answersForQuestion: Reco
     const source = spec.target.source;
     const maxSourceBytes = spec.target.language === 'python' ? MAX_PY_SOURCE_BYTES : MAX_C_SOURCE_BYTES;
     if (new TextEncoder().encode(source).length > maxSourceBytes) return singleResult(question, 'fail', 'Source byte limit exceeded.');
-    const engine = spec.target.language === 'python' ? options.pythonFallback ? pythonEngineWithFallback : pythonEngine : cppEngine;
+    const engine = spec.target.language === 'python' ? options.pythonRuntime === 'pyodide' ? pythonEnginePyodide : pythonEngine : cppEngine;
     const testCase = { id: 'candidate-input', stdin: answers[spec.answerBlank], expected: spec.expected, maxSteps: spec.maxSteps };
     let result: EngineResult;
     try { result = await engine.run(source, spec.target, testCase); }

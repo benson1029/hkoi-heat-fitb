@@ -98,6 +98,30 @@ describe('checked C/C++ subset', () => {
     expect(call('int grow(vector<int>& v){v.push_back(7);return 0;}int f(){vector<int>v={1};return *(v.begin()+grow(v));}', 'f'))
       .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('invalidated iterator') });
   });
+  it('tracks scalar pointers, aliasing, null dereferences, and expired targets', () => {
+    expect(call('int f(){int x=2;int *p=&x;*p=7;return x;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 7 } });
+    expect(call('void set(int *p){*p=9;}int f(){int x=1;set(&x);return x;}', 'f'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 9 } });
+    expect(call('int f(){int x=3;int *p=&x;return p==&x && *(&x)==3;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 1 } });
+    expect(call('int f(){int *p=0;return *p;}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('Null pointer dereference') });
+    expect(call('int f(){int *p=nullptr;return p==nullptr;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 1 } });
+    expect(call('int f(){int *p=0;{int x=1;p=&x;}return *p;}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('expired') });
+  });
+  it('aliases scalar references without shortening the referenced object lifetime', () => {
+    expect(call('void add(int& x){x+=4;}int f(){int a=3;add(a);return a;}', 'f'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 7 } });
+    expect(call('int f(){int x=1;{int& y=x;y=5;}return x;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 5 } });
+    expect(call('void set(int& x){x=8;}int f(){int a[2]={1,2};set(a[1]);return a[1];}', 'f'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 8 } });
+    expect(call('int f(){int& x=1;return x;}'))
+      .toMatchObject({ kind: 'compile-error' });
+  });
   it('handles string npos, positioned searches, and size_t substring counts', () => {
     expect(call('int f(){string s="ababa";return int(s.find("ba",2))+int(s.rfind("ba",3));}'))
       .toMatchObject({ kind: 'ok', observation: { returnValue: 6 } });

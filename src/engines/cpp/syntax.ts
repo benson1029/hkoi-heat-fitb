@@ -167,14 +167,18 @@ export class Parser {
   private isType(): boolean { return this.aliases.has(this.peek()) || ['int', 'long', 'bool', 'char', 'double', 'void', 'const', 'string', 'vector', 'array', 'deque', 'stack', 'queue', 'priority_queue', 'size_t', 'struct'].includes(this.peek()) ||
     this.peek() === 'std' && this.peek(1) === '::' && ['string', 'vector', 'array', 'deque', 'stack', 'queue', 'priority_queue'].includes(this.peek(2)); }
   private pointerType(type: TypeName): TypeName {
-    if (!type.startsWith('struct ')) throw new CppFault('unsupported', 'Only pointers to structs are modeled');
-    return `pointer:${type.slice('struct '.length)}`;
+    if (type.startsWith('struct ')) return `pointer:${type.slice('struct '.length)}`;
+    if (['int', 'long long', 'bool', 'char', 'size_t'].includes(type)) return `pointer:scalar:${type}`;
+    throw new CppFault('unsupported', `Pointers to ${type} are not modeled`);
   }
   private declarator(type: TypeName, parameter = false): Decl {
     if (this.eat('*')) type = this.pointerType(type);
     const reference = this.eat('&');
-    if (reference && (!parameter || type !== 'vector<int>' && type !== 'deque<int>' && !type.startsWith('array<int,')))
-      throw new CppFault('unsupported', 'Only vector<int>& and array<int,N>& function parameters are modeled');
+    if (reference && !['int', 'long long', 'bool', 'char', 'size_t', 'vector<int>', 'deque<int>'].includes(type) && !type.startsWith('array<int,'))
+      throw new CppFault('unsupported', `References to ${type} are not modeled`);
+    if (reference && !parameter && !['int', 'long long', 'bool', 'char', 'size_t'].includes(type))
+      throw new CppFault('unsupported', `Local references to ${type} are not modeled`);
+    if (reference && this.language === 'c') throw new CppFault('compile-error', 'References are not C syntax');
     const name = this.identifier();
     let array: Expr | undefined;
     let arrayParameter = false;

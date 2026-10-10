@@ -2,8 +2,10 @@ import type { EngineResult, Language, Observation, ProgramCase, ProgramTarget, Q
 import { CheckedRuntime } from '../engines/cpp/runtime';
 import { CppFault, parse } from '../engines/cpp/syntax';
 import { tryRunFastPythonFunction } from '../engines/python/fast-function';
+import { pythonEnginePyodide } from '../engines/python';
 import { supportsFastPythonSource } from '../engines/python/program';
-import { generateCandidates } from './candidates';
+import { classifyBlankContext, generateCandidates } from './candidates';
+import { stateAwareAssignments } from './state-aware';
 import type { SolveProgress, SolveRequest, SolveResult } from './types';
 
 const DEFAULT_MAX_CANDIDATES = 12_000;
@@ -44,6 +46,50 @@ function matches(actual: Observation, expected: Observation): boolean {
 function assemble(target: ProgramTarget, answers: Record<string, string>): string {
   const body = target.source.replace(/\{\{([^{}]+)\}\}/g, (_, id: string) => answers[id] ?? '');
   return target.helperSource ? `${target.helperSource}\n${body}` : body;
+}
+
+/** Put short in-scope expressions before compositions, regardless of generator order. */
+function directCandidates(target: ProgramTarget, blankId: string): string[] {
+  const marker = target.source.indexOf(`{{${blankId}}}`);
+  if (marker < 0) return [];
+  const prefix = target.source.slice(0, marker);
+  const signatures = target.language === 'python'
+    ? [...prefix.matchAll(/\bdef\s+[A-Za-z_]\w*\s*\(([^)]*)\)\s*(?:->[^:\n]+)?\s*:/g)]
+    : [...prefix.matchAll(/\b(?:int|long\s+long|bool|char|double|float|string|void)\s+[A-Za-z_]\w*\s*\(([^)]*)\)\s*\{/g)];
+  const signature = signatures.at(-1);
+  const names: string[] = [];
+  if (signature) {
+    for (const parameter of signature[1].split(',')) {
+      const name = target.language === 'python'
+        ? /^\s*([A-Za-z_]\w*)/.exec(parameter)?.[1]
+        : /([A-Za-z_]\w*)\s*(?:\[[^\]]*\])?\s*$/.exec(parameter)?.[1];
+      if (name && name !== 'void') names.push(name);
+    }
+  }
+  const body = prefix.slice(signature ? signature.index! + signature[0].length : 0);
+  if (target.language === 'python') {
+    for (const match of body.matchAll(/(?:^|\n)\s*([A-Za-z_]\w*)\s*(?::[^=\n]+)?=(?!=)/g)) names.push(match[1]);
+    for (const match of body.matchAll(/\bfor\s+([A-Za-z_]\w*)\s+in\b/g)) names.push(match[1]);
+  } else {
+    for (const match of body.matchAll(/\b(?:int|long\s+long|bool|char|double|float|string|size_t)\s*(?:[&*]\s*)?([A-Za-z_]\w*)\b/g)) names.push(match[1]);
+  }
+  return [...new Set([...names, '1', '0', '2', '-1'])].slice(0, 24);
+}
+
+/** Canonicalize identities only for side-effect-free integral C/C++ expressions. */
+function canonicalIntegralExpression(source: string, numericNames: Set<string>): string {
+  const text = source.replace(/\s+/g, '');
+  const atom = '(?:[A-Za-z_]\\w*|-?\\d+)';
+  const binary = new RegExp(`^(${atom})([+*/-])(${atom})$`).exec(text);
+  if (!binary) return text;
+  const [, left, operator, right] = binary;
+  const integral = (value: string) => /^-?\d+$/.test(value) || numericNames.has(value);
+  if (!integral(left) || !integral(right)) return text;
+  if (operator === '+' && right === '0' || operator === '-' && right === '0'
+    || operator === '*' && right === '1' || operator === '/' && right === '1') return left;
+  if (operator === '+' && left === '0' || operator === '*' && left === '1') return right;
+  if (operator === '+' || operator === '*') return [left, right].sort().join(operator);
+  return text;
 }
 
 /** Enumerate index vectors by total rank, so no blank's candidates monopolize the budget. */
@@ -88,12 +134,13 @@ function scoreCpp(source: string, target: ProgramTarget, cases: ProgramCase[]): 
   return { passed, viable: true, unsupported: false, complete: passed === cases.length };
 }
 
-function scorePython(source: string, target: ProgramTarget, cases: ProgramCase[]): Score {
-  if (!supportsFastPythonSource(source, target))
+async function scorePython(source: string, target: ProgramTarget, cases: ProgramCase[], usePyodide: boolean): Promise<Score> {
+  if (!usePyodide && !supportsFastPythonSource(source, target))
     return { passed: 0, viable: false, unsupported: false, complete: false };
   let passed = 0;
   for (const testCase of cases) {
-    const result = tryRunFastPythonFunction(source, target, testCase);
+    const result = usePyodide ? await pythonEnginePyodide.run(source, target, testCase)
+      : tryRunFastPythonFunction(source, target, testCase);
     if (!result || result.kind === 'unsupported' || result.kind === 'internal-error')
       return { passed, viable: Boolean(result), unsupported: true, complete: false };
     if (result.kind === 'ok' && matches(result.observation, testCase.expectedByLanguage?.python ?? testCase.expected)) passed++;
@@ -133,22 +180,42 @@ export async function solveJointBlanks(
   // Larger arity has a much larger product. Rank diagonals still reach each
   // dimension, while these caps keep source generation and memory bounded.
   const poolCap = ids.length <= 2 ? 250 : ids.length === 3 ? 120 : 80;
+  const numericNames = new Set(language === 'python' ? [] : [...target.source.matchAll(/\b(?:int|long\s+long|char|size_t)\s*(?:[&*]\s*)?([A-Za-z_]\w*)\b/g)].map(match => match[1]));
   const pools = ids.map((id, index) => {
     const seen = new Set<string>();
+    const canonicalSeen = new Set<string>();
     const pool: string[] = [];
     const add = (value: string) => {
-      if (pool.length < poolCap && !seen.has(value) && allowed(value, blanks[index]!)) {
-        seen.add(value); pool.push(value);
+      const canonical = language === 'python' ? value : canonicalIntegralExpression(value, numericNames);
+      if (pool.length < poolCap && !seen.has(value) && !canonicalSeen.has(canonical) && allowed(value, blanks[index]!)) {
+        seen.add(value); canonicalSeen.add(canonical); pool.push(value);
       }
     };
     if (request.knownAnswers?.[id]) add(request.knownAnswers[id]);
-    const marker = target.source.indexOf(`{{${id}}}`);
+    const markerAt = target.source.indexOf(`{{${id}}}`);
+    const beforeSource = target.source.slice(0, markerAt);
+    const afterSource = target.source.slice(markerAt + `{{${id}}}`.length);
+    const controlHead = /^\s*\(/.test(afterSource) && /(?:^|\n)\s*$/.test(beforeSource);
+    const marker = markerAt;
     const before = marker < 0 ? '' : target.source.slice(Math.max(0, marker - 16), marker);
+    const guardedOr = /\bif\s+[A-Za-z_]\w*\s*&\s*(\d+)\s*:\s*\n\s*[A-Za-z_]\w*\s*\|=\s*$/.exec(beforeSource.slice(-120));
+    if (guardedOr) {
+      const weight = Number(guardedOr[1]);
+      if (weight > 0 && weight <= 8 && (weight & (weight - 1)) === 0) {
+        // Alternating groups of bits encode each set input bit as a run of
+        // ones. The short 8-bit form is useful for bounded OR accumulators.
+        let mask = 0;
+        for (let bit = 0; bit < 8; bit++) if (Math.floor(bit / weight) % 2 === 0) mask += 2 ** bit;
+        add(String(mask));
+      }
+    }
     // Periodic bit masks are useful when blanks feed a bitwise accumulator.
     // They are generated from a generic 8-bit pattern family, not answer keys.
     if (/(?:\||&|\^)\s*=\s*$/.test(before)) {
       for (const mask of [0, 1, 3, 7, 15, 31, 63, 127, 255, 85, 51, 17, 5, 170, 204, 34, 10]) add(String(mask));
     }
+    if (classifyBlankContext(target.source, id) !== 'statement' && !controlHead)
+      for (const value of directCandidates(target, id)) add(value);
     for (const value of generateCandidates(question, id, language, request.strategy)) {
       add(value);
       if (pool.length >= poolCap) break;
@@ -156,35 +223,45 @@ export async function solveJointBlanks(
     return pool;
   });
   if (pools.some(pool => pool.length === 0)) return done('unsupported', 'No candidates fit one of the selected blanks.');
-  if (language === 'python') {
+  if (language === 'python' && request.pythonRuntime !== 'pyodide') {
     const probe = assemble(target, { ...request.knownAnswers, ...Object.fromEntries(ids.map(id => [id, '0'])) });
     if (probe.length > 200_000 || !supportsFastPythonSource(probe, target))
       return done('unsupported', 'This Python program needs a language feature outside the fast solver.');
   }
   const seen = new Set<string>();
+  const seenAssignments = new Set<string>();
   const promising: RankedAssignment[] = [];
   let anySupported = false;
   const cases = question.grading.cases;
-  const evaluate = (indices: number[]): boolean => {
-    const key = indices.join(',');
+  const evaluateAnswers = async (answers: Record<string, string>, indices?: number[]): Promise<boolean> => {
+    const key = JSON.stringify(ids.map(id => answers[id]));
     if (seen.has(key)) return false;
     seen.add(key);
-    const answers = { ...request.knownAnswers };
-    ids.forEach((id, index) => { answers[id] = pools[index][indices[index]]; });
     const source = assemble(target, answers);
     generated++;
-    const result = language === 'python' ? scorePython(source, target, cases) : scoreCpp(source, target, cases);
+    const result = language === 'python' ? await scorePython(source, target, cases, request.pythonRuntime === 'pyodide')
+      : scoreCpp(source, target, cases);
     if (!result.unsupported) anySupported = true;
     tested++;
     if (result.complete) {
-      assignments.push(Object.fromEntries(ids.map(id => [id, answers[id]])));
-      onProgress?.(progress());
-    } else if (result.viable && result.passed > 0) {
+      const canonical = JSON.stringify(ids.map(id => language === 'python' ? answers[id]
+        : canonicalIntegralExpression(answers[id], numericNames)));
+      if (!seenAssignments.has(canonical)) {
+        seenAssignments.add(canonical);
+        assignments.push(Object.fromEntries(ids.map(id => [id, answers[id]])));
+        onProgress?.(progress());
+      }
+    } else if (indices && result.viable && result.passed > 0) {
       promising.push({ indices, score: result.passed });
       promising.sort((a, b) => b.score - a.score || a.indices.reduce((sum, n) => sum + n, 0) - b.indices.reduce((sum, n) => sum + n, 0));
       if (promising.length > 16) promising.length = 16;
     }
     return true;
+  };
+  const evaluate = (indices: number[]): Promise<boolean> => {
+    const answers = { ...request.knownAnswers };
+    ids.forEach((id, index) => { answers[id] = pools[index][indices[index]]; });
+    return evaluateAnswers(answers, indices);
   };
   const pauseIfNeeded = async (newTrial: boolean) => {
     if (newTrial && tested % 32 === 0) {
@@ -192,14 +269,53 @@ export async function solveJointBlanks(
       await new Promise<void>(resolve => setTimeout(resolve, 0));
     }
   };
+  // Shared expressions can fill two slots, but first give the ordinary rank
+  // traversal a budget so this shortcut does not crowd out distinct answers.
+  const shared = ids.length === 2 && maxCandidates >= 200
+    ? pools[0].map((value, first) => ({ first, second: pools[1].indexOf(value) }))
+      .filter(item => item.second >= 0)
+      .sort((a, b) => Math.max(a.first, a.second) - Math.max(b.first, b.second)
+        || a.first + a.second - b.first - b.second)
+      .slice(0, 64) : [];
+  let sharedDone = false;
+  let stateDone = false;
   // Fair rank-order traversal gives each blank's early and later candidates a
   // chance. Every 256 trials, use observations from real cases to search one
   // coordinate around promising assignments before returning to the diagonal.
   for (const indices of rankTuples(pools.map(pool => pool.length))) {
     if (isCancelled()) return done('cancelled');
     if (performance.now() - started >= maxMs || tested >= maxCandidates) return done('limit');
-    await pauseIfNeeded(evaluate(indices));
+    await pauseIfNeeded(await evaluate(indices));
     if (assignments.length >= maxResults) return done('limit', 'Result limit reached.');
+    if (!stateDone && tested >= 128 && request.pythonRuntime !== 'pyodide' && request.maxMs !== undefined && maxMs >= 5_000 && maxCandidates >= 500) {
+      stateDone = true;
+      const seeds = promising.slice(0, 2).map(item => item.indices);
+      if (!seeds.length) seeds.push(Array(ids.length).fill(0));
+      for (const seed of seeds) {
+        if (isCancelled()) return done('cancelled');
+        const anchors = { ...request.knownAnswers, ...Object.fromEntries(ids.map((id, index) => [id, pools[index][seed[index]]])) };
+        const guided = await stateAwareAssignments(question, language, ids, anchors, {
+          maxRuns: Math.min(100, Math.floor(maxCandidates / 10)),
+          deadline: performance.now() + Math.min((maxMs - (performance.now() - started)) * 0.3, 5_000),
+          isCancelled
+        });
+        for (const answers of guided) {
+          if (isCancelled()) return done('cancelled');
+          if (performance.now() - started >= maxMs || tested >= maxCandidates) return done('limit');
+          await pauseIfNeeded(await evaluateAnswers(answers));
+          if (assignments.length >= maxResults) return done('limit', 'Result limit reached.');
+        }
+      }
+    }
+    if (!sharedDone && shared.length && tested >= 128) {
+      sharedDone = true;
+      for (const pair of shared) {
+        if (isCancelled()) return done('cancelled');
+        if (performance.now() - started >= maxMs || tested >= maxCandidates) return done('limit');
+        await pauseIfNeeded(await evaluate([pair.first, pair.second]));
+        if (assignments.length >= maxResults) return done('limit', 'Result limit reached.');
+      }
+    }
     if (tested > 0 && tested % 256 === 0 && promising.length > 0) {
       for (const seed of promising.slice(0, 4)) {
         for (let dimension = 0; dimension < ids.length; dimension++) {
@@ -208,7 +324,7 @@ export async function solveJointBlanks(
             if (performance.now() - started >= maxMs || tested >= maxCandidates) return done('limit');
             const neighbor = [...seed.indices];
             neighbor[dimension] = index;
-            await pauseIfNeeded(evaluate(neighbor));
+            await pauseIfNeeded(await evaluate(neighbor));
             if (assignments.length >= maxResults) return done('limit', 'Result limit reached.');
           }
         }

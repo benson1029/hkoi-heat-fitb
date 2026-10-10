@@ -4,6 +4,8 @@ import { gradeQuestion } from '../core/grader';
 import junior2025 from '../../papers/2025-26-junior.json';
 import junior2024 from '../../papers/2024-25-junior.json';
 import sample2024 from '../../papers/2024-25-sample-senior.json';
+import senior2021 from '../../papers/2021-22-senior.json';
+import junior2022 from '../../papers/2022-23-junior.json';
 import { solveJointBlanks } from './joint';
 
 function question(paper: unknown, id: string) {
@@ -11,6 +13,23 @@ function question(paper: unknown, id: string) {
 }
 
 describe('joint search on published papers', () => {
+  it('tries direct atoms before algebraic variants in three coupled blanks', async () => {
+    const item = question(senior2021, 'cpp-a');
+    const result = await solveJointBlanks({ question: item, blankIds: ['A1', 'A2', 'A3'], language: 'cpp',
+      strategy: 'hybrid', maxCandidates: 250, maxResults: 8, maxMs: 10_000 });
+    expect(result.assignments).toContainEqual({ A1: 'c', A2: 'c', A3: '1' });
+    expect(result.assignments?.some(answer => ['c+0', 'c-0', 'c*1', 'c/1'].includes(answer.A2))).toBe(false);
+    for (const assignment of result.assignments ?? [])
+      expect((await gradeQuestion(item, assignment, 'cpp')).status).toBe('pass');
+  }, 20_000);
+
+  it('tries a shared expression across two index blanks within a small budget', async () => {
+    const item = question(junior2022, 'junior-b');
+    const result = await solveJointBlanks({ question: item, blankIds: ['B1', 'B2'], language: 'cpp',
+      strategy: 'hybrid', maxCandidates: 250, maxResults: 1, maxMs: 20_000 });
+    expect(result.assignments).toContainEqual({ B1: 'k-i-1', B2: 'k-i-1' });
+  }, 30_000);
+
   it.each(['cpp', 'python'] as const)('finds both affine blanks in the 2025/26 Junior %s question', async language => {
     const item = question(junior2025, 'paper1-g');
     const result = await solveJointBlanks({ question: item, blankIds: ['G1', 'G2'], language,

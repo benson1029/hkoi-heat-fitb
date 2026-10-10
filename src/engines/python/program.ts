@@ -1,4 +1,5 @@
 import type { EngineResult, JsonValue, ProgramCase, ProgramTarget } from '../../core/types';
+import { PROBE_PREFIX, type ProbeHandler, type ProbeValue } from '../../core/probe';
 import { comparePythonStrings, evaluatePythonExpression, PythonDict, PythonSet, PythonTuple, supportsPythonExpressionSyntax, type PythonExpressionOptions } from './expression';
 
 type Line = { indent: number; text: string };
@@ -270,7 +271,8 @@ function pythonize(value: unknown): unknown {
 }
 
 /** Synchronous, conservative paper runner; undefined means Pyodide must decide. */
-export function tryRunPythonProgram(source: string, target: ProgramTarget, testCase: ProgramCase): EngineResult | undefined {
+export function tryRunPythonProgram(source: string, target: ProgramTarget, testCase: ProgramCase,
+  probe?: ProbeHandler): EngineResult | undefined {
   if (target.language !== 'python') return undefined;
   let body: Statement[];
   try { body = new Parser(logicalLines(source)).parse(); }
@@ -284,6 +286,17 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
   let inputAt = 0; let stdout = '';
   const tick = () => { if (++meter.steps > budget) throw new Exhausted(); };
   const scopeVars = (locals: Record<string, unknown>) => ({ ...globals, ...locals });
+  const probeVariables = (locals: Record<string, unknown>): Record<string, ProbeValue> => {
+    const variables: Record<string, ProbeValue> = Object.create(null);
+    for (const [name, value] of Object.entries(scopeVars(locals))) {
+      if (value === null || typeof value === 'boolean' || typeof value === 'string'
+        || typeof value === 'number' && Number.isFinite(value)) variables[name] = value;
+      else if (Array.isArray(value) && value.length <= 256) variables[name] = value.map(item =>
+        item === null || typeof item === 'boolean' || typeof item === 'string'
+        || typeof item === 'number' && Number.isFinite(item) ? item : undefined);
+    }
+    return variables;
+  };
   const pyString = (value: unknown): string => {
     if (value !== null && typeof value === 'object') throw new Unsupported('Printing containers requires full Python');
     return value === null ? 'None' : value === true ? 'True' : value === false ? 'False' : String(value);
@@ -306,6 +319,8 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
 
   const call = (name: string, values: unknown[], receiver: unknown, locals: Record<string, unknown>, kwargs: Record<string, unknown> = {}): { handled: true; value: unknown } | { handled: false } => {
     tick();
+    if (probe && receiver === undefined && name.startsWith(PROBE_PREFIX) && values.length === 0 && Object.keys(kwargs).length === 0)
+      return { handled: true, value: probe({ blankId: name.slice(PROBE_PREFIX.length), variables: probeVariables(locals) }) };
     const keywords = Object.keys(kwargs);
     const user = functions.get(name);
     if (receiver === undefined && user) {
@@ -339,6 +354,11 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
         return { handled: true, value: null };
       }
       if (name === 'append' && Array.isArray(receiver) && values.length === 1) { receiver.push(values[0]); return { handled: true, value: null }; }
+      if (name === 'insert' && Array.isArray(receiver) && values.length === 2 && Number.isSafeInteger(values[0])) {
+        const index = values[0] as number;
+        receiver.splice(Math.max(0, Math.min(receiver.length, index < 0 ? receiver.length + index : index)), 0, values[1]);
+        return { handled: true, value: null };
+      }
       if (receiver instanceof PythonDict) {
         if (name === 'get' && values.length >= 1 && values.length <= 2) { const result = receiver.get(values[0]); return { handled: true, value: result.found ? result.value : values.length === 2 ? values[1] : null }; }
         if (name === 'keys' && !values.length) return { handled: true, value: receiver.keys() };
@@ -364,9 +384,42 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
           return result.value;
         }).length };
       }
+      if ((name === 'index' || name === 'remove') && (Array.isArray(receiver) || (name === 'index' && receiver instanceof PythonTuple)) && values.length >= 1 && values.length <= (name === 'index' ? 3 : 1)) {
+        const items = sequence(receiver)!;
+        if (values.slice(1).some((value) => !Number.isSafeInteger(value))) return { handled: false };
+        const bound = (value: number) => Math.max(0, Math.min(items.length, value < 0 ? items.length + value : value));
+        const start = values.length >= 2 ? bound(values[1] as number) : 0;
+        const stop = values.length >= 3 ? bound(values[2] as number) : items.length;
+        for (let index = start; index < stop; index++) {
+          const result = evaluatePythonExpression('a == b', { a: items[index], b: values[0] }, budget, { meter });
+          if (result.kind !== 'ok') return { handled: false };
+          if (result.value) {
+            if (name === 'index') return { handled: true, value: index };
+            if (Array.isArray(receiver)) { receiver.splice(index, 1); return { handled: true, value: null }; }
+          }
+        }
+        throw new Runtime(name === 'index' ? 'ValueError: value is not in sequence' : 'ValueError: list.remove(x): x not in list');
+      }
       if (name === 'count' && typeof receiver === 'string' && values.length === 1 && typeof values[0] === 'string') {
         if (values[0] === '') return { handled: true, value: [...receiver].length + 1 };
         return { handled: true, value: receiver.split(values[0]).length - 1 };
+      }
+      if (['find', 'rfind', 'index', 'rindex'].includes(name) && typeof receiver === 'string' && values.length >= 1 && values.length <= 3 && typeof values[0] === 'string') {
+        if (values.slice(1).some((value) => !Number.isSafeInteger(value))) return { handled: false };
+        const letters = [...receiver]; const needle = [...values[0]];
+        const bound = (value: number) => Math.max(0, Math.min(letters.length, value < 0 ? letters.length + value : value));
+        const start = values.length >= 2 ? bound(values[1] as number) : 0;
+        const stop = values.length >= 3 ? bound(values[2] as number) : letters.length;
+        let found = -1;
+        const emptyNeedleBeyondEnd = needle.length === 0 && values.length >= 2 && (values[1] as number) > letters.length;
+        for (let index = start; !emptyNeedleBeyondEnd && index <= stop - needle.length; index++) {
+          if (needle.every((letter, offset) => letter === letters[index + offset])) {
+            found = index;
+            if (name === 'find' || name === 'index') break;
+          }
+        }
+        if (found < 0 && (name === 'index' || name === 'rindex')) throw new Runtime('ValueError: substring not found');
+        return { handled: true, value: found };
       }
       if (name === 'pop' && Array.isArray(receiver) && values.length <= 1) {
         const index = values.length ? values[0] : -1;
@@ -412,16 +465,38 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
       return { handled: true, value: stdin[inputAt++].replace(/\r$/, '') };
     }
     if (name === 'abs' && values.length === 1 && typeof values[0] === 'number') return { handled: true, value: Math.abs(values[0]) };
+    if (name === 'int' && !values.length) return { handled: true, value: 0 };
+    if (name === 'float' && !values.length) return { handled: true, value: 0 };
+    if (name === 'bool' && !values.length) return { handled: true, value: false };
+    if (name === 'str' && !values.length) return { handled: true, value: '' };
     if (name === 'len' && values.length === 1) {
       if (values[0] instanceof PythonSet) return { handled: true, value: values[0].entries.size };
       const items = sequence(values[0]); if (items) return { handled: true, value: items.length };
     }
-    if (name === 'int' && values.length === 1 && typeof values[0] === 'string') {
+    if (name === 'int' && values.length >= 1 && values.length <= 2 && typeof values[0] === 'string') {
       const text = values[0].trim();
-      if (!/^[+-]?\d(?:_?\d)*$/.test(text)) throw new Runtime('ValueError: invalid literal for int');
-      const number = Number(text.replace(/_/g, ''));
-      if (!Number.isSafeInteger(number)) return { handled: false };
-      return { handled: true, value: number };
+      const requestedBase = values.length === 2 ? values[1] : 10;
+      if (!Number.isSafeInteger(requestedBase)) return { handled: false };
+      if (requestedBase !== 0 && ((requestedBase as number) < 2 || (requestedBase as number) > 36)) throw new Runtime('ValueError: int() base must be >= 2 and <= 36, or 0');
+      const sign = text.startsWith('-') ? -1n : 1n;
+      let digits = /^[+-]/.test(text) ? text.slice(1) : text;
+      let base = requestedBase as number;
+      const prefix = /^0([box])/i.exec(digits);
+      const prefixBase = prefix ? { b: 2, o: 8, x: 16 }[prefix[1].toLowerCase() as 'b' | 'o' | 'x'] : undefined;
+      if (base === 0) base = prefixBase ?? 10;
+      if (prefixBase === base) digits = digits.slice(2).replace(/^_/, '');
+      if (!/^[0-9a-z](?:_?[0-9a-z])*$/.test(digits.toLowerCase())) throw new Runtime('ValueError: invalid literal for int');
+      if (requestedBase === 0 && !prefixBase && /^0[0-9_]*[1-9]/.test(digits)) throw new Runtime('ValueError: invalid literal for int');
+      let number = 0n;
+      for (const digit of digits.toLowerCase().replace(/_/g, '')) {
+        tick();
+        const value = parseInt(digit, 36);
+        if (value >= base) throw new Runtime('ValueError: invalid literal for int');
+        number = number * BigInt(base) + BigInt(value);
+      }
+      number *= sign;
+      if (!Number.isSafeInteger(Number(number))) return { handled: false };
+      return { handled: true, value: Number(number) };
     }
     if (name === 'range' && values.length >= 1 && values.length <= 3 && values.every(Number.isSafeInteger)) {
       const start = values.length === 1 ? 0 : values[0] as number;
@@ -490,8 +565,17 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
           if (keywords.includes('default')) return { handled: true, value: kwargs.default };
           throw new Runtime(`ValueError: ${name}() arg is an empty sequence`);
         }
-        const result = ordered([...items], key);
-        if (result) return { handled: true, value: name === 'min' ? result[0] : result[result.length - 1] };
+        let best = items[0]; let bestKey = key === null ? best : key(best);
+        for (let index = 1; index < items.length; index++) {
+          const item = items[index]; const itemKey = key === null ? item : key(item);
+          const numeric = (value: unknown): value is number | boolean => typeof value === 'number' || typeof value === 'boolean';
+          let comparison: number;
+          if (numeric(bestKey) && numeric(itemKey)) comparison = Number(itemKey) - Number(bestKey);
+          else if (typeof bestKey === 'string' && typeof itemKey === 'string') comparison = comparePythonStrings(itemKey, bestKey);
+          else return { handled: false };
+          if ((name === 'min' && comparison < 0) || (name === 'max' && comparison > 0)) { best = item; bestKey = itemKey; }
+        }
+        return { handled: true, value: best };
       }
     }
     if (name === 'sum' && values.length >= 1 && values.length <= 2) {
@@ -606,7 +690,7 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     const options: PythonExpressionOptions = {
       meter,
       invoke: (name, values, receiver, kwargs) => call(name, values, receiver, locals, kwargs),
-      isCallableName: (name) => functions.has(name),
+      isCallableName: (name) => functions.has(name) || Boolean(probe && name.startsWith(PROBE_PREFIX)),
       shouldRethrow: (error) => error instanceof Unsupported || error instanceof Runtime || error instanceof Exhausted,
     };
     const result = evaluatePythonExpression(sourceText, scopeVars(locals), budget, options);

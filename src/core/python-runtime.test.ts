@@ -3,7 +3,7 @@ import { gradeQuestion } from './grader';
 import type { Question } from './types';
 
 const question: Question = {
-  id: 'python-fallback', track: 'python', printedRef: 'Python A', title: 'Python A',
+  id: 'python-runtime', track: 'python', printedRef: 'Python A', title: 'Python A',
   prompt: { en: 'Complete the function.' }, points: 1, blanks: [{ id: 'A' }],
   grading: {
     kind: 'program', targetPolicy: 'any',
@@ -13,8 +13,8 @@ const question: Question = {
   }
 };
 
-it('uses Pyodide for Python grading only when requested', async () => {
+it('uses the selected Python runtime for grading', async () => {
   const answers = { A: 'math.floor(x)' };
   expect((await gradeQuestion(question, answers, 'python')).status).toBe('inconclusive');
-  expect((await gradeQuestion(question, answers, 'python', undefined, { pythonFallback: true })).status).toBe('pass');
+  expect((await gradeQuestion(question, answers, 'python', undefined, { pythonRuntime: 'pyodide' })).status).toBe('pass');
 }, 60_000);

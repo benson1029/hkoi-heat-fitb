@@ -1,11 +1,13 @@
 import type { Language } from '../core/types';
 import { tryRunFastPythonFunction } from '../engines/python/fast-function';
+import { pythonEnginePyodide } from '../engines/python';
 import { supportsFastPythonSource } from '../engines/python/program';
 import { parse } from '../engines/cpp/syntax';
 import { CheckedRuntime } from '../engines/cpp/runtime';
 import { classifyBlankContext, generateCandidates } from './candidates';
 import { solveJointBlanks } from './joint';
 import { solveExhaustive } from './exhaustive';
+import { stateAwareAssignments } from './state-aware';
 import type { SolveProgress, SolveRequest, SolveResult } from './types';
 
 const DEFAULT_MAX_CANDIDATES = 1200;
@@ -71,14 +73,25 @@ export async function solveProgramBlank(
   const cppTarget = language !== 'python' ? question.grading.targets.find(target => target.language === language) : undefined;
   if (pythonTarget && pythonTarget.source.length + (pythonTarget.helperSource?.length ?? 0) > 200_000)
     return done('unsupported', 'Python source is too large for automatic search.');
-  if (pythonTarget) {
+  if (pythonTarget && request.pythonRuntime !== 'pyodide') {
     const context = classifyBlankContext(pythonTarget.source, blankId);
     const neutral = context === 'statement' ? 'pass' : context === 'condition' ? 'True' : '0';
     const probe = `${pythonTarget.helperSource ? `${pythonTarget.helperSource}\n` : ''}${assemble(pythonTarget.source, { ...answers, [blankId]: neutral })}`;
     if (!supportsFastPythonSource(probe, pythonTarget))
       return done('unsupported', 'This Python program needs the full runtime; automatic search supports the fast subset only.');
   }
-  for (const candidate of generateCandidates(question, blankId, language, request.strategy)) {
+  const guided = request.pythonRuntime !== 'pyodide' && request.maxMs !== undefined && maxMs >= 5_000 && maxCandidates >= 500
+    ? (await stateAwareAssignments(question, language, [blankId], answers, {
+      maxRuns: Math.min(160, Math.floor(maxCandidates / 4)),
+      deadline: started + Math.min(maxMs * 0.5, 6_000), isCancelled
+    })).map(assignment => assignment[blankId]) : [];
+  const candidates = function* (): Generator<string> {
+    const seen = new Set<string>();
+    for (const candidate of guided) if (!seen.has(candidate)) { seen.add(candidate); yield candidate; }
+    for (const candidate of generateCandidates(question, blankId, language, request.strategy))
+      if (!seen.has(candidate)) { seen.add(candidate); yield candidate; }
+  };
+  for (const candidate of candidates()) {
     generated++;
     if (generated % 25 === 0) {
       onProgress?.(progress());
@@ -96,7 +109,9 @@ export async function solveProgramBlank(
       let supported = true;
       passed = true;
       for (const testCase of question.grading.cases) {
-        const result = tryRunFastPythonFunction(source, pythonTarget, testCase);
+        const result = request.pythonRuntime === 'pyodide'
+          ? await pythonEnginePyodide.run(source, pythonTarget, testCase)
+          : tryRunFastPythonFunction(source, pythonTarget, testCase);
         if (result === undefined) { supported = false; break; }
         if (result.kind !== 'ok') { passed = false; break; }
         const expected = testCase.expectedByLanguage?.python ?? testCase.expected;
