@@ -1447,6 +1447,9 @@
             ]
           }
         ]
+      },
+      "displayCode": {
+        "cpp": "int g(int x) {\n    int a = {{J1}};\n    int b = 1;\n    int res = {{J2}};\n    while (a) {\n        res += a * b;\n        a >>= 1;\n        // ++b;\n    }\n    res += b;\n    return res;\n}"
       }
     },
     {
@@ -1599,6 +1602,9 @@
             ]
           }
         ]
+      },
+      "displayCode": {
+        "cpp": "int h(int x) {\n    int a = {{K1}};\n    int b = 0;\n    int res = {{K2}};\n    while (a) {\n        res += a * b;\n        a >>= 1;\n        // ++b;\n    }\n    res += b;\n    return res;\n}"
       }
     }
   ]

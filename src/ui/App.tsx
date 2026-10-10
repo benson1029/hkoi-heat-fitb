@@ -24,6 +24,7 @@ import type {
 import { validatePaper } from '../core/validate';
 import { bundledPapers } from '../data';
 import { deleteBeforeCursor, insertRobotToken } from './robot-edit';
+import { tokenizeCode } from './syntax-highlight';
 import { startSolver, type SolverJob } from '../solver/client';
 import type { SolveProgress, SolveResult } from '../solver/types';
 
@@ -250,23 +251,10 @@ function TrackPicker({ paper, selected, onChange }: { paper: PaperConfig; select
   );
 }
 
-const tokenPattern = /(\/\/[^\n]*|#[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b(?:alignas|and|auto|bool|break|case|class|const|continue|def|double|elif|else|enum|false|False|float|for|if|import|in|include|int|long|namespace|not|nullptr|or|print|return|self|static|std|str|struct|template|true|True|using|void|while)\b|\b\d+(?:\.\d+)?\b)/g;
-
-function highlighted(text: string): ReactNode[] {
-  const fragments: ReactNode[] = [];
-  let previous = 0;
-  for (const match of text.matchAll(tokenPattern)) {
-    const position = match.index ?? 0;
-    if (position > previous) fragments.push(text.slice(previous, position));
-    const token = match[0];
-    const type = token.startsWith('//') || token.startsWith('#') ? 'comment'
-      : token.startsWith('"') || token.startsWith("'") ? 'string'
-      : /^\d/.test(token) ? 'number' : 'keyword';
-    fragments.push(<span className={`syntax-${type}`} key={`${position}-${type}`}>{token}</span>);
-    previous = position + token.length;
-  }
-  if (previous < text.length) fragments.push(text.slice(previous));
-  return fragments;
+function highlighted(text: string, language = 'cpp'): ReactNode[] {
+  return tokenizeCode(text, language).map((token, index) => token.type
+    ? <span className={`syntax-${token.type}`} key={`${index}-${token.type}`}>{token.text}</span>
+    : token.text);
 }
 
 function MarkdownPrompt({ text }: { text: string }) {
@@ -277,7 +265,10 @@ function MarkdownPrompt({ text }: { text: string }) {
       rehypePlugins={[rehypeKatex]}
       components={{
         pre({ children }) { return <pre className="prompt-code">{children}</pre>; },
-        code({ className, children }) { return <code className={className || 'inline-code'}>{highlighted(String(children).replace(/\n$/, ''))}</code>; },
+        code({ className, children }) {
+          const language = /language-([\w+-]+)/.exec(className || '')?.[1] || 'cpp';
+          return <code className={className || 'inline-code'}>{highlighted(String(children).replace(/\n$/, ''), language)}</code>;
+        },
         img({ alt }) { return <span className="omitted-image">[{alt || 'Diagram in source paper'}]</span>; },
         a({ href, children }) {
           const safeHref = officialPaperLink(href ? { paperUrl: href } : undefined);
@@ -327,7 +318,7 @@ function contextCode(context: PaperContext, selectedLanguage?: Language): { lang
   return language && source ? { language, source } : null;
 }
 
-function ContextBlock({ context, questions, answers, selectedLanguage, activeQuestionId, onSelectAnswerSet, onAnswer }: {
+export function ContextBlock({ context, questions, answers, selectedLanguage, activeQuestionId, onSelectAnswerSet, onAnswer }: {
   context: PaperContext;
   questions: Question[];
   answers: PaperAnswers;
@@ -430,7 +421,7 @@ function CodeTemplate({
       <div className="code-toolbar"><span className="code-dots" aria-hidden="true"><i /><i /><i /></span><span>{target.language.toUpperCase()} · {target.harness.kind === 'call' ? 'function completion' : 'program completion'}</span></div>
       <pre className="code-source"><code>{parts.map((part, index) => {
         const match = /^\{\{([A-Za-z][A-Za-z0-9_-]*)\}\}$/.exec(part);
-        if (!match) return <span key={index}>{highlighted(part)}</span>;
+        if (!match) return <span key={index}>{highlighted(part, target.language)}</span>;
         const blank = question.blanks.find((item) => item.id === match[1]);
         if (!blank) return <span key={index}>{part}</span>;
         shown.add(blank.id);
@@ -457,7 +448,7 @@ function SharedCodeTemplate({ language, source, owners, answers, onAnswer }: {
     <div className="code-toolbar"><span className="code-dots" aria-hidden="true"><i /><i /><i /></span><span>{language.toUpperCase()} · code completion</span></div>
     <pre className="code-source"><code>{parts.map((part, index) => {
       const marker = /^\{\{([A-Za-z][A-Za-z0-9_-]*)\}\}$/.exec(part);
-      if (!marker) return <span key={index}>{highlighted(part)}</span>;
+      if (!marker) return <span key={index}>{highlighted(part, language)}</span>;
       const owner = owners.get(marker[1]);
       if (!owner) return <span key={index}>{part}</span>;
       if (owner.question.grading.kind === 'cancelled') return <span key={index}>________</span>;
@@ -470,7 +461,7 @@ function SharedCodeTemplate({ language, source, owners, answers, onAnswer }: {
 function DisplayCode({ language, source }: { language: Language; source: string }) {
   return <div className="code-frame">
     <div className="code-toolbar"><span className="code-dots" aria-hidden="true"><i /><i /><i /></span><span>{language.toUpperCase()}</span></div>
-    <pre className="code-source"><code>{highlighted(source)}</code></pre>
+    <pre className="code-source"><code>{highlighted(source, language)}</code></pre>
   </div>;
 }
 
@@ -794,7 +785,7 @@ function SolverPanel({ question, language, pythonRuntime, values, allAnswers, on
   </details>;
 }
 
-function QuestionCard({
+export function QuestionCard({
   question,
   selectedLanguage,
   pythonRuntime,

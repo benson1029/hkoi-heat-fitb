@@ -702,7 +702,7 @@
         ]
       },
       "displayCode": {
-        "c": "#include <stdio.h>\nint main() {\n  int i;\n  for (i = 0; i <= 15; i++) {\n    printf(\"%c\",       I       );\n    if (i % 4 == 3)\n      printf(\"\\n\");\n  }\n  return 0;\n}"
+        "c": "#include <stdio.h>\nint main() {\n  int i;\n  for (i = 0; i <= 15; i++) {\n    printf(\"%c\", {{I}});\n    if (i % 4 == 3)\n      printf(\"\\n\");\n  }\n  return 0;\n}"
       }
     },
     {

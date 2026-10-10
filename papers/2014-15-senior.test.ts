@@ -18,6 +18,11 @@ const answers: PaperAnswers = {
   'c-j': { J: '0' }
 };
 
+it('places 2014/15 Senior I in the printed program', () => {
+  const question = paper.questions.find(item => item.id === 'c-i');
+  expect(question?.displayCode?.c).toContain('printf("%c", {{I}});');
+});
+
 it('grades official 2014/15 Senior Section B answers', async () => {
   const result = await gradePaper(paper, answers, ['section-b']);
   expect(result.questions.filter(item => item.status !== 'pass')).toEqual([]);
