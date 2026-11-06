@@ -10,6 +10,7 @@ npm run dev
 ```
 
 Open the URL printed by Vite. To check a production build locally, run `npm run build`.
+The browser offers opt-in Pyodide for Python and Clang WebAssembly for C++.
 
 ## Offline commands
 

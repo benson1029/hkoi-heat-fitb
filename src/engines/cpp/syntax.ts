@@ -8,7 +8,7 @@ export class CppFault extends Error {
 export interface Token { text: string; at: number }
 export type TypeName = 'int' | 'long long' | 'bool' | 'char' | 'string' | 'double' | 'void' | 'size_t' | 'vector<int>' | 'vector<vector<int>>' | 'deque<int>' | 'stack<int>' | 'queue<int>' | 'priority_queue<int>' | `array<int,${number}>` | `struct ${string}` | `pointer:${string}`;
 export type Initializer = Expr | Initializer[];
-export interface Decl { name: string; type: TypeName; array?: Expr; arrayParameter?: boolean; reference?: boolean; init?: Initializer; constructArgs?: Expr[] }
+export interface Decl { name: string; type: TypeName; array?: Expr; arrayParameter?: boolean; reference?: boolean; readonly?: boolean; init?: Initializer; constructArgs?: Expr[] }
 export type Expr =
   | { kind: 'number'; value: bigint; long: boolean }
   | { kind: 'float'; value: number }
@@ -254,9 +254,16 @@ export class Parser {
       const name = this.identifier();
       if (this.eat('(')) {
         const params = this.list(')', () => {
+          const readonly = this.eat('const');
           const t = this.type();
           if (t === 'void' && this.peek() === ')') return { name: '', type: t } as Decl;
-          return this.declarator(t, true);
+          const parameter = this.declarator(t, true);
+          if (readonly) {
+            if (!parameter.reference || parameter.type !== 'vector<int>')
+              throw new CppFault('unsupported', 'Only const vector<int>& parameters are modeled');
+            parameter.readonly = true;
+          }
+          return parameter;
         }).filter(p => p.name);
         if (this.eat(';')) throw new CppFault('unsupported', 'Separate function prototypes are not modeled');
         const body = this.statement();

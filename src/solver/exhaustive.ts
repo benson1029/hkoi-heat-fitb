@@ -184,6 +184,9 @@ function syntacticallyValid(request: SolveRequest, answers: Record<string, strin
         // its `unsupported` result here would lose valid Pyodide answers.
         // The grader performs Python's syntax check before execution.
         validCount++;
+      } else if (request.cppRuntime === 'wasm' && target.language === 'cpp') {
+        // The checked parser covers less syntax than Clang; it cannot preflight this mode.
+        validCount++;
       } else {
         try { parseCpp(source, target.language); validCount++; } catch { /* Invalid syntax or unsupported subset. */ }
       }
@@ -309,7 +312,7 @@ export async function solveExhaustive(
     Object.assign(answers, tuple);
     if (!syntacticallyValid(request, answers)) return true;
     const result = await gradeQuestion(question, answers, language, request.allAnswers,
-      { pythonRuntime: request.pythonRuntime });
+      { pythonRuntime: request.pythonRuntime, cppRuntime: request.cppRuntime });
     tested++;
     if (result.status === 'pass') {
       assignments.push({ ...tuple });

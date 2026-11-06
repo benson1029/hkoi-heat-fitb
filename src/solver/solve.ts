@@ -151,6 +151,8 @@ export function solveRequest(
   onProgress?: (progress: SolveProgress) => void,
   isCancelled: () => boolean = () => false
 ): Promise<SolveResult> {
+  if (request.cppRuntime === 'wasm' && request.language === 'cpp')
+    return solveExhaustive(request, onProgress, isCancelled);
   if (request.strategy === 'exhaustive') return solveExhaustive(request, onProgress, isCancelled);
   if ((request.blankIds?.length ?? 0) > 1) return solveJointBlanks(request, onProgress, isCancelled);
   return solveProgramBlank(request, onProgress, isCancelled);

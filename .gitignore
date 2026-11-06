@@ -6,3 +6,4 @@ coverage/
 private/
 submissions/
 public/pyodide/
+public/clang/

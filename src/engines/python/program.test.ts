@@ -17,6 +17,20 @@ function run(paper: { questions: unknown[] }, id: string, answers: Record<string
 }
 
 describe('custom Python paper runner', () => {
+  it('supports boolean sums and string partition helpers', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'strings', args: ['xy:zz:qq'], expected: {}, maxSteps: 2_000 };
+    expect(tryRunFastPythonFunction("def f(text):\n    return text.partition(':')", target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: ['xy', ':', 'zz:qq'] } });
+    expect(tryRunFastPythonFunction("def f(text):\n    return text.rpartition(':')", target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: ['xy:zz', ':', 'qq'] } });
+    expect(tryRunFastPythonFunction("def f(text):\n    return text.removeprefix('xy')", target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: ':zz:qq' } });
+    expect(tryRunFastPythonFunction("def f(text):\n    return text.removesuffix('qq')", target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 'xy:zz:' } });
+    expect(tryRunFastPythonFunction('def f(text):\n    return sum(x > 0 for x in [1, -2, 3])', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 2 } });
+  });
   it('executes nested loops, list mutation, and function calls from 2024/25 Junior', () => {
     expect(run(junior25, 'python-d', { D: 'a[i]!=a[i-1]' })?.kind).toBe('ok');
     expect(run(junior25, 'python-f', { F: '0<=ni<n and 0<=nj<m' })?.kind).toBe('ok');

@@ -18,6 +18,18 @@ function program(source: string, stdin = '', maxSteps = 10000) {
 }
 
 describe('checked C/C++ subset', () => {
+  it('returns copied vectors and preserves read-only vector parameters', () => {
+    expect(call('vector<int> f(const vector<int>& values){vector<int> copy=values; copy.push_back(9); return copy;}', 'f', [[2, 4]]))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: [2, 4, 9] } });
+    expect(call('int f(const vector<int>& values){values.push_back(9); return 0;}', 'f', [[2]]))
+      .toMatchObject({ kind: 'compile-error' });
+  });
+  it('sorts arrays through a named comparator and checks their bounds', () => {
+    const source = 'bool descending(int a,int b){return a>b;} int f(){int values[4]={2,9,1,5};sort(values,values+4,descending);return values[0]*10+values[3];}';
+    expect(call(source)).toMatchObject({ kind: 'ok', observation: { returnValue: 91 } });
+    expect(call('int f(){int values[2]={1,2};sort(values,values+3);return 0;}'))
+      .toMatchObject({ kind: 'runtime-error' });
+  });
   it('executes the 2024/25 senior S bitmask question', () => {
     const source = 'int g(int x) { int cnt = 0; for (int i = 1; i <= x; ++i) { if ((i&x) == (i)) { ++cnt; } } return cnt; }';
     for (const [x, expected] of [[1, 1], [2, 1], [3, 3], [5, 3], [26, 7], [255, 255], [1023, 1023]])

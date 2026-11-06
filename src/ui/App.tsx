@@ -688,10 +688,11 @@ function LogoDrawingAnswer({ question, answerBlank, value, onAnswer }: {
   </div>;
 }
 
-function SolverPanel({ question, language, pythonRuntime, values, allAnswers, onAnswer }: {
+function SolverPanel({ question, language, pythonRuntime, cppRuntime = 'custom', values, allAnswers, onAnswer }: {
   question: Question;
   language?: Language;
   pythonRuntime: 'custom' | 'pyodide';
+  cppRuntime?: 'custom' | 'wasm';
   values: Record<string, string>;
   allAnswers: PaperAnswers;
   onAnswer: (blankId: string, value: string) => void;
@@ -703,7 +704,7 @@ function SolverPanel({ question, language, pythonRuntime, values, allAnswers, on
   const [solving, setSolving] = useState(false);
   const jobRef = useRef<SolverJob | null>(null);
   const reference = question.grading.kind === 'weighted-route' ? question.grading.reference : undefined;
-  const inputKey = JSON.stringify([language, pythonRuntime, values, reference ? allAnswers[reference.questionId]?.[reference.blankId] : null]);
+  const inputKey = JSON.stringify([language, pythonRuntime, cppRuntime, values, reference ? allAnswers[reference.questionId]?.[reference.blankId] : null]);
   const previousInputKey = useRef(inputKey);
   useEffect(() => () => { jobRef.current?.cancel(); jobRef.current = null; }, []);
   useEffect(() => {
@@ -729,7 +730,7 @@ function SolverPanel({ question, language, pythonRuntime, values, allAnswers, on
         : searchMode === 'deep' ? { maxCandidates: 250_000, maxMs: 300_000, strategy: 'deep' as const }
           : { maxCandidates: 0, maxMs: 0, strategy: 'exhaustive' as const };
     const job = startSolver({ question, ...(joint ? { blankIds: question.blanks.map(blank => blank.id) } : { blankId }),
-      language: target?.language ?? language, pythonRuntime, knownAnswers: values, allAnswers,
+      language: target?.language ?? language, pythonRuntime, cppRuntime, knownAnswers: values, allAnswers,
       ...limits, maxResults: searchMode === 'exhaustive' ? 0 : 8 }, next => {
       if (jobRef.current === job) setProgress(next);
     });
@@ -789,6 +790,7 @@ export function QuestionCard({
   question,
   selectedLanguage,
   pythonRuntime,
+  cppRuntime = 'custom',
   sharedCode,
   contextShowsCode,
   onEditShared,
@@ -803,6 +805,7 @@ export function QuestionCard({
   question: Question;
   selectedLanguage?: Language;
   pythonRuntime: 'custom' | 'pyodide';
+  cppRuntime?: 'custom' | 'wasm';
   sharedCode: boolean;
   contextShowsCode: boolean;
   onEditShared?: () => void;
@@ -850,7 +853,7 @@ export function QuestionCard({
       {!sharedCode && (grading.kind !== 'program' || plainAnswer || (!!displaySource && !displayHasBlanks)) && grading.kind !== 'graph' && grading.kind !== 'robot-grid' && grading.kind !== 'drawing-robot' && grading.kind !== 'box-stack-robot' && grading.kind !== 'river-route' && grading.kind !== 'die-face' && grading.kind !== 'logo-drawing' && grading.kind !== 'cancelled' && !displayHasBlanks && <div className="answer-fields">{question.blanks.map((blank) => <AnswerInput key={blank.id} blank={blank} value={values[blank.id] || ''} onChange={(value) => onAnswer(blank.id, value)} showLabel={question.blanks.length > 1} questionTitle={question.printedRef} />)}</div>}
       {grading.kind === 'pending' && <p className="pending-note">Grader pending: {grading.reason}</p>}
       {grading.kind === 'cancelled' && <p className="cancelled-note">{grading.reason}</p>}
-      {grading.kind !== 'cancelled' && grading.kind !== 'pending' && <SolverPanel question={question} language={target?.language ?? selectedLanguage} pythonRuntime={pythonRuntime} values={values} allAnswers={allAnswers} onAnswer={onAnswer} />}
+      {grading.kind !== 'cancelled' && grading.kind !== 'pending' && <SolverPanel question={question} language={target?.language ?? selectedLanguage} pythonRuntime={pythonRuntime} cppRuntime={cppRuntime} values={values} allAnswers={allAnswers} onAnswer={onAnswer} />}
       {grading.kind !== 'cancelled' && <div className="question-actions"><button type="button" className="check-button" onClick={onCheck} disabled={busy || grading.kind === 'pending'}>{busy ? 'Checking…' : 'Check'}</button></div>}
       {result && <QuestionResult result={result} />}
     </article>
@@ -883,6 +886,7 @@ export default function App() {
   const [importError, setImportError] = useState<string | null>(null);
   const [gradeError, setGradeError] = useState<string | null>(null);
   const [usePyodide, setUsePyodide] = useState(false);
+  const [useWasmCpp, setUseWasmCpp] = useState(false);
   const importSequence = useRef(0);
   const visibleQuestions = paper ? displayedQuestions(paper, selectedTracks) : [];
   const answers = selectedKey ? answersByPaper[selectedKey] || {} : {};
@@ -959,7 +963,7 @@ export default function App() {
     setBusyQuestion(question.id);
     setGradeError(null);
     try {
-      const result = await gradeQuestion(question, answersByPaper[key]?.[question.id] || {}, selectedLanguage, answersByPaper[key] || {}, { pythonRuntime: usePyodide ? 'pyodide' : 'custom' });
+      const result = await gradeQuestion(question, answersByPaper[key]?.[question.id] || {}, selectedLanguage, answersByPaper[key] || {}, { pythonRuntime: usePyodide ? 'pyodide' : 'custom', cppRuntime: useWasmCpp ? 'wasm' : 'custom' });
       setResultsByPaper((all) => ({ ...all, [key]: { ...(all[key] || {}), [question.id]: result } }));
       setFullResults((all) => ({ ...all, [key]: null }));
     } catch (error) {
@@ -973,7 +977,7 @@ export default function App() {
     setBusyAll(true);
     setGradeError(null);
     try {
-      const result = await gradePaper(paper, answersByPaper[key] || {}, selectedTracks, { pythonRuntime: usePyodide ? 'pyodide' : 'custom' });
+      const result = await gradePaper(paper, answersByPaper[key] || {}, selectedTracks, { pythonRuntime: usePyodide ? 'pyodide' : 'custom', cppRuntime: useWasmCpp ? 'wasm' : 'custom' });
       setResultsByPaper((all) => ({ ...all, [key]: Object.fromEntries(result.questions.map((question) => [question.questionId, question])) }));
       setFullResults((all) => ({ ...all, [key]: result }));
     } catch (error) {
@@ -994,6 +998,13 @@ export default function App() {
             setFullResults((all) => ({ ...all, [selectedKey]: null }));
           }
         }} />Run Python with Pyodide</label>}
+        {selectedLanguage === 'cpp' && <label className="python-runtime-option" title="Clang supports more C++ syntax; the checked runtime has stricter bounds and step diagnostics."><input type="checkbox" checked={useWasmCpp} disabled={busyAll || !!busyQuestion} onChange={(event) => {
+          setUseWasmCpp(event.target.checked);
+          if (selectedKey) {
+            setResultsByPaper((all) => ({ ...all, [selectedKey]: {} }));
+            setFullResults((all) => ({ ...all, [selectedKey]: null }));
+          }
+        }} />Run C++ with Clang (WebAssembly)</label>}
         <Summary questions={visibleQuestions} results={results} fullResult={fullResult} busyAll={busyAll} />
         <div className="section-bar"><h2>Questions</h2><button type="button" className="check-all-button" disabled={busyAll || !!busyQuestion || visibleQuestions.length === 0} onClick={checkAll}>{busyAll ? 'Checking…' : 'Check all'}</button></div>
         <nav className="question-nav" aria-label="Jump to question">{sections.map((section) => <div className="question-nav-group" key={section.key}><strong>{section.label}</strong><div>{section.questions.map((question) => <a key={question.id} href={`#question-${question.id}`} className={results[question.id] ? `nav-${results[question.id].status}` : ''}>{jumpName(question)}</a>)}</div></div>)}</nav>
@@ -1014,7 +1025,7 @@ export default function App() {
                 selectedLanguage={selectedLanguage} activeQuestionId={activeContextQuestions[`${paper.paper.id}:${start.id}`]}
                 onSelectAnswerSet={(questionId) => setActiveContextQuestions((all) => ({ ...all, [`${paper.paper.id}:${start.id}`]: questionId }))}
                 onAnswer={changeAnswer} />}
-              <QuestionCard question={question} selectedLanguage={selectedLanguage} pythonRuntime={usePyodide ? 'pyodide' : 'custom'} sharedCode={sharedCode}
+              <QuestionCard question={question} selectedLanguage={selectedLanguage} pythonRuntime={usePyodide ? 'pyodide' : 'custom'} cppRuntime={useWasmCpp ? 'wasm' : 'custom'} sharedCode={sharedCode}
                 contextShowsCode={(!!context?.markdown && /```(?:c|cpp|c\+\+|python)(?:\s|$)/i.test(context.markdown)) || (!!shared && markers.size === 0)} paperSource={paper.paper.source}
                 values={answers[question.id] || {}} allAnswers={answers} result={results[question.id]} busy={busyAll || !!busyQuestion}
                 onEditShared={sharedCode && context ? () => {

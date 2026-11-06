@@ -10,6 +10,7 @@ export interface SolveRequest {
   language?: Language;
   /** Python execution mode for validating candidates. */
   pythonRuntime?: 'custom' | 'pyodide';
+  cppRuntime?: 'custom' | 'wasm';
   knownAnswers?: Record<string, string>;
   /** Answers elsewhere in the paper, for graders with cross-question references. */
   allAnswers?: PaperAnswers;

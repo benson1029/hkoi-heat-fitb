@@ -430,6 +430,20 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
       }
       if (name === 'lower' && typeof receiver === 'string' && !values.length) return { handled: true, value: receiver.toLowerCase() };
       if (name === 'upper' && typeof receiver === 'string' && !values.length) return { handled: true, value: receiver.toUpperCase() };
+      if ((name === 'removeprefix' || name === 'removesuffix') && typeof receiver === 'string' && values.length === 1 && typeof values[0] === 'string') {
+        const part = values[0];
+        return { handled: true, value: name === 'removeprefix'
+          ? receiver.startsWith(part) ? receiver.slice(part.length) : receiver
+          : receiver.endsWith(part) && part ? receiver.slice(0, -part.length) : receiver };
+      }
+      if ((name === 'partition' || name === 'rpartition') && typeof receiver === 'string' && values.length === 1 && typeof values[0] === 'string') {
+        const separator = values[0];
+        if (!separator) throw new Runtime('ValueError: empty separator');
+        const at = name === 'partition' ? receiver.indexOf(separator) : receiver.lastIndexOf(separator);
+        return { handled: true, value: new PythonTuple(at < 0
+          ? name === 'partition' ? [receiver, '', ''] : ['', '', receiver]
+          : [receiver.slice(0, at), separator, receiver.slice(at + separator.length)]) };
+      }
       if (name === 'strip' && typeof receiver === 'string' && values.length <= 1) {
         if (!values.length) return { handled: true, value: receiver.trim() };
         if (typeof values[0] !== 'string') return { handled: false };
@@ -580,10 +594,10 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     }
     if (name === 'sum' && values.length >= 1 && values.length <= 2) {
       const items = sequence(values[0]); const start = values.length === 2 ? values[1] : 0;
-      if (items && typeof start === 'number' && items.every((item) => typeof item === 'number')) {
+      if (items && typeof start === 'number' && items.every((item) => typeof item === 'number' || typeof item === 'boolean')) {
         let result = start;
         for (const item of items) {
-          result += item as number;
+          result += Number(item);
           if (!Number.isFinite(result) || (Number.isInteger(result) && !Number.isSafeInteger(result))) return { handled: false };
         }
         return { handled: true, value: result };
@@ -659,8 +673,8 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
       if (generator[1] === 'sum') {
         let total = 0;
         for (const value of produced) {
-          if (typeof value !== 'number') throw new Unsupported('Generator sum requires numbers');
-          total += value;
+          if (typeof value !== 'number' && typeof value !== 'boolean') throw new Unsupported('Generator sum requires numbers');
+          total += Number(value);
           if (!Number.isFinite(total) || (Number.isInteger(total) && !Number.isSafeInteger(total))) throw new Unsupported('Generator sum outside exact range');
         }
         return total;
