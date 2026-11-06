@@ -32,4 +32,10 @@ describe('source-aware candidate ordering', () => {
     const first = firstCandidates(question(source), 50);
     expect(first).toContain('/2');
   });
+
+  it('uses multi-digit constants already printed in the source', () => {
+    const source = 'int f(int x){return {{A}}+x/37;}';
+    const first = firstCandidates(question(source), 600);
+    expect(first).toContain('x%37');
+  });
 });

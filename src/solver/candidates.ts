@@ -111,7 +111,8 @@ function sourceAtoms(source: string, language: Language, prioritySource: string,
     })
     .sort((a, b) => rankNearby ? b.score - a.score || a.order - b.order : a.order - b.order)
     .slice(0, 18).map(item => item.name);
-  const constants = [...new Set((source.match(/(?<![\w.])-?\d+(?![\w.])/g) ?? []).filter(x => Number(x) >= -9 && Number(x) <= 9))].slice(0, 6);
+  const constants = [...new Set((source.match(/(?<![\w.])-?\d+(?![\w.])/g) ?? [])
+    .filter(value => Number.isSafeInteger(Number(value)) && Math.abs(Number(value)) <= 1_000_000_000))].slice(0, 6);
   const atoms = [...names];
   const indexed = names.filter(name => new RegExp(`\\b${name}\\s*\\[|\\b(?:vector|array)\\s*<[^>]+>\\s*&?\\s*${name}\\b|\\b${name}\\s*:\\s*list\\s*\\[`).test(source));
   const indexOrder = ['i', 'j', 'k', 'idx', 'index', 'n', 'x', 'y'];

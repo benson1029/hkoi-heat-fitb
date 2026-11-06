@@ -26,6 +26,7 @@ Judge submissions from a CSV file:
 ```sh
 npm run judge:csv -- papers/2024-25-senior.json submissions.csv scores.csv paper1 python
 npx tsx src/cli/judge-csv.ts --paper papers/2024-25-senior.json --input submissions.csv --output scores.csv --tracks paper1,python --python-runtime pyodide
+npx tsx src/cli/judge-csv.ts --paper papers/2024-25-senior.json --input submissions.csv --output scores.csv --tracks paper1,cpp --cpp-runtime wasm
 ```
 
 Use one input column per answer, named `<question-id>.<blank-id>`. For example:
@@ -38,6 +39,7 @@ id,paper1-a.A
 The optional track arguments select which parts to score (`paper1 python` or `paper1 cpp` for recent papers). A `tracks` column can override them per row, with comma-separated track IDs such as `"paper1,cpp"`. Without either, the command uses required tracks and the first language choice. The output CSV retains the input columns and adds each question's score and status, plus totals.
 
 The custom Python runner is used by default. Pass `--python-runtime pyodide` in the named-argument form to run every Python case with Pyodide. The browser has the same choice as a checkbox for Python papers.
+The checked C++ runner is used by default. Pass `--cpp-runtime wasm` in the named-argument form to compile and run C++ cases with the bundled WebAssembly Clang toolchain. This mode checks language compatibility but does not provide the checked runner's undefined-behavior or step-limit diagnostics. It needs no network connection after `npm ci`.
 
 Run the test suite with `npm test`.
 
