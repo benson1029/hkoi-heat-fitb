@@ -971,6 +971,7 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
   } catch (error) {
     if (error instanceof PythonSyntaxFailure) return { kind: 'compile-error', message: `${error.name}: ${error.message}`, steps: meter.steps * STEP_SCALE };
     if (error instanceof Runtime) return { kind: 'runtime-error', message: error.message, steps: meter.steps * STEP_SCALE };
+    if (error instanceof Exhausted) return { kind: 'step-limit', message: 'Python step limit exceeded', steps: meter.steps * STEP_SCALE };
     return undefined;
   }
 }

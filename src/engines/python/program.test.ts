@@ -51,6 +51,17 @@ describe('custom Python paper runner', () => {
     expect(tryRunFastPythonFunction('import math\ndef f(x):\n    return math.sin(x)', target, testCase)).toBeUndefined();
   });
 
+  it('reports loop exhaustion for expression statements and augmented assignments', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'bounded', args: [3], expected: {}, maxSteps: 200 };
+    for (const statement of ['i + 1', 'i += 0', 'i -= 0', 'i += i']) {
+      const source = `def f(n):\n    i = 0\n    while i < n:\n        ${statement}\n    return i`;
+      expect(tryRunFastPythonFunction(source, target, testCase)).toMatchObject({ kind: 'step-limit' });
+    }
+    expect(tryRunFastPythonFunction('def f(n):\n    i = 0\n    while i < n:\n        i += 1\n    return i', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 3 } });
+  });
+
   it('preserves alias mutation and Python signed arithmetic', () => {
     const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
     const testCase: ProgramCase = { id: 'alias', args: [[1, 2]], expected: {}, maxSteps: 1_000 };
