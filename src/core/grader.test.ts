@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 import source from '../../papers/2024-25-senior.json';
 import cancelledSource from '../../papers/2019-20-junior.json';
 import { gradeQuestion } from './grader';
-import type { Question } from './types';
+import type { ProgramGrading, Question } from './types';
 import { validatePaper } from './validate';
 
 const paper = validatePaper(source);
@@ -38,4 +38,30 @@ it('can exclude whitespace from a printed character limit', async () => {
     grading: { kind: 'literal', accepted: { A: ['z = i % j'] }, normalize: 'none' } };
   expect((await gradeQuestion(constrained, { A: 'z = i % j' })).status).toBe('pass');
   expect((await gradeQuestion(constrained, { A: 'z = i % jj' })).message).toContain('character limit');
+});
+
+it('accepts either program language and stops after an accepted target', async () => {
+  const grading: ProgramGrading = {
+    kind: 'program', targetPolicy: 'any',
+    targets: [
+      { language: 'python', source: 'print({{A}})', harness: { kind: 'program' } },
+      { language: 'cpp', source: '#include <iostream>\nint main() { std::cout << ({{A}} + 1) << "\\n"; }', harness: { kind: 'program' } }
+    ],
+    cases: [{ id: 'one', expected: { stdout: '7\n' }, maxSteps: 1000 }]
+  };
+  const base: Question = {
+    id: 'either-language', track: 'paper1', printedRef: 'A', title: '', prompt: { en: '' }, points: 1,
+    blanks: [{ id: 'A' }], grading
+  };
+  const pythonPass = await gradeQuestion(base, { A: '7' });
+  expect(pythonPass.status).toBe('pass');
+  expect(pythonPass.cases.map(item => item.id)).toEqual(['python:one']);
+
+  const cppPass: Question = { ...base, grading: { ...grading, targets: [
+    { language: 'python', source: 'print({{A}} + 1)', harness: { kind: 'program' } },
+    { language: 'cpp', source: '#include <iostream>\nint main() { std::cout << {{A}} << "\\n"; }', harness: { kind: 'program' } }
+  ] } };
+  const result = await gradeQuestion(cppPass, { A: '7' });
+  expect(result.status).toBe('pass');
+  expect(result.cases.map(item => item.id)).toEqual(['python:one', 'cpp:one']);
 });

@@ -535,7 +535,11 @@ export async function gradeQuestion(question: Question, answersForQuestion: Reco
   const matchingTargets = language && allTargets.length > 1 ? allTargets.filter(target => target.language === language) : [];
   const targets = matchingTargets.length ? matchingTargets : allTargets;
   const targetCases = [];
-  for (const target of targets) targetCases.push(await gradeTarget(question, answers, target, options));
+  for (const target of targets) {
+    const cases = await gradeTarget(question, answers, target, options);
+    targetCases.push(cases);
+    if (question.grading.targetPolicy === 'any' && cases.every(item => item.status === 'pass')) break;
+  }
   const targetStatus = targetCases.map(cases => cases.every(item => item.status === 'pass')
     ? 'pass' : cases.some(item => item.status === 'fail') ? 'fail' : 'inconclusive');
   const status = question.grading.targetPolicy === 'any'
