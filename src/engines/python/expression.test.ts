@@ -68,12 +68,13 @@ describe('bounded Python expression subset', () => {
     expect(evaluatePythonExpression('2 @ 3').kind).toBe('unsupported');
   });
 
-  it('runs only a safe, single-return function and leaves other sources to Pyodide', () => {
+  it('runs bounded functions and reports exhausted work', () => {
     const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
     const testCase: ProgramCase = { id: 'a', args: [[1, 2, 3]], expected: { returnValue: 3 }, maxSteps: 1000 };
     const result = tryRunFastPythonFunction('def f(a: list[int]) -> int:\n    return len(a)', target, testCase);
     expect(result).toMatchObject({ kind: 'ok', observation: { returnValue: 3, argsAfter: [[1, 2, 3]], stdout: '' } });
     expect(tryRunFastPythonFunction('def f(a):\n    a.sort()\n    return a', target, testCase)?.kind).toBe('ok');
-    expect(tryRunFastPythonFunction('def f(a):\n    return sum(a)', target, { ...testCase, maxSteps: 10 })).toBeUndefined();
+    expect(tryRunFastPythonFunction('def f(a):\n    return sum(a)', target, { ...testCase, maxSteps: 10 }))
+      .toMatchObject({ kind: 'step-limit' });
   });
 });
