@@ -1,6 +1,6 @@
 import type { EngineResult, JsonValue, ProgramCase, ProgramTarget } from '../../core/types';
 import { PROBE_PREFIX, type ProbeHandler, type ProbeValue } from '../../core/probe';
-import { comparePythonStrings, evaluatePythonExpression, PythonDict, PythonSet, PythonTuple, supportsPythonExpressionSyntax, type PythonExpressionOptions } from './expression';
+import { classifyPythonExpressionSyntax, comparePythonStrings, evaluatePythonExpression, PythonDict, PythonSet, PythonSyntaxFailure, PythonTuple, supportsPythonExpressionSyntax, type PythonExpressionOptions } from './expression';
 
 type Line = { indent: number; text: string };
 type Statement =
@@ -10,6 +10,7 @@ type Statement =
   | { kind: 'while'; test: string; body: Statement[] }
   | { kind: 'return'; value: string | null }
   | { kind: 'assign'; targets: string; op: string; value: string }
+  | { kind: 'chain-assign'; targets: string[]; value: string }
   | { kind: 'expr'; value: string }
   | { kind: 'break' | 'continue' | 'pass' };
 
@@ -48,27 +49,37 @@ function balance(text: string): number {
 }
 
 function logicalLines(source: string): Line[] {
-  if (source.includes('\t') || source.includes('"""') || source.includes("'''")) throw new Unsupported('Tabs or triple strings require full Python');
+  if (source.includes('"""') || source.includes("'''")) throw new Unsupported('Triple strings require full Python');
   const result: Line[] = [];
   let pending = ''; let indent = 0; let depth = 0;
+  const indentStyles = new Map<number, string>();
   for (const raw of source.replace(/\r\n/g, '\n').split('\n')) {
     const withoutComment = stripComment(raw).trimEnd();
     if (!withoutComment.trim()) continue;
-    const currentIndent = raw.length - raw.trimStart().length;
-    if (!pending) indent = currentIndent;
+    const prefix = /^[ \t]*/.exec(raw)![0];
+    let currentIndent = 0;
+    for (const char of prefix) currentIndent += char === '\t' ? 8 - currentIndent % 8 : 1;
+    if (!pending) {
+      if (prefix.includes(' ') && prefix.includes('\t')) throw new PythonSyntaxFailure('inconsistent use of tabs and spaces in indentation', 'TabError');
+      const style = prefix.includes('\t') ? 'tabs' : 'spaces';
+      if (currentIndent && indentStyles.has(currentIndent) && indentStyles.get(currentIndent) !== style)
+        throw new PythonSyntaxFailure('inconsistent use of tabs and spaces in indentation', 'TabError');
+      if (currentIndent) indentStyles.set(currentIndent, style);
+      indent = currentIndent;
+    }
     pending += (pending ? ' ' : '') + withoutComment.trim();
     depth += balance(withoutComment);
-    if (depth < 0) throw new Unsupported('Unbalanced delimiters');
+    if (depth < 0) throw new PythonSyntaxFailure('unmatched closing delimiter');
     if (depth === 0 && !pending.endsWith('\\')) {
-      const inline = /^(if .+): (return(?: .+)?|pass)$/.exec(pending);
-      if (inline) {
-        result.push({ indent, text: `${inline[1]}:` });
-        result.push({ indent: indent + 4, text: inline[2] });
-      } else result.push({ indent, text: pending });
+      const inline = splitTop(pending, ':');
+      if (inline.length === 2 && /^(?:def|if|elif|else|for|while)\b/.test(inline[0]) && inline[1]) {
+        result.push({ indent, text: `${inline[0]}:` });
+        for (const text of splitTop(inline[1], ';')) if (text) result.push({ indent: indent + 4, text });
+      } else for (const text of splitTop(pending, ';')) if (text) result.push({ indent, text });
       pending = '';
     } else if (pending.endsWith('\\')) pending = pending.slice(0, -1);
   }
-  if (pending || depth !== 0) throw new Unsupported('Incomplete Python statement');
+  if (pending || depth !== 0) throw new PythonSyntaxFailure('incomplete statement');
   return result;
 }
 
@@ -123,22 +134,27 @@ function findAssignment(text: string): { left: string; op: string; right: string
   return null;
 }
 
+function simpleAnnotatedName(text: string): string | null {
+  const match = /^([A-Za-z_]\w*)\s*:\s*((?:int|float|bool|str|list|tuple|dict|set)(?:\[(?:int|float|bool|str)(?:,\s*(?:int|float|bool|str))*\])?)$/.exec(text);
+  return match?.[1] ?? null;
+}
+
 class Parser {
   private index = 0;
   constructor(private readonly lines: Line[]) {}
   parse(): Statement[] {
     if (!this.lines.length) return [];
-    if (this.lines[0].indent !== 0) throw new Unsupported('Unexpected indentation');
-    const body = this.block(0);
-    if (this.index !== this.lines.length) throw new Unsupported('Unexpected indentation');
+    if (this.lines[0].indent !== 0) throw new PythonSyntaxFailure('unexpected indent', 'IndentationError');
+    const body = this.block(0, false, false);
+    if (this.index !== this.lines.length) throw new PythonSyntaxFailure('unexpected indent', 'IndentationError');
     return body;
   }
-  private nested(parent: number): Statement[] {
+  private nested(parent: number, inFunction: boolean, inLoop: boolean): Statement[] {
     const next = this.lines[this.index];
-    if (!next || next.indent <= parent) throw new Unsupported('Expected indented block');
-    return this.block(next.indent);
+    if (!next || next.indent <= parent) throw new PythonSyntaxFailure('expected an indented block', 'IndentationError');
+    return this.block(next.indent, inFunction, inLoop);
   }
-  private block(indent: number): Statement[] {
+  private block(indent: number, inFunction: boolean, inLoop: boolean): Statement[] {
     const result: Statement[] = [];
     while (this.index < this.lines.length && this.lines[this.index].indent === indent) {
       const text = this.lines[this.index++].text;
@@ -149,30 +165,51 @@ class Parser {
           if (!parsed) throw new Unsupported('Function parameter requires full Python');
           return parsed[1];
         }) : [];
-        result.push({ kind: 'def', name: def[1], params, body: this.nested(indent) });
+        result.push({ kind: 'def', name: def[1], params, body: this.nested(indent, true, false) });
         continue;
       }
       const ifMatch = /^if (.*):$/.exec(text);
       if (ifMatch) {
-        const branches: { test: string | null; body: Statement[] }[] = [{ test: ifMatch[1], body: this.nested(indent) }];
+        const branches: { test: string | null; body: Statement[] }[] = [{ test: ifMatch[1], body: this.nested(indent, inFunction, inLoop) }];
         while (this.lines[this.index]?.indent === indent) {
           const elif = /^elif (.*):$/.exec(this.lines[this.index].text);
-          if (elif) { this.index++; branches.push({ test: elif[1], body: this.nested(indent) }); continue; }
-          if (this.lines[this.index].text === 'else:') { this.index++; branches.push({ test: null, body: this.nested(indent) }); }
+          if (elif) { this.index++; branches.push({ test: elif[1], body: this.nested(indent, inFunction, inLoop) }); continue; }
+          if (this.lines[this.index].text === 'else:') { this.index++; branches.push({ test: null, body: this.nested(indent, inFunction, inLoop) }); }
           break;
         }
         result.push({ kind: 'if', branches });
         continue;
       }
       const forMatch = /^for (.+) in (.+):$/.exec(text);
-      if (forMatch) { result.push({ kind: 'for', target: forMatch[1], iterable: forMatch[2], body: this.nested(indent) }); continue; }
+      if (forMatch) { result.push({ kind: 'for', target: forMatch[1], iterable: forMatch[2], body: this.nested(indent, inFunction, true) }); continue; }
       const whileMatch = /^while (.+):$/.exec(text);
-      if (whileMatch) { result.push({ kind: 'while', test: whileMatch[1], body: this.nested(indent) }); continue; }
-      if (text === 'return' || text.startsWith('return ')) { result.push({ kind: 'return', value: text === 'return' ? null : text.slice(7) }); continue; }
-      if (text === 'break' || text === 'continue' || text === 'pass') { result.push({ kind: text }); continue; }
+      if (whileMatch) { result.push({ kind: 'while', test: whileMatch[1], body: this.nested(indent, inFunction, true) }); continue; }
+      if (text === 'return' || text.startsWith('return ')) {
+        if (!inFunction) throw new PythonSyntaxFailure("'return' outside function");
+        result.push({ kind: 'return', value: text === 'return' ? null : text.slice(7) }); continue;
+      }
+      if (text === 'break' || text === 'continue') {
+        if (!inLoop) throw new PythonSyntaxFailure(`'${text}' outside loop`);
+        result.push({ kind: text }); continue;
+      }
+      if (text === 'pass') { result.push({ kind: 'pass' }); continue; }
       const assignment = findAssignment(text);
-      if (assignment) { result.push({ kind: 'assign', targets: assignment.left, op: assignment.op, value: assignment.right }); continue; }
-      if (/^(?:import|from|class|try|except|with|async|global|nonlocal|del|raise)\b/.test(text) || text.endsWith(':')) throw new Unsupported('Statement requires full Python');
+      if (assignment) {
+        const annotated = simpleAnnotatedName(assignment.left);
+        if (assignment.op === '=') {
+          const targets = [annotated ?? assignment.left];
+          let value = assignment.right;
+          let next: ReturnType<typeof findAssignment>;
+          while ((next = findAssignment(value)) !== null && next.op === '=') { targets.push(next.left); value = next.right; }
+          if (targets.length > 1) { result.push({ kind: 'chain-assign', targets, value }); continue; }
+        }
+        result.push({ kind: 'assign', targets: annotated ?? assignment.left, op: assignment.op, value: assignment.right }); continue;
+      }
+      if (simpleAnnotatedName(text)) { result.push({ kind: 'pass' }); continue; }
+      if (/^[A-Za-z_]\w*\s*:\s*.+$/.test(text)) throw new Unsupported('Annotation requires full Python');
+      if (/^(?:import|from|class|try|except|with|async|global|nonlocal|del|raise|assert|yield|match|case)\b/.test(text)
+        || text.startsWith('@')) throw new Unsupported('Statement requires full Python');
+      if (/^(?:def|if|elif|else|for|while)\b/.test(text) || text.endsWith(':')) throw new PythonSyntaxFailure('invalid statement');
       result.push({ kind: 'expr', value: text });
     }
     return result;
@@ -210,6 +247,7 @@ export function supportsFastPythonSource(source: string, target: ProgramTarget):
       case 'while': return validExpression(statement.test) && valid(statement.body);
       case 'return': return statement.value === null || validExpression(statement.value);
       case 'assign': return validTarget(statement.targets) && validExpression(statement.value);
+      case 'chain-assign': return statement.targets.every(validTarget) && validExpression(statement.value);
       case 'expr': {
         const printed = /^print\((.*)\)$/.exec(statement.value);
         if (!printed) return validExpression(statement.value);
@@ -222,6 +260,59 @@ export function supportsFastPythonSource(source: string, target: ProgramTarget):
     }
   });
   return valid(statements);
+}
+
+function assertProgramSyntax(statements: Statement[]): void {
+  const expression = (text: string): void => {
+    const trimmed = text.trim();
+    if (!trimmed) throw new PythonSyntaxFailure('expected expression');
+    const list = /^\[([^\[\]]*)\]$/.exec(trimmed);
+    if (list && !hasTopLevelFor(list[1])) {
+      if (list[1].trim()) splitTop(list[1]).forEach(expression);
+      return;
+    }
+    const generator = /^(?:any|all|sum|min|max)\((.+) for ([A-Za-z_]\w*) in (.+?)(?: if (.+))?\)$/.exec(trimmed);
+    if (generator) { expression(generator[1]); expression(generator[3]); if (generator[4]) expression(generator[4]); return; }
+    const comprehension = /^\[(.+) for ([A-Za-z_]\w*) in (.+?)(?: if (.+))?\]$/.exec(trimmed);
+    if (comprehension) { expression(comprehension[1]); expression(comprehension[3]); if (comprehension[4]) expression(comprehension[4]); return; }
+    const parts = splitTop(trimmed);
+    if (parts.length > 1) { parts.forEach(expression); return; }
+    if (classifyPythonExpressionSyntax(trimmed) === 'invalid') throw new PythonSyntaxFailure('invalid expression');
+  };
+  const target = (text: string): void => {
+    for (const part of splitTop(text)) {
+      if (/^[A-Za-z_]\w*$/.test(part)) continue;
+      const indexed = /^(.+)\[(.+)\]$/.exec(part);
+      if (indexed) { expression(indexed[1]); expression(indexed[2]); continue; }
+      // Annotations, starred targets, and other valid assignment forms still
+      // need the full runtime; do not infer a syntax error from this subset.
+      if (part.includes(':') || part.startsWith('*')) continue;
+      throw new PythonSyntaxFailure('cannot assign to expression');
+    }
+  };
+  const visit = (body: Statement[]): void => {
+    for (const statement of body) {
+      switch (statement.kind) {
+        case 'def': visit(statement.body); break;
+        case 'if': statement.branches.forEach(branch => { if (branch.test !== null) expression(branch.test); visit(branch.body); }); break;
+        case 'for': target(statement.target); expression(statement.iterable); visit(statement.body); break;
+        case 'while': expression(statement.test); visit(statement.body); break;
+        case 'return': if (statement.value !== null) expression(statement.value); break;
+        case 'assign': target(statement.targets); expression(statement.value); break;
+        case 'chain-assign': statement.targets.forEach(target); expression(statement.value); break;
+        case 'expr': {
+          const printed = /^print\((.*)\)$/.exec(statement.value);
+          if (!printed) expression(statement.value);
+          else if (printed[1].trim()) splitTop(printed[1]).forEach(entry =>
+            expression(entry.startsWith('end=') || entry.startsWith('sep=') ? entry.slice(4)
+              : entry.startsWith('*') ? entry.slice(1) : entry));
+          break;
+        }
+        default: break;
+      }
+    }
+  };
+  visit(statements);
 }
 
 function truthy(value: unknown): boolean {
@@ -275,8 +366,11 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
   probe?: ProbeHandler): EngineResult | undefined {
   if (target.language !== 'python') return undefined;
   let body: Statement[];
-  try { body = new Parser(logicalLines(source)).parse(); }
-  catch { return undefined; }
+  try { body = new Parser(logicalLines(source)).parse(); assertProgramSyntax(body); }
+  catch (error) {
+    if (error instanceof PythonSyntaxFailure) return { kind: 'compile-error', message: `${error.name}: ${error.message}`, steps: 0 };
+    return undefined;
+  }
   const globals: Record<string, unknown> = Object.create(null);
   const functions = new Map<string, Extract<Statement, { kind: 'def' }>>();
   const args = pythonize(structuredClone(testCase.args ?? [])) as unknown[];
@@ -444,13 +538,26 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
           ? name === 'partition' ? [receiver, '', ''] : ['', '', receiver]
           : [receiver.slice(0, at), separator, receiver.slice(at + separator.length)]) };
       }
-      if (name === 'strip' && typeof receiver === 'string' && values.length <= 1) {
-        if (!values.length) return { handled: true, value: receiver.trim() };
+      if (['strip', 'lstrip', 'rstrip'].includes(name) && typeof receiver === 'string' && values.length <= 1) {
+        if (!values.length) return { handled: true, value: name === 'strip' ? receiver.trim() : name === 'lstrip' ? receiver.trimStart() : receiver.trimEnd() };
         if (typeof values[0] !== 'string') return { handled: false };
         const chars = new Set(values[0]); const letters = [...receiver];
-        while (letters.length && chars.has(letters[0])) letters.shift();
-        while (letters.length && chars.has(letters[letters.length - 1])) letters.pop();
+        if (name !== 'rstrip') while (letters.length && chars.has(letters[0])) letters.shift();
+        if (name !== 'lstrip') while (letters.length && chars.has(letters[letters.length - 1])) letters.pop();
         return { handled: true, value: letters.join('') };
+      }
+      if (['isdigit', 'isdecimal', 'isnumeric', 'isalpha', 'isalnum', 'isspace', 'islower', 'isupper'].includes(name)
+        && typeof receiver === 'string' && !values.length) {
+        if (/[^\x00-\x7f]/.test(receiver)) return { handled: false };
+        const pattern: Record<string, RegExp> = {
+          isdigit: /^[0-9]+$/, isdecimal: /^[0-9]+$/, isnumeric: /^[0-9]+$/,
+          isalpha: /^[A-Za-z]+$/, isalnum: /^[A-Za-z0-9]+$/, isspace: /^[\t\n\v\f\r ]+$/,
+          islower: /[a-z]/, isupper: /[A-Z]/,
+        };
+        const result = name === 'islower' ? pattern.islower.test(receiver) && !/[A-Z]/.test(receiver)
+          : name === 'isupper' ? pattern.isupper.test(receiver) && !/[a-z]/.test(receiver)
+            : pattern[name].test(receiver);
+        return { handled: true, value: result };
       }
       if (name === 'join' && typeof receiver === 'string' && values.length === 1) {
         const items = sequence(values[0]);
@@ -486,6 +593,30 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     if (name === 'len' && values.length === 1) {
       if (values[0] instanceof PythonSet) return { handled: true, value: values[0].entries.size };
       const items = sequence(values[0]); if (items) return { handled: true, value: items.length };
+    }
+    if (name === 'isinstance' && values.length === 2) {
+      const types = values[1] instanceof PythonTuple ? values[1].values : [values[1]];
+      const matches = (type: unknown): boolean | null | undefined => {
+        if (!type || typeof type !== 'object' || !('builtin' in type) || 'typeAlias' in type) return null;
+        switch (type.builtin) {
+          case 'bool': return typeof values[0] === 'boolean';
+          case 'int': return typeof values[0] === 'number' ? undefined : typeof values[0] === 'boolean';
+          case 'float': return typeof values[0] === 'number' ? undefined : false;
+          case 'str': return typeof values[0] === 'string';
+          case 'list': return Array.isArray(values[0]);
+          case 'tuple': return values[0] instanceof PythonTuple;
+          case 'dict': return values[0] instanceof PythonDict;
+          case 'set': return values[0] instanceof PythonSet;
+          default: return null;
+        }
+      };
+      for (const type of types) {
+        const result = matches(type);
+        if (result === null) throw new Runtime('TypeError: isinstance() arg 2 must be a type or tuple of types');
+        if (result === undefined) return { handled: false };
+        if (result) return { handled: true, value: true };
+      }
+      return { handled: true, value: false };
     }
     if (name === 'int' && values.length >= 1 && values.length <= 2 && typeof values[0] === 'string') {
       const text = values[0].trim();
@@ -710,6 +841,7 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     const result = evaluatePythonExpression(sourceText, scopeVars(locals), budget, options);
     if (result.kind === 'ok') return result.value;
     if (result.kind === 'step-limit') throw new Exhausted();
+    if (result.kind === 'compile-error') throw new PythonSyntaxFailure(result.message.replace(/^SyntaxError: /, ''));
     if (result.kind === 'runtime-error') throw new Runtime(result.message);
     throw new Unsupported(result.message);
   };
@@ -802,9 +934,17 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
             }
             const variables = { ...scopeVars(locals), __left: previous, __right: value };
             const opResult = evaluatePythonExpression(`__left ${statement.op.slice(0, -1)} __right`, variables, budget, { meter });
+            if (opResult.kind === 'runtime-error') throw new Runtime(opResult.message);
+            if (opResult.kind === 'compile-error') throw new PythonSyntaxFailure(opResult.message.replace(/^SyntaxError: /, ''));
+            if (opResult.kind === 'step-limit') throw new Exhausted();
             if (opResult.kind !== 'ok') throw new Unsupported('Augmented assignment requires full Python');
             assign(statement.targets, opResult.value, locals);
           }
+          break;
+        }
+        case 'chain-assign': {
+          const value = expression(statement.value, locals);
+          statement.targets.forEach(targetText => assign(targetText, value, locals));
           break;
         }
         case 'expr': if (!print(statement.value, locals)) expression(statement.value, locals); break;
@@ -829,6 +969,7 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     }
     return { kind: 'ok', observation, steps: meter.steps * STEP_SCALE };
   } catch (error) {
+    if (error instanceof PythonSyntaxFailure) return { kind: 'compile-error', message: `${error.name}: ${error.message}`, steps: meter.steps * STEP_SCALE };
     if (error instanceof Runtime) return { kind: 'runtime-error', message: error.message, steps: meter.steps * STEP_SCALE };
     return undefined;
   }

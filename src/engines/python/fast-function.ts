@@ -32,6 +32,7 @@ function normalizeTuple(value: unknown): unknown {
 /** Returns undefined whenever the full Python runtime should decide the case. */
 export function tryRunFastPythonFunction(source: string, target: ProgramTarget, testCase: ProgramCase): EngineResult | undefined {
   if (target.language !== 'python') return undefined;
+  if (source.includes('\t')) return tryRunPythonProgram(source, target, testCase);
   if (target.harness.kind !== 'call' || testCase.maxSteps < 100) return tryRunPythonProgram(source, target, testCase);
   const match = /^def ([A-Za-z_]\w*)\(([^()]*)\)(?:\s*->\s*[A-Za-z_][\w\[\], ]*)?\s*:\r?\n[ \t]+return ([^\r\n]+)\s*$/.exec(source);
   if (!match || match[1] !== target.harness.function) return tryRunPythonProgram(source, target, testCase);

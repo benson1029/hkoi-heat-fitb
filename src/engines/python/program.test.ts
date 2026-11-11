@@ -187,4 +187,46 @@ def f(a):
       kind: 'ok', observation: { returnValue: [5, 255, 35, 0, 0, false, ''] },
     });
   });
+
+  it('classifies malformed code and ordinary Python failures before fallback', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'calculate' } };
+    const testCase: ProgramCase = { id: 'errors', args: [[2, 4]], expected: {}, maxSteps: 1_000 };
+    const run = (body: string) => tryRunFastPythonFunction(`def calculate(items):\n    ${body}`, target, testCase);
+    expect(run('return items(0)+1')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+    expect(run('return items[0]+MISSING')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('NameError') });
+    expect(run('return 3+list')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+    expect(run('return int[0]+1')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+    expect(tryRunFastPythonFunction('def calculate(items):\n    step = 1\n    step += list\n    return step', target, testCase))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+    expect(tryRunFastPythonFunction('def calculate(items):\n    step = 1\n    step += int[0]\n    return step', target, testCase))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+    expect(run('return 1+')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('SyntaxError') });
+    expect(tryRunFastPythonFunction('def calculate(items):\n    if False:\n        return 1+\n    return 4', target, testCase))
+      .toMatchObject({ kind: 'compile-error', message: expect.stringContaining('SyntaxError') });
+    expect(tryRunFastPythonFunction('def calculate(items):\nreturn 4', target, testCase))
+      .toMatchObject({ kind: 'compile-error', message: expect.stringContaining('IndentationError') });
+    expect(tryRunFastPythonFunction('def calculate(items):\n \treturn 4', target, testCase))
+      .toMatchObject({ kind: 'compile-error', message: expect.stringContaining('TabError') });
+    expect(tryRunFastPythonFunction('def calculate(items):\n\treturn len(items)', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 2 } });
+  });
+
+  it('handles common compact statements and string helpers', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'calculate' } };
+    const testCase: ProgramCase = { id: 'compact', args: [[1, 2, 3]], expected: {}, maxSteps: 10_000 };
+    const source = `def calculate(values):
+    total: int = 0
+    first = last = values[0]
+    for value in values: total += value; first += 0
+    if "  A12  ".strip().isalnum(): total += 100
+    if "  A12  ".lstrip().rstrip().isalnum(): total += first + last
+    return total`;
+    expect(tryRunFastPythonFunction(source, target, testCase)).toMatchObject({
+      kind: 'ok', observation: { returnValue: 108, argsAfter: [[1, 2, 3]] },
+    });
+    expect(tryRunFastPythonFunction('def calculate(values):\n    return ["42".isdigit(), "Ab".isalpha(), "a3".isalnum(), " ".isspace()]', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: [true, true, true, true] } });
+    expect(tryRunFastPythonFunction('def calculate(values):\n    return [isinstance(values, list), isinstance("x", (str, list)), isinstance(True, int)]', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: [true, true, true] } });
+  });
 });

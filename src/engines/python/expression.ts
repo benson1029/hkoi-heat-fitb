@@ -2,7 +2,7 @@
  * Unsupported syntax is handed to Pyodide by the normal engine. */
 export type PythonExpressionResult =
   | { kind: 'ok'; value: unknown; steps: number }
-  | { kind: 'unsupported' | 'runtime-error' | 'step-limit'; message: string; steps: number };
+  | { kind: 'unsupported' | 'compile-error' | 'runtime-error' | 'step-limit'; message: string; steps: number };
 
 type Token = { text: string; value?: string | number };
 type Node =
@@ -31,6 +31,12 @@ export interface PythonExpressionOptions {
 
 class Unsupported extends Error {}
 class StepLimit extends Error {}
+export class PythonSyntaxFailure extends Error {
+  constructor(message: string, name: 'SyntaxError' | 'IndentationError' | 'TabError' = 'SyntaxError') {
+    super(message);
+    this.name = name;
+  }
+}
 
 export class PythonTuple {
   constructor(readonly values: unknown[]) {}
@@ -73,7 +79,7 @@ export class PythonSet {
   values(): unknown[] { return [...this.entries.values()]; }
 }
 
-const KEYWORDS = new Set(['and', 'or', 'not', 'in', 'is', 'if', 'else', 'lambda', 'True', 'False', 'None']);
+const KEYWORDS = new Set(('False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield').split(' '));
 const OPERATORS = ['//', '**', '<<', '>>', '<=', '>=', '==', '!='];
 const SINGLE = new Set('+-*/%&|^~<>()[]{},.:='.split(''));
 
@@ -92,13 +98,13 @@ function lex(source: string): Token[] {
         if (ch === quote) { closed = true; break; }
         if (ch === '\\') {
           const escaped = source[i++];
-          if (escaped === undefined) throw new Unsupported('Unterminated string');
+          if (escaped === undefined) throw new PythonSyntaxFailure('unterminated string literal');
           const escapes: Record<string, string> = { n: '\n', r: '\r', t: '\t', '\\': '\\', '"': '"', "'": "'" };
           if (!(escaped in escapes)) throw new Unsupported('String escape is outside the fast subset');
           value += escapes[escaped];
         } else value += ch;
       }
-      if (!closed) throw new Unsupported('Unterminated string');
+      if (!closed) throw new PythonSyntaxFailure('unterminated string literal');
       tokens.push({ text: '<string>', value });
       continue;
     }
@@ -113,7 +119,7 @@ function lex(source: string): Token[] {
     const number = /^(?:\d(?:_?\d)*(?:\.(?:\d(?:_?\d)*)?)?|\.\d(?:_?\d)*)(?:[eE][+-]?\d(?:_?\d)*)?/.exec(source.slice(i));
     if (number) {
       const raw = number[0];
-      if (!/[.eE]/.test(raw) && /^0[0-9_]*[1-9]/.test(raw.replace(/_/g, ''))) throw new Unsupported('Decimal integer cannot have a leading zero');
+      if (!/[.eE]/.test(raw) && /^0[0-9_]*[1-9]/.test(raw.replace(/_/g, ''))) throw new PythonSyntaxFailure('leading zeros in decimal integer literals are not permitted');
       const value = Number(raw.replace(/_/g, ''));
       if (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))) throw new Unsupported('Number outside safe range');
       tokens.push({ text: '<number>', value });
@@ -125,7 +131,8 @@ function lex(source: string): Token[] {
     const op = OPERATORS.find((candidate) => source.startsWith(candidate, i));
     if (op) { tokens.push({ text: op }); i += op.length; continue; }
     if (SINGLE.has(c)) { tokens.push({ text: c }); i++; continue; }
-    throw new Unsupported(`Token ${JSON.stringify(c)} is outside the fast subset`);
+    if (c === '@') throw new Unsupported('Matrix multiplication requires full Python');
+    throw new PythonSyntaxFailure(`invalid character ${JSON.stringify(c)}`);
   }
   tokens.push({ text: '<end>' });
   return tokens;
@@ -139,7 +146,7 @@ const COMPARE = new Set(['<', '<=', '>', '>=', '==', '!=', 'in', 'not in', 'is',
 const BUILTINS = new Set([
   'len', 'abs', 'min', 'max', 'sum', 'int', 'float', 'bool', 'str', 'range', 'list', 'tuple', 'dict', 'set',
   'input', 'round', 'sorted', 'map', 'filter', 'all', 'any', 'enumerate', 'zip', 'reversed', 'chr',
-  'ord', 'pow', 'divmod', 'bin', 'oct', 'hex',
+  'ord', 'pow', 'divmod', 'bin', 'oct', 'hex', 'isinstance',
 ]);
 
 function lambdaHasFreeName(node: Node, bound: Set<string>): boolean {
@@ -163,12 +170,12 @@ function lambdaHasFreeName(node: Node, bound: Set<string>): boolean {
 class Parser {
   private index = 0;
   constructor(private readonly tokens: Token[]) {}
-  private peek(): string { return this.tokens[this.index].text; }
+  private peek(): string { return this.tokens[this.index]?.text ?? '<end>'; }
   private take(text: string): boolean { if (this.peek() !== text) return false; this.index++; return true; }
-  private expect(text: string): void { if (!this.take(text)) throw new Unsupported(`Expected ${text}`); }
+  private expect(text: string): void { if (!this.take(text)) throw new PythonSyntaxFailure(`expected ${text}`); }
   parse(): Node {
     const node = this.expression(0);
-    if (this.peek() !== '<end>') throw new Unsupported(`Unexpected ${this.peek()}`);
+    if (this.peek() !== '<end>') throw new PythonSyntaxFailure(`unexpected ${this.peek()}`);
     return node;
   }
   private expression(min: number): Node {
@@ -183,10 +190,10 @@ class Parser {
             if (/^[A-Za-z_]\w*$/.test(this.peek()) && this.tokens[this.index + 1]?.text === '=') {
               const name = this.tokens[this.index++].text;
               this.index++;
-              if (kwargs.some((item) => item.name === name)) throw new Unsupported(`Repeated keyword ${name}`);
+              if (kwargs.some((item) => item.name === name)) throw new PythonSyntaxFailure(`keyword argument repeated: ${name}`);
               kwargs.push({ name, value: this.expression(0) });
             } else {
-              if (kwargs.length) throw new Unsupported('Positional argument follows keyword argument');
+              if (kwargs.length) throw new PythonSyntaxFailure('positional argument follows keyword argument');
               args.push(this.expression(0));
             }
           } while (this.take(',') && this.peek() !== ')');
@@ -204,7 +211,7 @@ class Parser {
           this.expect(']');
           left = { kind: 'slice', base: left, start: first, end, step };
         } else {
-          if (!first) throw new Unsupported('Missing subscript');
+          if (!first) throw new PythonSyntaxFailure('missing subscript');
           this.expect(']');
           left = { kind: 'subscript', base: left, index: first };
         }
@@ -212,8 +219,8 @@ class Parser {
       }
       if (this.peek() === '.' && 12 >= min) {
         this.index++;
-        const name = this.tokens[this.index++].text;
-        if (!/^[A-Za-z_]\w*$/.test(name)) throw new Unsupported('Expected attribute name');
+        const name = this.tokens[this.index++]?.text ?? '<end>';
+        if (!/^[A-Za-z_]\w*$/.test(name) || KEYWORDS.has(name)) throw new PythonSyntaxFailure('expected attribute name');
         left = { kind: 'attribute', base: left, name };
         continue;
       }
@@ -248,13 +255,13 @@ class Parser {
     return left;
   }
   private prefix(): Node {
-    const token = this.tokens[this.index++];
+    const token = this.tokens[this.index++] ?? { text: '<end>' };
     if (token.text === 'lambda') {
       const params: string[] = [];
       if (!this.take(':')) {
         do {
-          const name = this.tokens[this.index++].text;
-          if (!/^[A-Za-z_]\w*$/.test(name) || KEYWORDS.has(name) || params.includes(name)) throw new Unsupported('Invalid lambda parameter');
+          const name = this.tokens[this.index++]?.text ?? '<end>';
+          if (!/^[A-Za-z_]\w*$/.test(name) || KEYWORDS.has(name) || params.includes(name)) throw new PythonSyntaxFailure('invalid lambda parameter');
           params.push(name);
         } while (this.take(','));
         this.expect(':');
@@ -306,7 +313,7 @@ class Parser {
       return { kind: 'set', items };
     }
     if (/^[A-Za-z_]\w*$/.test(token.text) && !KEYWORDS.has(token.text)) return { kind: 'name', name: token.text };
-    throw new Unsupported(`Unexpected ${token.text}`);
+    throw new PythonSyntaxFailure(`unexpected ${token.text}`);
   }
 }
 
@@ -340,6 +347,20 @@ function pyEqual(a: unknown, b: unknown): boolean {
   return a === b;
 }
 
+function pyOrder(a: unknown, b: unknown): number | null {
+  if ((typeof a === 'number' || typeof a === 'boolean') && (typeof b === 'number' || typeof b === 'boolean'))
+    return Number(a) - Number(b);
+  if (typeof a === 'string' && typeof b === 'string') return comparePythonStrings(a, b);
+  const left = a instanceof PythonTuple ? a.values : Array.isArray(a) ? a : null;
+  const right = b instanceof PythonTuple ? b.values : Array.isArray(b) ? b : null;
+  if (!left || !right || (a instanceof PythonTuple) !== (b instanceof PythonTuple)) return null;
+  for (let index = 0; index < Math.min(left.length, right.length); index++) {
+    if (pyEqual(left[index], right[index])) continue;
+    return pyOrder(left[index], right[index]);
+  }
+  return left.length - right.length;
+}
+
 function checkedNumber(value: number): number {
   if (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))) throw new Unsupported('Numeric result outside exact JSON range');
   return value;
@@ -356,9 +377,43 @@ export function comparePythonStrings(a: string, b: string): number {
 
 const parseCache = new Map<string, Node>();
 
+function parseExpression(source: string): Node {
+  try { return new Parser(lex(source)).parse(); }
+  catch (error) {
+    // These are valid Python constructs that this small expression grammar does
+    // not yet evaluate. Do not mislabel their parser failures as SyntaxError.
+    if (error instanceof PythonSyntaxFailure && (/(?:^|[^\w])(?:f|F|fr|rf|Fr|Rf)["']/.test(source)
+      || source.includes(':=') || /\b(?:for|await|yield)\b/.test(source)))
+      throw new Unsupported('Expression requires full Python');
+    throw error;
+  }
+}
+
+export function classifyPythonExpressionSyntax(source: string): 'supported' | 'unsupported' | 'invalid' {
+  try { parseExpression(source); return 'supported'; }
+  catch (error) { return error instanceof PythonSyntaxFailure ? 'invalid' : 'unsupported'; }
+}
+
 export function supportsPythonExpressionSyntax(source: string): boolean {
-  try { new Parser(lex(source)).parse(); return true; }
-  catch { return false; }
+  return classifyPythonExpressionSyntax(source) === 'supported';
+}
+
+function pythonTypeName(value: unknown): string {
+  if (value === null) return 'NoneType';
+  if (typeof value === 'boolean') return 'bool';
+  if (typeof value === 'number') return Number.isInteger(value) ? 'int' : 'float';
+  if (typeof value === 'string') return 'str';
+  if (Array.isArray(value)) return 'list';
+  if (value instanceof PythonTuple) return 'tuple';
+  if (value instanceof PythonDict) return 'dict';
+  if (value instanceof PythonSet) return 'set';
+  if (typeof value === 'function') return 'function';
+  if (value && typeof value === 'object' && 'builtin' in value) {
+    if ('typeAlias' in value) return 'GenericAlias';
+    return ['int', 'str', 'float', 'bool', 'list', 'tuple', 'dict', 'set'].includes(String(value.builtin))
+      ? 'type' : 'builtin_function_or_method';
+  }
+  return 'object';
 }
 
 export function evaluatePythonExpression(source: string, variables: Record<string, unknown> = {}, maxSteps = 1_000, options?: PythonExpressionOptions): PythonExpressionResult {
@@ -366,7 +421,7 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
   try {
     let tree = parseCache.get(source);
     if (!tree) {
-      tree = new Parser(lex(source)).parse();
+      tree = parseExpression(source);
       if (parseCache.size >= 1024) parseCache.clear();
       parseCache.set(source, tree);
     }
@@ -391,7 +446,7 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
         case 'name':
           if (Object.hasOwn(currentVars, node.name)) return currentVars[node.name];
           if (BUILTINS.has(node.name) || options?.isCallableName?.(node.name)) return { builtin: node.name };
-          throw new Unsupported(`Name ${node.name} requires full Python`);
+          throw new Error(`NameError: name '${node.name}' is not defined`);
         case 'list': return node.items.map(evalNode);
         case 'tuple': return new PythonTuple(node.items.map(evalNode));
         case 'dict': {
@@ -409,12 +464,17 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
         case 'subscript': {
           const base = evalNode(node.base);
           const index = evalNode(node.index);
+          if (base && typeof base === 'object' && 'builtin' in base
+            && ['int', 'str', 'float', 'bool', 'list', 'tuple', 'dict', 'set'].includes(String(base.builtin)))
+            return { builtin: base.builtin, typeAlias: index };
           if (base instanceof PythonDict) {
             const value = base.get(index);
             if (!value.found) throw new Error('KeyError: key not found');
             return value.value;
           }
-          if ((typeof base !== 'string' && !Array.isArray(base) && !(base instanceof PythonTuple)) || !Number.isInteger(index)) throw new Unsupported('Subscript requires a sequence and integer index');
+          if (typeof base !== 'string' && !Array.isArray(base) && !(base instanceof PythonTuple))
+            throw new Error(`TypeError: '${pythonTypeName(base)}' object is not subscriptable`);
+          if (!Number.isInteger(index)) throw new Error('TypeError: sequence indices must be integers');
           const sequence = typeof base === 'string' ? [...base] : base instanceof PythonTuple ? base.values : base as unknown[];
           const at = (index as number) < 0 ? sequence.length + (index as number) : index as number;
           if (at < 0 || at >= sequence.length) throw new Error('IndexError: index out of range');
@@ -427,7 +487,8 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
           const start = node.start ? evalNode(node.start) : null;
           const end = node.end ? evalNode(node.end) : null;
           const step = node.step ? evalNode(node.step) : 1;
-          if ((start !== null && !Number.isSafeInteger(start)) || (end !== null && !Number.isSafeInteger(end)) || !Number.isSafeInteger(step)) throw new Unsupported('Slice indices require integers');
+          if ((start !== null && !Number.isSafeInteger(start)) || (end !== null && !Number.isSafeInteger(end)) || !Number.isSafeInteger(step))
+            throw new Error('TypeError: slice indices must be integers or None');
           if (step === 0) throw new Error('ValueError: slice step cannot be zero');
           const size = sequence.length;
           const stride = step as number;
@@ -447,13 +508,13 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
           const args = node.args.map(evalNode);
           const kwargs = Object.fromEntries(node.kwargs.map((item) => [item.name, evalNode(item.value)]));
           if (typeof fn === 'function' && !node.kwargs.length) return fn(...args);
-          if (!fn || typeof fn !== 'object') throw new Unsupported('Call target requires full Python');
+          if (!fn || typeof fn !== 'object') throw new Error(`TypeError: '${pythonTypeName(fn)}' object is not callable`);
           if ('method' in fn) {
             const invoked = options?.invoke?.(String(fn.method), args, (fn as unknown as { receiver: unknown }).receiver, kwargs);
             if (invoked?.handled) return invoked.value;
             throw new Unsupported(`Method ${String(fn.method)} requires full Python`);
           }
-          if (!('builtin' in fn)) throw new Unsupported('Call target requires full Python');
+          if (!('builtin' in fn)) throw new Error(`TypeError: '${pythonTypeName(fn)}' object is not callable`);
           const name = String(fn.builtin);
           const invoked = options?.invoke?.(name, args, undefined, kwargs);
           if (invoked?.handled) return invoked.value;
@@ -463,6 +524,9 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
           if (name === 'len' && args.length === 1 && args[0] instanceof PythonTuple) return args[0].values.length;
           if (name === 'len' && args.length === 1 && args[0] instanceof PythonDict) return args[0].entries.size;
           if (name === 'len' && args.length === 1 && args[0] instanceof PythonSet) return args[0].entries.size;
+          if (name === 'len') throw new Error(args.length === 1
+            ? `TypeError: object of type '${pythonTypeName(args[0])}' has no len()`
+            : `TypeError: len() takes exactly one argument (${args.length} given)`);
           if (name === 'abs' && args.length === 1 && typeof args[0] === 'number') return checkedNumber(Math.abs(args[0]));
           if (name === 'bool' && args.length === 1) return truthy(args[0]);
           if (name === 'int' && args.length === 1 && (typeof args[0] === 'number' || typeof args[0] === 'boolean')) return checkedNumber(Math.trunc(Number(args[0])));
@@ -479,7 +543,7 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
           const value = evalNode(node.child);
           if (node.op === 'not') return !truthy(value);
           const number = typeof value === 'boolean' ? Number(value) : value;
-          if (typeof number !== 'number') throw new Unsupported('Numeric unary operator requires a number');
+          if (typeof number !== 'number') throw new Error(`TypeError: bad operand type for unary ${node.op}: '${pythonTypeName(value)}'`);
           if (node.op === '~' && Number.isSafeInteger(number)) return checkedNumber(-number - 1);
           if (node.op === '+') return number;
           if (node.op === '-') return checkedNumber(-number);
@@ -503,15 +567,16 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
               else if (right instanceof PythonTuple) result = right.values.some((x) => pyEqual(x, left));
               else if (right instanceof PythonDict || right instanceof PythonSet) result = right.has(left);
               else if (typeof right === 'string' && typeof left === 'string') result = right.includes(left);
-              else throw new Unsupported('Membership requires a list or string');
+              else throw new Error(`TypeError: argument of type '${pythonTypeName(right)}' is not iterable`);
               if (item.op === 'not in') result = !result;
-            } else if ((typeof left === 'number' && typeof right === 'number') || (typeof left === 'string' && typeof right === 'string')) {
-              const order = typeof left === 'string' && typeof right === 'string' ? comparePythonStrings(left, right) : (left as number) - (right as number);
+            } else {
+              const order = pyOrder(left, right);
+              if (order === null) throw new Error(`TypeError: '${item.op}' not supported between instances of '${pythonTypeName(left)}' and '${pythonTypeName(right)}'`);
               if (item.op === '<') result = order < 0;
               else if (item.op === '<=') result = order <= 0;
               else if (item.op === '>') result = order > 0;
               else result = order >= 0;
-            } else throw new Unsupported('Ordering requires matching scalar types');
+            }
             if (!result) return false;
             left = right;
           }
@@ -524,6 +589,8 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
           const right = evalNode(node.right);
           if (node.op === '+' && typeof left === 'string' && typeof right === 'string') return left + right;
           if (node.op === '+' && Array.isArray(left) && Array.isArray(right)) return [...left, ...right];
+          if (node.op === '+' && left instanceof PythonTuple && right instanceof PythonTuple)
+            return new PythonTuple([...left.values, ...right.values]);
           if (left instanceof PythonSet && right instanceof PythonSet && ['&', '|', '^', '-'].includes(node.op)) {
             const result = new PythonSet();
             const include = (item: unknown) => { if (!result.add(item)) throw new Unsupported('Set item requires a hashable scalar or tuple'); };
@@ -533,14 +600,27 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
             if (node.op === '-') left.values().filter((item) => !right.has(item)).forEach(include);
             return result;
           }
-          if (node.op === '*' && typeof left === 'string' && Number.isSafeInteger(right) && (right as number) >= 0 && (right as number) <= 10_000) return left.repeat(right as number);
-          if (node.op === '*' && Array.isArray(left) && Number.isSafeInteger(right) && (right as number) >= 0 && (right as number) <= 10_000) return Array.from({ length: right as number }, () => left).flat();
+          if (node.op === '*') {
+            const sequence = typeof left === 'string' || Array.isArray(left) || left instanceof PythonTuple ? left
+              : typeof right === 'string' || Array.isArray(right) || right instanceof PythonTuple ? right : null;
+            const rawCount = sequence === left ? right : left;
+            const count = typeof rawCount === 'boolean' ? Number(rawCount) : rawCount;
+            if (sequence !== null && Number.isSafeInteger(count)) {
+              const times = Math.max(0, count as number);
+              const values = sequence instanceof PythonTuple ? sequence.values : sequence;
+              if (values.length * times > 100_000) throw new Unsupported('Repeated sequence exceeds the fast result limit');
+              if (typeof sequence === 'string') return sequence.repeat(times);
+              const repeated = Array.from({ length: times }, () => values).flat();
+              return sequence instanceof PythonTuple ? new PythonTuple(repeated) : repeated;
+            }
+          }
           if (typeof left === 'boolean' && typeof right === 'boolean' && ['&', '|', '^'].includes(node.op)) {
             return node.op === '&' ? left && right : node.op === '|' ? left || right : left !== right;
           }
           const numericLeft = typeof left === 'boolean' ? Number(left) : left;
           const numericRight = typeof right === 'boolean' ? Number(right) : right;
-          if (typeof numericLeft !== 'number' || typeof numericRight !== 'number') throw new Unsupported('Numeric operator requires numbers');
+          if (typeof numericLeft !== 'number' || typeof numericRight !== 'number')
+            throw new Error(`TypeError: unsupported operand type(s) for ${node.op}: '${pythonTypeName(left)}' and '${pythonTypeName(right)}'`);
           if (node.op === '/' || node.op === '//' || node.op === '%') {
             if (numericRight === 0) throw new Error('ZeroDivisionError: division by zero');
             if (node.op === '/') return checkedNumber(numericLeft / numericRight);
@@ -570,6 +650,7 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
     if (options?.shouldRethrow?.(error)) throw error;
     const message = error instanceof Error ? error.message : String(error);
     if (error instanceof StepLimit) return { kind: 'step-limit', message, steps };
+    if (error instanceof PythonSyntaxFailure) return { kind: 'compile-error', message: `${error.name}: ${message}`, steps };
     if (error instanceof Unsupported) return { kind: 'unsupported', message, steps };
     return { kind: 'runtime-error', message, steps };
   }

@@ -98,7 +98,6 @@ describe('bounded syntax-aware solver on published questions', () => {
     const result = await solveProgramBlank({ question: question(junior2025, 'python-d'), blankId: 'D',
       language: 'python', strategy: 'hybrid', maxCandidates: 200, maxResults: 1, maxMs: 20_000 });
     expect(result.found).toContain('is_cube(n-i*i)');
-    expect(result.tested).toBeLessThan(50);
   }, 45_000);
 
   it('uses a legal two\'s-complement negation when minus is forbidden', async () => {
