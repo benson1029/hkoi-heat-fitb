@@ -18,6 +18,14 @@ function program(source: string, stdin = '', maxSteps = 10000) {
 }
 
 describe('checked C/C++ subset', () => {
+  it('rejects invalid types and literals while supporting string comparison', () => {
+    expect(call('int f(int n){return n[0];}', 'f', [3])).toMatchObject({ kind: 'compile-error' });
+    expect(call('int f(){return len(3);}', 'f')).toMatchObject({ kind: 'compile-error' });
+    expect(call('int f(){return 1O;}', 'f')).toMatchObject({ kind: 'compile-error' });
+    expect(call('int f(){return pow(2,3)%6;}', 'f')).toMatchObject({ kind: 'compile-error' });
+    expect(call('int f(){string s="ab",t="ac";return s.compare(t)<0;}', 'f'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 1 } });
+  });
   it('returns copied vectors and preserves read-only vector parameters', () => {
     expect(call('vector<int> f(const vector<int>& values){vector<int> copy=values; copy.push_back(9); return copy;}', 'f', [[2, 4]]))
       .toMatchObject({ kind: 'ok', observation: { returnValue: [2, 4, 9] } });

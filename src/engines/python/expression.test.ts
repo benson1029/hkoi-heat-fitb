@@ -42,6 +42,9 @@ describe('bounded Python expression subset', () => {
     expect(value('None is None')).toBe(true);
     expect(value('True is not 1')).toBe(true);
     expect(evaluatePythonExpression('01').kind).toBe('compile-error');
+    expect(evaluatePythonExpression('0or True').kind).toBe('compile-error');
+    expect(evaluatePythonExpression('2abc').kind).toBe('compile-error');
+    expect(evaluatePythonExpression('1j').kind).toBe('unsupported');
     expect(evaluatePythonExpression('1 is 1').kind).toBe('unsupported');
     expect(value('len({True: 1, 1: 2})')).toBe(1);
     expect(value('True in {1, 2}')).toBe(true);

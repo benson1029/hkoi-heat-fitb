@@ -22,7 +22,7 @@ const MAX_ARRAY = 16384, MAX_STRING = 65536, MAX_OUTPUT = 65536, MAX_CALL_DEPTH 
 
 function int(value: bigint, type: ScalarType = 'int'): Value { return { kind: 'integer', value, type }; }
 function asInt(value: Value): { value: bigint; type: ScalarType } {
-  if (value.kind !== 'integer') throw new CppFault('unsupported', 'Expected an integer expression');
+  if (value.kind !== 'integer') throw new CppFault('compile-error', 'Expected an integer expression');
   return value;
 }
 function integralConversion(value: Value, type: ScalarType): bigint {
@@ -274,7 +274,8 @@ export class CheckedRuntime {
       if (i < 0n || i >= BigInt(base.slot.cells.length)) throw new CppFault('runtime-error', `Vector index out of bounds: ${i}`);
       return base.slot.cells[Number(i)];
     }
-    throw new CppFault('unsupported', 'Indexing requires a modeled array or vector');
+    throw new CppFault(base.kind === 'pointer' || base.kind === 'string' ? 'unsupported' : 'compile-error',
+      base.kind === 'pointer' || base.kind === 'string' ? 'This indexing form is not modeled' : 'This type has no indexing operator');
   }
   private fieldSlot(expr: Extract<Expr, { kind: 'field' }>): ScalarSlot | PointerSlot {
     const base = this.evaluate(expr.base);
@@ -514,7 +515,7 @@ export class CheckedRuntime {
       if (op === '-') return { kind: 'floating', value: a - b };
       if (op === '*') return { kind: 'floating', value: a * b };
       if (op === '/') return { kind: 'floating', value: a / b };
-      throw new CppFault('unsupported', `Floating-point operator ${op} is not modeled`);
+      throw new CppFault('compile-error', `Operator ${op} requires integer operands`);
     }
     const a = asInt(left), b = asInt(right);
     const type: ScalarType = a.type === 'size_t' || b.type === 'size_t' ? 'size_t'
@@ -558,6 +559,9 @@ export class CheckedRuntime {
     if (v.kind === 'integer') return v.type === 'char'
       ? String.fromCharCode(Number(BigInt.asUintN(8, v.value))) : v.value.toString();
     if (v.kind === 'string') return v.value;
+    if (v.kind === 'floating') return Number(v.value.toPrecision(6)).toString();
+    if (v.kind === 'array' || v.kind === 'vector' || v.kind === 'struct')
+      throw new CppFault('compile-error', 'No output operator for this type');
     throw new CppFault('unsupported', 'Cannot output this value');
   }
   private stream(op: string, left: Value, rightExpr: Expr): Value | undefined {
@@ -585,7 +589,7 @@ export class CheckedRuntime {
       this.write(slot, int(BigInt(token), slot.type));
       return left;
     }
-    throw new CppFault('unsupported', `Stream operator ${op} is not modeled`);
+    throw new CppFault('compile-error', `Operator ${op} is not defined for this stream`);
   }
   private builtin(name: string, args: Expr[]): Value | undefined {
     if (['max', 'std::max', 'min', 'std::min', 'clamp', 'std::clamp'].includes(name)) {
@@ -1054,16 +1058,23 @@ export class CheckedRuntime {
         return slot.kind === 'scalar' ? this.read(slot) : slot.kind === 'string'
           ? { kind: 'string', value: this.stringValue(slot) } : { kind: 'vector', slot };
       }
-      case 'member': throw new CppFault('unsupported', `Member ${expr.name} requires a call`);
+      case 'member': throw new CppFault('compile-error', `Member ${expr.name} cannot be used without a call`);
       case 'field': {
         const field = this.fieldSlot(expr);
         return field.kind === 'scalar' ? this.read(field) : this.readPointer(field);
       }
       case 'method-call': {
-        if (expr.args.length !== 0) throw new CppFault('compile-error', `${expr.name} takes no arguments`);
         const base = this.evaluate(expr.base);
+        if (base.kind === 'string' && expr.name === 'compare' && expr.args.length === 1) {
+          const other = this.evaluate(expr.args[0]);
+          if (other.kind !== 'string') throw new CppFault('compile-error', 'string.compare requires a string');
+          return int(BigInt(base.value < other.value ? -1 : base.value > other.value ? 1 : 0));
+        }
+        if (expr.args.length !== 0 && ['length', 'size'].includes(expr.name))
+          throw new CppFault('compile-error', `${expr.name} takes no arguments`);
         if (base.kind === 'string' && ['length', 'size'].includes(expr.name)) return int(BigInt(base.value.length), 'size_t');
         if (base.kind === 'vector' && expr.name === 'size') return int(BigInt(base.slot.cells.length), 'size_t');
+        if (base.kind === 'integer' || base.kind === 'floating') throw new CppFault('compile-error', `This type has no method ${expr.name}`);
         throw new CppFault('unsupported', `Method ${expr.name} on this expression is not modeled`);
       }
       case 'cast': {
@@ -1214,14 +1225,14 @@ export class CheckedRuntime {
           if (expr.op === '<=') return int(cmp <= 0 ? 1n : 0n, 'bool');
           if (expr.op === '>') return int(cmp > 0 ? 1n : 0n, 'bool');
           if (expr.op === '>=') return int(cmp >= 0 ? 1n : 0n, 'bool');
-          throw new CppFault('unsupported', `String operator ${expr.op} is not modeled`);
+          throw new CppFault('compile-error', `Operator ${expr.op} is not defined for strings`);
         }
         return this.arithmetic(expr.op, left, right);
       }
       case 'assign': {
         this.ensureWritable(expr.left);
-        if (expr.left.kind === 'name' && effects(expr.right).writes.has(expr.left.name))
-          throw new CppFault('unsupported', 'Assignment sequencing for a modified operand depends on the C++ dialect');
+        if (this.target.language === 'c' && expr.left.kind === 'name' && effects(expr.right).writes.has(expr.left.name))
+          throw new CppFault('runtime-error', 'Unsequenced assignment and modification');
         const object = this.addressable(expr.left);
         if (object.kind === 'pointer') {
           if (expr.op !== '=') throw new CppFault('compile-error', 'Only plain struct-pointer assignment is modeled');
@@ -1321,7 +1332,7 @@ export class CheckedRuntime {
   private call(name: string, values: Value[], references: (ScalarSlot | undefined)[] = []): Value {
     this.tick();
     const fn: FunctionDef | undefined = this.unit.functions.get(name);
-    if (!fn) throw new CppFault('unsupported', `Function ${name} is not modeled or declared`);
+    if (!fn) throw new CppFault('compile-error', `Function ${name} is not declared`);
     if (values.length !== fn.params.length) throw new CppFault('compile-error', `Function ${name} expects ${fn.params.length} arguments`);
     if (++this.callDepth > MAX_CALL_DEPTH) { this.callDepth--; throw new CppFault('step-limit', 'Call depth exceeded'); }
     const saved = this.scopes;

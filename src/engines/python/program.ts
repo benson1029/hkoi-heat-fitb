@@ -1,6 +1,6 @@
 import type { EngineResult, JsonValue, ProgramCase, ProgramTarget } from '../../core/types';
 import { PROBE_PREFIX, type ProbeHandler, type ProbeValue } from '../../core/probe';
-import { classifyPythonExpressionSyntax, comparePythonStrings, evaluatePythonExpression, PythonDict, PythonSet, PythonSyntaxFailure, PythonTuple, supportsPythonExpressionSyntax, type PythonExpressionOptions } from './expression';
+import { classifyPythonExpressionSyntax, comparePythonStrings, evaluatePythonExpression, pythonTypeName, PythonDict, PythonSet, PythonSyntaxFailure, PythonTuple, supportsPythonExpressionSyntax, type PythonExpressionOptions } from './expression';
 
 type Line = { indent: number; text: string };
 type Statement =
@@ -425,7 +425,12 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
       try { execute(user.body, frame); return { handled: true, value: null }; }
       catch (error) { if (error instanceof ReturnSignal) return { handled: true, value: error.value }; throw error; }
     }
-    if (keywords.length && !['sort', 'sorted', 'min', 'max'].includes(name)) return { handled: false };
+    if (keywords.length && name === 'int') {
+      if (keywords.length === 1 && keywords[0] === 'base' && values.length === 1) values = [...values, kwargs.base];
+      else throw new Runtime(`TypeError: '${keywords[0]}' is an invalid keyword argument for int()`);
+    } else if (keywords.length && !['sort', 'sorted', 'min', 'max'].includes(name)) {
+      return { handled: false };
+    }
     const keyFunction = (): ((item: unknown) => unknown) | null | undefined => {
       const key = kwargs.key;
       if (key === undefined || key === null) return null;
@@ -581,7 +586,8 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
       }
       return { handled: false };
     }
-    if (name === 'input' && !values.length) {
+    if (name === 'input' && values.length <= 1) {
+      if (values.length) stdout += pyString(values[0]);
       if (inputAt >= stdin.length || (inputAt === stdin.length - 1 && stdin[inputAt] === '')) throw new Runtime('EOFError: EOF when reading a line');
       return { handled: true, value: stdin[inputAt++].replace(/\r$/, '') };
     }
@@ -642,6 +648,16 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
       number *= sign;
       if (!Number.isSafeInteger(Number(number))) return { handled: false };
       return { handled: true, value: Number(number) };
+    }
+    if (name === 'int') {
+      if (values.length > 2) throw new Runtime(`TypeError: int() takes at most 2 arguments (${values.length} given)`);
+      if (values.length === 2) throw new Runtime("TypeError: int() can't convert non-string with explicit base");
+      if (values.length === 1 && (typeof values[0] === 'number' || typeof values[0] === 'boolean')) {
+        const converted = Math.trunc(Number(values[0]));
+        if (!Number.isSafeInteger(converted)) throw new Unsupported('Integer result exceeds exact range');
+        return { handled: true, value: converted };
+      }
+      if (values.length === 1) throw new Runtime(`TypeError: int() argument must be a string, a bytes-like object or a real number, not '${pythonTypeName(values[0])}'`);
     }
     if (name === 'range' && values.length >= 1 && values.length <= 3 && values.every(Number.isSafeInteger)) {
       const start = values.length === 1 ? 0 : values[0] as number;
@@ -804,7 +820,7 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
       if (generator[1] === 'sum') {
         let total = 0;
         for (const value of produced) {
-          if (typeof value !== 'number' && typeof value !== 'boolean') throw new Unsupported('Generator sum requires numbers');
+          if (typeof value !== 'number' && typeof value !== 'boolean') throw new Runtime(`TypeError: unsupported operand type(s) for +: 'int' and '${pythonTypeName(value)}'`);
           total += Number(value);
           if (!Number.isFinite(total) || (Number.isInteger(total) && !Number.isSafeInteger(total))) throw new Unsupported('Generator sum outside exact range');
         }

@@ -114,6 +114,7 @@ function lex(source: string): Token[] {
       if (!Number.isSafeInteger(value)) throw new Unsupported('Integer literal outside exact range');
       tokens.push({ text: '<number>', value });
       i += prefixed[0].length;
+      if (/[A-Za-z_]/.test(source[i] ?? '')) throw new PythonSyntaxFailure('invalid numeric literal');
       continue;
     }
     const number = /^(?:\d(?:_?\d)*(?:\.(?:\d(?:_?\d)*)?)?|\.\d(?:_?\d)*)(?:[eE][+-]?\d(?:_?\d)*)?/.exec(source.slice(i));
@@ -124,6 +125,10 @@ function lex(source: string): Token[] {
       if (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))) throw new Unsupported('Number outside safe range');
       tokens.push({ text: '<number>', value });
       i += number[0].length;
+      if (/[A-Za-z_]/.test(source[i] ?? '')) {
+        if (/^[jJ](?![A-Za-z_0-9])/.test(source.slice(i))) throw new Unsupported('Complex literals require full Python');
+        throw new PythonSyntaxFailure('invalid numeric literal');
+      }
       continue;
     }
     const name = /^[A-Za-z_]\w*/.exec(source.slice(i));
@@ -398,7 +403,7 @@ export function supportsPythonExpressionSyntax(source: string): boolean {
   return classifyPythonExpressionSyntax(source) === 'supported';
 }
 
-function pythonTypeName(value: unknown): string {
+export function pythonTypeName(value: unknown): string {
   if (value === null) return 'NoneType';
   if (typeof value === 'boolean') return 'bool';
   if (typeof value === 'number') return Number.isInteger(value) ? 'int' : 'float';

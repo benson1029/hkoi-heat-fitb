@@ -40,8 +40,8 @@ it('runs fixed helper functions only in the owning target and question', async (
   const paper = validatePaper(fixture());
   const [withHelper, withoutHelper, targetIsolation] = paper.questions;
   expect(await gradeQuestion(withHelper, { A: '21' })).toMatchObject({ status: 'pass', score: 1 });
-  expect(await gradeQuestion(withoutHelper, { A: '21' })).toMatchObject({ status: 'inconclusive', score: null });
-  expect(await gradeQuestion(targetIsolation, { A: '21' })).toMatchObject({ status: 'inconclusive', score: null });
+  expect(await gradeQuestion(withoutHelper, { A: '21' })).toMatchObject({ status: 'fail', score: 0 });
+  expect(await gradeQuestion(targetIsolation, { A: '21' })).toMatchObject({ status: 'fail', score: 0 });
 });
 
 it('prepends a question-local Python helper to its Python target', async () => {

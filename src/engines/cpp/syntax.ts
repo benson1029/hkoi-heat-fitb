@@ -93,7 +93,8 @@ export function lex(source: string, language: 'cpp' | 'c' = 'cpp'): Token[] {
       const op = operators.find(o => source.startsWith(o, i));
       if (op) i += op.length;
       else if (punct.includes(c)) i++;
-      else throw new CppFault('unsupported', `Unsupported token ${JSON.stringify(c)} at ${i}`);
+      else throw new CppFault(/[\p{L}\p{N}_]/u.test(c) ? 'unsupported' : 'compile-error',
+        `${/[\p{L}\p{N}_]/u.test(c) ? 'Unmodeled identifier character' : 'Invalid token'} ${JSON.stringify(c)} at ${i}`);
     }
     const text = source.slice(start, i);
     result.push({ text: language === 'cpp' ? cppAlternativeOperators[text] ?? text : text, at: start });
@@ -338,8 +339,9 @@ export class Parser {
         if ((this.peek() === '.' || this.peek() === '->') && 13 >= min) {
           const viaPointer = this.take() === '->';
           const member = this.identifier();
-          if (!viaPointer && ['length', 'size', 'begin', 'end', 'empty', 'front', 'back', 'top', 'push', 'pop', 'push_back', 'pop_back', 'push_front', 'pop_front', 'clear', 'fill', 'at', 'substr', 'find', 'rfind', 'resize', 'assign', 'append'].includes(member))
-            left = left.kind === 'name' ? { kind: 'name', name: `${left.name}.${member}` } : { kind: 'member', base: left, name: member };
+          if (!viaPointer && ['length', 'size', 'begin', 'end', 'empty', 'front', 'back', 'top', 'push', 'pop', 'push_back', 'pop_back', 'push_front', 'pop_front', 'clear', 'fill', 'at', 'substr', 'find', 'rfind', 'compare', 'resize', 'assign', 'append'].includes(member))
+            left = left.kind === 'name' && member !== 'compare'
+              ? { kind: 'name', name: `${left.name}.${member}` } : { kind: 'member', base: left, name: member };
           else left = { kind: 'field', base: left, name: member, viaPointer };
           continue;
         }
@@ -367,8 +369,13 @@ export class Parser {
     if (t === 'true' || t === 'false') return { kind: 'number', value: t === 'true' ? 1n : 0n, long: false };
     if (/^\d/.test(t)) {
       if (/^\d+\.\d+$/.test(t)) return { kind: 'float', value: Number(t) };
+      if (/^\d+(?:\.\d+)?[eE][+-]?\d+[fFlL]?$/.test(t) || /^\d+(?:\.\d+)?[fF]$/.test(t))
+        return { kind: 'float', value: Number(t.replace(/[fFlL]$/, '')) };
+      const binary = /^(0[bB][01]+)([uUlL]*)$/.exec(t);
+      if (binary) return { kind: 'number', value: BigInt(binary[1]), long: /l/i.test(binary[2]) };
       const match = /^(0[xX][0-9a-fA-F]+|\d+)([uUlL]*)$/.exec(t);
-      if (!match) throw new CppFault('unsupported', `Numeric literal ${t} is not modeled`);
+      if (!match) throw new CppFault(t.includes('_') || t.includes("'") ? 'unsupported' : 'compile-error',
+        `${t.includes('_') || t.includes("'") ? 'Numeric literal' : 'Invalid numeric literal'} ${t}${t.includes('_') || t.includes("'") ? ' is not modeled' : ''}`);
       if (/u/i.test(match[2])) throw new CppFault('unsupported', 'Unsigned integers are not modeled');
       const digits = match[1];
       if (/^0[0-9]+$/.test(digits) && /[89]/.test(digits)) throw new CppFault('compile-error', `Invalid octal literal ${digits}`);

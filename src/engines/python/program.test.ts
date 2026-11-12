@@ -197,6 +197,20 @@ def f(a):
     expect(tryRunFastPythonFunction('def f():\n    return [int("101", 2), int("0x_FF", 0), int("z", 36), int(), float(), bool(), str()]', target, testCase)).toMatchObject({
       kind: 'ok', observation: { returnValue: [5, 255, 35, 0, 0, false, ''] },
     });
+    expect(tryRunFastPythonFunction('def f():\n    return int("101", base=2)', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 5 } });
+    for (const expression of ['int(1, 2)', 'int([])', 'int(x=1)'])
+      expect(tryRunFastPythonFunction(`def f():\n    return ${expression}`, target, testCase))
+        .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+    expect(tryRunFastPythonFunction('def f():\n    return sum("x" for _ in [0])', target, testCase))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+  });
+
+  it('prints an input prompt before reading a line', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'program' } };
+    const testCase: ProgramCase = { id: 'prompt', stdin: 'Ada\n', expected: {}, maxSteps: 1_000 };
+    expect(tryRunFastPythonFunction('name = input("Name: ")\nprint(name)', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { stdout: 'Name: Ada\n' } });
   });
 
   it('classifies malformed code and ordinary Python failures before fallback', () => {
