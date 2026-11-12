@@ -475,6 +475,7 @@ export interface Observation {
 
 export type EngineResult =
   | { kind: 'ok'; observation: Observation; steps: number }
+  | { kind: 'non-json-return'; message: string; steps: number }
   | { kind: 'compile-error' | 'runtime-error' | 'step-limit' | 'unsupported' | 'wall-timeout' | 'internal-error'; message: string; steps?: number };
 
 export interface ProgramEngine {

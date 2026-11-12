@@ -12,7 +12,7 @@ describe('Python engine', () => {
     const customOnly = createPythonEngine();
     const result = await customOnly.run('import math\ndef double(n):\n    return math.floor(n * 2)', target, testCase);
     expect(result.kind).toBe('unsupported');
-    if (result.kind === 'unsupported') expect(result.message).toContain('Select Pyodide');
+    if (result.kind === 'unsupported') expect(result.message).toContain('Statement requires full Python');
   });
 
   it('runs a function with a fresh namespace and captures the return value', async () => {

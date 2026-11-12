@@ -65,3 +65,33 @@ it('accepts either program language and stops after an accepted target', async (
   expect(result.status).toBe('pass');
   expect(result.cases.map(item => item.id)).toEqual(['python:one', 'cpp:one']);
 });
+
+it('rejects a non-JSON Python return when a JSON value is required', async () => {
+  const candidate: Question = {
+    id: 'function-value', track: 'python', printedRef: 'A', title: '', prompt: { en: '' }, points: 1,
+    blanks: [{ id: 'A' }],
+    grading: {
+      kind: 'program', targetPolicy: 'all',
+      targets: [{ language: 'python', source: 'def f():\n    return {{A}}', harness: { kind: 'call', function: 'f' } }],
+      cases: [{ id: 'one', expected: { returnValue: 1 }, maxSteps: 1000 }],
+    },
+  };
+  const grade = await gradeQuestion(candidate, { A: 'tuple' }, undefined, undefined, { pythonRuntime: 'custom' });
+  expect(grade.status).toBe('fail');
+  expect(grade.cases[0].message).toContain('non-json-return');
+});
+
+it('rejects a non-JSON Python mutation when argument state is asserted', async () => {
+  const candidate: Question = {
+    id: 'non-json-mutation', track: 'python', printedRef: 'A', title: '', prompt: { en: '' }, points: 1,
+    blanks: [{ id: 'A' }],
+    grading: {
+      kind: 'program', targetPolicy: 'all',
+      targets: [{ language: 'python', source: 'def f(a):\n    a[0] = {{A}}\n    return 0', harness: { kind: 'call', function: 'f' } }],
+      cases: [{ id: 'one', args: [[0]], expected: { returnValue: 0, argsAfter: [[1]] }, maxSteps: 1000 }],
+    },
+  };
+  const grade = await gradeQuestion(candidate, { A: 'a' }, undefined, undefined, { pythonRuntime: 'custom' });
+  expect(grade.status).toBe('fail');
+  expect(grade.cases[0].message).toContain('Expected');
+});

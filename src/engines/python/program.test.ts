@@ -17,6 +17,60 @@ function run(paper: { questions: unknown[] }, id: string, answers: Record<string
 }
 
 describe('custom Python paper runner', () => {
+  it('handles builtin type objects and rejects calls on non-iterables', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'types', args: [], expected: {}, maxSteps: 2_000 };
+    expect(tryRunFastPythonFunction('def f():\n    return str(float)', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: "<class 'float'>" } });
+    expect(tryRunFastPythonFunction('def f():\n    return tuple(dict)', target, testCase))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('not iterable') });
+    expect(tryRunFastPythonFunction('def f():\n    return range()', target, testCase))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+    expect(tryRunFastPythonFunction("def f():\n    return int('10', '2')", target, testCase))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+  });
+
+  it('distinguishes absent methods from supported builtin methods', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'methods', args: [[1, 2]], expected: {}, maxSteps: 2_000 };
+    expect(tryRunFastPythonFunction('def f(items):\n    return items.size()', target, testCase))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('AttributeError') });
+    expect(tryRunFastPythonFunction('def f(a):\n    return a.append(3)', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { argsAfter: [[1, 2, 3]] } });
+  });
+
+  it('accepts iterable list extension and rejects scalar extension', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'extend', args: [[1]], expected: {}, maxSteps: 2_000 };
+    expect(tryRunFastPythonFunction('def f(a):\n    a += (2, 3)\n    return a', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: [1, 2, 3] } });
+    expect(tryRunFastPythonFunction('def f(a):\n    a += 1\n    return a', target, testCase))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('not iterable') });
+  });
+
+  it('reports non-JSON mutations without recursively traversing cycles', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'mutation', args: [[0]], expected: {}, maxSteps: 2_000 };
+    expect(tryRunFastPythonFunction('def f(a):\n    a[0] = a\n    return 0', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 0 } });
+    expect(tryRunFastPythonFunction('def f(a):\n    a[0] = dict\n    return 0', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 0 } });
+  });
+
+  it('requires parentheses around tuple comprehension elements', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'comprehension', args: [], expected: {}, maxSteps: 2_000 };
+    expect(tryRunFastPythonFunction('def f():\n    return [i, 0 for i in range(3)]', target, testCase))
+      .toMatchObject({ kind: 'compile-error', message: expect.stringContaining('SyntaxError') });
+    expect(tryRunFastPythonFunction('def f():\n    return [(i, 0) for i in range(3)]', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: [[0, 0], [1, 0], [2, 0]] } });
+  });
+  it('does not mistake quote markers inside ordinary strings for triple strings', () => {
+    const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
+    const testCase: ProgramCase = { id: 'quote', args: [], expected: {}, maxSteps: 1_000 };
+    expect(tryRunFastPythonFunction("def f():\n    return \"'''\"", target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: "'''" } });
+  });
   it('supports boolean sums and string partition helpers', () => {
     const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
     const testCase: ProgramCase = { id: 'strings', args: ['xy:zz:qq'], expected: {}, maxSteps: 2_000 };
@@ -48,7 +102,8 @@ describe('custom Python paper runner', () => {
   it('leaves unsupported Python to Pyodide', () => {
     const target: ProgramTarget = { language: 'python', source: '', harness: { kind: 'call', function: 'f' } };
     const testCase: ProgramCase = { id: 'x', args: [1], expected: {}, maxSteps: 1_000 };
-    expect(tryRunFastPythonFunction('import math\ndef f(x):\n    return math.sin(x)', target, testCase)).toBeUndefined();
+    expect(tryRunFastPythonFunction('import math\ndef f(x):\n    return math.sin(x)', target, testCase))
+      .toMatchObject({ kind: 'unsupported' });
   });
 
   it('reports loop exhaustion for expression statements and augmented assignments', () => {
@@ -75,7 +130,8 @@ describe('custom Python paper runner', () => {
     const testCase: ProgramCase = { id: 'unicode', expected: {}, maxSteps: 1_000 };
     const result = tryRunFastPythonFunction('s = "🐱"\nprint(len(s), end=" ")\nprint(s)', target, testCase);
     expect(result).toMatchObject({ kind: 'ok', observation: { stdout: '1 🐱\n' } });
-    expect(tryRunFastPythonFunction('print([1, 2])', target, testCase)).toBeUndefined();
+    expect(tryRunFastPythonFunction('print([1, 2])', target, testCase))
+      .toMatchObject({ kind: 'unsupported' });
   });
 
   it('supports common iterator helpers, tuple unpacking, and list methods', () => {
@@ -136,7 +192,8 @@ def f(a):
     expect(tryRunFastPythonFunction('def f():\n    return divmod(-7, 3)', target, testCase)).toMatchObject({
       kind: 'ok', observation: { returnValue: [-3, 2] },
     });
-    expect(tryRunFastPythonFunction('def f():\n    return sum([9007199254740991, 2, -2])', target, testCase)).toBeUndefined();
+    expect(tryRunFastPythonFunction('def f():\n    return sum([9007199254740991, 2, -2])', target, testCase))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 9007199254740991 } });
   });
 
   it('supports lambda keys, map, and filter on bounded sequences', () => {
@@ -153,7 +210,8 @@ def f(a):
     expect(tryRunFastPythonFunction('def f(a):\n    return [max(a, key=lambda x: -x), sorted(a, key=abs)]', target, testCase)).toMatchObject({
       kind: 'ok', observation: { returnValue: [1, [1, 2, 3]] },
     });
-    expect(tryRunFastPythonFunction('def f(a):\n    x = 1\n    g = lambda: x\n    x = 2\n    return g()', target, testCase)).toBeUndefined();
+    expect(tryRunFastPythonFunction('def f(a):\n    x = 1\n    g = lambda: x\n    x = 2\n    return g()', target, testCase))
+      .toMatchObject({ kind: 'unsupported' });
   });
 
   it('supports hashable dict and set literals without object key coercion', () => {
@@ -167,7 +225,8 @@ def f(a):
     expect(tryRunFastPythonFunction(source, target, testCase)).toMatchObject({
       kind: 'ok', observation: { returnValue: [{ x: 3, '1': 3 }, 2, true, [1, 2], 7], argsAfter: [{ a: 7 }] },
     });
-    expect(tryRunFastPythonFunction('def f(arg):\n    return {1, 2}', target, testCase)).toBeUndefined();
+    expect(tryRunFastPythonFunction('def f(arg):\n    return {1, 2}', target, testCase))
+      .toMatchObject({ kind: 'non-json-return' });
   });
 
   it('handles sequence search and mutation with Python indexing', () => {

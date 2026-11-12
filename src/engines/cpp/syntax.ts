@@ -17,6 +17,7 @@ export type Expr =
   | { kind: 'name'; name: string }
   | { kind: 'index'; base: Expr; index: Expr }
   | { kind: 'call'; name: string; args: Expr[] }
+  | { kind: 'indirect-call'; base: Expr; args: Expr[] }
   | { kind: 'method-call'; base: Expr; name: string; args: Expr[] }
   | { kind: 'member'; base: Expr; name: string }
   | { kind: 'field'; base: Expr; name: string; viaPointer: boolean }
@@ -46,6 +47,11 @@ const cppAlternativeOperators: Record<string, string> = {
   and_eq: '&=', or_eq: '|=', xor_eq: '^='
 };
 const punct = '{}[]();,?:+-*/%<>=!~&|^.';
+const identifierStart = /^[_\p{ID_Start}]$/u;
+const identifierContinue = /^[_\p{ID_Continue}]$/u;
+const identifierName = /^[_\p{ID_Start}][_\p{ID_Continue}]*$/u;
+const statementKeywords = new Set(['return', 'if', 'else', 'while', 'for', 'do', 'break', 'continue',
+  'case', 'default', 'switch', 'goto', 'throw', 'try', 'catch', 'true', 'false']);
 const MAX_SOURCE = 128 * 1024;
 const MAX_TOKENS = 30000;
 const MAX_PARSE_DEPTH = 256;
@@ -75,7 +81,15 @@ export function lex(source: string, language: 'cpp' | 'c' = 'cpp'): Token[] {
     }
     const start = i;
     const c = source[i];
-    if (/[A-Za-z_]/.test(c)) { i++; while (i < source.length && /[A-Za-z_0-9]/.test(source[i])) i++; }
+    const firstCodePoint = String.fromCodePoint(source.codePointAt(i)!);
+    if (identifierStart.test(firstCodePoint)) {
+      i += firstCodePoint.length;
+      while (i < source.length) {
+        const next = String.fromCodePoint(source.codePointAt(i)!);
+        if (!identifierContinue.test(next)) break;
+        i += next.length;
+      }
+    }
     else if (/[0-9]/.test(c)) {
       i++; while (i < source.length && /[A-Za-z_0-9]/.test(source[i])) i++;
       if (source[i] === '.' && /[0-9]/.test(source[i + 1] ?? '')) {
@@ -93,8 +107,7 @@ export function lex(source: string, language: 'cpp' | 'c' = 'cpp'): Token[] {
       const op = operators.find(o => source.startsWith(o, i));
       if (op) i += op.length;
       else if (punct.includes(c)) i++;
-      else throw new CppFault(/[\p{L}\p{N}_]/u.test(c) ? 'unsupported' : 'compile-error',
-        `${/[\p{L}\p{N}_]/u.test(c) ? 'Unmodeled identifier character' : 'Invalid token'} ${JSON.stringify(c)} at ${i}`);
+      else throw new CppFault('compile-error', `Invalid token ${JSON.stringify(firstCodePoint)} at ${i}`);
     }
     const text = source.slice(start, i);
     result.push({ text: language === 'cpp' ? cppAlternativeOperators[text] ?? text : text, at: start });
@@ -125,7 +138,7 @@ export class Parser {
   private leave(): void { this.depth--; }
   private identifier(): string {
     const s = this.take();
-    if (!/^[A-Za-z_]\w*$/.test(s)) throw new CppFault('compile-error', `Expected identifier, got ${s}`);
+    if (!identifierName.test(s)) throw new CppFault('compile-error', `Expected identifier, got ${s}`);
     return s;
   }
   private type(): TypeName {
@@ -135,6 +148,8 @@ export class Parser {
     const alias = this.aliases.get(t);
     if (alias) return alias;
     if (t === 'std' && this.eat('::')) t = this.take();
+    if (!identifierName.test(t)) throw new CppFault('compile-error', `Expected type name, got ${t}`);
+    if (statementKeywords.has(t)) throw new CppFault('compile-error', `Statement ${t} is not a declaration`);
     if (t === 'stack' || t === 'queue' || t === 'deque' || t === 'priority_queue') {
       if (this.language === 'c') throw new CppFault('compile-error', `std::${t} is not a C type`);
       this.need('<'); this.need('int'); this.need('>');
@@ -218,6 +233,7 @@ export class Parser {
     const functions = new Map<string, FunctionDef>();
     const globals: Decl[] = [];
     while (this.peek() !== '<eof>') {
+      if (this.language === 'cpp' && this.eat(';')) continue;
       if (this.eat('typedef')) {
         const base = this.type();
         this.need('*');
@@ -333,7 +349,7 @@ export class Parser {
           this.take(); const args = this.list(')', () => this.expression(2));
           if (left.kind === 'name') left = { kind: 'call', name: left.name, args };
           else if (left.kind === 'member') left = { kind: 'method-call', base: left.base, name: left.name, args };
-          else throw new CppFault('unsupported', 'Indirect calls are not modeled');
+          else left = { kind: 'indirect-call', base: left, args };
           continue;
         }
         if ((this.peek() === '.' || this.peek() === '->') && 13 >= min) {
@@ -397,7 +413,7 @@ export class Parser {
       }
       return { kind: 'string', value };
     }
-    if (/^[A-Za-z_]\w*$/.test(t)) {
+    if (identifierName.test(t)) {
       let name = t;
       while (this.eat('::')) name += `::${this.identifier()}`;
       return { kind: 'name', name };
@@ -433,6 +449,7 @@ function verifyAst(unit: TranslationUnit): void {
       case 'break': case 'continue': case 'number': case 'float': case 'char': case 'string': case 'name': break;
       case 'index': addExpr(node.base, next); addExpr(node.index, next); break;
       case 'call': for (const arg of node.args) addExpr(arg, next); break;
+      case 'indirect-call': addExpr(node.base, next); for (const arg of node.args) addExpr(arg, next); break;
       case 'method-call': addExpr(node.base, next); for (const arg of node.args) addExpr(arg, next); break;
       case 'member': addExpr(node.base, next); break;
       case 'field': addExpr(node.base, next); break;

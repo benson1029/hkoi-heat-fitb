@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { ProgramCase, ProgramTarget } from '../../core/types';
-import { evaluatePythonExpression } from './expression';
+import { evaluatePythonExpression, PythonTuple } from './expression';
 import { tryRunFastPythonFunction } from './fast-function';
 
 function value(source: string, variables: Record<string, unknown> = {}): unknown {
   const result = evaluatePythonExpression(source, variables);
-  expect(result.kind, JSON.stringify(result)).toBe('ok');
+  expect(result.kind, result.kind === 'ok' ? undefined : result.message).toBe('ok');
   return result.kind === 'ok' ? result.value : undefined;
 }
 
@@ -51,9 +51,9 @@ describe('bounded Python expression subset', () => {
     expect(evaluatePythonExpression('[1] in {1, 2}').kind).toBe('unsupported');
   });
 
-  it('returns unsupported for syntax or values that need Pyodide', () => {
+  it('reports unsupported syntax and bounded work', () => {
     expect(evaluatePythonExpression('[x for x in a]', { a: [1] }).kind).toBe('unsupported');
-    expect(evaluatePythonExpression('2 ** 60').kind).toBe('unsupported');
+    expect(value('2 ** 60')).toBe(1152921504606846976n);
     expect(evaluatePythonExpression('a.sort()', { a: [2, 1] }).kind).toBe('unsupported');
     expect(evaluatePythonExpression('x + 1', { x: 3 }, 1).kind).toBe('step-limit');
     expect(evaluatePythonExpression('1 // 0').kind).toBe('runtime-error');
@@ -66,9 +66,45 @@ describe('bounded Python expression subset', () => {
     expect(evaluatePythonExpression('items[0]+MISSING', { items: [2] })).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('NameError') });
     expect(evaluatePythonExpression('3+list')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
     expect(evaluatePythonExpression('int[0]+1')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+    expect(evaluatePythonExpression('x[1:3]', { x: 7 })).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
+    expect(evaluatePythonExpression('x[1:missing]', { x: 7 })).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('NameError') });
     expect(value('len(items)', { items: [2, 4] })).toBe(2);
     expect(evaluatePythonExpression('len(3)')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('TypeError') });
     expect(evaluatePythonExpression('2 @ 3').kind).toBe('unsupported');
+  });
+
+  it('handles Unicode names, triple strings, and invalid assignment targets', () => {
+    expect(value('λ + 1', { λ: 2 })).toBe(3);
+    expect(evaluatePythonExpression('Ω')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('NameError') });
+    expect(value("'''one\"two''' ")).toBe('one"two');
+    expect(evaluatePythonExpression("'''unfinished")).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('unterminated') });
+    expect(evaluatePythonExpression('items[0]:=values[1]')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('SyntaxError') });
+    expect(evaluatePythonExpression('item for in values = 1')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('SyntaxError') });
+    expect(evaluatePythonExpression('x<limit for item')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('SyntaxError') });
+    expect(evaluatePythonExpression('x<limit for 1')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('SyntaxError') });
+    expect(evaluatePythonExpression('[x,7 for x in [1,2]]')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('SyntaxError') });
+    expect(evaluatePythonExpression('[5,6 for x in [1]]')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('SyntaxError') });
+    expect(evaluatePythonExpression('[(x,7) for x in [1,2]]').kind).toBe('unsupported');
+    expect(evaluatePythonExpression('1λ')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('invalid numeric literal') });
+    expect(value('1, 2, 3')).toEqual(new PythonTuple([1, 2, 3]));
+    expect(value('1,')).toEqual(new PythonTuple([1]));
+    expect(evaluatePythonExpression('U,V')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('NameError') });
+  });
+
+  it('keeps Python integer arithmetic exact under a bounded resource limit', () => {
+    expect(value('9007199254740993')).toBe(9007199254740993n);
+    expect(value('9007199254740993 + 1')).toBe(9007199254740994n);
+    expect(value('9007199254740993 == 9007199254740992')).toBe(false);
+    expect(value('9007199254740993 > 9007199254740992')).toBe(true);
+    expect(value('9007199254740993 > 1.5')).toBe(true);
+    expect(value('9007199254740993 == 9007199254740992.0')).toBe(false);
+    expect(value('9007199254740993 // 2')).toBe(4503599627370496);
+    expect(value('9007199254740993 % 2')).toBe(1);
+    expect(value('2 ** 60 >> 60')).toBe(1);
+    expect(value('15 >> 1000000000')).toBe(0);
+    expect(value('-15 >> 1000000000')).toBe(-1);
+    expect(evaluatePythonExpression('1 << -1')).toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('negative shift count') });
+    expect(evaluatePythonExpression('2 ** 1000000').kind).toBe('step-limit');
   });
 
   it('runs bounded functions and reports exhausted work', () => {

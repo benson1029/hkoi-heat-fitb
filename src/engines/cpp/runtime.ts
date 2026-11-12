@@ -58,6 +58,7 @@ function effects(expr: Expr): Effects {
     case 'name': e.reads.add(expr.name); break;
     case 'index': merge(effects(expr.base)); merge(effects(expr.index)); break;
     case 'call': e.calls = true; for (const a of expr.args) merge(effects(a)); break;
+    case 'indirect-call': e.calls = true; merge(effects(expr.base)); for (const a of expr.args) merge(effects(a)); break;
     case 'method-call': e.calls = true; merge(effects(expr.base)); for (const a of expr.args) merge(effects(a)); break;
     case 'member': merge(effects(expr.base)); break;
     case 'field': merge(effects(expr.base)); break;
@@ -251,6 +252,7 @@ export class CheckedRuntime {
     return { kind: 'string', value: this.stringValue(slot) };
   }
   private indexedSlot(expr: Extract<Expr, {kind: 'index'}>): ScalarSlot | StringSlot | VectorSlot {
+    if (expr.base.kind === 'string') throw new CppFault('compile-error', 'String literal elements are const');
     const direct = expr.base.kind === 'name' ? this.find(expr.base.name)
       : expr.base.kind === 'index' ? this.indexedSlot(expr.base) : undefined;
     if (direct?.kind === 'string') {
@@ -1054,6 +1056,13 @@ export class CheckedRuntime {
           : slot.kind === 'pointer' ? this.readPointer(slot) : { kind: 'struct', slot };
       }
       case 'index': {
+        if (expr.base.kind === 'string') {
+          const text = this.checkedString(this.evaluate(expr.base));
+          const index = asInt(this.evaluate(expr.index)).value;
+          if (index < 0n || index > BigInt(text.length))
+            throw new CppFault('runtime-error', `String literal index out of bounds: ${index}`);
+          return int(index === BigInt(text.length) ? 0n : BigInt(text.charCodeAt(Number(index))), 'char');
+        }
         const slot = this.indexedSlot(expr);
         return slot.kind === 'scalar' ? this.read(slot) : slot.kind === 'string'
           ? { kind: 'string', value: this.stringValue(slot) } : { kind: 'vector', slot };
@@ -1119,6 +1128,11 @@ export class CheckedRuntime {
         const built = this.builtin(expr.name, expr.args);
         if (built) return built;
         return this.call(expr.name, expr.args.map(a => this.evaluate(a)));
+      }
+      case 'indirect-call': {
+        const target = this.evaluate(expr.base);
+        if (target.kind === 'struct') throw new CppFault('unsupported', 'Callable struct objects are not modeled');
+        throw new CppFault('compile-error', 'This expression is not callable');
       }
       case 'conditional': return truth(this.evaluate(expr.condition)) ? this.evaluate(expr.yes) : this.evaluate(expr.no);
       case 'unary': {

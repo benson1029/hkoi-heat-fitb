@@ -62,6 +62,15 @@ function resultCase(id: string, result: EngineResult, expected: Observation): Ca
     message: matches(result.observation, expected) ? undefined : `Expected ${JSON.stringify(expected)}; got ${JSON.stringify(result.observation)}.`,
     observed: result.observation, steps: result.steps
   };
+  // A Python function/type/set cannot equal any configured JSON return value.
+  // If the case does not assert a return value, leave the other observations
+  // inconclusive rather than turning a valid return into a false failure.
+  if (result.kind === 'non-json-return') return {
+    id,
+    status: Object.hasOwn(expected, 'returnValue') ? 'fail' : 'inconclusive',
+    message: `${result.kind}: ${result.message}`,
+    steps: result.steps,
+  };
   return {
     id,
     status: ['unsupported', 'wall-timeout', 'internal-error'].includes(result.kind) ? 'inconclusive' : 'fail',

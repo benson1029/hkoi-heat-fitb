@@ -18,6 +18,36 @@ function program(source: string, stdin = '', maxSteps = 10000) {
 }
 
 describe('checked C/C++ subset', () => {
+  it('indexes string literals as const char arrays, including the terminator', () => {
+    expect(call('int f(int i){return "31415"[i];}', 'f', [2]))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 52 } });
+    expect(call('int f(){return "hi"[2];}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 0 } });
+    expect(call('int f(){return "hi"[3];}'))
+      .toMatchObject({ kind: 'runtime-error', message: expect.stringContaining('bounds') });
+    expect(call('int f(){"hi"[0]=1;return 0;}'))
+      .toMatchObject({ kind: 'compile-error', message: expect.stringContaining('const') });
+  });
+  it('accepts Unicode C++ identifiers and rejects unknown names and symbols', () => {
+    expect(call('int f(){int σ3=7;int 变量=5;return σ3+变量;}'))
+      .toMatchObject({ kind: 'ok', observation: { returnValue: 12 } });
+    expect(call('int f(){return missingα;}', 'f'))
+      .toMatchObject({ kind: 'compile-error' });
+    expect(call('int f(){return 14∕7;}', 'f'))
+      .toMatchObject({ kind: 'compile-error', message: expect.stringContaining('Invalid token') });
+  });
+  it('rejects calls through arithmetic values after parsing their arguments', () => {
+    expect(call('int f(int x){return (x*2)(x<0);}', 'f', [3]))
+      .toMatchObject({ kind: 'compile-error', message: expect.stringContaining('not callable') });
+    expect(call('int f(int x){return (x*2)(x<0;}', 'f', [3]))
+      .toMatchObject({ kind: 'compile-error' });
+  });
+  it('distinguishes invalid declaration tokens from unfamiliar type names', () => {
+    expect(call('int f(){return 1;} }')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('Expected type name') });
+    expect(call('int f(){return 1;} ;')).toMatchObject({ kind: 'ok', observation: { returnValue: 1 } });
+    expect(call('int f(){return 1;} ; return 2;')).toMatchObject({ kind: 'compile-error', message: expect.stringContaining('not a declaration') });
+    expect(call('OtherType f(){return 1;}')).toMatchObject({ kind: 'unsupported' });
+  });
   it('rejects invalid types and literals while supporting string comparison', () => {
     expect(call('int f(int n){return n[0];}', 'f', [3])).toMatchObject({ kind: 'compile-error' });
     expect(call('int f(){return len(3);}', 'f')).toMatchObject({ kind: 'compile-error' });

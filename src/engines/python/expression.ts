@@ -1,10 +1,9 @@
-/** Small, deliberately closed Python expression evaluator used for cheap candidate probes.
- * Unsupported syntax is handed to Pyodide by the normal engine. */
+/** Bounded Python expression evaluator shared by browser and offline grading. */
 export type PythonExpressionResult =
   | { kind: 'ok'; value: unknown; steps: number }
   | { kind: 'unsupported' | 'compile-error' | 'runtime-error' | 'step-limit'; message: string; steps: number };
 
-type Token = { text: string; value?: string | number };
+type Token = { text: string; value?: string | number | bigint };
 type Node =
   | { kind: 'literal'; value: unknown }
   | { kind: 'name'; name: string }
@@ -46,6 +45,7 @@ function hashKey(value: unknown): string | null {
   if (value === null) return 'none';
   if (typeof value === 'boolean') return `number:${Number(value)}`;
   if (typeof value === 'number' && Number.isSafeInteger(value)) return `number:${value}`;
+  if (typeof value === 'bigint') return `number:${value}`;
   if (typeof value === 'string') return `string:${JSON.stringify(value)}`;
   if (value instanceof PythonTuple) {
     const parts = value.values.map(hashKey);
@@ -82,6 +82,22 @@ export class PythonSet {
 const KEYWORDS = new Set(('False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield').split(' '));
 const OPERATORS = ['//', '**', '<<', '>>', '<=', '>=', '==', '!='];
 const SINGLE = new Set('+-*/%&|^~<>()[]{},.:='.split(''));
+const IDENTIFIER = /^[_\p{ID_Start}][_\p{ID_Continue}]*$/u;
+const IDENTIFIER_PREFIX = /^[_\p{ID_Start}][_\p{ID_Continue}]*/u;
+const IDENTIFIER_CONTINUATION = /^[_\p{ID_Continue}]/u;
+const MAX_INTEGER_BITS = 16_384;
+
+function boundedInteger(value: bigint): number | bigint {
+  if (value.toString(2).replace('-', '').length > MAX_INTEGER_BITS)
+    throw new StepLimit('Python integer result exceeds resource limit');
+  return value <= BigInt(Number.MAX_SAFE_INTEGER) && value >= BigInt(Number.MIN_SAFE_INTEGER) ? Number(value) : value;
+}
+
+function integerValue(value: unknown): bigint | null {
+  if (typeof value === 'bigint') return value;
+  if (typeof value === 'boolean') return value ? 1n : 0n;
+  return typeof value === 'number' && Number.isFinite(value) && Number.isInteger(value) ? BigInt(value) : null;
+}
 
 function lex(source: string): Token[] {
   const tokens: Token[] = [];
@@ -90,12 +106,14 @@ function lex(source: string): Token[] {
     if (/\s/.test(c)) { i++; continue; }
     if (c === '"' || c === "'") {
       const quote = c;
+      const triple = source.startsWith(quote.repeat(3), i);
       let value = '';
-      i++;
+      i += triple ? 3 : 1;
       let closed = false;
       while (i < source.length) {
+        if (triple && source.startsWith(quote.repeat(3), i)) { i += 3; closed = true; break; }
         const ch = source[i++];
-        if (ch === quote) { closed = true; break; }
+        if (!triple && ch === quote) { closed = true; break; }
         if (ch === '\\') {
           const escaped = source[i++];
           if (escaped === undefined) throw new PythonSyntaxFailure('unterminated string literal');
@@ -110,28 +128,27 @@ function lex(source: string): Token[] {
     }
     const prefixed = /^0(?:[xX]_?[0-9a-fA-F](?:_?[0-9a-fA-F])*|[bB]_?[01](?:_?[01])*|[oO]_?[0-7](?:_?[0-7])*)/.exec(source.slice(i));
     if (prefixed) {
-      const value = Number(prefixed[0].replace(/_/g, ''));
-      if (!Number.isSafeInteger(value)) throw new Unsupported('Integer literal outside exact range');
+      const value = boundedInteger(BigInt(prefixed[0].replace(/_/g, '')));
       tokens.push({ text: '<number>', value });
       i += prefixed[0].length;
-      if (/[A-Za-z_]/.test(source[i] ?? '')) throw new PythonSyntaxFailure('invalid numeric literal');
+      if (IDENTIFIER_CONTINUATION.test(source.slice(i))) throw new PythonSyntaxFailure('invalid numeric literal');
       continue;
     }
     const number = /^(?:\d(?:_?\d)*(?:\.(?:\d(?:_?\d)*)?)?|\.\d(?:_?\d)*)(?:[eE][+-]?\d(?:_?\d)*)?/.exec(source.slice(i));
     if (number) {
       const raw = number[0];
       if (!/[.eE]/.test(raw) && /^0[0-9_]*[1-9]/.test(raw.replace(/_/g, ''))) throw new PythonSyntaxFailure('leading zeros in decimal integer literals are not permitted');
-      const value = Number(raw.replace(/_/g, ''));
-      if (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))) throw new Unsupported('Number outside safe range');
+      const value = /[.eE]/.test(raw) ? Number(raw.replace(/_/g, '')) : boundedInteger(BigInt(raw.replace(/_/g, '')));
+      if (typeof value === 'number' && !Number.isFinite(value)) throw new Unsupported('Number outside safe range');
       tokens.push({ text: '<number>', value });
       i += number[0].length;
-      if (/[A-Za-z_]/.test(source[i] ?? '')) {
-        if (/^[jJ](?![A-Za-z_0-9])/.test(source.slice(i))) throw new Unsupported('Complex literals require full Python');
+      if (IDENTIFIER_CONTINUATION.test(source.slice(i))) {
+        if (/^[jJ](?![_\p{ID_Continue}])/u.test(source.slice(i))) throw new Unsupported('Complex literals require full Python');
         throw new PythonSyntaxFailure('invalid numeric literal');
       }
       continue;
     }
-    const name = /^[A-Za-z_]\w*/.exec(source.slice(i));
+    const name = IDENTIFIER_PREFIX.exec(source.slice(i));
     if (name) { tokens.push({ text: name[0] }); i += name[0].length; continue; }
     const op = OPERATORS.find((candidate) => source.startsWith(candidate, i));
     if (op) { tokens.push({ text: op }); i += op.length; continue; }
@@ -179,7 +196,15 @@ class Parser {
   private take(text: string): boolean { if (this.peek() !== text) return false; this.index++; return true; }
   private expect(text: string): void { if (!this.take(text)) throw new PythonSyntaxFailure(`expected ${text}`); }
   parse(): Node {
-    const node = this.expression(0);
+    let node = this.expression(0);
+    if (this.take(',')) {
+      const items = [node];
+      while (this.peek() !== '<end>') {
+        items.push(this.expression(0));
+        if (!this.take(',')) break;
+      }
+      node = { kind: 'tuple', items };
+    }
     if (this.peek() !== '<end>') throw new PythonSyntaxFailure(`unexpected ${this.peek()}`);
     return node;
   }
@@ -192,7 +217,7 @@ class Parser {
         const kwargs: { name: string; value: Node }[] = [];
         if (!this.take(')')) {
           do {
-            if (/^[A-Za-z_]\w*$/.test(this.peek()) && this.tokens[this.index + 1]?.text === '=') {
+            if (IDENTIFIER.test(this.peek()) && this.tokens[this.index + 1]?.text === '=') {
               const name = this.tokens[this.index++].text;
               this.index++;
               if (kwargs.some((item) => item.name === name)) throw new PythonSyntaxFailure(`keyword argument repeated: ${name}`);
@@ -225,7 +250,7 @@ class Parser {
       if (this.peek() === '.' && 12 >= min) {
         this.index++;
         const name = this.tokens[this.index++]?.text ?? '<end>';
-        if (!/^[A-Za-z_]\w*$/.test(name) || KEYWORDS.has(name)) throw new PythonSyntaxFailure('expected attribute name');
+        if (!IDENTIFIER.test(name) || KEYWORDS.has(name)) throw new PythonSyntaxFailure('expected attribute name');
         left = { kind: 'attribute', base: left, name };
         continue;
       }
@@ -266,7 +291,7 @@ class Parser {
       if (!this.take(':')) {
         do {
           const name = this.tokens[this.index++]?.text ?? '<end>';
-          if (!/^[A-Za-z_]\w*$/.test(name) || KEYWORDS.has(name) || params.includes(name)) throw new PythonSyntaxFailure('invalid lambda parameter');
+          if (!IDENTIFIER.test(name) || KEYWORDS.has(name) || params.includes(name)) throw new PythonSyntaxFailure('invalid lambda parameter');
           params.push(name);
         } while (this.take(','));
         this.expect(':');
@@ -317,13 +342,13 @@ class Parser {
       this.expect('}');
       return { kind: 'set', items };
     }
-    if (/^[A-Za-z_]\w*$/.test(token.text) && !KEYWORDS.has(token.text)) return { kind: 'name', name: token.text };
+    if (IDENTIFIER.test(token.text) && !KEYWORDS.has(token.text)) return { kind: 'name', name: token.text };
     throw new PythonSyntaxFailure(`unexpected ${token.text}`);
   }
 }
 
 function truthy(value: unknown): boolean {
-  if (value === null || value === false || value === 0 || value === '') return false;
+  if (value === null || value === false || value === 0 || value === 0n || value === '') return false;
   if (Array.isArray(value) && value.length === 0) return false;
   if (value instanceof PythonTuple && value.values.length === 0) return false;
   if (value instanceof PythonDict && value.entries.size === 0) return false;
@@ -347,14 +372,25 @@ function pyEqual(a: unknown, b: unknown): boolean {
     const keys = Object.keys(a);
     return keys.length === Object.keys(b).length && keys.every((key) => Object.hasOwn(b, key) && pyEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key]));
   }
+  const ai = integerValue(a); const bi = integerValue(b);
+  if (ai !== null && bi !== null) return ai === bi;
+  if (typeof a === 'bigint' && typeof b === 'number') return false;
+  if (typeof b === 'bigint' && typeof a === 'number') return false;
   if (typeof a === 'boolean' && typeof b === 'number') return Number(a) === b;
   if (typeof b === 'boolean' && typeof a === 'number') return a === Number(b);
   return a === b;
 }
 
 function pyOrder(a: unknown, b: unknown): number | null {
-  if ((typeof a === 'number' || typeof a === 'boolean') && (typeof b === 'number' || typeof b === 'boolean'))
-    return Number(a) - Number(b);
+  if ((typeof a === 'number' || typeof a === 'boolean' || typeof a === 'bigint')
+      && (typeof b === 'number' || typeof b === 'boolean' || typeof b === 'bigint')) {
+    const ai = integerValue(a); const bi = integerValue(b);
+    if (ai !== null && bi !== null) return ai < bi ? -1 : ai > bi ? 1 : 0;
+    if (typeof a === 'bigint' && typeof b === 'number') return compareIntegerToFloat(a, b);
+    if (typeof b === 'bigint' && typeof a === 'number') return -compareIntegerToFloat(b, a);
+    const leftNumber = Number(a); const rightNumber = Number(b);
+    return leftNumber < rightNumber ? -1 : leftNumber > rightNumber ? 1 : 0;
+  }
   if (typeof a === 'string' && typeof b === 'string') return comparePythonStrings(a, b);
   const left = a instanceof PythonTuple ? a.values : Array.isArray(a) ? a : null;
   const right = b instanceof PythonTuple ? b.values : Array.isArray(b) ? b : null;
@@ -364,6 +400,15 @@ function pyOrder(a: unknown, b: unknown): number | null {
     return pyOrder(left[index], right[index]);
   }
   return left.length - right.length;
+}
+
+function compareIntegerToFloat(integer: bigint, float: number): number {
+  if (float === Infinity) return -1;
+  if (float === -Infinity) return 1;
+  const truncated = BigInt(Math.trunc(float));
+  if (integer < truncated) return -1;
+  if (integer > truncated) return 1;
+  return float > 0 ? -1 : 1;
 }
 
 function checkedNumber(value: number): number {
@@ -382,13 +427,36 @@ export function comparePythonStrings(a: string, b: string): number {
 
 const parseCache = new Map<string, Node>();
 
+function hasUnparenthesizedComprehensionTuple(source: string): boolean {
+  const frames: { opener: string; commaBeforeFor: boolean; sawFor: boolean }[] =
+    [{ opener: '<top>', commaBeforeFor: false, sawFor: false }];
+  for (const token of lex(source)) {
+    if (token.text === '<end>') break;
+    if (['(', '[', '{'].includes(token.text)) {
+      frames.push({ opener: token.text, commaBeforeFor: false, sawFor: false });
+      continue;
+    }
+    if ([')', ']', '}'].includes(token.text)) { if (frames.length > 1) frames.pop(); continue; }
+    const frame = frames[frames.length - 1];
+    if (token.text === ',' && !frame.sawFor) frame.commaBeforeFor = true;
+    if (token.text === 'for' && !frame.sawFor) {
+      if (frame.commaBeforeFor && (frame.opener === '[' || frame.opener === '<top>')) return true;
+      frame.sawFor = true;
+    }
+  }
+  return false;
+}
+
 function parseExpression(source: string): Node {
   try { return new Parser(lex(source)).parse(); }
   catch (error) {
     // These are valid Python constructs that this small expression grammar does
     // not yet evaluate. Do not mislabel their parser failures as SyntaxError.
+    const possibleComprehension = /\bfor\s+[_\p{ID_Start}][_\p{ID_Continue}]*\s+in\b/u.test(source)
+      || /\bfor\s*[\[(]/.test(source);
     if (error instanceof PythonSyntaxFailure && (/(?:^|[^\w])(?:f|F|fr|rf|Fr|Rf)["']/.test(source)
-      || source.includes(':=') || /\b(?:for|await|yield)\b/.test(source)))
+      || (source.includes(':=') && !/(?:\]|\.)\s*:=/.test(source))
+      || /\b(?:await|yield)\b/.test(source) || (possibleComprehension && !hasUnparenthesizedComprehensionTuple(source))))
       throw new Unsupported('Expression requires full Python');
     throw error;
   }
@@ -406,6 +474,7 @@ export function supportsPythonExpressionSyntax(source: string): boolean {
 export function pythonTypeName(value: unknown): string {
   if (value === null) return 'NoneType';
   if (typeof value === 'boolean') return 'bool';
+  if (typeof value === 'bigint') return 'int';
   if (typeof value === 'number') return Number.isInteger(value) ? 'int' : 'float';
   if (typeof value === 'string') return 'str';
   if (Array.isArray(value)) return 'list';
@@ -479,19 +548,21 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
           }
           if (typeof base !== 'string' && !Array.isArray(base) && !(base instanceof PythonTuple))
             throw new Error(`TypeError: '${pythonTypeName(base)}' object is not subscriptable`);
-          if (!Number.isInteger(index)) throw new Error('TypeError: sequence indices must be integers');
+          const integerIndex = integerValue(index);
+          if (integerIndex === null) throw new Error('TypeError: sequence indices must be integers');
           const sequence = typeof base === 'string' ? [...base] : base instanceof PythonTuple ? base.values : base as unknown[];
-          const at = (index as number) < 0 ? sequence.length + (index as number) : index as number;
-          if (at < 0 || at >= sequence.length) throw new Error('IndexError: index out of range');
-          return sequence[at];
+          const at = integerIndex < 0n ? BigInt(sequence.length) + integerIndex : integerIndex;
+          if (at < 0n || at >= BigInt(sequence.length)) throw new Error('IndexError: index out of range');
+          return sequence[Number(at)];
         }
         case 'slice': {
           const base = evalNode(node.base);
-          if (typeof base !== 'string' && !Array.isArray(base) && !(base instanceof PythonTuple)) throw new Unsupported('Slice requires a sequence');
-          const sequence = typeof base === 'string' ? [...base] : base instanceof PythonTuple ? base.values : base;
           const start = node.start ? evalNode(node.start) : null;
           const end = node.end ? evalNode(node.end) : null;
           const step = node.step ? evalNode(node.step) : 1;
+          if (typeof base !== 'string' && !Array.isArray(base) && !(base instanceof PythonTuple))
+            throw new Error(`TypeError: '${pythonTypeName(base)}' object is not subscriptable`);
+          const sequence = typeof base === 'string' ? [...base] : base instanceof PythonTuple ? base.values : base;
           if ((start !== null && !Number.isSafeInteger(start)) || (end !== null && !Number.isSafeInteger(end)) || !Number.isSafeInteger(step))
             throw new Error('TypeError: slice indices must be integers or None');
           if (step === 0) throw new Error('ValueError: slice step cannot be zero');
@@ -548,6 +619,11 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
           const value = evalNode(node.child);
           if (node.op === 'not') return !truthy(value);
           const number = typeof value === 'boolean' ? Number(value) : value;
+          if (typeof number === 'bigint') {
+            if (node.op === '+') return number;
+            if (node.op === '-') return boundedInteger(-number);
+            if (node.op === '~') return boundedInteger(~number);
+          }
           if (typeof number !== 'number') throw new Error(`TypeError: bad operand type for unary ${node.op}: '${pythonTypeName(value)}'`);
           if (node.op === '~' && Number.isSafeInteger(number)) return checkedNumber(-number - 1);
           if (node.op === '+') return number;
@@ -624,8 +700,55 @@ export function evaluatePythonExpression(source: string, variables: Record<strin
           }
           const numericLeft = typeof left === 'boolean' ? Number(left) : left;
           const numericRight = typeof right === 'boolean' ? Number(right) : right;
-          if (typeof numericLeft !== 'number' || typeof numericRight !== 'number')
+          if ((typeof numericLeft !== 'number' && typeof numericLeft !== 'bigint')
+            || (typeof numericRight !== 'number' && typeof numericRight !== 'bigint'))
             throw new Error(`TypeError: unsupported operand type(s) for ${node.op}: '${pythonTypeName(left)}' and '${pythonTypeName(right)}'`);
+          const integerLeft = integerValue(numericLeft); const integerRight = integerValue(numericRight);
+          if (integerLeft !== null && integerRight !== null) {
+            if (node.op === '+') return boundedInteger(integerLeft + integerRight);
+            if (node.op === '-') return boundedInteger(integerLeft - integerRight);
+            if (node.op === '*') return boundedInteger(integerLeft * integerRight);
+            if (node.op === '//' || node.op === '%' || node.op === '/') {
+              if (integerRight === 0n) throw new Error('ZeroDivisionError: division by zero');
+              if (node.op === '/') {
+                const quotient = Number(integerLeft) / Number(integerRight);
+                if (!Number.isFinite(quotient)) throw new Error('OverflowError: integer division result too large for a float');
+                return quotient;
+              }
+              let quotient = integerLeft / integerRight;
+              if (integerLeft % integerRight !== 0n && (integerLeft < 0n) !== (integerRight < 0n)) quotient -= 1n;
+              return boundedInteger(node.op === '//' ? quotient : integerLeft - quotient * integerRight);
+            }
+            if (node.op === '**') {
+              if (integerRight < 0n) {
+                if (integerLeft === 0n) throw new Error('ZeroDivisionError: 0.0 cannot be raised to a negative power');
+                const result = Number(integerLeft) ** Number(integerRight);
+                if (!Number.isFinite(result)) throw new Error('OverflowError: numerical result out of range');
+                return result;
+              }
+              if (integerLeft === 0n) return integerRight === 0n ? 1 : 0;
+              if (integerLeft === 1n) return 1;
+              if (integerLeft === -1n) return integerRight % 2n === 0n ? 1 : -1;
+              if (integerRight > BigInt(MAX_INTEGER_BITS)) throw new StepLimit('Python integer power exceeds resource limit');
+              const estimatedBits = Math.ceil(Number(integerRight) * Math.log2(Math.abs(Number(integerLeft)))) + 1;
+              if (estimatedBits > MAX_INTEGER_BITS) throw new StepLimit('Python integer power exceeds resource limit');
+              return boundedInteger(integerLeft ** integerRight);
+            }
+            if (node.op === '&') return boundedInteger(integerLeft & integerRight);
+            if (node.op === '|') return boundedInteger(integerLeft | integerRight);
+            if (node.op === '^') return boundedInteger(integerLeft ^ integerRight);
+            if (node.op === '<<' || node.op === '>>') {
+              if (integerRight < 0n) throw new Error('ValueError: negative shift count');
+              if (node.op === '>>' && integerRight > BigInt(MAX_INTEGER_BITS)) return integerLeft < 0n ? -1 : 0;
+              if (node.op === '<<' && integerRight > BigInt(MAX_INTEGER_BITS)) {
+                if (integerLeft === 0n) return 0;
+                throw new StepLimit('Python left shift exceeds resource limit');
+              }
+              return boundedInteger(node.op === '<<' ? integerLeft << integerRight : integerLeft >> integerRight);
+            }
+          }
+          if (typeof numericLeft !== 'number' || typeof numericRight !== 'number')
+            throw new Unsupported('Mixed huge integer and float arithmetic requires full Python');
           if (node.op === '/' || node.op === '//' || node.op === '%') {
             if (numericRight === 0) throw new Error('ZeroDivisionError: division by zero');
             if (node.op === '/') return checkedNumber(numericLeft / numericRight);

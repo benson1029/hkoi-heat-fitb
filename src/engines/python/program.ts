@@ -17,6 +17,7 @@ type Statement =
 class Unsupported extends Error {}
 class Runtime extends Error {}
 class Exhausted extends Error {}
+class NonJsonValue extends Error {}
 class ReturnSignal { constructor(readonly value: unknown) {} }
 class BreakSignal {}
 class ContinueSignal {}
@@ -49,7 +50,21 @@ function balance(text: string): number {
 }
 
 function logicalLines(source: string): Line[] {
-  if (source.includes('"""') || source.includes("'''")) throw new Unsupported('Triple strings require full Python');
+  let quote: string | null = null; let escaped = false; let multilineTriple = false;
+  for (let i = 0; i < source.length; i++) {
+    if (quote) {
+      if (escaped) { escaped = false; continue; }
+      if (source[i] === '\\') { escaped = true; continue; }
+      if (source.startsWith(quote, i)) { i += quote.length - 1; quote = null; continue; }
+      if (quote.length === 3 && source[i] === '\n') multilineTriple = true;
+      continue;
+    }
+    if (source[i] === '#') { while (i + 1 < source.length && source[i + 1] !== '\n') i++; continue; }
+    if (source.startsWith('"""', i) || source.startsWith("'''", i)) { quote = source.slice(i, i + 3); i += 2; continue; }
+    if (source[i] === '"' || source[i] === "'") quote = source[i];
+  }
+  if (quote?.length === 3) throw new PythonSyntaxFailure('unterminated triple-quoted string literal');
+  if (multilineTriple) throw new Unsupported('Multiline string literal requires full Python');
   const result: Line[] = [];
   let pending = ''; let indent = 0; let depth = 0;
   const indentStyles = new Map<number, string>();
@@ -227,9 +242,9 @@ export function supportsFastPythonSource(source: string, target: ProgramTarget):
     const listLiteral = /^\[([^\[\]]*)\]$/.exec(trimmed);
     if (listLiteral && !hasTopLevelFor(listLiteral[1])) return !listLiteral[1].trim() || splitTop(listLiteral[1]).every(validExpression);
     const generator = /^(any|all|sum|min|max)\((.+) for ([A-Za-z_]\w*) in (.+?)(?: if (.+))?\)$/.exec(trimmed);
-    if (generator) return validExpression(generator[2]) && validExpression(generator[4]) && (!generator[5] || validExpression(generator[5]));
+    if (generator) return splitTop(generator[2]).length === 1 && validExpression(generator[2]) && validExpression(generator[4]) && (!generator[5] || validExpression(generator[5]));
     const comprehension = /^\[(.+) for ([A-Za-z_]\w*) in (.+?)(?: if (.+))?\]$/.exec(trimmed);
-    if (comprehension) return validExpression(comprehension[1]) && validExpression(comprehension[3]) && (!comprehension[4] || validExpression(comprehension[4]));
+    if (comprehension) return splitTop(comprehension[1]).length === 1 && validExpression(comprehension[1]) && validExpression(comprehension[3]) && (!comprehension[4] || validExpression(comprehension[4]));
     const parts = splitTop(trimmed);
     if (parts.length > 1) return parts.every(validExpression);
     return supportsPythonExpressionSyntax(trimmed);
@@ -272,9 +287,15 @@ function assertProgramSyntax(statements: Statement[]): void {
       return;
     }
     const generator = /^(?:any|all|sum|min|max)\((.+) for ([A-Za-z_]\w*) in (.+?)(?: if (.+))?\)$/.exec(trimmed);
-    if (generator) { expression(generator[1]); expression(generator[3]); if (generator[4]) expression(generator[4]); return; }
+    if (generator) {
+      if (splitTop(generator[1]).length > 1) throw new PythonSyntaxFailure('generator expression must be parenthesized');
+      expression(generator[1]); expression(generator[3]); if (generator[4]) expression(generator[4]); return;
+    }
     const comprehension = /^\[(.+) for ([A-Za-z_]\w*) in (.+?)(?: if (.+))?\]$/.exec(trimmed);
-    if (comprehension) { expression(comprehension[1]); expression(comprehension[3]); if (comprehension[4]) expression(comprehension[4]); return; }
+    if (comprehension) {
+      if (splitTop(comprehension[1]).length > 1) throw new PythonSyntaxFailure('did you forget parentheses around the comprehension target');
+      expression(comprehension[1]); expression(comprehension[3]); if (comprehension[4]) expression(comprehension[4]); return;
+    }
     const parts = splitTop(trimmed);
     if (parts.length > 1) { parts.forEach(expression); return; }
     if (classifyPythonExpressionSyntax(trimmed) === 'invalid') throw new PythonSyntaxFailure('invalid expression');
@@ -316,7 +337,7 @@ function assertProgramSyntax(statements: Statement[]): void {
 }
 
 function truthy(value: unknown): boolean {
-  if (value === null || value === false || value === 0 || value === '') return false;
+  if (value === null || value === false || value === 0 || value === 0n || value === '') return false;
   if (Array.isArray(value)) return value.length > 0;
   if (value instanceof PythonTuple) return value.values.length > 0;
   if (value instanceof PythonDict || value instanceof PythonSet) return value.entries.size > 0;
@@ -334,20 +355,38 @@ function asJson(value: unknown): value is JsonValue {
   return false;
 }
 
-function normalizeTuple(value: unknown): unknown {
-  if (value instanceof PythonTuple) return value.values.map(normalizeTuple);
+function containsBigInt(value: unknown): boolean {
+  if (typeof value === 'bigint') return true;
+  if (Array.isArray(value)) return value.some(containsBigInt);
+  if (value && typeof value === 'object') return Object.values(value).some(containsBigInt);
+  return false;
+}
+
+function normalizeTuple(value: unknown, active = new Set<object>()): unknown {
+  if (typeof value === 'bigint') return value >= BigInt(Number.MIN_SAFE_INTEGER) && value <= BigInt(Number.MAX_SAFE_INTEGER)
+    ? Number(value) : value;
+  if (value && typeof value === 'object') {
+    if (active.has(value)) throw new NonJsonValue('cyclic Python value');
+    active.add(value);
+  }
+  try { return normalizeTupleValue(value, active); }
+  finally { if (value && typeof value === 'object') active.delete(value); }
+}
+
+function normalizeTupleValue(value: unknown, active: Set<object>): unknown {
+  if (value instanceof PythonTuple) return value.values.map(item => normalizeTuple(item, active));
   if (value instanceof PythonSet) return value;
   if (value instanceof PythonDict) {
     const entries = value.keys().map((key) => {
       if (key instanceof PythonTuple) throw new Unsupported('JSON cannot encode tuple dictionary keys');
       const label = key === null ? 'null' : key === true ? 'true' : key === false ? 'false' : String(key);
-      return [label, normalizeTuple(value.get(key).value)] as const;
+      return [label, normalizeTuple(value.get(key).value, active)] as const;
     });
     return Object.fromEntries(entries);
   }
-  if (Array.isArray(value)) return value.map(normalizeTuple);
+  if (Array.isArray(value)) return value.map(item => normalizeTuple(item, active));
   if (value && typeof value === 'object' && !('builtin' in value))
-    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, normalizeTuple(item)]));
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, normalizeTuple(item, active)]));
   return value;
 }
 
@@ -369,6 +408,7 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
   try { body = new Parser(logicalLines(source)).parse(); assertProgramSyntax(body); }
   catch (error) {
     if (error instanceof PythonSyntaxFailure) return { kind: 'compile-error', message: `${error.name}: ${error.message}`, steps: 0 };
+    if (error instanceof Unsupported) return { kind: 'unsupported', message: error.message, steps: 0 };
     return undefined;
   }
   const globals: Record<string, unknown> = Object.create(null);
@@ -392,6 +432,11 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     return variables;
   };
   const pyString = (value: unknown): string => {
+    if (value && typeof value === 'object' && 'builtin' in value) {
+      const name = String(value.builtin);
+      if (['int', 'float', 'bool', 'str', 'list', 'tuple', 'dict', 'set'].includes(name)) return `<class '${name}'>`;
+      return `<built-in function ${name}>`;
+    }
     if (value !== null && typeof value === 'object') throw new Unsupported('Printing containers requires full Python');
     return value === null ? 'None' : value === true ? 'True' : value === false ? 'False' : String(value);
   };
@@ -400,6 +445,16 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     if (value instanceof PythonTuple) return value.values;
     if (typeof value === 'string') return [...value];
     if (value instanceof PythonDict) return value.keys();
+    return null;
+  };
+  const knownMethods = (value: unknown): Set<string> | null => {
+    if (typeof value === 'string') return new Set(('capitalize casefold center count encode endswith expandtabs find format format_map index isalnum isalpha isascii isdecimal isdigit isidentifier islower isnumeric isprintable isspace istitle isupper join ljust lower lstrip maketrans partition removeprefix removesuffix replace rfind rindex rjust rpartition rsplit rstrip split splitlines startswith strip swapcase title translate upper zfill').split(' '));
+    if (Array.isArray(value)) return new Set('append clear copy count extend index insert pop remove reverse sort'.split(' '));
+    if (value instanceof PythonTuple) return new Set(['count', 'index']);
+    if (value instanceof PythonDict) return new Set('clear copy fromkeys get items keys pop popitem setdefault update values'.split(' '));
+    if (value instanceof PythonSet) return new Set('add clear copy difference difference_update discard intersection intersection_update isdisjoint issubset issuperset pop remove symmetric_difference symmetric_difference_update union update'.split(' '));
+    if (typeof value === 'number' || typeof value === 'boolean') return new Set('as_integer_ratio bit_count bit_length conjugate denominator from_bytes imag is_integer numerator real to_bytes'.split(' '));
+    if (value === null || value && typeof value === 'object' && 'builtin' in value) return new Set();
     return null;
   };
   const ordered = (values: unknown[], key: unknown = null): unknown[] | null => {
@@ -443,6 +498,9 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
       return undefined;
     };
     if (receiver !== undefined) {
+      const methods = knownMethods(receiver);
+      if (methods && !methods.has(name) && !name.startsWith('__'))
+        throw new Runtime(`AttributeError: '${pythonTypeName(receiver)}' object has no attribute '${name}'`);
       if (name === 'split' && typeof receiver === 'string' && values.length <= 1) {
         if (!values.length) return { handled: true, value: receiver.trim() ? receiver.trim().split(/\s+/u) : [] };
         if (typeof values[0] === 'string' && values[0] !== '') return { handled: true, value: receiver.split(values[0]) };
@@ -596,6 +654,7 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     if (name === 'float' && !values.length) return { handled: true, value: 0 };
     if (name === 'bool' && !values.length) return { handled: true, value: false };
     if (name === 'str' && !values.length) return { handled: true, value: '' };
+    if (name === 'range' && !values.length) throw new Runtime('TypeError: range expected at least 1 argument, got 0');
     if (name === 'len' && values.length === 1) {
       if (values[0] instanceof PythonSet) return { handled: true, value: values[0].entries.size };
       const items = sequence(values[0]); if (items) return { handled: true, value: items.length };
@@ -627,7 +686,8 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     if (name === 'int' && values.length >= 1 && values.length <= 2 && typeof values[0] === 'string') {
       const text = values[0].trim();
       const requestedBase = values.length === 2 ? values[1] : 10;
-      if (!Number.isSafeInteger(requestedBase)) return { handled: false };
+      if (!Number.isSafeInteger(requestedBase))
+        throw new Runtime(`TypeError: '${pythonTypeName(requestedBase)}' object cannot be interpreted as an integer`);
       if (requestedBase !== 0 && ((requestedBase as number) < 2 || (requestedBase as number) > 36)) throw new Runtime('ValueError: int() base must be >= 2 and <= 36, or 0');
       const sign = text.startsWith('-') ? -1n : 1n;
       let digits = /^[+-]/.test(text) ? text.slice(1) : text;
@@ -652,8 +712,9 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     if (name === 'int') {
       if (values.length > 2) throw new Runtime(`TypeError: int() takes at most 2 arguments (${values.length} given)`);
       if (values.length === 2) throw new Runtime("TypeError: int() can't convert non-string with explicit base");
-      if (values.length === 1 && (typeof values[0] === 'number' || typeof values[0] === 'boolean')) {
-        const converted = Math.trunc(Number(values[0]));
+      if (values.length === 1 && (typeof values[0] === 'number' || typeof values[0] === 'boolean' || typeof values[0] === 'bigint')) {
+        const converted = typeof values[0] === 'bigint' ? values[0] : Math.trunc(Number(values[0]));
+        if (typeof converted === 'bigint') return { handled: true, value: converted };
         if (!Number.isSafeInteger(converted)) throw new Unsupported('Integer result exceeds exact range');
         return { handled: true, value: converted };
       }
@@ -670,9 +731,17 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
       return { handled: true, value: Array.from({ length: size }, (_, index) => start + index * stride) };
     }
     if (name === 'list' && !values.length) return { handled: true, value: [] };
-    if (name === 'list' && values.length === 1) { const items = sequence(values[0]); if (items) return { handled: true, value: [...items] }; }
+    if (name === 'list' && values.length === 1) {
+      const items = sequence(values[0]);
+      if (items) return { handled: true, value: [...items] };
+      throw new Runtime(`TypeError: '${pythonTypeName(values[0])}' object is not iterable`);
+    }
     if (name === 'tuple' && !values.length) return { handled: true, value: new PythonTuple([]) };
-    if (name === 'tuple' && values.length === 1) { const items = sequence(values[0]); if (items) return { handled: true, value: new PythonTuple([...items]) }; }
+    if (name === 'tuple' && values.length === 1) {
+      const items = sequence(values[0]);
+      if (items) return { handled: true, value: new PythonTuple([...items]) };
+      throw new Runtime(`TypeError: '${pythonTypeName(values[0])}' object is not iterable`);
+    }
     if (name === 'dict' && !values.length) return { handled: true, value: new PythonDict() };
     if (name === 'dict' && values.length === 1) {
       const dictionary = values[0];
@@ -741,16 +810,26 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     }
     if (name === 'sum' && values.length >= 1 && values.length <= 2) {
       const items = sequence(values[0]); const start = values.length === 2 ? values[1] : 0;
-      if (items && typeof start === 'number' && items.every((item) => typeof item === 'number' || typeof item === 'boolean')) {
-        let result = start;
+      const numeric = (item: unknown): item is number | bigint | boolean =>
+        typeof item === 'number' || typeof item === 'bigint' || typeof item === 'boolean';
+      if (items && numeric(start) && items.every(numeric)) {
+        const allInteger = [start, ...items].every(item => typeof item === 'bigint' || typeof item === 'boolean' || Number.isSafeInteger(item));
+        if (allInteger) {
+          let result = BigInt(start);
+          for (const item of items) { tick(); result += BigInt(item); }
+          return { handled: true, value: result >= BigInt(Number.MIN_SAFE_INTEGER) && result <= BigInt(Number.MAX_SAFE_INTEGER) ? Number(result) : result };
+        }
+        let result = Number(start);
         for (const item of items) {
           result += Number(item);
-          if (!Number.isFinite(result) || (Number.isInteger(result) && !Number.isSafeInteger(result))) return { handled: false };
+          if (!Number.isFinite(result)) return { handled: false };
         }
         return { handled: true, value: result };
       }
     }
-    if (name === 'str' && values.length === 1 && (values[0] === null || ['string', 'number', 'boolean'].includes(typeof values[0]))) return { handled: true, value: pyString(values[0]) };
+    if (name === 'str' && values.length === 1 && (values[0] === null || ['string', 'number', 'boolean', 'bigint'].includes(typeof values[0])
+      || values[0] && typeof values[0] === 'object' && 'builtin' in values[0]))
+      return { handled: true, value: pyString(values[0]) };
     if (name === 'float' && values.length === 1) {
       if (typeof values[0] === 'number' || typeof values[0] === 'boolean') return { handled: true, value: Number(values[0]) };
       if (typeof values[0] === 'string') {
@@ -818,13 +897,15 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
         if (generator[1] === 'all' && !value) return false;
       }
       if (generator[1] === 'sum') {
-        let total = 0;
+        let total = 0n;
         for (const value of produced) {
-          if (typeof value !== 'number' && typeof value !== 'boolean') throw new Runtime(`TypeError: unsupported operand type(s) for +: 'int' and '${pythonTypeName(value)}'`);
-          total += Number(value);
-          if (!Number.isFinite(total) || (Number.isInteger(total) && !Number.isSafeInteger(total))) throw new Unsupported('Generator sum outside exact range');
+          if (typeof value !== 'number' && typeof value !== 'boolean' && typeof value !== 'bigint')
+            throw new Runtime(`TypeError: unsupported operand type(s) for +: 'int' and '${pythonTypeName(value)}'`);
+          if (typeof value === 'number' && !Number.isSafeInteger(value))
+            throw new Unsupported('Generator sum with floating-point values requires full Python');
+          total += BigInt(value);
         }
-        return total;
+        return total >= BigInt(Number.MIN_SAFE_INTEGER) && total <= BigInt(Number.MAX_SAFE_INTEGER) ? Number(total) : total;
       }
       if (generator[1] === 'min' || generator[1] === 'max') {
         if (!produced.length) throw new Runtime(`ValueError: ${generator[1]}() arg is an empty sequence`);
@@ -943,8 +1024,10 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
           else {
             const previous = expression(statement.targets, locals);
             if (Array.isArray(previous)) {
-              if (statement.op !== '+=' || !Array.isArray(value)) throw new Unsupported('Mutable augmented assignment requires full Python');
-              previous.push(...value);
+              if (statement.op !== '+=') throw new Unsupported('Mutable augmented assignment requires full Python');
+              const items = sequence(value);
+              if (!items) throw new Runtime(`TypeError: '${pythonTypeName(value)}' object is not iterable`);
+              previous.push(...items);
               assign(statement.targets, previous, locals);
               break;
             }
@@ -977,17 +1060,24 @@ export function tryRunPythonProgram(source: string, target: ProgramTarget, testC
     if (target.harness.kind === 'call') {
       const invocation = call(target.harness.function, args, undefined, globals);
       if (!invocation.handled) return undefined;
-      const returned = normalizeTuple(invocation.value);
-      const argsAfter = normalizeTuple(args);
-      if (!asJson(returned) || !asJson(argsAfter)) return undefined;
+      let returned: unknown;
+      try { returned = normalizeTuple(invocation.value); }
+      catch (error) { if (error instanceof NonJsonValue) return { kind: 'non-json-return', message: error.message, steps: meter.steps * STEP_SCALE }; throw error; }
+      if (containsBigInt(returned)) return { kind: 'unsupported', message: 'Integer return value outside exact JSON range', steps: meter.steps * STEP_SCALE };
+      if (!asJson(returned)) return { kind: 'non-json-return', message: 'Python return value is not a JSON value', steps: meter.steps * STEP_SCALE };
+      let argsAfter: unknown;
+      try { argsAfter = normalizeTuple(args); }
+      catch (error) { if (error instanceof NonJsonValue) argsAfter = undefined; else throw error; }
+      if (containsBigInt(argsAfter)) return { kind: 'unsupported', message: 'Mutated argument contains an integer outside exact JSON range', steps: meter.steps * STEP_SCALE };
       observation.returnValue = returned;
-      observation.argsAfter = argsAfter as JsonValue[];
+      if (asJson(argsAfter)) observation.argsAfter = argsAfter as JsonValue[];
     }
     return { kind: 'ok', observation, steps: meter.steps * STEP_SCALE };
   } catch (error) {
     if (error instanceof PythonSyntaxFailure) return { kind: 'compile-error', message: `${error.name}: ${error.message}`, steps: meter.steps * STEP_SCALE };
     if (error instanceof Runtime) return { kind: 'runtime-error', message: error.message, steps: meter.steps * STEP_SCALE };
     if (error instanceof Exhausted) return { kind: 'step-limit', message: 'Python step limit exceeded', steps: meter.steps * STEP_SCALE };
+    if (error instanceof Unsupported) return { kind: 'unsupported', message: error.message, steps: meter.steps * STEP_SCALE };
     return undefined;
   }
 }
